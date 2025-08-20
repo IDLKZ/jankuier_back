@@ -8,6 +8,9 @@ class DbValueConstants:
     AdminRoleConstantID = 1
     AdminRoleConstantValue = "system_admin"
 
+    ClientRoleConstantID = 2
+    ClientRoleConstantValue = "client"
+
     # Языки
     RussianLanguageConstantID = 1
     RussianLanguageConstantValue = "russian_language"
