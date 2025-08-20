@@ -1,0 +1,227 @@
+# English translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same licence as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-06-06 09:24+0500\n"
+"PO-Revision-Date: 2025-06-06 09:25+0500\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "internal_server_error"
+msgstr "Internal Server Errors:"
+
+msgid "the_next_value_already_exists"
+msgstr "The next value already exists:"
+
+msgid "bad_request"
+msgstr "Bad Request"
+
+msgid "unauthorized"
+msgstr "Unauthorized"
+
+msgid "forbidden"
+msgstr "Access Forbidden"
+
+msgid "not_found"
+msgstr "Resource Not Found"
+
+msgid "conflict_occurred"
+msgstr "Conflict Occurred"
+
+msgid "you_dont_have_access_to_club_or_it_is_not_verified_or_exists"
+msgstr "You don't have access to the club, or it is not verified or does not exist."
+
+msgid "licence_not_found"
+msgstr "License not found."
+
+msgid "licence_is_not_active"
+msgstr "License is not active."
+
+msgid "you_already_have_application_for_this_licence"
+msgstr "You already have an application for this license."
+
+msgid "first_status_not_found"
+msgstr "Initial status not found."
+
+msgid "not_found"
+msgstr "Not found."
+
+msgid "access_denied"
+msgstr "Access denied."
+
+msgid "application_not_found"
+msgstr "Application not found."
+
+msgid "application_status_is_not_correct"
+msgstr "Application status is not correct."
+
+msgid "application_is_not_active"
+msgstr "Application is not active."
+
+msgid "application_is_not_ready"
+msgstr "Application is not ready."
+
+msgid "application_step_not_updated"
+msgstr "Application step not updated."
+
+msgid "application_next_status_not_found"
+msgstr "Next application status not found."
+
+msgid "application_not_updated"
+msgstr "Application not updated."
+
+msgid "application_step_not_created"
+msgstr "Application step not created."
+
+msgid "application_criteria_not_checked"
+msgstr "Application criteria not checked."
+
+msgid "application_criteria_not_found"
+msgstr "Application criteria not found."
+
+msgid "application_criteria_is_ready"
+msgstr "Application criteria is ready."
+
+msgid "category_document_not_found"
+msgstr "Category document not found."
+
+msgid "licence_requirement_not_found"
+msgstr "License requirement not found."
+
+msgid "application_criteria_not_ready"
+msgstr "Application criteria not ready."
+
+msgid "application_criteria_already_passed"
+msgstr "Application criteria already passed."
+
+msgid "category_not_found"
+msgstr "Category not found."
+
+msgid "invalid_criteria_state"
+msgstr "Invalid criteria state."
+
+msgid "application_not_created"
+msgstr "Application not created."
+
+msgid "licence_has_no_requirements"
+msgstr "License has no requirements."
+
+msgid "category_ids_not_created"
+msgstr "Category IDs not created."
+
+msgid "application_document_not_found"
+msgstr "Application document not found."
+
+msgid "application_document_not_updated"
+msgstr "Application document not updated."
+
+msgid "application_document_already_checked"
+msgstr "Application document already checked."
+
+msgid "application_document_already_exists"
+msgstr "Application document already exists."
+
+msgid "file_not_saved"
+msgstr "File not saved."
+
+msgid "application_document_not_created"
+msgstr "Application document not created."
+
+msgid "file_not_found"
+msgstr "File not found."
+
+msgid "application_status_exists"
+msgstr "Application status already exists."
+
+msgid "role_not_found_by_value"
+msgstr "Role not found by value."
+
+msgid "token_expired"
+msgstr "Token expired."
+
+msgid "user_not_found"
+msgstr "User not found."
+
+msgid "data_not_ready"
+msgstr "Data not ready."
+
+msgid "something_went_wrong"
+msgstr "Something went wrong."
+
+msgid "role_not_found"
+msgstr "Role not found."
+
+msgid "role_cant_register"
+msgstr "Role can't register."
+
+msgid "email_exists"
+msgstr "Email already exists."
+
+msgid "username_exists"
+msgstr "Username already exists."
+
+msgid "phone_exists"
+msgstr "Phone number already exists."
+
+msgid "iin_exists"
+msgstr "IIN already exists."
+
+msgid "the_next_value_already_exists"
+msgstr "The next value already exists."
+
+msgid "user_role_doesnt_exists"
+msgstr "User role does not exist."
+
+msgid "user_role_is_not_satisfied"
+msgstr "User role is not satisfied."
+
+msgid "club_parent_not_found_by_id"
+msgstr "Club parent not found by ID."
+
+msgid "club_type_not_found_by_id"
+msgstr "Club type not found by ID."
+
+msgid "image_not_found_by_id"
+msgstr "Image not found by ID."
+
+msgid "parent_and_child_are_equal"
+msgstr "Parent and child are equal."
+
+msgid "the_next_relations_already_exists"
+msgstr "The next relation already exists."
+
+msgid "club_not_found_by_id"
+msgstr "Club not found by ID."
+
+msgid "season_not_found"
+msgstr "Season not found."
+
+msgid "league_not_found"
+msgstr "League not found."
+
+msgid "document_not_found"
+msgstr "Document not found."
+
+msgid "can_not_delete_system_permission"
+msgstr "Cannot delete system permission."
+
+msgid "can_not_delete_system_role"
+msgstr "Cannot delete system role."
+
+msgid "role_not_found_by_id"
+msgstr "Role not found by ID."
+
+msgid "permission_not_found_by_id"
+msgstr "Permission not found by ID."
+

@@ -1,0 +1,222 @@
+# Russian translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same licence as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-06-06 09:24+0500\n"
+"PO-Revision-Date: 2025-06-06 09:25+0500\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ru\n"
+"Language-Team: ru <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "internal_server_error"
+msgstr "Внутренняя ошибка сервера"
+
+msgid "the_next_value_already_exists"
+msgstr "Следующее значение уже существует"
+
+msgid "bad_request"
+msgstr "Некорректный запрос"
+
+msgid "unauthorized"
+msgstr "Неавторизован"
+
+msgid "forbidden"
+msgstr "Доступ запрещён"
+
+msgid "not_found"
+msgstr "Ресурс не найден"
+
+msgid "conflict_occurred"
+msgstr "Обнаружен конфликт"
+
+msgid "you_dont_have_access_to_club_or_it_is_not_verified_or_exists"
+msgstr "У вас нет доступа к клубу, либо он не существует или не подтверждён"
+
+msgid "licence_not_found"
+msgstr "Лицензия не найдена"
+
+msgid "licence_is_not_active"
+msgstr "Лицензия неактивна"
+
+msgid "you_already_have_application_for_this_licence"
+msgstr "У вас уже есть заявка на эту лицензию"
+
+msgid "first_status_not_found"
+msgstr "Первоначальный статус не найден"
+
+msgid "access_denied"
+msgstr "Доступ запрещён"
+
+msgid "application_not_found"
+msgstr "Заявка не найдена"
+
+msgid "application_status_is_not_correct"
+msgstr "Статус заявки некорректен"
+
+msgid "application_is_not_active"
+msgstr "Заявка неактивна"
+
+msgid "application_is_not_ready"
+msgstr "Заявка не готова"
+
+msgid "application_step_not_updated"
+msgstr "Этап заявки не обновлён"
+
+msgid "application_next_status_not_found"
+msgstr "Следующий статус заявки не найден"
+
+msgid "application_not_updated"
+msgstr "Заявка не обновлена"
+
+msgid "application_step_not_created"
+msgstr "Этап заявки не создан"
+
+msgid "application_criteria_not_checked"
+msgstr "Критерии заявки не проверены"
+
+msgid "application_criteria_not_found"
+msgstr "Критерии заявки не найдены"
+
+msgid "application_criteria_is_ready"
+msgstr "Критерии заявки готовы"
+
+msgid "category_document_not_found"
+msgstr "Документ категории не найден"
+
+msgid "licence_requirement_not_found"
+msgstr "Требование по лицензии не найдено"
+
+msgid "application_criteria_not_ready"
+msgstr "Критерии заявки не готовы"
+
+msgid "application_criteria_already_passed"
+msgstr "Критерии заявки уже пройдены"
+
+msgid "category_not_found"
+msgstr "Категория не найдена"
+
+msgid "invalid_criteria_state"
+msgstr "Некорректное состояние критериев"
+
+msgid "application_not_created"
+msgstr "Заявка не создана"
+
+msgid "licence_has_no_requirements"
+msgstr "У лицензии нет требований"
+
+msgid "category_ids_not_created"
+msgstr "ID категорий не созданы"
+
+msgid "application_document_not_found"
+msgstr "Документ заявки не найден"
+
+msgid "application_document_not_updated"
+msgstr "Документ заявки не обновлён"
+
+msgid "application_document_already_checked"
+msgstr "Документ заявки уже проверен"
+
+msgid "application_document_already_exists"
+msgstr "Документ заявки уже существует"
+
+msgid "file_not_saved"
+msgstr "Файл не сохранён"
+
+msgid "application_document_not_created"
+msgstr "Документ заявки не создан"
+
+msgid "file_not_found"
+msgstr "Файл не найден"
+
+msgid "application_status_exists"
+msgstr "Статус заявки уже существует"
+
+msgid "role_not_found_by_value"
+msgstr "Роль не найдена по значению"
+
+msgid "token_expired"
+msgstr "Срок действия токена истёк"
+
+msgid "user_not_found"
+msgstr "Пользователь не найден"
+
+msgid "data_not_ready"
+msgstr "Данные не готовы"
+
+msgid "something_went_wrong"
+msgstr "Что-то пошло не так"
+
+msgid "role_not_found"
+msgstr "Роль не найдена"
+
+msgid "role_cant_register"
+msgstr "Роль не может быть зарегистрирована"
+
+msgid "email_exists"
+msgstr "Email уже существует"
+
+msgid "username_exists"
+msgstr "Имя пользователя уже существует"
+
+msgid "phone_exists"
+msgstr "Номер телефона уже существует"
+
+msgid "iin_exists"
+msgstr "ИИН уже существует"
+
+msgid "user_role_doesnt_exists"
+msgstr "Роль пользователя не существует"
+
+msgid "user_role_is_not_satisfied"
+msgstr "Роль пользователя не удовлетворяет требованиям"
+
+msgid "club_parent_not_found_by_id"
+msgstr "Родительский клуб не найден по ID"
+
+msgid "club_type_not_found_by_id"
+msgstr "Тип клуба не найден по ID"
+
+msgid "image_not_found_by_id"
+msgstr "Изображение не найдено по ID"
+
+msgid "parent_and_child_are_equal"
+msgstr "Родитель и потомок совпадают"
+
+msgid "the_next_relations_already_exists"
+msgstr "Следующая связь уже существует"
+
+msgid "club_not_found_by_id"
+msgstr "Клуб не найден по ID"
+
+msgid "season_not_found"
+msgstr "Сезон не найден"
+
+msgid "league_not_found"
+msgstr "Лига не найдена"
+
+msgid "document_not_found"
+msgstr "Документ не найден"
+
+msgid "can_not_delete_system_permission"
+msgstr "Нельзя удалить системное разрешение"
+
+msgid "can_not_delete_system_role"
+msgstr "Нельзя удалить системную роль"
+
+msgid "role_not_found_by_id"
+msgstr "Роль не найдена по ID"
+
+msgid "permission_not_found_by_id"
+msgstr "Разрешение не найдено по ID"
+

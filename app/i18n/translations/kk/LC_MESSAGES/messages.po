@@ -1,0 +1,220 @@
+# Kazakh translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same licence as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-06-06 09:24+0500\n"
+"PO-Revision-Date: 2025-06-06 09:25+0500\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: kk\n"
+"Language-Team: kk <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "internal_server_error"
+msgstr "Сервердің ішкі қатесі"
+
+msgid "the_next_value_already_exists"
+msgstr "Келесі мән бұрыннан бар"
+
+msgid "bad_request"
+msgstr "Дұрыс емес сұраныс"
+
+msgid "unauthorized"
+msgstr "Авторизацияланбаған"
+
+msgid "forbidden"
+msgstr "Қатынауға тыйым салынған"
+
+msgid "not_found"
+msgstr "Ресурс табылмады"
+
+msgid "conflict_occurred"
+msgstr "Қақтығыс анықталды"
+
+msgid "you_dont_have_access_to_club_or_it_is_not_verified_or_exists"
+msgstr "Сізде клубқа қол жеткізу жоқ, немесе клуб расталмаған не жоқ"
+
+msgid "licence_not_found"
+msgstr "Лицензия табылмады"
+
+msgid "licence_is_not_active"
+msgstr "Лицензия белсенді емес"
+
+msgid "you_already_have_application_for_this_licence"
+msgstr "Сізде осы лицензияға өтінім бар"
+
+msgid "first_status_not_found"
+msgstr "Бастапқы статус табылмады"
+
+msgid "access_denied"
+msgstr "Қатынау рұқсат етілмеді"
+
+msgid "application_not_found"
+msgstr "Өтінім табылмады"
+
+msgid "application_status_is_not_correct"
+msgstr "Өтінім статусы дұрыс емес"
+
+msgid "application_is_not_active"
+msgstr "Өтінім белсенді емес"
+
+msgid "application_is_not_ready"
+msgstr "Өтінім дайын емес"
+
+msgid "application_step_not_updated"
+msgstr "Өтінім кезеңі жаңартылмады"
+
+msgid "application_next_status_not_found"
+msgstr "Өтінімнің келесі статусы табылмады"
+
+msgid "application_not_updated"
+msgstr "Өтінім жаңартылмады"
+
+msgid "application_step_not_created"
+msgstr "Өтінім кезеңі құрылмады"
+
+msgid "application_criteria_not_checked"
+msgstr "Өтінім критерийлері тексерілмеді"
+
+msgid "application_criteria_not_found"
+msgstr "Өтінім критерийлері табылмады"
+
+msgid "application_criteria_is_ready"
+msgstr "Өтінім критерийлері дайын"
+
+msgid "category_document_not_found"
+msgstr "Санат құжаты табылмады"
+
+msgid "licence_requirement_not_found"
+msgstr "Лицензия талабы табылмады"
+
+msgid "application_criteria_not_ready"
+msgstr "Өтінім критерийлері дайын емес"
+
+msgid "application_criteria_already_passed"
+msgstr "Өтінім критерийлері бұрыннан өтілген"
+
+msgid "category_not_found"
+msgstr "Санат табылмады"
+
+msgid "invalid_criteria_state"
+msgstr "Критерийдің дұрыс емес күйі"
+
+msgid "application_not_created"
+msgstr "Өтінім құрылмады"
+
+msgid "licence_has_no_requirements"
+msgstr "Лицензияда талаптар жоқ"
+
+msgid "category_ids_not_created"
+msgstr "Санат ID-лары құрылмады"
+
+msgid "application_document_not_found"
+msgstr "Өтінім құжаты табылмады"
+
+msgid "application_document_not_updated"
+msgstr "Өтінім құжаты жаңартылмады"
+
+msgid "application_document_already_checked"
+msgstr "Өтінім құжаты бұрыннан тексерілген"
+
+msgid "application_document_already_exists"
+msgstr "Өтінім құжаты бұрыннан бар"
+
+msgid "file_not_saved"
+msgstr "Файл сақталмады"
+
+msgid "application_document_not_created"
+msgstr "Өтінім құжаты құрылмады"
+
+msgid "file_not_found"
+msgstr "Файл табылмады"
+
+msgid "application_status_exists"
+msgstr "Өтінім статусы бұрыннан бар"
+
+msgid "role_not_found_by_value"
+msgstr "Рөл мәні бойынша табылмады"
+
+msgid "token_expired"
+msgstr "Токеннің мерзімі өтті"
+
+msgid "user_not_found"
+msgstr "Пайдаланушы табылмады"
+
+msgid "data_not_ready"
+msgstr "Деректер дайын емес"
+
+msgid "something_went_wrong"
+msgstr "Бірдеңе қате болды"
+
+msgid "role_not_found"
+msgstr "Рөл табылмады"
+
+msgid "role_cant_register"
+msgstr "Рөлді тіркеу мүмкін емес"
+
+msgid "email_exists"
+msgstr "Email бұрыннан бар"
+
+msgid "username_exists"
+msgstr "Пайдаланушы аты бұрыннан бар"
+
+msgid "phone_exists"
+msgstr "Телефон нөмірі бұрыннан бар"
+
+msgid "iin_exists"
+msgstr "ЖСН бұрыннан бар"
+
+msgid "user_role_doesnt_exists"
+msgstr "Пайдаланушы рөлі жоқ"
+
+msgid "user_role_is_not_satisfied"
+msgstr "Пайдаланушы рөлі талаптарға сай емес"
+
+msgid "club_parent_not_found_by_id"
+msgstr "Ата-клуб ID бойынша табылмады"
+
+msgid "club_type_not_found_by_id"
+msgstr "Клуб түрі ID бойынша табылмады"
+
+msgid "image_not_found_by_id"
+msgstr "Сурет ID бойынша табылмады"
+
+msgid "parent_and_child_are_equal"
+msgstr "Ата мен бала бірдей"
+
+msgid "the_next_relations_already_exists"
+msgstr "Келесі байланыс бұрыннан бар"
+
+msgid "club_not_found_by_id"
+msgstr "Клуб ID бойынша табылмады"
+
+msgid "season_not_found"
+msgstr "Маусым табылмады"
+
+msgid "league_not_found"
+msgstr "Лига табылмады"
+
+msgid "document_not_found"
+msgstr "Құжат табылмады"
+
+msgid "can_not_delete_system_permission"
+msgstr "Жүйелік рұқсатты жоюға болмайды"
+
+msgid "can_not_delete_system_role"
+msgstr "Жүйелік рөлді жоюға болмайды"
+
+msgid "role_not_found_by_id"
+msgstr "Рөл ID бойынша табылмады"
+
+msgid "permission_not_found_by_id"
+msgstr "Рұқсат ID бойынша табылмады"

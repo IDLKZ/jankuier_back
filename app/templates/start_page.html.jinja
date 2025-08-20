@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Сервис Paryz.Education</title>
+    <link rel="stylesheet" href="{{template_folder}}/css/bootstrap_min_5.3.3.css">
+    <link rel="stylesheet" href="{{template_folder}}/css/my_style.css">
+  </head>
+  <body>
+  <div class="banner">
+    <div class="container">
+        <div class="row">
+          <div class="col-span-12 text-center py-4 mt-4 mb-2">
+            <h1 class="text-white fw-bold fs-1">
+              Paryz.Education API
+            </h1>
+          </div>
+          <div class="col-span-12 text-center py-4 my-4">
+            <h2 class="text-white mb-4 fw-bolder">Выбор документации API по роли</h2>
+                    <ul class="list-unstyled">
+                        <li><a class="btn bg-white btn-lg my-2" target="_blank" href="{{admin_docs_url}}">Администратор</a></li>
+                        <li><a class="btn bg-white btn-lg my-2" target="_blank" href="{{client_docs_url}}">Пользователи</a></li>
+                        <li><a class="btn bg-white btn-lg my-2" target="_blank" href="{{common_docs_url}}">Общедоступные</a></li>
+                    </ul>
+          </div>
+
+        </div>
+    </div>
+  </div>
+    <script src="{{template_folder}}/js/bootstrap_min_5.3.3.js"></script>
+  </body>
+</html>

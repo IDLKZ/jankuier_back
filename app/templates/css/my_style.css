@@ -1,0 +1,32 @@
+@font-face {
+    font-family: 'Play';
+    src: url('app/templates/fonts/Play-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Play';
+    src: url('app/templates/fonts/Play-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+/* Пример применения шрифта */
+body {
+    font-family: 'Play', Arial, sans-serif!important;
+}
+
+h1 {
+    font-family: 'Play';
+    font-weight: bold;
+}
+
+.banner{
+    background: linear-gradient(180deg, #F0821F 0%, #C65E00 100%);
+    min-height: 100vh;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
