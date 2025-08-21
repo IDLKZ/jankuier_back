@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from app.adapters.dto.permission.permission_dto import PermissionRDTO
 from app.adapters.dto.country.country_dto import CountryRDTO
 from app.adapters.dto.city.city_dto import CityRDTO, CityWithRelationsRDTO
+from app.adapters.dto.field.field_dto import FieldRDTO, FieldWithRelationsRDTO
 
 T = TypeVar("T")
 
@@ -76,4 +77,12 @@ class PaginationCityRDTO(BasePageModel):
 
 class PaginationCityWithRelationsRDTO(BasePageModel):
     items: list[CityWithRelationsRDTO]
+
+
+class PaginationFieldRDTO(BasePageModel):
+    items: list[FieldRDTO]
+
+
+class PaginationFieldWithRelationsRDTO(BasePageModel):
+    items: list[FieldWithRelationsRDTO]
 

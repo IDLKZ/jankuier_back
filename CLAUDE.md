@@ -257,9 +257,32 @@ if self.model.image_id:
 - `DOCUMENT_EXTENSIONS` - pdf, doc, xls, ppt, txt, etc.
 - `ALL_EXTENSIONS` - Combined set of all above
 
-#### Directory Helpers
+#### Folder Naming Conventions
+All entities that support file uploads should follow standardized folder naming patterns:
+
+**Folder Name Constants:**
+- `UserFolderName = "users"` - для файлов пользователей
+- `FieldFolderName = "fields"` - для файлов полей
+- Добавляйте аналогичные константы для новых entities: `{Entity}FolderName = "entity_name"`
+
+**Directory Helper Functions:**
 - `user_profile_photo_directory(username)` - Returns `"users/photos/{username}"`
+- `field_image_directory(field_value)` - Returns `"fields/images/{field_value}"`
 - `application_document_directory(id, department)` - Returns `"applications/documents/{id}/{department}"`
+
+**Pattern for New Entities:**
+При создании use case для новых entities с файловой поддержкой:
+1. Добавьте `{Entity}FolderName = "entity_name"` в `AppFileExtensionConstants`
+2. Создайте helper функцию `{entity}_directory()` следуя паттерну
+3. Используйте helper функцию в use cases вместо хардкода путей
+
+```python
+# Правильно - используйте helper функции
+self.upload_folder = AppFileExtensionConstants.field_image_directory(dto.value)
+
+# Неправильно - хардкод путей
+self.upload_folder = f"fields/{dto.value}"
+```
 
 ## Development Notes
 
