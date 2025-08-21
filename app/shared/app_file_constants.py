@@ -12,6 +12,7 @@ class AppFileExtensionConstants:
     UserFolderName = "users"
     FieldFolderName = "fields"
     ProductFolderName = "products"
+    RequestMaterialFolderName = "request_materials"
 
     # Расширения для изображений
     IMAGE_EXTENSIONS: typing.ClassVar = {
@@ -150,3 +151,7 @@ class AppFileExtensionConstants:
     @staticmethod
     def application_document_directory(id: int, department_str: str) -> str:
         return "applications/documents/" + f"{id}/{department_str}"
+
+    @staticmethod
+    def request_material_directory(request_id: int, student_id: int) -> str:
+        return f"request_materials/{request_id}/{student_id}"

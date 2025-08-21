@@ -17,6 +17,8 @@ from app.adapters.dto.category_modification.category_modification_dto import Cat
 from app.adapters.dto.product_gallery.product_gallery_dto import ProductGalleryRDTO, ProductGalleryWithRelationsRDTO
 from app.adapters.dto.student.student_dto import StudentRDTO, StudentWithRelationsRDTO
 from app.adapters.dto.request_to_academy_group.request_to_academy_group_dto import RequestToAcademyGroupRDTO, RequestToAcademyGroupWithRelationsRDTO
+from app.adapters.dto.request_material.request_material_dto import RequestMaterialRDTO, RequestMaterialWithRelationsRDTO
+from app.adapters.dto.academy_group_student.academy_group_student_dto import AcademyGroupStudentRDTO, AcademyGroupStudentWithRelationsRDTO
 
 T = TypeVar("T")
 
@@ -176,4 +178,20 @@ class PaginationRequestToAcademyGroupRDTO(BasePageModel):
 
 class PaginationRequestToAcademyGroupWithRelationsRDTO(BasePageModel):
     items: list[RequestToAcademyGroupWithRelationsRDTO]
+
+
+class PaginationRequestMaterialRDTO(BasePageModel):
+    items: list[RequestMaterialRDTO]
+
+
+class PaginationRequestMaterialWithRelationsRDTO(BasePageModel):
+    items: list[RequestMaterialWithRelationsRDTO]
+
+
+class PaginationAcademyGroupStudentRDTO(BasePageModel):
+    items: list[AcademyGroupStudentRDTO]
+
+
+class PaginationAcademyGroupStudentWithRelationsRDTO(BasePageModel):
+    items: list[AcademyGroupStudentWithRelationsRDTO]
 
