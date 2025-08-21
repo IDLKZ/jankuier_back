@@ -3,6 +3,8 @@ from typing import Generic, TypeVar
 from pydantic import BaseModel
 
 from app.adapters.dto.permission.permission_dto import PermissionRDTO
+from app.adapters.dto.country.country_dto import CountryRDTO
+from app.adapters.dto.city.city_dto import CityRDTO, CityWithRelationsRDTO
 
 T = TypeVar("T")
 
@@ -62,4 +64,16 @@ class BasePageModel(BaseModel):
 
 class PaginationPermissionRDTO(BasePageModel):
     items: list[PermissionRDTO]
+
+
+class PaginationCountryRDTO(BasePageModel):
+    items: list[CountryRDTO]
+
+
+class PaginationCityRDTO(BasePageModel):
+    items: list[CityRDTO]
+
+
+class PaginationCityWithRelationsRDTO(BasePageModel):
+    items: list[CityWithRelationsRDTO]
 
