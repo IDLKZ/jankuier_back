@@ -2,6 +2,8 @@ from typing import Generic, TypeVar
 
 from pydantic import BaseModel
 
+from app.adapters.dto.permission.permission_dto import PermissionRDTO
+
 T = TypeVar("T")
 
 
@@ -57,4 +59,7 @@ class BasePageModel(BaseModel):
     total_pages: int
     total_items: int
 
+
+class PaginationPermissionRDTO(BasePageModel):
+    items: list[PermissionRDTO]
 

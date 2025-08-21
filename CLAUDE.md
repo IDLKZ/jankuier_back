@@ -100,6 +100,167 @@ The project follows a clean architecture approach with clear separation of conce
 3. Review and edit migration file if needed
 4. Apply migration: `alembic upgrade head`
 
+## Use Case CRUD Patterns
+
+### Standard Use Case Structure
+All use cases must implement the BaseUseCase pattern with three required methods:
+
+1. **`execute(*args, **kwargs) -> T`** - Main entry point and business logic execution
+2. **`validate(*args, **kwargs)`** - Input validation and business rule checks
+3. **`transform(*args, **kwargs)`** - Optional data transformation (can be empty)
+
+### Read Operations Pattern
+For entities with CRUD operations, implement these 4 standard read use cases:
+
+#### 1. All Data - `all_{entity}_case.py`
+- **Purpose**: Retrieve all records with filtering and sorting
+- **Parameters**: Filter object with search, order_by, order_direction, is_show_deleted
+- **Returns**: `list[EntityRDTO]`
+- **Pattern**: Uses `repository.get_with_filters()` or `repository.get_all()`
+
+#### 2. Paginated Data - `paginate_{entity}_case.py`
+- **Purpose**: Retrieve paginated records
+- **Parameters**: PaginationFilter object (extends base filter with page/per_page)
+- **Returns**: `Pagination{Entity}RDTO` (specific pagination DTO)
+- **Pattern**: Uses `repository.paginate(dto=EntityRDTO, ...)`
+- **Required**: Must use PaginationDTO for response
+
+#### 3. By ID - `get_{entity}_by_id_case.py`
+- **Purpose**: Retrieve single record by primary key
+- **Parameters**: `id: int`
+- **Returns**: `EntityRDTO`
+- **Pattern**: Uses `repository.get(id, include_deleted_filter=True)`
+- **Validation**: Throws `AppExceptionResponse.not_found()` if not found
+
+#### 4. By Value - `get_{entity}_by_value_case.py`
+- **Purpose**: Retrieve single record by unique value field
+- **Parameters**: `value: str`
+- **Returns**: `EntityRDTO`
+- **Pattern**: Uses `repository.get_first_with_filters()` with `func.lower()` comparison
+- **Note**: Only implement if entity has a `value` field with unique constraint
+- **Validation**: Throws `AppExceptionResponse.not_found()` if not found
+
+### CRUD Use Case Conventions
+
+#### Create Use Case
+- Validates uniqueness of `value` field if present
+- Auto-generates `value` from `title_ru` using `DbValueConstants.get_value()` if not provided
+- Uses `repository.create()` and refreshes with relationships
+
+#### Update Use Case
+- Validates entity exists and uniqueness constraints
+- Excludes current record from uniqueness check using `model.id != id`
+- Uses `repository.update(obj, dto)` pattern
+
+#### Delete Use Case
+- Supports soft delete (default) and force delete
+- Validates entity exists before deletion
+- May include business rules (e.g., cannot delete system roles)
+- Uses `repository.delete(id, force_delete=False)`
+
+### Filter and DTO Patterns
+
+#### Filters
+- **Base Filter**: For `all_` use cases (search, sorting, show_deleted)
+- **Pagination Filter**: Extends base filter with page/per_page parameters
+- Implements `apply()` method returning list of SQLAlchemy filters
+- Search typically covers title fields (title_ru, title_kk, title_en) and value
+
+#### DTOs
+- **CDTO**: Create Data Transfer Object for input
+- **RDTO**: Read Data Transfer Object for output
+- **Pagination{Entity}RDTO**: Specific pagination response with typed items list
+
+### User CRUD Patterns (Extended Example)
+
+#### User Entity Features
+- Has multiple unique fields: `username`, `email`, `phone`, `iin`
+- Supports file uploads through `image_id` foreign key to FileEntity
+- Password hashing during create/update operations
+- Complex validation for multiple unique constraints
+
+#### User Read Operations
+1. **`all_user_case.py`** - Returns `list[UserWithRelationsRDTO]` with relationships
+2. **`paginate_user_case.py`** - Returns `PaginationUserWithRelationsRDTO`
+3. **`get_user_by_id_case.py`** - Standard ID lookup
+4. **`get_user_by_username_case.py`** - By unique `username` field (not `value`)
+
+#### User CUD Operations with File Handling
+- **Create**: Validates uniqueness of username/email/phone/iin, handles optional file upload
+- **Update**: Preserves password if not changed, handles file update/replacement
+- **Delete**: Soft delete with automatic file cleanup via FileService
+
+## File Service Integration
+
+### FileService Overview
+The `FileService` class (`app/infrastructure/service/file_service.py`) provides comprehensive file handling:
+
+#### Core Methods
+1. **`save_file(file, uploaded_folder, extensions)`** - Upload new file
+2. **`update_file(file_id, new_file, uploaded_folder, extensions)`** - Replace existing file
+3. **`delete_file(file_id)`** - Remove file from disk and database
+4. **`read_file_base64(file_id)`** - Read file as Base64 string
+5. **`save_from_bytes(file_bytes, filename, uploaded_folder)`** - Save from byte data
+
+#### File Validation
+- **Extension validation**: Checks against allowed extensions from `AppFileExtensionConstants`
+- **Size validation**: Configurable max file size (default from `app_config.app_upload_max_file_size_mb`)
+- **Security**: Blocks files with extensions in `not_allowed_extensions`
+
+#### File Storage
+- **Path generation**: UUID-based unique filenames to prevent conflicts
+- **Directory structure**: Organized by entity type (e.g., `users/photos/{username}`)
+- **File metadata**: Stored in `FileEntity` with filename, path, size, content_type
+
+#### Usage in Use Cases
+```python
+# In __init__
+self.file_service = FileService(db)
+self.extensions = AppFileExtensionConstants.IMAGE_EXTENSIONS
+
+# In validate() 
+if file:
+    self.file_service.validate_file(file, self.extensions)
+
+# In transform() - Create
+if file:
+    file_entity = await self.file_service.save_file(
+        file, self.upload_folder, self.extensions
+    )
+    dto.image_id = file_entity.id
+
+# In transform() - Update  
+if file:
+    if self.model.image_id:
+        # Replace existing file
+        file_entity = await self.file_service.update_file(
+            file_id=self.model.image_id,
+            new_file=file,
+            uploaded_folder=self.upload_folder,
+            extensions=self.extensions,
+        )
+    else:
+        # Create new file
+        file_entity = await self.file_service.save_file(...)
+    dto.image_id = file_entity.id
+
+# In delete use case
+if self.model.image_id:
+    await self.file_service.delete_file(file_id=self.model.image_id)
+```
+
+#### File Extension Constants
+`AppFileExtensionConstants` provides predefined extension sets:
+- `IMAGE_EXTENSIONS` - jpg, png, gif, svg, webp, etc.
+- `VIDEO_EXTENSIONS` - mp4, avi, mkv, mov, etc.
+- `AUDIO_EXTENSIONS` - mp3, wav, aac, flac, etc.
+- `DOCUMENT_EXTENSIONS` - pdf, doc, xls, ppt, txt, etc.
+- `ALL_EXTENSIONS` - Combined set of all above
+
+#### Directory Helpers
+- `user_profile_photo_directory(username)` - Returns `"users/photos/{username}"`
+- `application_document_directory(id, department)` - Returns `"applications/documents/{id}/{department}"`
+
 ## Development Notes
 
 - The project uses async/await patterns throughout
