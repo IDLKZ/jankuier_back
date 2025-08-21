@@ -1,13 +1,23 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.pagination_dto import PaginationCategoryModificationWithRelationsRDTO
-from app.adapters.dto.category_modification.category_modification_dto import CategoryModificationWithRelationsRDTO
-from app.adapters.filters.category_modification.category_modification_pagination_filter import CategoryModificationPaginationFilter
-from app.adapters.repository.category_modification.category_modification_repository import CategoryModificationRepository
+from app.adapters.dto.pagination_dto import (
+    PaginationCategoryModificationWithRelationsRDTO,
+)
+from app.adapters.dto.category_modification.category_modification_dto import (
+    CategoryModificationWithRelationsRDTO,
+)
+from app.adapters.filters.category_modification.category_modification_pagination_filter import (
+    CategoryModificationPaginationFilter,
+)
+from app.adapters.repository.category_modification.category_modification_repository import (
+    CategoryModificationRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
-class PaginateCategoryModificationCase(BaseUseCase[PaginationCategoryModificationWithRelationsRDTO]):
+class PaginateCategoryModificationCase(
+    BaseUseCase[PaginationCategoryModificationWithRelationsRDTO]
+):
     """
     Класс Use Case для получения пагинированного списка модификаций категорий.
 
@@ -35,7 +45,9 @@ class PaginateCategoryModificationCase(BaseUseCase[PaginationCategoryModificatio
         """
         self.repository = CategoryModificationRepository(db)
 
-    async def execute(self, filter: CategoryModificationPaginationFilter) -> PaginationCategoryModificationWithRelationsRDTO:
+    async def execute(
+        self, filter: CategoryModificationPaginationFilter
+    ) -> PaginationCategoryModificationWithRelationsRDTO:
         """
         Выполняет операцию получения пагинированного списка модификаций категорий.
 

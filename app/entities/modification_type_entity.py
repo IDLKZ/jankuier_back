@@ -22,12 +22,12 @@ class ModificationTypeEntity(Base):
     deleted_at: Mapped[DbColumnConstants.DeletedAt]
 
     # Relationships
-    category_modifications: Mapped[list[AppEntityNames.CategoryModificationEntityName]] = (
-        DbRelationshipConstants.one_to_many(
-            target=AppEntityNames.CategoryModificationEntityName,
-            back_populates="modification_type",
-            foreign_keys=f"{AppEntityNames.CategoryModificationEntityName}.modification_type_id",
-        )
+    category_modifications: Mapped[
+        list[AppEntityNames.CategoryModificationEntityName]
+    ] = DbRelationshipConstants.one_to_many(
+        target=AppEntityNames.CategoryModificationEntityName,
+        back_populates="modification_type",
+        foreign_keys=f"{AppEntityNames.CategoryModificationEntityName}.modification_type_id",
     )
 
     modification_values: Mapped[list[AppEntityNames.ModificationValueEntityName]] = (

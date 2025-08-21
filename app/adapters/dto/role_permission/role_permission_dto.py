@@ -36,7 +36,8 @@ class RolePermissionRDTO(RolePermissionDTO):
 
 
 class RolePermissionWithRelationsRDTO(RolePermissionRDTO):
-    role:RoleRDTO|None = None
-    permission:PermissionRDTO|None = None
+    role: RoleRDTO | None = None
+    permission: PermissionRDTO | None = None
+
     class Config:
         from_attributes = True

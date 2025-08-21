@@ -1,7 +1,11 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.modification_value.modification_value_dto import ModificationValueWithRelationsRDTO
-from app.adapters.repository.modification_value.modification_value_repository import ModificationValueRepository
+from app.adapters.dto.modification_value.modification_value_dto import (
+    ModificationValueWithRelationsRDTO,
+)
+from app.adapters.repository.modification_value.modification_value_repository import (
+    ModificationValueRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import ModificationValueEntity
 from app.i18n.i18n_wrapper import i18n

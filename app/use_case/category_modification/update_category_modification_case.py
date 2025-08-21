@@ -1,16 +1,27 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.category_modification.category_modification_dto import CategoryModificationCDTO, CategoryModificationWithRelationsRDTO
-from app.adapters.repository.category_modification.category_modification_repository import CategoryModificationRepository
-from app.adapters.repository.modification_type.modification_type_repository import ModificationTypeRepository
-from app.adapters.repository.product_category.product_category_repository import ProductCategoryRepository
+from app.adapters.dto.category_modification.category_modification_dto import (
+    CategoryModificationCDTO,
+    CategoryModificationWithRelationsRDTO,
+)
+from app.adapters.repository.category_modification.category_modification_repository import (
+    CategoryModificationRepository,
+)
+from app.adapters.repository.modification_type.modification_type_repository import (
+    ModificationTypeRepository,
+)
+from app.adapters.repository.product_category.product_category_repository import (
+    ProductCategoryRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import CategoryModificationEntity
 from app.i18n.i18n_wrapper import i18n
 from app.use_case.base_case import BaseUseCase
 
 
-class UpdateCategoryModificationCase(BaseUseCase[CategoryModificationWithRelationsRDTO]):
+class UpdateCategoryModificationCase(
+    BaseUseCase[CategoryModificationWithRelationsRDTO]
+):
     """
     Класс Use Case для обновления модификации категории.
 
@@ -46,7 +57,9 @@ class UpdateCategoryModificationCase(BaseUseCase[CategoryModificationWithRelatio
         self.modification_type_repository = ModificationTypeRepository(db)
         self.model: CategoryModificationEntity | None = None
 
-    async def execute(self, id: int, dto: CategoryModificationCDTO) -> CategoryModificationWithRelationsRDTO:
+    async def execute(
+        self, id: int, dto: CategoryModificationCDTO
+    ) -> CategoryModificationWithRelationsRDTO:
         """
         Выполняет операцию обновления модификации категории.
 
@@ -92,7 +105,9 @@ class UpdateCategoryModificationCase(BaseUseCase[CategoryModificationWithRelatio
 
         # Проверка существования типа модификации (если указан)
         if dto.modification_type_id is not None:
-            if (await self.modification_type_repository.get(dto.modification_type_id)) is None:
+            if (
+                await self.modification_type_repository.get(dto.modification_type_id)
+            ) is None:
                 raise AppExceptionResponse.bad_request(
                     message=i18n.gettext("modification_type_not_found_by_id")
                 )
@@ -100,11 +115,13 @@ class UpdateCategoryModificationCase(BaseUseCase[CategoryModificationWithRelatio
         # Проверка на дублирование связи (исключая текущую запись)
         filters = [
             self.repository.model.category_id == dto.category_id,
-            self.repository.model.id != id
+            self.repository.model.id != id,
         ]
-        
+
         if dto.modification_type_id is not None:
-            filters.append(self.repository.model.modification_type_id == dto.modification_type_id)
+            filters.append(
+                self.repository.model.modification_type_id == dto.modification_type_id
+            )
         else:
             filters.append(self.repository.model.modification_type_id.is_(None))
 

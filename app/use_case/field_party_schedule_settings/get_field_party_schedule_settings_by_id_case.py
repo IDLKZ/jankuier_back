@@ -1,13 +1,19 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.field_party_schedule_settings.field_party_schedule_settings_dto import FieldPartyScheduleSettingsRDTO
-from app.adapters.repository.field_party_schedule_settings.field_party_schedule_settings_repository import FieldPartyScheduleSettingsRepository
+from app.adapters.dto.field_party_schedule_settings.field_party_schedule_settings_dto import (
+    FieldPartyScheduleSettingsRDTO,
+)
+from app.adapters.repository.field_party_schedule_settings.field_party_schedule_settings_repository import (
+    FieldPartyScheduleSettingsRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.i18n.i18n_wrapper import i18n
 from app.use_case.base_case import BaseUseCase
 
 
-class GetFieldPartyScheduleSettingsByIdCase(BaseUseCase[FieldPartyScheduleSettingsRDTO]):
+class GetFieldPartyScheduleSettingsByIdCase(
+    BaseUseCase[FieldPartyScheduleSettingsRDTO]
+):
     """
     Класс Use Case для получения настройки расписания площадки по ID.
 
@@ -48,13 +54,13 @@ class GetFieldPartyScheduleSettingsByIdCase(BaseUseCase[FieldPartyScheduleSettin
             AppExceptionResponse: Если настройка расписания не найдена.
         """
         await self.validate(id)
-        
+
         model = await self.repository.get(id, include_deleted_filter=True)
         if not model:
             raise AppExceptionResponse.not_found(
                 i18n.gettext("field_party_schedule_settings_not_found")
             )
-        
+
         return FieldPartyScheduleSettingsRDTO.from_orm(model)
 
     async def validate(self, id: int) -> None:
@@ -68,6 +74,4 @@ class GetFieldPartyScheduleSettingsByIdCase(BaseUseCase[FieldPartyScheduleSettin
             AppExceptionResponse: Если ID недействителен.
         """
         if not isinstance(id, int) or id <= 0:
-            raise AppExceptionResponse.bad_request(
-                i18n.gettext("id_validation_error")
-            )
+            raise AppExceptionResponse.bad_request(i18n.gettext("id_validation_error"))

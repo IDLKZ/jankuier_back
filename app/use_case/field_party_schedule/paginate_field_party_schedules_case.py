@@ -1,13 +1,23 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.field_party_schedule.field_party_schedule_dto import FieldPartyScheduleWithRelationsRDTO
-from app.adapters.dto.pagination_dto import PaginationFieldPartyScheduleWithRelationsRDTO
-from app.adapters.filters.field_party_schedule.field_party_schedule_pagination_filter import FieldPartySchedulePaginationFilter
-from app.adapters.repository.field_party_schedule.field_party_schedule_repository import FieldPartyScheduleRepository
+from app.adapters.dto.field_party_schedule.field_party_schedule_dto import (
+    FieldPartyScheduleWithRelationsRDTO,
+)
+from app.adapters.dto.pagination_dto import (
+    PaginationFieldPartyScheduleWithRelationsRDTO,
+)
+from app.adapters.filters.field_party_schedule.field_party_schedule_pagination_filter import (
+    FieldPartySchedulePaginationFilter,
+)
+from app.adapters.repository.field_party_schedule.field_party_schedule_repository import (
+    FieldPartyScheduleRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
-class PaginateFieldPartySchedulesCase(BaseUseCase[PaginationFieldPartyScheduleWithRelationsRDTO]):
+class PaginateFieldPartySchedulesCase(
+    BaseUseCase[PaginationFieldPartyScheduleWithRelationsRDTO]
+):
     """
     Класс Use Case для получения пагинированного списка расписаний площадок.
 
@@ -34,7 +44,9 @@ class PaginateFieldPartySchedulesCase(BaseUseCase[PaginationFieldPartyScheduleWi
         """
         self.repository = FieldPartyScheduleRepository(db)
 
-    async def execute(self, filter: FieldPartySchedulePaginationFilter) -> PaginationFieldPartyScheduleWithRelationsRDTO:
+    async def execute(
+        self, filter: FieldPartySchedulePaginationFilter
+    ) -> PaginationFieldPartyScheduleWithRelationsRDTO:
         """
         Выполняет операцию получения пагинированного списка расписаний площадок.
 

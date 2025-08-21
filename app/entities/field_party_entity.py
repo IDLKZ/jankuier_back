@@ -80,11 +80,10 @@ class FieldPartyEntity(Base):
         )
     )
 
-    field_party_schedule_settings: Mapped[list[AppEntityNames.FieldPartyScheduleSettingsEntityName]] = (
-        DbRelationshipConstants.one_to_many(
-            target=AppEntityNames.FieldPartyScheduleSettingsEntityName,
-            back_populates="party",
-            foreign_keys=f"{AppEntityNames.FieldPartyScheduleSettingsEntityName}.party_id",
-        )
+    field_party_schedule_settings: Mapped[
+        list[AppEntityNames.FieldPartyScheduleSettingsEntityName]
+    ] = DbRelationshipConstants.one_to_many(
+        target=AppEntityNames.FieldPartyScheduleSettingsEntityName,
+        back_populates="party",
+        foreign_keys=f"{AppEntityNames.FieldPartyScheduleSettingsEntityName}.party_id",
     )
-

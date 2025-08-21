@@ -8,7 +8,9 @@ from app.shared.query_constants import AppQueryConstants
 class RequestToAcademyGroupFilter(BaseFilter[RequestToAcademyGroupEntity]):
     def __init__(
         self,
-        search: str | None = AppQueryConstants.StandardOptionalSearchQuery("Поиск по информации о заявке"),
+        search: str | None = AppQueryConstants.StandardOptionalSearchQuery(
+            "Поиск по информации о заявке"
+        ),
         order_by: str | None = AppQueryConstants.StandardSortFieldQuery(
             "Поле сортировки"
         ),
@@ -17,22 +19,30 @@ class RequestToAcademyGroupFilter(BaseFilter[RequestToAcademyGroupEntity]):
         ),
         student_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по студентам"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по студентам"
+        ),
         group_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по группам академий"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по группам академий"
+        ),
         checked_by_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по проверившим заявку"),
-        status: (
-            int | None
-        ) = AppQueryConstants.StandardOptionalIntegerQuery("Фильтрация по статусу (0-не просмотрена, 1-принята, -1-отклонена)"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по проверившим заявку"
+        ),
+        status: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
+            "Фильтрация по статусу (0-не просмотрена, 1-принята, -1-отклонена)"
+        ),
         statuses: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по статусам (0-не просмотрена, 1-принята, -1-отклонена)"),
-        is_checked: (
-            bool | None
-        ) = AppQueryConstants.StandardOptionalBooleanQuery("Фильтрация по факту проверки заявки"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по статусам (0-не просмотрена, 1-принята, -1-отклонена)"
+        ),
+        is_checked: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
+            "Фильтрация по факту проверки заявки"
+        ),
         is_show_deleted: bool = AppQueryConstants.StandardBooleanQuery(
             "Показывать удаленные данные?"
         ),
@@ -64,7 +74,9 @@ class RequestToAcademyGroupFilter(BaseFilter[RequestToAcademyGroupEntity]):
             filters.append(RequestToAcademyGroupEntity.group_id.in_(self.group_ids))
 
         if self.checked_by_ids:
-            filters.append(RequestToAcademyGroupEntity.checked_by.in_(self.checked_by_ids))
+            filters.append(
+                RequestToAcademyGroupEntity.checked_by.in_(self.checked_by_ids)
+            )
 
         if self.status is not None:
             filters.append(RequestToAcademyGroupEntity.status == self.status)

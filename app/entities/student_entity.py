@@ -48,26 +48,28 @@ class StudentEntity(Base):
         foreign_keys=f"{AppEntityNames.StudentEntityName}.image_id",
     )
 
-    created_by_user: Mapped[AppEntityNames.UserEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.UserEntityName,
-        back_populates="created_students",
-        foreign_keys=f"{AppEntityNames.StudentEntityName}.created_by",
-    )
-
-    academy_group_students: Mapped[list[AppEntityNames.AcademyGroupStudentEntityName]] = (
-        DbRelationshipConstants.one_to_many(
-            target=AppEntityNames.AcademyGroupStudentEntityName,
-            back_populates="student",
-            foreign_keys=f"{AppEntityNames.AcademyGroupStudentEntityName}.student_id",
+    created_by_user: Mapped[AppEntityNames.UserEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.UserEntityName,
+            back_populates="created_students",
+            foreign_keys=f"{AppEntityNames.StudentEntityName}.created_by",
         )
     )
 
-    request_to_academy_groups: Mapped[list[AppEntityNames.RequestToAcademyGroupEntityName]] = (
-        DbRelationshipConstants.one_to_many(
-            target=AppEntityNames.RequestToAcademyGroupEntityName,
-            back_populates="student",
-            foreign_keys=f"{AppEntityNames.RequestToAcademyGroupEntityName}.student_id",
-        )
+    academy_group_students: Mapped[
+        list[AppEntityNames.AcademyGroupStudentEntityName]
+    ] = DbRelationshipConstants.one_to_many(
+        target=AppEntityNames.AcademyGroupStudentEntityName,
+        back_populates="student",
+        foreign_keys=f"{AppEntityNames.AcademyGroupStudentEntityName}.student_id",
+    )
+
+    request_to_academy_groups: Mapped[
+        list[AppEntityNames.RequestToAcademyGroupEntityName]
+    ] = DbRelationshipConstants.one_to_many(
+        target=AppEntityNames.RequestToAcademyGroupEntityName,
+        back_populates="student",
+        foreign_keys=f"{AppEntityNames.RequestToAcademyGroupEntityName}.student_id",
     )
 
     request_materials: Mapped[list[AppEntityNames.RequestMaterialEntityName]] = (
@@ -77,4 +79,3 @@ class StudentEntity(Base):
             foreign_keys=f"{AppEntityNames.RequestMaterialEntityName}.student_id",
         )
     )
-

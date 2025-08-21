@@ -1,7 +1,11 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.field_party_schedule.field_party_schedule_dto import FieldPartyScheduleRDTO
-from app.adapters.repository.field_party_schedule.field_party_schedule_repository import FieldPartyScheduleRepository
+from app.adapters.dto.field_party_schedule.field_party_schedule_dto import (
+    FieldPartyScheduleRDTO,
+)
+from app.adapters.repository.field_party_schedule.field_party_schedule_repository import (
+    FieldPartyScheduleRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.i18n.i18n_wrapper import i18n
 from app.use_case.base_case import BaseUseCase
@@ -48,13 +52,13 @@ class GetFieldPartyScheduleByIdCase(BaseUseCase[FieldPartyScheduleRDTO]):
             AppExceptionResponse: Если расписание площадки не найдено.
         """
         await self.validate(id)
-        
+
         model = await self.repository.get(id, include_deleted_filter=True)
         if not model:
             raise AppExceptionResponse.not_found(
                 i18n.gettext("field_party_schedule_not_found")
             )
-        
+
         return FieldPartyScheduleRDTO.from_orm(model)
 
     async def validate(self, id: int) -> None:

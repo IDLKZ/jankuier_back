@@ -20,10 +20,14 @@ class ModificationValueFilter(BaseFilter[ModificationValueEntity]):
         ),
         modification_type_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по типам модификаций"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по типам модификаций"
+        ),
         product_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по товарам"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по товарам"
+        ),
         is_active: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
             "Фильтрация по активности значения модификации"
         ),
@@ -46,10 +50,10 @@ class ModificationValueFilter(BaseFilter[ModificationValueEntity]):
         return [
             "title_ru",
             "title_kk",
-            "title_en", 
+            "title_en",
             "description_ru",
             "description_kk",
-            "description_en"
+            "description_en",
         ]
 
     def apply(self) -> list[SQLAlchemyQuery]:
@@ -71,7 +75,11 @@ class ModificationValueFilter(BaseFilter[ModificationValueEntity]):
                 )
 
         if self.modification_type_ids:
-            filters.append(ModificationValueEntity.modification_type_id.in_(self.modification_type_ids))
+            filters.append(
+                ModificationValueEntity.modification_type_id.in_(
+                    self.modification_type_ids
+                )
+            )
 
         if self.product_ids:
             filters.append(ModificationValueEntity.product_id.in_(self.product_ids))

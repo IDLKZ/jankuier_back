@@ -12,8 +12,12 @@ class CartDTO(BaseModel):
 
 class CartCDTO(BaseModel):
     user_id: DTOConstant.StandardUnsignedIntegerField(description="ID пользователя")
-    total_price: DTOConstant.StandardZeroDecimalField(description="Общая стоимость корзины")
-    cart_items: DTOConstant.StandardNullableJSONField(description="Snapshot товаров в корзине в формате JSON")
+    total_price: DTOConstant.StandardZeroDecimalField(
+        description="Общая стоимость корзины"
+    )
+    cart_items: DTOConstant.StandardNullableJSONField(
+        description="Snapshot товаров в корзине в формате JSON"
+    )
 
     class Config:
         from_attributes = True
@@ -21,8 +25,12 @@ class CartCDTO(BaseModel):
 
 class CartRDTO(CartDTO):
     user_id: DTOConstant.StandardUnsignedIntegerField(description="ID пользователя")
-    total_price: DTOConstant.StandardZeroDecimalField(description="Общая стоимость корзины")
-    cart_items: DTOConstant.StandardNullableJSONField(description="Snapshot товаров в корзине в формате JSON")
+    total_price: DTOConstant.StandardZeroDecimalField(
+        description="Общая стоимость корзины"
+    )
+    cart_items: DTOConstant.StandardNullableJSONField(
+        description="Snapshot товаров в корзине в формате JSON"
+    )
 
     created_at: DTOConstant.StandardCreatedAt
     updated_at: DTOConstant.StandardUpdatedAt
@@ -34,8 +42,17 @@ class CartRDTO(CartDTO):
 
 class CartUpdateDTO(BaseModel):
     """DTO для обновления корзины"""
-    total_price: DTOConstant.StandardZeroDecimalField(description="Общая стоимость корзины") | None = None
-    cart_items: DTOConstant.StandardNullableJSONField(description="Snapshot товаров в корзине в формате JSON") | None = None
+
+    total_price: (
+        DTOConstant.StandardZeroDecimalField(description="Общая стоимость корзины")
+        | None
+    ) = None
+    cart_items: (
+        DTOConstant.StandardNullableJSONField(
+            description="Snapshot товаров в корзине в формате JSON"
+        )
+        | None
+    ) = None
 
     class Config:
         from_attributes = True
@@ -43,6 +60,7 @@ class CartUpdateDTO(BaseModel):
 
 class CartCalculateTotalDTO(BaseModel):
     """DTO для пересчета общей стоимости корзины"""
+
     cart_id: DTOConstant.StandardUnsignedIntegerField(description="ID корзины")
 
     class Config:

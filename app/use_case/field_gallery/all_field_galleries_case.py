@@ -1,8 +1,12 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.field_gallery.field_gallery_dto import FieldGalleryWithRelationsRDTO
+from app.adapters.dto.field_gallery.field_gallery_dto import (
+    FieldGalleryWithRelationsRDTO,
+)
 from app.adapters.filters.field_gallery.field_gallery_filter import FieldGalleryFilter
-from app.adapters.repository.field_gallery.field_gallery_repository import FieldGalleryRepository
+from app.adapters.repository.field_gallery.field_gallery_repository import (
+    FieldGalleryRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
@@ -33,7 +37,9 @@ class AllFieldGalleriesCase(BaseUseCase[list[FieldGalleryWithRelationsRDTO]]):
         """
         self.repository = FieldGalleryRepository(db)
 
-    async def execute(self, filter: FieldGalleryFilter) -> list[FieldGalleryWithRelationsRDTO]:
+    async def execute(
+        self, filter: FieldGalleryFilter
+    ) -> list[FieldGalleryWithRelationsRDTO]:
         """
         Выполняет операцию получения списка всех изображений галереи полей.
 

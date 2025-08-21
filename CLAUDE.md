@@ -284,6 +284,142 @@ self.upload_folder = AppFileExtensionConstants.field_image_directory(dto.value)
 self.upload_folder = f"fields/{dto.value}"
 ```
 
+## API Architecture and Patterns
+
+### API Structure and Use Cases
+
+The project's API layer (`app/adapters/api/`) follows a consistent pattern where APIs are built on top of Use Cases, providing clean separation between HTTP handling and business logic:
+
+#### Core API Patterns
+
+1. **API Class Structure**: Each API is implemented as a class with `__init__()` and `_add_routes()` methods
+2. **Use Case Integration**: APIs directly instantiate and execute Use Cases for all business operations
+3. **Route Path Constants**: All paths are defined in `RoutePathConstants` for consistency
+4. **Error Handling**: Standardized exception handling with `AppExceptionResponse`
+
+#### Standard CRUD API Routes
+
+All CRUD APIs should implement these standard routes:
+
+- **`GET /`** - Paginated listing (index route)
+- **`GET /all`** - Full listing without pagination  
+- **`POST /create`** - Create new entity
+- **`PUT /update/{id}`** - Update entity by ID
+- **`GET /get/{id}`** - Get entity by ID
+- **`GET /get-by-value/{value}`** - Get entity by unique value (if applicable)
+- **`DELETE /delete/{id}`** - Delete entity by ID
+
+#### Route Path Constants Usage
+
+```python
+# Use RoutePathConstants for all route definitions
+self.router.get(
+    RoutePathConstants.IndexPathName,        # "/"
+    RoutePathConstants.AllPathName,          # "/all" 
+    RoutePathConstants.CreatePathName,       # "/create"
+    RoutePathConstants.UpdatePathName,       # "/update/{id}"
+    RoutePathConstants.GetByIdPathName,      # "/get/{id}"
+    RoutePathConstants.GetByValuePathName,   # "/get-by-value/{value}"
+    RoutePathConstants.DeleteByIdPathName,   # "/delete/{id}"
+)
+
+# Path parameters
+id: RoutePathConstants.IDPath              # Annotated[int, Path(gt=0, description="Уникальный идентификатор")]
+value: RoutePathConstants.ValuePath        # Annotated[str, Path(max_length=255, description="Уникальное значение")]
+```
+
+#### Force Delete Query Parameter
+
+For `get`, `get_by_value`, and `delete` endpoints, include the `force_delete` parameter:
+
+```python
+async def delete(
+    self,
+    id: RoutePathConstants.IDPath,
+    force_delete: bool | None = AppQueryConstants.StandardForceDeleteQuery(),
+    db: AsyncSession = Depends(get_db),
+) -> bool:
+    return await DeleteEntityCase(db).execute(id=id, force_delete=force_delete)
+```
+
+#### File Upload Handling
+
+When entities support file uploads, use the FormParserHelper pattern:
+
+```python
+async def create(
+    self,
+    dto: EntityCDTO = Depends(FormParserHelper.parse_entity_dto_from_form),
+    file: UploadFile | None = File(default=None),
+    db: AsyncSession = Depends(get_db),
+) -> EntityWithRelationsRDTO:
+    return await CreateEntityCase(db).execute(dto=dto, file=file)
+```
+
+#### API Method Pattern
+
+Each API method follows this consistent pattern:
+
+```python
+async def method_name(
+    self,
+    # Parameters (id, dto, filters, etc.)
+    db: AsyncSession = Depends(get_db),
+) -> ResponseDTO:
+    try:
+        return await UseCaseClass(db).execute(param1=value1, param2=value2)
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise AppExceptionResponse.internal_error(
+            message=i18n.gettext("internal_server_error"),
+            extra={"details": str(exc)},
+            is_custom=True,
+        ) from exc
+```
+
+#### Response Models
+
+- **Paginated endpoints**: Use `Pagination{Entity}WithRelationsRDTO`
+- **List endpoints**: Use `list[{Entity}WithRelationsRDTO]`
+- **Single item endpoints**: Use `{Entity}WithRelationsRDTO` or `{Entity}RDTO`
+- **Create/Update endpoints**: Use `{Entity}WithRelationsRDTO` to show relationships
+- **Delete endpoints**: Return `bool`
+
+#### Filter Dependencies
+
+- **Pagination filters**: `{Entity}PaginationFilter = Depends()`
+- **Basic filters**: `{Entity}Filter = Depends()`
+- These are automatically parsed from query parameters
+
+#### Error Handling Standards
+
+All API methods must:
+1. Re-raise `HTTPException` without modification
+2. Wrap other exceptions in `AppExceptionResponse.internal_error()`
+3. Use localized error messages via `i18n.gettext()`
+4. Include exception details in `extra` field for debugging
+
+#### FormParserHelper Usage
+
+For entities with file uploads, extend `FormParserHelper` with entity-specific parsing methods:
+
+```python
+@staticmethod  
+def parse_entity_dto_from_form(
+    field1: str = Form(..., description="Field 1"),
+    field2: Optional[int] = Form(None, description="Field 2"),
+    # ... other fields
+) -> EntityCDTO:
+    return EntityCDTO(
+        field1=field1,
+        field2=field2,
+        # ... other fields
+    )
+```
+
+This architecture ensures consistency across all APIs while maintaining clean separation between HTTP concerns and business logic through the Use Case pattern.
+
 ## Development Notes
 
 - The project uses async/await patterns throughout

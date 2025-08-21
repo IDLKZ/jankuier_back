@@ -2,10 +2,17 @@ from fastapi import UploadFile
 from sqlalchemy import and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.academy_gallery.academy_gallery_dto import AcademyGalleryCDTO, AcademyGalleryWithRelationsRDTO
+from app.adapters.dto.academy_gallery.academy_gallery_dto import (
+    AcademyGalleryCDTO,
+    AcademyGalleryWithRelationsRDTO,
+)
 from app.adapters.repository.academy.academy_repository import AcademyRepository
-from app.adapters.repository.academy_gallery.academy_gallery_repository import AcademyGalleryRepository
-from app.adapters.repository.academy_group.academy_group_repository import AcademyGroupRepository
+from app.adapters.repository.academy_gallery.academy_gallery_repository import (
+    AcademyGalleryRepository,
+)
+from app.adapters.repository.academy_group.academy_group_repository import (
+    AcademyGroupRepository,
+)
 from app.adapters.repository.file.file_repository import FileRepository
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import AcademyGalleryEntity
@@ -77,7 +84,9 @@ class CreateAcademyGalleryCase(BaseUseCase[AcademyGalleryWithRelationsRDTO]):
         )
         return AcademyGalleryWithRelationsRDTO.from_orm(model)
 
-    async def validate(self, dto: AcademyGalleryCDTO, file: UploadFile | None = None) -> None:
+    async def validate(
+        self, dto: AcademyGalleryCDTO, file: UploadFile | None = None
+    ) -> None:
         """
         Валидация перед выполнением.
 
@@ -102,7 +111,7 @@ class CreateAcademyGalleryCase(BaseUseCase[AcademyGalleryWithRelationsRDTO]):
                 raise AppExceptionResponse.bad_request(
                     message=i18n.gettext("academy_group_not_found")
                 )
-            
+
             # Проверка, что группа принадлежит указанной академии
             if group.academy_id != dto.academy_id:
                 raise AppExceptionResponse.bad_request(
@@ -119,7 +128,7 @@ class CreateAcademyGalleryCase(BaseUseCase[AcademyGalleryWithRelationsRDTO]):
         if file:
             # Валидация типа и размера файла
             self.file_service.validate_file(file, self.extensions)
-            
+
             # Дополнительная проверка на тип изображения
             if not any(file.filename.lower().endswith(ext) for ext in self.extensions):
                 raise AppExceptionResponse.bad_request(
@@ -133,7 +142,7 @@ class CreateAcademyGalleryCase(BaseUseCase[AcademyGalleryWithRelationsRDTO]):
                 raise AppExceptionResponse.bad_request(
                     message=i18n.gettext("file_not_found")
                 )
-            
+
             # Проверка на дублирование: этот файл уже не должен быть в галерее данной академии
             duplicate_gallery_item = await self.repository.get_first_with_filters(
                 filters=[
@@ -146,7 +155,9 @@ class CreateAcademyGalleryCase(BaseUseCase[AcademyGalleryWithRelationsRDTO]):
                     message=i18n.gettext("academy_gallery_duplicate_file")
                 )
 
-    async def transform(self, dto: AcademyGalleryCDTO, file: UploadFile | None = None) -> None:
+    async def transform(
+        self, dto: AcademyGalleryCDTO, file: UploadFile | None = None
+    ) -> None:
         """
         Преобразование DTO в модель.
 
@@ -159,7 +170,7 @@ class CreateAcademyGalleryCase(BaseUseCase[AcademyGalleryWithRelationsRDTO]):
             # Получаем академию для определения папки загрузки
             academy = await self.academy_repository.get(dto.academy_id)
             academy_value = academy.value if academy.value else str(dto.academy_id)
-            
+
             if dto.group_id:
                 # Если указана группа, сохраняем в папку группы
                 group = await self.group_repository.get(dto.group_id)
@@ -168,7 +179,7 @@ class CreateAcademyGalleryCase(BaseUseCase[AcademyGalleryWithRelationsRDTO]):
             else:
                 # Иначе сохраняем в общую папку академии
                 self.upload_folder = f"{AppFileExtensionConstants.FieldFolderName}/academy_galleries/{academy_value}"
-            
+
             file_entity = await self.file_service.save_file(
                 file, self.upload_folder, self.extensions
             )

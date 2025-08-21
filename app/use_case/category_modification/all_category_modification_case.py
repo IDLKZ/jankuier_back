@@ -1,12 +1,20 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.category_modification.category_modification_dto import CategoryModificationWithRelationsRDTO
-from app.adapters.filters.category_modification.category_modification_filter import CategoryModificationFilter
-from app.adapters.repository.category_modification.category_modification_repository import CategoryModificationRepository
+from app.adapters.dto.category_modification.category_modification_dto import (
+    CategoryModificationWithRelationsRDTO,
+)
+from app.adapters.filters.category_modification.category_modification_filter import (
+    CategoryModificationFilter,
+)
+from app.adapters.repository.category_modification.category_modification_repository import (
+    CategoryModificationRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
-class AllCategoryModificationCase(BaseUseCase[list[CategoryModificationWithRelationsRDTO]]):
+class AllCategoryModificationCase(
+    BaseUseCase[list[CategoryModificationWithRelationsRDTO]]
+):
     """
     Класс Use Case для получения списка всех модификаций категорий.
 
@@ -33,7 +41,9 @@ class AllCategoryModificationCase(BaseUseCase[list[CategoryModificationWithRelat
         """
         self.repository = CategoryModificationRepository(db)
 
-    async def execute(self, filter: CategoryModificationFilter) -> list[CategoryModificationWithRelationsRDTO]:
+    async def execute(
+        self, filter: CategoryModificationFilter
+    ) -> list[CategoryModificationWithRelationsRDTO]:
         """
         Выполняет операцию получения списка всех модификаций категорий.
 
@@ -50,7 +60,9 @@ class AllCategoryModificationCase(BaseUseCase[list[CategoryModificationWithRelat
             order_direction=filter.order_direction,
             include_deleted_filter=filter.is_show_deleted,
         )
-        return [CategoryModificationWithRelationsRDTO.from_orm(model) for model in models]
+        return [
+            CategoryModificationWithRelationsRDTO.from_orm(model) for model in models
+        ]
 
     async def validate(self) -> None:
         """

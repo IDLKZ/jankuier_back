@@ -39,16 +39,20 @@ class ProductGalleryEntity(Base):
     updated_at: Mapped[DbColumnConstants.UpdatedAt]
 
     # Relationships
-    product: Mapped[AppEntityNames.ProductEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.ProductEntityName,
-        back_populates="product_galleries",
-        foreign_keys=f"{AppEntityNames.ProductGalleryEntityName}.product_id",
+    product: Mapped[AppEntityNames.ProductEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.ProductEntityName,
+            back_populates="product_galleries",
+            foreign_keys=f"{AppEntityNames.ProductGalleryEntityName}.product_id",
+        )
     )
 
-    variant: Mapped[AppEntityNames.ProductVariantEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.ProductVariantEntityName,
-        back_populates="product_galleries",
-        foreign_keys=f"{AppEntityNames.ProductGalleryEntityName}.variant_id",
+    variant: Mapped[AppEntityNames.ProductVariantEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.ProductVariantEntityName,
+            back_populates="product_galleries",
+            foreign_keys=f"{AppEntityNames.ProductGalleryEntityName}.variant_id",
+        )
     )
 
     file: Mapped[AppEntityNames.FileEntityName] = DbRelationshipConstants.many_to_one(
@@ -56,4 +60,3 @@ class ProductGalleryEntity(Base):
         back_populates="product_galleries",
         foreign_keys=f"{AppEntityNames.ProductGalleryEntityName}.file_id",
     )
-

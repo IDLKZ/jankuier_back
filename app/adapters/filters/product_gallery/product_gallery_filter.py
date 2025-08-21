@@ -16,10 +16,14 @@ class ProductGalleryFilter(BaseFilter[ProductGalleryEntity]):
         ),
         product_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по товарам"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по товарам"
+        ),
         variant_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по вариантам товаров"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по вариантам товаров"
+        ),
         file_ids: (
             list[int] | None
         ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по файлам"),

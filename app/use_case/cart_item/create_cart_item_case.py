@@ -2,11 +2,16 @@ from decimal import Decimal
 from sqlalchemy import and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.cart_item.cart_item_dto import CartItemCDTO, CartItemWithRelationsRDTO
+from app.adapters.dto.cart_item.cart_item_dto import (
+    CartItemCDTO,
+    CartItemWithRelationsRDTO,
+)
 from app.adapters.repository.cart.cart_repository import CartRepository
 from app.adapters.repository.cart_item.cart_item_repository import CartItemRepository
 from app.adapters.repository.product.product_repository import ProductRepository
-from app.adapters.repository.product_variant.product_variant_repository import ProductVariantRepository
+from app.adapters.repository.product_variant.product_variant_repository import (
+    ProductVariantRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import CartItemEntity
 from app.i18n.i18n_wrapper import i18n
@@ -98,7 +103,7 @@ class CreateCartItemCase(BaseUseCase[CartItemWithRelationsRDTO]):
                 raise AppExceptionResponse.bad_request(
                     message=i18n.gettext("product_variant_not_found")
                 )
-            
+
             # Проверка, что вариант принадлежит указанному товару
             if variant.product_id != dto.product_id:
                 raise AppExceptionResponse.bad_request(
@@ -112,17 +117,17 @@ class CreateCartItemCase(BaseUseCase[CartItemWithRelationsRDTO]):
             )
 
         # Валидация цен
-        if dto.product_price < Decimal('0'):
+        if dto.product_price < Decimal("0"):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("cart_item_price_invalid")
             )
 
-        if dto.unit_price < Decimal('0'):
+        if dto.unit_price < Decimal("0"):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("cart_item_price_invalid")
             )
 
-        if dto.total_price < Decimal('0'):
+        if dto.total_price < Decimal("0"):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("cart_item_price_invalid")
             )
@@ -131,12 +136,12 @@ class CreateCartItemCase(BaseUseCase[CartItemWithRelationsRDTO]):
         expected_unit_price = dto.product_price + dto.delta_price
         expected_total_price = expected_unit_price * dto.qty
 
-        if abs(dto.unit_price - expected_unit_price) > Decimal('0.01'):
+        if abs(dto.unit_price - expected_unit_price) > Decimal("0.01"):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("cart_item_calculation_error")
             )
 
-        if abs(dto.total_price - expected_total_price) > Decimal('0.01'):
+        if abs(dto.total_price - expected_total_price) > Decimal("0.01"):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("cart_item_calculation_error")
             )
@@ -175,7 +180,7 @@ class CreateCartItemCase(BaseUseCase[CartItemWithRelationsRDTO]):
             else:
                 # Получаем товар для формирования SKU
                 product = await self.product_repository.get(dto.product_id)
-                if product and hasattr(product, 'sku') and product.sku:
+                if product and hasattr(product, "sku") and product.sku:
                     dto.sku = product.sku
 
         self.model = CartItemEntity(**dto.dict())

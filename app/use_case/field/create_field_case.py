@@ -130,7 +130,9 @@ class CreateFieldCase(BaseUseCase[FieldWithRelationsRDTO]):
 
         # Сохранение файла
         if file:
-            self.upload_folder = AppFileExtensionConstants.field_image_directory(dto.value)
+            self.upload_folder = AppFileExtensionConstants.field_image_directory(
+                dto.value
+            )
             file_entity = await self.file_service.save_file(
                 file, self.upload_folder, self.extensions
             )

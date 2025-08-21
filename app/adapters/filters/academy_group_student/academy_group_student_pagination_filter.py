@@ -5,14 +5,18 @@ from app.entities import AcademyGroupStudentEntity
 from app.shared.query_constants import AppQueryConstants
 
 
-class AcademyGroupStudentPaginationFilter(BasePaginationFilter[AcademyGroupStudentEntity]):
+class AcademyGroupStudentPaginationFilter(
+    BasePaginationFilter[AcademyGroupStudentEntity]
+):
     def __init__(
         self,
         per_page: int = AppQueryConstants.StandardPerPageQuery(
             "Количество записей студентов в группах академий на странице"
         ),
         page: int = AppQueryConstants.StandardPageQuery("Номер страницы"),
-        search: str | None = AppQueryConstants.StandardOptionalSearchQuery("Поиск по информации о студенте в группе"),
+        search: str | None = AppQueryConstants.StandardOptionalSearchQuery(
+            "Поиск по информации о студенте в группе"
+        ),
         order_by: str | None = AppQueryConstants.StandardSortFieldQuery(
             "Поле сортировки"
         ),
@@ -21,19 +25,25 @@ class AcademyGroupStudentPaginationFilter(BasePaginationFilter[AcademyGroupStude
         ),
         student_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по студентам"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по студентам"
+        ),
         group_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по группам академий"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по группам академий"
+        ),
         request_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по заявкам в академические группы"),
-        is_active: (
-            bool | None
-        ) = AppQueryConstants.StandardOptionalBooleanQuery("Фильтрация по статусу активности студента в группе"),
-        has_request: (
-            bool | None
-        ) = AppQueryConstants.StandardOptionalBooleanQuery("Фильтрация по наличию связанной заявки"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по заявкам в академические группы"
+        ),
+        is_active: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
+            "Фильтрация по статусу активности студента в группе"
+        ),
+        has_request: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
+            "Фильтрация по наличию связанной заявки"
+        ),
         is_show_deleted: bool = AppQueryConstants.StandardBooleanQuery(
             "Показывать удаленные данные?"
         ),

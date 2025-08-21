@@ -43,10 +43,10 @@ class ProductCategoryEntity(Base):
         )
     )
 
-    category_modifications: Mapped[list[AppEntityNames.CategoryModificationEntityName]] = (
-        DbRelationshipConstants.one_to_many(
-            target=AppEntityNames.CategoryModificationEntityName,
-            back_populates="category",
-            foreign_keys=f"{AppEntityNames.CategoryModificationEntityName}.category_id",
-        )
+    category_modifications: Mapped[
+        list[AppEntityNames.CategoryModificationEntityName]
+    ] = DbRelationshipConstants.one_to_many(
+        target=AppEntityNames.CategoryModificationEntityName,
+        back_populates="category",
+        foreign_keys=f"{AppEntityNames.CategoryModificationEntityName}.category_id",
     )

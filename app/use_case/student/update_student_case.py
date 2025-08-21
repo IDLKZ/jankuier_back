@@ -1,7 +1,10 @@
 from fastapi import UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.student.student_dto import StudentUpdateDTO, StudentWithRelationsRDTO
+from app.adapters.dto.student.student_dto import (
+    StudentUpdateDTO,
+    StudentWithRelationsRDTO,
+)
 from app.adapters.repository.city.city_repository import CityRepository
 from app.adapters.repository.file.file_repository import FileRepository
 from app.adapters.repository.student.student_repository import StudentRepository
@@ -80,7 +83,9 @@ class UpdateStudentCase(BaseUseCase[StudentWithRelationsRDTO]):
         )
         return StudentWithRelationsRDTO.from_orm(self.model)
 
-    async def validate(self, id: int, dto: StudentUpdateDTO, file: UploadFile | None = None) -> None:
+    async def validate(
+        self, id: int, dto: StudentUpdateDTO, file: UploadFile | None = None
+    ) -> None:
         """
         Валидирует данные перед обновлением студента.
 
@@ -106,7 +111,7 @@ class UpdateStudentCase(BaseUseCase[StudentWithRelationsRDTO]):
             existed = await self.repository.get_first_with_filters(
                 filters=[
                     self.repository.model.value == dto.value,
-                    self.repository.model.id != id
+                    self.repository.model.id != id,
                 ]
             )
             if existed:

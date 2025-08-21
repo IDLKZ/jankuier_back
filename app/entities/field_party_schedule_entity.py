@@ -39,15 +39,18 @@ class FieldPartyScheduleEntity(Base):
     deleted_at: Mapped[DbColumnConstants.DeletedAt]
 
     # Relationships
-    party: Mapped[AppEntityNames.FieldPartyEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.FieldPartyEntityName,
-        back_populates="field_party_schedules",
-        foreign_keys=f"{AppEntityNames.FieldPartyScheduleEntityName}.party_id",
+    party: Mapped[AppEntityNames.FieldPartyEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.FieldPartyEntityName,
+            back_populates="field_party_schedules",
+            foreign_keys=f"{AppEntityNames.FieldPartyScheduleEntityName}.party_id",
+        )
     )
 
-    setting: Mapped[AppEntityNames.FieldPartyScheduleSettingsEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.FieldPartyScheduleSettingsEntityName,
-        back_populates="field_party_schedules",
-        foreign_keys=f"{AppEntityNames.FieldPartyScheduleEntityName}.setting_id",
+    setting: Mapped[AppEntityNames.FieldPartyScheduleSettingsEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.FieldPartyScheduleSettingsEntityName,
+            back_populates="field_party_schedules",
+            foreign_keys=f"{AppEntityNames.FieldPartyScheduleEntityName}.setting_id",
+        )
     )
-

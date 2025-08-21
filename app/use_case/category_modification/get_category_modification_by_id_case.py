@@ -1,14 +1,20 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.category_modification.category_modification_dto import CategoryModificationWithRelationsRDTO
-from app.adapters.repository.category_modification.category_modification_repository import CategoryModificationRepository
+from app.adapters.dto.category_modification.category_modification_dto import (
+    CategoryModificationWithRelationsRDTO,
+)
+from app.adapters.repository.category_modification.category_modification_repository import (
+    CategoryModificationRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import CategoryModificationEntity
 from app.i18n.i18n_wrapper import i18n
 from app.use_case.base_case import BaseUseCase
 
 
-class GetCategoryModificationByIdCase(BaseUseCase[CategoryModificationWithRelationsRDTO]):
+class GetCategoryModificationByIdCase(
+    BaseUseCase[CategoryModificationWithRelationsRDTO]
+):
     """
     Класс Use Case для получения модификации категории по ID.
 

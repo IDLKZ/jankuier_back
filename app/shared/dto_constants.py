@@ -350,11 +350,12 @@ class DTOConstant:
     def StandardNullableArrayDateField(description: str | None = None) -> Annotated:
         msg = "Массив из дат (гггг-мм-дд) "
         return Annotated[
-            List[date]|None,
+            List[date] | None,
             Field(
                 description=description or msg,
             ),
         ]
+
     @staticmethod
     def StandardDateField(description: str | None = "Дата") -> Annotated:
         return Annotated[date, Field(description=description)]

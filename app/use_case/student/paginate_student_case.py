@@ -2,7 +2,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.pagination_dto import PaginationStudentWithRelationsRDTO
 from app.adapters.dto.student.student_dto import StudentWithRelationsRDTO
-from app.adapters.filters.student.student_pagination_filter import StudentPaginationFilter
+from app.adapters.filters.student.student_pagination_filter import (
+    StudentPaginationFilter,
+)
 from app.adapters.repository.student.student_repository import StudentRepository
 from app.use_case.base_case import BaseUseCase
 
@@ -35,7 +37,9 @@ class PaginateStudentCase(BaseUseCase[PaginationStudentWithRelationsRDTO]):
         """
         self.repository = StudentRepository(db)
 
-    async def execute(self, filter: StudentPaginationFilter) -> PaginationStudentWithRelationsRDTO:
+    async def execute(
+        self, filter: StudentPaginationFilter
+    ) -> PaginationStudentWithRelationsRDTO:
         """
         Выполняет операцию получения пагинированного списка студентов.
 

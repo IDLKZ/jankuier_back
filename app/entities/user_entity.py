@@ -75,10 +75,10 @@ class UserEntity(Base):
         )
     )
 
-    checked_requests_to_academy_groups: Mapped[list[AppEntityNames.RequestToAcademyGroupEntityName]] = (
-        DbRelationshipConstants.one_to_many(
-            target=AppEntityNames.RequestToAcademyGroupEntityName,
-            back_populates="checked_by_user",
-            foreign_keys=f"{AppEntityNames.RequestToAcademyGroupEntityName}.checked_by",
-        )
+    checked_requests_to_academy_groups: Mapped[
+        list[AppEntityNames.RequestToAcademyGroupEntityName]
+    ] = DbRelationshipConstants.one_to_many(
+        target=AppEntityNames.RequestToAcademyGroupEntityName,
+        back_populates="checked_by_user",
+        foreign_keys=f"{AppEntityNames.RequestToAcademyGroupEntityName}.checked_by",
     )

@@ -2,7 +2,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.academy.academy_dto import AcademyWithRelationsRDTO
 from app.adapters.dto.pagination_dto import PaginationAcademyWithRelationsRDTO
-from app.adapters.filters.academy.academy_pagination_filter import AcademyPaginationFilter
+from app.adapters.filters.academy.academy_pagination_filter import (
+    AcademyPaginationFilter,
+)
 from app.adapters.repository.academy.academy_repository import AcademyRepository
 from app.use_case.base_case import BaseUseCase
 
@@ -34,7 +36,9 @@ class PaginateAcademiesCase(BaseUseCase[PaginationAcademyWithRelationsRDTO]):
         """
         self.repository = AcademyRepository(db)
 
-    async def execute(self, filter: AcademyPaginationFilter) -> PaginationAcademyWithRelationsRDTO:
+    async def execute(
+        self, filter: AcademyPaginationFilter
+    ) -> PaginationAcademyWithRelationsRDTO:
         """
         Выполняет операцию получения пагинированного списка академий.
 

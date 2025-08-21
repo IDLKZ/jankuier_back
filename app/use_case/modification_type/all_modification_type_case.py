@@ -1,8 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.modification_type.modification_type_dto import ModificationTypeRDTO
-from app.adapters.filters.modification_type.modification_type_filter import ModificationTypeFilter
-from app.adapters.repository.modification_type.modification_type_repository import ModificationTypeRepository
+from app.adapters.dto.modification_type.modification_type_dto import (
+    ModificationTypeRDTO,
+)
+from app.adapters.filters.modification_type.modification_type_filter import (
+    ModificationTypeFilter,
+)
+from app.adapters.repository.modification_type.modification_type_repository import (
+    ModificationTypeRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
@@ -33,7 +39,9 @@ class AllModificationTypeCase(BaseUseCase[list[ModificationTypeRDTO]]):
         """
         self.repository = ModificationTypeRepository(db)
 
-    async def execute(self, filter: ModificationTypeFilter) -> list[ModificationTypeRDTO]:
+    async def execute(
+        self, filter: ModificationTypeFilter
+    ) -> list[ModificationTypeRDTO]:
         """
         Выполняет операцию получения списка всех типов модификаций.
 

@@ -6,7 +6,9 @@ from app.entities import AcademyGroupScheduleEntity
 from app.shared.query_constants import AppQueryConstants
 
 
-class AcademyGroupSchedulePaginationFilter(BasePaginationFilter[AcademyGroupScheduleEntity]):
+class AcademyGroupSchedulePaginationFilter(
+    BasePaginationFilter[AcademyGroupScheduleEntity]
+):
     def __init__(
         self,
         per_page: int = AppQueryConstants.StandardPerPageQuery(
@@ -21,37 +23,39 @@ class AcademyGroupSchedulePaginationFilter(BasePaginationFilter[AcademyGroupSche
         ),
         group_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по группам академий"),
-        training_date_from: (
-            date | None
-        ) = AppQueryConstants.StandardOptionalDateQuery("Дата тренировки от"),
-        training_date_to: (
-            date | None
-        ) = AppQueryConstants.StandardOptionalDateQuery("Дата тренировки до"),
-        start_time_from: (
-            time | None
-        ) = AppQueryConstants.StandardOptionalTimeQuery("Время начала от"),
-        start_time_to: (
-            time | None
-        ) = AppQueryConstants.StandardOptionalTimeQuery("Время начала до"),
-        end_time_from: (
-            time | None
-        ) = AppQueryConstants.StandardOptionalTimeQuery("Время окончания от"),
-        end_time_to: (
-            time | None
-        ) = AppQueryConstants.StandardOptionalTimeQuery("Время окончания до"),
-        is_active: (
-            bool | None
-        ) = AppQueryConstants.StandardOptionalBooleanQuery("Фильтрация по статусу активности"),
-        is_canceled: (
-            bool | None
-        ) = AppQueryConstants.StandardOptionalBooleanQuery("Фильтрация по статусу отмены"),
-        is_finished: (
-            bool | None
-        ) = AppQueryConstants.StandardOptionalBooleanQuery("Фильтрация по статусу завершения"),
-        has_reschedule: (
-            bool | None
-        ) = AppQueryConstants.StandardOptionalBooleanQuery("Фильтрация по наличию переноса"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по группам академий"
+        ),
+        training_date_from: date | None = AppQueryConstants.StandardOptionalDateQuery(
+            "Дата тренировки от"
+        ),
+        training_date_to: date | None = AppQueryConstants.StandardOptionalDateQuery(
+            "Дата тренировки до"
+        ),
+        start_time_from: time | None = AppQueryConstants.StandardOptionalTimeQuery(
+            "Время начала от"
+        ),
+        start_time_to: time | None = AppQueryConstants.StandardOptionalTimeQuery(
+            "Время начала до"
+        ),
+        end_time_from: time | None = AppQueryConstants.StandardOptionalTimeQuery(
+            "Время окончания от"
+        ),
+        end_time_to: time | None = AppQueryConstants.StandardOptionalTimeQuery(
+            "Время окончания до"
+        ),
+        is_active: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
+            "Фильтрация по статусу активности"
+        ),
+        is_canceled: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
+            "Фильтрация по статусу отмены"
+        ),
+        is_finished: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
+            "Фильтрация по статусу завершения"
+        ),
+        has_reschedule: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
+            "Фильтрация по наличию переноса"
+        ),
         reschedule_start_from: (
             datetime | None
         ) = AppQueryConstants.StandardOptionalDateTimeQuery("Перенос начала от"),
@@ -95,10 +99,14 @@ class AcademyGroupSchedulePaginationFilter(BasePaginationFilter[AcademyGroupSche
             filters.append(AcademyGroupScheduleEntity.group_id.in_(self.group_ids))
 
         if self.training_date_from:
-            filters.append(AcademyGroupScheduleEntity.training_date >= self.training_date_from)
+            filters.append(
+                AcademyGroupScheduleEntity.training_date >= self.training_date_from
+            )
 
         if self.training_date_to:
-            filters.append(AcademyGroupScheduleEntity.training_date <= self.training_date_to)
+            filters.append(
+                AcademyGroupScheduleEntity.training_date <= self.training_date_to
+            )
 
         if self.start_time_from:
             filters.append(AcademyGroupScheduleEntity.start_at >= self.start_time_from)
@@ -123,14 +131,22 @@ class AcademyGroupSchedulePaginationFilter(BasePaginationFilter[AcademyGroupSche
 
         if self.has_reschedule is not None:
             if self.has_reschedule:
-                filters.append(AcademyGroupScheduleEntity.reschedule_start_at.is_not(None))
+                filters.append(
+                    AcademyGroupScheduleEntity.reschedule_start_at.is_not(None)
+                )
             else:
                 filters.append(AcademyGroupScheduleEntity.reschedule_start_at.is_(None))
 
         if self.reschedule_start_from:
-            filters.append(AcademyGroupScheduleEntity.reschedule_start_at >= self.reschedule_start_from)
+            filters.append(
+                AcademyGroupScheduleEntity.reschedule_start_at
+                >= self.reschedule_start_from
+            )
 
         if self.reschedule_start_to:
-            filters.append(AcademyGroupScheduleEntity.reschedule_start_at <= self.reschedule_start_to)
+            filters.append(
+                AcademyGroupScheduleEntity.reschedule_start_at
+                <= self.reschedule_start_to
+            )
 
         return filters

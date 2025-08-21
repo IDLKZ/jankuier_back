@@ -1,8 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.product_gallery.product_gallery_dto import ProductGalleryWithRelationsRDTO
-from app.adapters.filters.product_gallery.product_gallery_filter import ProductGalleryFilter
-from app.adapters.repository.product_gallery.product_gallery_repository import ProductGalleryRepository
+from app.adapters.dto.product_gallery.product_gallery_dto import (
+    ProductGalleryWithRelationsRDTO,
+)
+from app.adapters.filters.product_gallery.product_gallery_filter import (
+    ProductGalleryFilter,
+)
+from app.adapters.repository.product_gallery.product_gallery_repository import (
+    ProductGalleryRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
@@ -33,7 +39,9 @@ class AllProductGalleryCase(BaseUseCase[list[ProductGalleryWithRelationsRDTO]]):
         """
         self.repository = ProductGalleryRepository(db)
 
-    async def execute(self, filter: ProductGalleryFilter) -> list[ProductGalleryWithRelationsRDTO]:
+    async def execute(
+        self, filter: ProductGalleryFilter
+    ) -> list[ProductGalleryWithRelationsRDTO]:
         """
         Выполняет операцию получения списка всех изображений галереи товаров.
 

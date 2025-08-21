@@ -1,6 +1,8 @@
 from pydantic import BaseModel
 from app.adapters.dto.product_variant.product_variant_dto import ProductVariantRDTO
-from app.adapters.dto.modification_value.modification_value_dto import ModificationValueRDTO
+from app.adapters.dto.modification_value.modification_value_dto import (
+    ModificationValueRDTO,
+)
 from app.shared.dto_constants import DTOConstant
 
 
@@ -12,16 +14,24 @@ class ProductVariantModificationDTO(BaseModel):
 
 
 class ProductVariantModificationCDTO(BaseModel):
-    variant_id: DTOConstant.StandardUnsignedIntegerField(description="ID варианта товара")
-    modification_value_id: DTOConstant.StandardUnsignedIntegerField(description="ID значения модификации")
+    variant_id: DTOConstant.StandardUnsignedIntegerField(
+        description="ID варианта товара"
+    )
+    modification_value_id: DTOConstant.StandardUnsignedIntegerField(
+        description="ID значения модификации"
+    )
 
     class Config:
         from_attributes = True
 
 
 class ProductVariantModificationRDTO(ProductVariantModificationDTO):
-    variant_id: DTOConstant.StandardUnsignedIntegerField(description="ID варианта товара")
-    modification_value_id: DTOConstant.StandardUnsignedIntegerField(description="ID значения модификации")
+    variant_id: DTOConstant.StandardUnsignedIntegerField(
+        description="ID варианта товара"
+    )
+    modification_value_id: DTOConstant.StandardUnsignedIntegerField(
+        description="ID значения модификации"
+    )
 
     created_at: DTOConstant.StandardCreatedAt
     updated_at: DTOConstant.StandardUpdatedAt
@@ -41,8 +51,13 @@ class ProductVariantModificationWithRelationsRDTO(ProductVariantModificationRDTO
 
 class ProductVariantModificationBulkCDTO(BaseModel):
     """DTO для массового создания модификаций варианта товара"""
-    variant_id: DTOConstant.StandardUnsignedIntegerField(description="ID варианта товара")
-    modification_value_ids: list[DTOConstant.StandardUnsignedIntegerField(description="ID значения модификации")] = []
+
+    variant_id: DTOConstant.StandardUnsignedIntegerField(
+        description="ID варианта товара"
+    )
+    modification_value_ids: list[
+        DTOConstant.StandardUnsignedIntegerField(description="ID значения модификации")
+    ] = []
 
     class Config:
         from_attributes = True
@@ -50,7 +65,10 @@ class ProductVariantModificationBulkCDTO(BaseModel):
 
 class ProductVariantModificationSummaryDTO(BaseModel):
     """DTO для краткого представления модификаций варианта"""
-    variant_id: DTOConstant.StandardUnsignedIntegerField(description="ID варианта товара")
+
+    variant_id: DTOConstant.StandardUnsignedIntegerField(
+        description="ID варианта товара"
+    )
     modifications: list[ModificationValueRDTO] = []
 
     class Config:

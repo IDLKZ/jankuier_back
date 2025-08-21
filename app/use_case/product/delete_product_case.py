@@ -57,11 +57,11 @@ class DeleteProductCase(BaseUseCase[bool]):
         """
         await self.validate(id=id)
         result = await self.repository.delete(id=id, force_delete=force_delete)
-        
+
         # Удаление связанного файла изображения при успешном удалении товара
         if self.file_id and result:
             await self.file_service.delete_file(file_id=self.file_id)
-        
+
         return result
 
     async def validate(self, id: int) -> None:
@@ -77,7 +77,7 @@ class DeleteProductCase(BaseUseCase[bool]):
         self.model = await self.repository.get(id, include_deleted_filter=True)
         if not self.model:
             raise AppExceptionResponse.not_found(message=i18n.gettext("not_found"))
-        
+
         # Запоминаем ID файла для удаления
         if self.model.image_id:
             self.file_id = self.model.image_id

@@ -33,7 +33,9 @@ class DeleteAcademyCase(BaseUseCase[bool]):
         self.file_service = FileService(db)
         self.model: AcademyEntity | None = None
 
-    async def execute(self, id: int, force_delete: bool = False, delete_image: bool = True) -> bool:
+    async def execute(
+        self, id: int, force_delete: bool = False, delete_image: bool = True
+    ) -> bool:
         """
         Выполняет операцию удаления академии.
 
@@ -49,11 +51,11 @@ class DeleteAcademyCase(BaseUseCase[bool]):
             AppExceptionResponse: Если валидация не прошла.
         """
         await self.validate(id=id, force_delete=force_delete)
-        
+
         # Удаление связанного изображения (если требуется и изображение существует)
         if delete_image and self.model.image_id:
             await self.file_service.delete_file(file_id=self.model.image_id)
-        
+
         result = await self.repository.delete(id, force_delete=force_delete)
         return result
 
@@ -77,9 +79,7 @@ class DeleteAcademyCase(BaseUseCase[bool]):
         # Проверка существования академии
         model = await self.repository.get(id, include_deleted_filter=True)
         if not model:
-            raise AppExceptionResponse.not_found(
-                i18n.gettext("academy_not_found")
-            )
+            raise AppExceptionResponse.not_found(i18n.gettext("academy_not_found"))
 
         # Бизнес-правила для удаления
         if not force_delete:

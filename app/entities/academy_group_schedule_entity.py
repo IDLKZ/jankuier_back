@@ -32,8 +32,10 @@ class AcademyGroupScheduleEntity(Base):
     updated_at: Mapped[DbColumnConstants.UpdatedAt]
 
     # Relationships
-    group: Mapped[AppEntityNames.AcademyGroupEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.AcademyGroupEntityName,
-        back_populates="academy_group_schedules",
-        foreign_keys=f"{AppEntityNames.AcademyGroupScheduleEntityName}.group_id",
+    group: Mapped[AppEntityNames.AcademyGroupEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.AcademyGroupEntityName,
+            back_populates="academy_group_schedules",
+            foreign_keys=f"{AppEntityNames.AcademyGroupScheduleEntityName}.group_id",
+        )
     )

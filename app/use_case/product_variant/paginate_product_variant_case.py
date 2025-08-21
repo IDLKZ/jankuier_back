@@ -1,13 +1,21 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.pagination_dto import PaginationProductVariantWithRelationsRDTO
-from app.adapters.dto.product_variant.product_variant_dto import ProductVariantWithRelationsRDTO
-from app.adapters.filters.product_variant.product_variant_pagination_filter import ProductVariantPaginationFilter
-from app.adapters.repository.product_variant.product_variant_repository import ProductVariantRepository
+from app.adapters.dto.product_variant.product_variant_dto import (
+    ProductVariantWithRelationsRDTO,
+)
+from app.adapters.filters.product_variant.product_variant_pagination_filter import (
+    ProductVariantPaginationFilter,
+)
+from app.adapters.repository.product_variant.product_variant_repository import (
+    ProductVariantRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
-class PaginateProductVariantCase(BaseUseCase[PaginationProductVariantWithRelationsRDTO]):
+class PaginateProductVariantCase(
+    BaseUseCase[PaginationProductVariantWithRelationsRDTO]
+):
     """
     Класс Use Case для получения пагинированного списка вариантов товаров.
 
@@ -35,7 +43,9 @@ class PaginateProductVariantCase(BaseUseCase[PaginationProductVariantWithRelatio
         """
         self.repository = ProductVariantRepository(db)
 
-    async def execute(self, filter: ProductVariantPaginationFilter) -> PaginationProductVariantWithRelationsRDTO:
+    async def execute(
+        self, filter: ProductVariantPaginationFilter
+    ) -> PaginationProductVariantWithRelationsRDTO:
         """
         Выполняет операцию получения пагинированного списка вариантов товаров.
 

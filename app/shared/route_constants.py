@@ -27,7 +27,6 @@ class RoutePathConstants:
     UserPathName = "/user"
     UserTagName = "Пользователь"
 
-
     IDPath = Annotated[int, Path(gt=0, description="Уникальный идентификатор")]
     ValuePath = Annotated[
         str,

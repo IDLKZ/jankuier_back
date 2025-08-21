@@ -20,7 +20,9 @@ class FieldFilter(BaseFilter[FieldEntity]):
         ),
         city_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по городам"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по городам"
+        ),
         is_active: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
             "Фильтрация по активности поля"
         ),
@@ -45,7 +47,7 @@ class FieldFilter(BaseFilter[FieldEntity]):
     def get_search_filters(self) -> list[str] | None:
         return [
             "title_ru",
-            "title_kk", 
+            "title_kk",
             "title_en",
             "description_ru",
             "description_kk",
@@ -62,7 +64,7 @@ class FieldFilter(BaseFilter[FieldEntity]):
             "whatsapp",
             "telegram",
             "instagram",
-            "tiktok"
+            "tiktok",
         ]
 
     def apply(self) -> list[SQLAlchemyQuery]:

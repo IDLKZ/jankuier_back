@@ -1,13 +1,23 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.field_party_schedule_settings.field_party_schedule_settings_dto import FieldPartyScheduleSettingsWithRelationsRDTO
-from app.adapters.dto.pagination_dto import PaginationFieldPartyScheduleSettingsWithRelationsRDTO
-from app.adapters.filters.field_party_schedule_settings.field_party_schedule_settings_pagination_filter import FieldPartyScheduleSettingsPaginationFilter
-from app.adapters.repository.field_party_schedule_settings.field_party_schedule_settings_repository import FieldPartyScheduleSettingsRepository
+from app.adapters.dto.field_party_schedule_settings.field_party_schedule_settings_dto import (
+    FieldPartyScheduleSettingsWithRelationsRDTO,
+)
+from app.adapters.dto.pagination_dto import (
+    PaginationFieldPartyScheduleSettingsWithRelationsRDTO,
+)
+from app.adapters.filters.field_party_schedule_settings.field_party_schedule_settings_pagination_filter import (
+    FieldPartyScheduleSettingsPaginationFilter,
+)
+from app.adapters.repository.field_party_schedule_settings.field_party_schedule_settings_repository import (
+    FieldPartyScheduleSettingsRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
-class PaginateFieldPartyScheduleSettingsCase(BaseUseCase[PaginationFieldPartyScheduleSettingsWithRelationsRDTO]):
+class PaginateFieldPartyScheduleSettingsCase(
+    BaseUseCase[PaginationFieldPartyScheduleSettingsWithRelationsRDTO]
+):
     """
     Класс Use Case для получения пагинированного списка настроек расписания площадок.
 
@@ -34,7 +44,9 @@ class PaginateFieldPartyScheduleSettingsCase(BaseUseCase[PaginationFieldPartySch
         """
         self.repository = FieldPartyScheduleSettingsRepository(db)
 
-    async def execute(self, filter: FieldPartyScheduleSettingsPaginationFilter) -> PaginationFieldPartyScheduleSettingsWithRelationsRDTO:
+    async def execute(
+        self, filter: FieldPartyScheduleSettingsPaginationFilter
+    ) -> PaginationFieldPartyScheduleSettingsWithRelationsRDTO:
         """
         Выполняет операцию получения пагинированного списка настроек расписания площадок.
 

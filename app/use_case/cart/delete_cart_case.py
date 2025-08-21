@@ -44,7 +44,7 @@ class DeleteCartCase(BaseUseCase[bool]):
             AppExceptionResponse: Если валидация не прошла.
         """
         await self.validate(id=id, force_delete=force_delete)
-        
+
         result = await self.repository.delete(id, force_delete=force_delete)
         return result
 
@@ -68,9 +68,7 @@ class DeleteCartCase(BaseUseCase[bool]):
         # Проверка существования корзины
         model = await self.repository.get(id, include_deleted_filter=True)
         if not model:
-            raise AppExceptionResponse.not_found(
-                i18n.gettext("cart_not_found")
-            )
+            raise AppExceptionResponse.not_found(i18n.gettext("cart_not_found"))
 
         # Бизнес-правила для удаления
         if not force_delete:
@@ -78,7 +76,7 @@ class DeleteCartCase(BaseUseCase[bool]):
             # - Проверка на активные заказы, связанные с корзиной
             # - Проверка на право доступа к корзине
             # - Другие бизнес-ограничения
-            
+
             # Проверка на пустую корзину (предупреждение о потере данных)
             if model.cart_items and len(model.cart_items) > 0:
                 # Можно добавить дополнительную логику или просто разрешить удаление

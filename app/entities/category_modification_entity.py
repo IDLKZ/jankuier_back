@@ -31,16 +31,18 @@ class CategoryModificationEntity(Base):
     updated_at: Mapped[DbColumnConstants.UpdatedAt]
 
     # Relationships
-    category: Mapped[AppEntityNames.ProductCategoryEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.ProductCategoryEntityName,
-        back_populates="category_modifications",
-        foreign_keys=f"{AppEntityNames.CategoryModificationEntityName}.category_id",
+    category: Mapped[AppEntityNames.ProductCategoryEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.ProductCategoryEntityName,
+            back_populates="category_modifications",
+            foreign_keys=f"{AppEntityNames.CategoryModificationEntityName}.category_id",
+        )
     )
 
-    modification_type: Mapped[AppEntityNames.ModificationTypeEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.ModificationTypeEntityName,
-        back_populates="category_modifications",
-        foreign_keys=f"{AppEntityNames.CategoryModificationEntityName}.modification_type_id",
+    modification_type: Mapped[AppEntityNames.ModificationTypeEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.ModificationTypeEntityName,
+            back_populates="category_modifications",
+            foreign_keys=f"{AppEntityNames.CategoryModificationEntityName}.modification_type_id",
+        )
     )
-
-

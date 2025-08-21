@@ -42,22 +42,26 @@ class ModificationValueEntity(Base):
     deleted_at: Mapped[DbColumnConstants.DeletedAt]
 
     # Relationships
-    modification_type: Mapped[AppEntityNames.ModificationTypeEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.ModificationTypeEntityName,
-        back_populates="modification_values",
-        foreign_keys=f"{AppEntityNames.ModificationValueEntityName}.modification_type_id",
-    )
-
-    product: Mapped[AppEntityNames.ProductEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.ProductEntityName,
-        back_populates="modification_values",
-        foreign_keys=f"{AppEntityNames.ModificationValueEntityName}.product_id",
-    )
-
-    product_variant_modifications: Mapped[list[AppEntityNames.ProductVariantModificationEntityName]] = (
-        DbRelationshipConstants.one_to_many(
-            target=AppEntityNames.ProductVariantModificationEntityName,
-            back_populates="modification_value",
-            foreign_keys=f"{AppEntityNames.ProductVariantModificationEntityName}.modification_value_id",
+    modification_type: Mapped[AppEntityNames.ModificationTypeEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.ModificationTypeEntityName,
+            back_populates="modification_values",
+            foreign_keys=f"{AppEntityNames.ModificationValueEntityName}.modification_type_id",
         )
+    )
+
+    product: Mapped[AppEntityNames.ProductEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.ProductEntityName,
+            back_populates="modification_values",
+            foreign_keys=f"{AppEntityNames.ModificationValueEntityName}.product_id",
+        )
+    )
+
+    product_variant_modifications: Mapped[
+        list[AppEntityNames.ProductVariantModificationEntityName]
+    ] = DbRelationshipConstants.one_to_many(
+        target=AppEntityNames.ProductVariantModificationEntityName,
+        back_populates="modification_value",
+        foreign_keys=f"{AppEntityNames.ProductVariantModificationEntityName}.modification_value_id",
     )

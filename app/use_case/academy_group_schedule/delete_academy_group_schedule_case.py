@@ -1,7 +1,9 @@
 from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.repository.academy_group_schedule.academy_group_schedule_repository import AcademyGroupScheduleRepository
+from app.adapters.repository.academy_group_schedule.academy_group_schedule_repository import (
+    AcademyGroupScheduleRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import AcademyGroupScheduleEntity
 from app.i18n.i18n_wrapper import i18n
@@ -45,7 +47,7 @@ class DeleteAcademyGroupScheduleCase(BaseUseCase[bool]):
             AppExceptionResponse: Если валидация не прошла.
         """
         await self.validate(id=id, force_delete=force_delete)
-        
+
         result = await self.repository.delete(id, force_delete=force_delete)
         return result
 
@@ -80,11 +82,11 @@ class DeleteAcademyGroupScheduleCase(BaseUseCase[bool]):
                 raise AppExceptionResponse.bad_request(
                     message=i18n.gettext("schedule_cannot_update_finished")
                 )
-            
+
             # Проверка: нельзя удалять расписание, если тренировка уже началась
             current_datetime = datetime.now()
             training_datetime = datetime.combine(model.training_date, model.start_at)
-            
+
             if current_datetime >= training_datetime and not model.is_canceled:
                 raise AppExceptionResponse.bad_request(
                     message=i18n.gettext("schedule_already_started")

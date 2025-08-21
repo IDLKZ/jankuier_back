@@ -1,13 +1,23 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.pagination_dto import PaginationProductVariantModificationWithRelationsRDTO
-from app.adapters.dto.product_variant_modification.product_variant_modification_dto import ProductVariantModificationWithRelationsRDTO
-from app.adapters.filters.product_variant_modification.product_variant_modification_pagination_filter import ProductVariantModificationPaginationFilter
-from app.adapters.repository.product_variant_modification.product_variant_modification_repository import ProductVariantModificationRepository
+from app.adapters.dto.pagination_dto import (
+    PaginationProductVariantModificationWithRelationsRDTO,
+)
+from app.adapters.dto.product_variant_modification.product_variant_modification_dto import (
+    ProductVariantModificationWithRelationsRDTO,
+)
+from app.adapters.filters.product_variant_modification.product_variant_modification_pagination_filter import (
+    ProductVariantModificationPaginationFilter,
+)
+from app.adapters.repository.product_variant_modification.product_variant_modification_repository import (
+    ProductVariantModificationRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
-class PaginateProductVariantModificationCase(BaseUseCase[PaginationProductVariantModificationWithRelationsRDTO]):
+class PaginateProductVariantModificationCase(
+    BaseUseCase[PaginationProductVariantModificationWithRelationsRDTO]
+):
     """
     Класс Use Case для получения пагинированного списка модификаций вариантов товаров.
 
@@ -35,7 +45,9 @@ class PaginateProductVariantModificationCase(BaseUseCase[PaginationProductVarian
         """
         self.repository = ProductVariantModificationRepository(db)
 
-    async def execute(self, filter: ProductVariantModificationPaginationFilter) -> PaginationProductVariantModificationWithRelationsRDTO:
+    async def execute(
+        self, filter: ProductVariantModificationPaginationFilter
+    ) -> PaginationProductVariantModificationWithRelationsRDTO:
         """
         Выполняет операцию получения пагинированного списка модификаций вариантов товаров.
 

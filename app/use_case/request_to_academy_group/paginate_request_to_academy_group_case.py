@@ -1,13 +1,23 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.pagination_dto import PaginationRequestToAcademyGroupWithRelationsRDTO
-from app.adapters.dto.request_to_academy_group.request_to_academy_group_dto import RequestToAcademyGroupWithRelationsRDTO
-from app.adapters.filters.request_to_academy_group.request_to_academy_group_pagination_filter import RequestToAcademyGroupPaginationFilter
-from app.adapters.repository.request_to_academy_group.request_to_academy_group_repository import RequestToAcademyGroupRepository
+from app.adapters.dto.pagination_dto import (
+    PaginationRequestToAcademyGroupWithRelationsRDTO,
+)
+from app.adapters.dto.request_to_academy_group.request_to_academy_group_dto import (
+    RequestToAcademyGroupWithRelationsRDTO,
+)
+from app.adapters.filters.request_to_academy_group.request_to_academy_group_pagination_filter import (
+    RequestToAcademyGroupPaginationFilter,
+)
+from app.adapters.repository.request_to_academy_group.request_to_academy_group_repository import (
+    RequestToAcademyGroupRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
-class PaginateRequestToAcademyGroupCase(BaseUseCase[PaginationRequestToAcademyGroupWithRelationsRDTO]):
+class PaginateRequestToAcademyGroupCase(
+    BaseUseCase[PaginationRequestToAcademyGroupWithRelationsRDTO]
+):
     """
     Класс Use Case для получения пагинированного списка заявок в академические группы.
 
@@ -35,7 +45,9 @@ class PaginateRequestToAcademyGroupCase(BaseUseCase[PaginationRequestToAcademyGr
         """
         self.repository = RequestToAcademyGroupRepository(db)
 
-    async def execute(self, filter: RequestToAcademyGroupPaginationFilter) -> PaginationRequestToAcademyGroupWithRelationsRDTO:
+    async def execute(
+        self, filter: RequestToAcademyGroupPaginationFilter
+    ) -> PaginationRequestToAcademyGroupWithRelationsRDTO:
         """
         Выполняет операцию получения пагинированного списка заявок в академические группы.
 

@@ -20,19 +20,21 @@ class CartPaginationFilter(BasePaginationFilter[CartEntity]):
         ),
         user_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по пользователям"),
-        total_price_from: (
-            float | None
-        ) = AppQueryConstants.StandardOptionalDecimalQuery("Общая стоимость корзины от"),
-        total_price_to: (
-            float | None
-        ) = AppQueryConstants.StandardOptionalDecimalQuery("Общая стоимость корзины до"),
-        has_items: (
-            bool | None
-        ) = AppQueryConstants.StandardOptionalBooleanQuery("Фильтрация по наличию товаров в корзине"),
-        is_empty: (
-            bool | None
-        ) = AppQueryConstants.StandardOptionalBooleanQuery("Фильтрация по пустой корзине"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по пользователям"
+        ),
+        total_price_from: float | None = AppQueryConstants.StandardOptionalDecimalQuery(
+            "Общая стоимость корзины от"
+        ),
+        total_price_to: float | None = AppQueryConstants.StandardOptionalDecimalQuery(
+            "Общая стоимость корзины до"
+        ),
+        has_items: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
+            "Фильтрация по наличию товаров в корзине"
+        ),
+        is_empty: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
+            "Фильтрация по пустой корзине"
+        ),
         is_show_deleted: bool = AppQueryConstants.StandardBooleanQuery(
             "Показывать удаленные данные?"
         ),

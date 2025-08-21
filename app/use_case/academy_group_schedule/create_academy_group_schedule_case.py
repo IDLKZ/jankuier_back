@@ -2,16 +2,25 @@ from datetime import datetime, date, time
 from sqlalchemy import and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.academy_group_schedule.academy_group_schedule_dto import AcademyGroupScheduleCDTO, AcademyGroupScheduleWithRelationsRDTO
-from app.adapters.repository.academy_group.academy_group_repository import AcademyGroupRepository
-from app.adapters.repository.academy_group_schedule.academy_group_schedule_repository import AcademyGroupScheduleRepository
+from app.adapters.dto.academy_group_schedule.academy_group_schedule_dto import (
+    AcademyGroupScheduleCDTO,
+    AcademyGroupScheduleWithRelationsRDTO,
+)
+from app.adapters.repository.academy_group.academy_group_repository import (
+    AcademyGroupRepository,
+)
+from app.adapters.repository.academy_group_schedule.academy_group_schedule_repository import (
+    AcademyGroupScheduleRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import AcademyGroupScheduleEntity
 from app.i18n.i18n_wrapper import i18n
 from app.use_case.base_case import BaseUseCase
 
 
-class CreateAcademyGroupScheduleCase(BaseUseCase[AcademyGroupScheduleWithRelationsRDTO]):
+class CreateAcademyGroupScheduleCase(
+    BaseUseCase[AcademyGroupScheduleWithRelationsRDTO]
+):
     """
     Класс Use Case для создания нового расписания группы академии.
 
@@ -38,7 +47,9 @@ class CreateAcademyGroupScheduleCase(BaseUseCase[AcademyGroupScheduleWithRelatio
         self.group_repository = AcademyGroupRepository(db)
         self.model: AcademyGroupScheduleEntity | None = None
 
-    async def execute(self, dto: AcademyGroupScheduleCDTO) -> AcademyGroupScheduleWithRelationsRDTO:
+    async def execute(
+        self, dto: AcademyGroupScheduleCDTO
+    ) -> AcademyGroupScheduleWithRelationsRDTO:
         """
         Выполняет операцию создания расписания группы академии.
 
@@ -105,11 +116,11 @@ class CreateAcademyGroupScheduleCase(BaseUseCase[AcademyGroupScheduleWithRelatio
                 and_(
                     # Проверка пересечения времени: (start_at < existing_end_at) AND (end_at > existing_start_at)
                     dto.start_at < self.repository.model.end_at,
-                    dto.end_at > self.repository.model.start_at
-                )
+                    dto.end_at > self.repository.model.start_at,
+                ),
             ]
         )
-        
+
         if existing_schedules:
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("schedule_conflict_error")

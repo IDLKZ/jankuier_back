@@ -1,6 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.repository.category_modification.category_modification_repository import CategoryModificationRepository
+from app.adapters.repository.category_modification.category_modification_repository import (
+    CategoryModificationRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import CategoryModificationEntity
 from app.i18n.i18n_wrapper import i18n

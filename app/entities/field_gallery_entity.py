@@ -45,10 +45,12 @@ class FieldGalleryEntity(Base):
         foreign_keys=f"{AppEntityNames.FieldGalleryEntityName}.field_id",
     )
 
-    party: Mapped[AppEntityNames.FieldPartyEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.FieldPartyEntityName,
-        back_populates="field_galleries",
-        foreign_keys=f"{AppEntityNames.FieldGalleryEntityName}.party_id",
+    party: Mapped[AppEntityNames.FieldPartyEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.FieldPartyEntityName,
+            back_populates="field_galleries",
+            foreign_keys=f"{AppEntityNames.FieldGalleryEntityName}.party_id",
+        )
     )
 
     file: Mapped[AppEntityNames.FileEntityName] = DbRelationshipConstants.many_to_one(
@@ -56,4 +58,3 @@ class FieldGalleryEntity(Base):
         back_populates="field_galleries",
         foreign_keys=f"{AppEntityNames.FieldGalleryEntityName}.file_id",
     )
-

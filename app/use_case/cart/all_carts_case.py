@@ -48,30 +48,34 @@ class AllCartsCase(BaseUseCase[list[CartRDTO]]):
             list[CartRDTO]: Список корзин.
         """
         await self.validate(filter)
-        
+
         # Применяем фильтры
         filters = []
-        if hasattr(filter, 'search') and filter.search:
+        if hasattr(filter, "search") and filter.search:
             search_term = f"%{filter.search.lower()}%"
             # Поиск по ID пользователя или общей стоимости
             filters.append(
                 or_(
-                    func.cast(self.repository.model.user_id, func.text('TEXT')).like(search_term),
-                    func.cast(self.repository.model.total_price, func.text('TEXT')).like(search_term),
+                    func.cast(self.repository.model.user_id, func.text("TEXT")).like(
+                        search_term
+                    ),
+                    func.cast(
+                        self.repository.model.total_price, func.text("TEXT")
+                    ).like(search_term),
                     func.lower(self.repository.model.user.username).like(search_term),
                     func.lower(self.repository.model.user.email).like(search_term),
                 )
             )
-        
+
         # Получаем данные из репозитория
         models = await self.repository.get_with_filters(
             filters=filters,
-            order_by=getattr(filter, 'order_by', 'created_at'),
-            order_direction=getattr(filter, 'order_direction', 'desc'),
-            include_deleted_filter=not getattr(filter, 'is_show_deleted', False),
+            order_by=getattr(filter, "order_by", "created_at"),
+            order_direction=getattr(filter, "order_direction", "desc"),
+            include_deleted_filter=not getattr(filter, "is_show_deleted", False),
             options=self.repository.default_relationships(),
         )
-        
+
         return [CartRDTO.from_orm(model) for model in models]
 
     async def validate(self, filter: BaseFilter) -> None:

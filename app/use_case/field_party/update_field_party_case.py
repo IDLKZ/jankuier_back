@@ -2,8 +2,13 @@ from fastapi import UploadFile
 from sqlalchemy import func, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.field_party.field_party_dto import FieldPartyCDTO, FieldPartyWithRelationsRDTO
-from app.adapters.repository.field_party.field_party_repository import FieldPartyRepository
+from app.adapters.dto.field_party.field_party_dto import (
+    FieldPartyCDTO,
+    FieldPartyWithRelationsRDTO,
+)
+from app.adapters.repository.field_party.field_party_repository import (
+    FieldPartyRepository,
+)
 from app.adapters.repository.field.field_repository import FieldRepository
 from app.adapters.repository.file.file_repository import FileRepository
 from app.core.app_exception_response import AppExceptionResponse
@@ -146,7 +151,9 @@ class UpdateFieldPartyCase(BaseUseCase[FieldPartyWithRelationsRDTO]):
 
         # Обработка файла
         if file:
-            self.upload_folder = AppFileExtensionConstants.field_party_image_directory(dto.value)
+            self.upload_folder = AppFileExtensionConstants.field_party_image_directory(
+                dto.value
+            )
             if self.model.image_id:
                 # Обновление существующего файла
                 file_entity = await self.file_service.update_file(

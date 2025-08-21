@@ -8,7 +8,9 @@ from app.shared.query_constants import AppQueryConstants
 class AcademyGroupFilter(BaseFilter[AcademyGroupEntity]):
     def __init__(
         self,
-        search: str | None = AppQueryConstants.StandardOptionalSearchQuery("Поиск по названию, описанию группы"),
+        search: str | None = AppQueryConstants.StandardOptionalSearchQuery(
+            "Поиск по названию, описанию группы"
+        ),
         order_by: str | None = AppQueryConstants.StandardSortFieldQuery(
             "Поле сортировки"
         ),
@@ -17,37 +19,39 @@ class AcademyGroupFilter(BaseFilter[AcademyGroupEntity]):
         ),
         academy_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по академиям"),
-        gender: (
-            int | None
-        ) = AppQueryConstants.StandardOptionalIntegerQuery("Фильтрация по полу (0-любой, 1-мужской, 2-женский)"),
-        is_active: (
-            bool | None
-        ) = AppQueryConstants.StandardOptionalBooleanQuery("Фильтрация по статусу активности"),
-        is_recruiting: (
-            bool | None
-        ) = AppQueryConstants.StandardOptionalBooleanQuery("Фильтрация по статусу набора"),
-        min_age_from: (
-            int | None
-        ) = AppQueryConstants.StandardOptionalIntegerQuery("Минимальный возраст от"),
-        min_age_to: (
-            int | None
-        ) = AppQueryConstants.StandardOptionalIntegerQuery("Минимальный возраст до"),
-        max_age_from: (
-            int | None
-        ) = AppQueryConstants.StandardOptionalIntegerQuery("Максимальный возраст от"),
-        max_age_to: (
-            int | None
-        ) = AppQueryConstants.StandardOptionalIntegerQuery("Максимальный возраст до"),
-        price_from: (
-            float | None
-        ) = AppQueryConstants.StandardOptionalDecimalQuery("Цена от"),
-        price_to: (
-            float | None
-        ) = AppQueryConstants.StandardOptionalDecimalQuery("Цена до"),
-        has_free_space: (
-            bool | None
-        ) = AppQueryConstants.StandardOptionalBooleanQuery("Фильтрация по наличию свободных мест"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по академиям"
+        ),
+        gender: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
+            "Фильтрация по полу (0-любой, 1-мужской, 2-женский)"
+        ),
+        is_active: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
+            "Фильтрация по статусу активности"
+        ),
+        is_recruiting: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
+            "Фильтрация по статусу набора"
+        ),
+        min_age_from: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
+            "Минимальный возраст от"
+        ),
+        min_age_to: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
+            "Минимальный возраст до"
+        ),
+        max_age_from: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
+            "Максимальный возраст от"
+        ),
+        max_age_to: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
+            "Максимальный возраст до"
+        ),
+        price_from: float | None = AppQueryConstants.StandardOptionalDecimalQuery(
+            "Цена от"
+        ),
+        price_to: float | None = AppQueryConstants.StandardOptionalDecimalQuery(
+            "Цена до"
+        ),
+        has_free_space: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
+            "Фильтрация по наличию свободных мест"
+        ),
         is_show_deleted: bool = AppQueryConstants.StandardBooleanQuery(
             "Показывать удаленные данные?"
         ),
@@ -80,7 +84,7 @@ class AcademyGroupFilter(BaseFilter[AcademyGroupEntity]):
             "value",
             "price_per_ru",
             "price_per_kk",
-            "price_per_en"
+            "price_per_en",
         ]
 
     def apply(self) -> list[SQLAlchemyQuery]:

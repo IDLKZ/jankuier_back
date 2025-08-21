@@ -21,10 +21,14 @@ class ProductFilter(BaseFilter[ProductEntity]):
         ),
         category_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по категориям"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по категориям"
+        ),
         city_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по городам"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по городам"
+        ),
         min_price: Decimal | None = None,
         max_price: Decimal | None = None,
         gender: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
@@ -68,7 +72,7 @@ class ProductFilter(BaseFilter[ProductEntity]):
             "description_kk",
             "description_en",
             "sku",
-            "value"
+            "value",
         ]
 
     def apply(self) -> list[SQLAlchemyQuery]:

@@ -1,7 +1,11 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.modification_type.modification_type_dto import ModificationTypeRDTO
-from app.adapters.repository.modification_type.modification_type_repository import ModificationTypeRepository
+from app.adapters.dto.modification_type.modification_type_dto import (
+    ModificationTypeRDTO,
+)
+from app.adapters.repository.modification_type.modification_type_repository import (
+    ModificationTypeRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import ModificationTypeEntity
 from app.i18n.i18n_wrapper import i18n

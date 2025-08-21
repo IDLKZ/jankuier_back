@@ -1,8 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.modification_value.modification_value_dto import ModificationValueWithRelationsRDTO
-from app.adapters.filters.modification_value.modification_value_filter import ModificationValueFilter
-from app.adapters.repository.modification_value.modification_value_repository import ModificationValueRepository
+from app.adapters.dto.modification_value.modification_value_dto import (
+    ModificationValueWithRelationsRDTO,
+)
+from app.adapters.filters.modification_value.modification_value_filter import (
+    ModificationValueFilter,
+)
+from app.adapters.repository.modification_value.modification_value_repository import (
+    ModificationValueRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
@@ -33,7 +39,9 @@ class AllModificationValueCase(BaseUseCase[list[ModificationValueWithRelationsRD
         """
         self.repository = ModificationValueRepository(db)
 
-    async def execute(self, filter: ModificationValueFilter) -> list[ModificationValueWithRelationsRDTO]:
+    async def execute(
+        self, filter: ModificationValueFilter
+    ) -> list[ModificationValueWithRelationsRDTO]:
         """
         Выполняет операцию получения списка всех значений модификаций.
 

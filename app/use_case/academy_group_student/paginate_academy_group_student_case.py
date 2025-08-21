@@ -1,17 +1,29 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.pagination_dto import PaginationAcademyGroupStudentWithRelationsRDTO
-from app.adapters.dto.academy_group_student.academy_group_student_dto import AcademyGroupStudentWithRelationsRDTO
-from app.adapters.filters.academy_group_student.academy_group_student_pagination_filter import AcademyGroupStudentPaginationFilter
-from app.adapters.repository.academy_group_student.academy_group_student_repository import AcademyGroupStudentRepository
+from app.adapters.dto.pagination_dto import (
+    PaginationAcademyGroupStudentWithRelationsRDTO,
+)
+from app.adapters.dto.academy_group_student.academy_group_student_dto import (
+    AcademyGroupStudentWithRelationsRDTO,
+)
+from app.adapters.filters.academy_group_student.academy_group_student_pagination_filter import (
+    AcademyGroupStudentPaginationFilter,
+)
+from app.adapters.repository.academy_group_student.academy_group_student_repository import (
+    AcademyGroupStudentRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
-class PaginateAcademyGroupStudentCase(BaseUseCase[PaginationAcademyGroupStudentWithRelationsRDTO]):
+class PaginateAcademyGroupStudentCase(
+    BaseUseCase[PaginationAcademyGroupStudentWithRelationsRDTO]
+):
     def __init__(self, db: AsyncSession) -> None:
         self.repository = AcademyGroupStudentRepository(db)
 
-    async def execute(self, filter: AcademyGroupStudentPaginationFilter) -> PaginationAcademyGroupStudentWithRelationsRDTO:
+    async def execute(
+        self, filter: AcademyGroupStudentPaginationFilter
+    ) -> PaginationAcademyGroupStudentWithRelationsRDTO:
         pagination = await self.repository.paginate(
             dto=AcademyGroupStudentWithRelationsRDTO,
             order_by=filter.order_by,

@@ -18,16 +18,16 @@ class FieldPartyScheduleFilter(BaseFilter[FieldPartyScheduleEntity]):
         ),
         party_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по площадкам"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по площадкам"
+        ),
         setting_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по настройкам расписания"),
-        day_from: date | None = AppQueryConstants.StandardOptionalDateQuery(
-            "Дата от"
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по настройкам расписания"
         ),
-        day_to: date | None = AppQueryConstants.StandardOptionalDateQuery(
-            "Дата до"
-        ),
+        day_from: date | None = AppQueryConstants.StandardOptionalDateQuery("Дата от"),
+        day_to: date | None = AppQueryConstants.StandardOptionalDateQuery("Дата до"),
         min_price: Decimal | None = None,
         max_price: Decimal | None = None,
         is_booked: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(

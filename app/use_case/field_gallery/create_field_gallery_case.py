@@ -2,10 +2,17 @@ from fastapi import UploadFile
 from sqlalchemy import and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.field_gallery.field_gallery_dto import FieldGalleryCDTO, FieldGalleryWithRelationsRDTO
-from app.adapters.repository.field_gallery.field_gallery_repository import FieldGalleryRepository
+from app.adapters.dto.field_gallery.field_gallery_dto import (
+    FieldGalleryCDTO,
+    FieldGalleryWithRelationsRDTO,
+)
+from app.adapters.repository.field_gallery.field_gallery_repository import (
+    FieldGalleryRepository,
+)
 from app.adapters.repository.field.field_repository import FieldRepository
-from app.adapters.repository.field_party.field_party_repository import FieldPartyRepository
+from app.adapters.repository.field_party.field_party_repository import (
+    FieldPartyRepository,
+)
 from app.adapters.repository.file.file_repository import FileRepository
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import FieldGalleryEntity
@@ -77,7 +84,9 @@ class CreateFieldGalleryCase(BaseUseCase[FieldGalleryWithRelationsRDTO]):
         )
         return FieldGalleryWithRelationsRDTO.from_orm(model)
 
-    async def validate(self, dto: FieldGalleryCDTO, file: UploadFile | None = None) -> None:
+    async def validate(
+        self, dto: FieldGalleryCDTO, file: UploadFile | None = None
+    ) -> None:
         """
         Валидация перед выполнением.
 
@@ -146,7 +155,7 @@ class CreateFieldGalleryCase(BaseUseCase[FieldGalleryWithRelationsRDTO]):
                 and_(
                     FieldGalleryEntity.field_id == dto.field_id,
                     FieldGalleryEntity.file_id == dto.file_id,
-                    FieldGalleryEntity.party_id == dto.party_id
+                    FieldGalleryEntity.party_id == dto.party_id,
                 )
             ]
         )
@@ -168,12 +177,14 @@ class CreateFieldGalleryCase(BaseUseCase[FieldGalleryWithRelationsRDTO]):
         """
         if not filename:
             return False
-        
+
         # Получаем расширение файла
         extension = "." + filename.split(".")[-1].lower() if "." in filename else ""
         return extension in self.extensions
 
-    async def transform(self, dto: FieldGalleryCDTO, file: UploadFile | None = None) -> None:
+    async def transform(
+        self, dto: FieldGalleryCDTO, file: UploadFile | None = None
+    ) -> None:
         """
         Преобразование DTO в модель.
 
@@ -185,8 +196,10 @@ class CreateFieldGalleryCase(BaseUseCase[FieldGalleryWithRelationsRDTO]):
         if file:
             # Определяем папку для загрузки на основе поля
             field = await self.field_repository.get(dto.field_id)
-            if field and hasattr(field, 'value') and field.value:
-                self.upload_folder = f"{AppFileExtensionConstants.FieldFolderName}/gallery/{field.value}"
+            if field and hasattr(field, "value") and field.value:
+                self.upload_folder = (
+                    f"{AppFileExtensionConstants.FieldFolderName}/gallery/{field.value}"
+                )
             else:
                 self.upload_folder = f"{AppFileExtensionConstants.FieldFolderName}/gallery/{dto.field_id}"
 

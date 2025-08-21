@@ -13,7 +13,9 @@ from app.entities.field_entity import FieldEntity
 from app.entities.field_gallery_entity import FieldGalleryEntity
 from app.entities.field_party_entity import FieldPartyEntity
 from app.entities.field_party_schedule_entity import FieldPartyScheduleEntity
-from app.entities.field_party_schedule_settings_entity import FieldPartyScheduleSettingsEntity
+from app.entities.field_party_schedule_settings_entity import (
+    FieldPartyScheduleSettingsEntity,
+)
 from app.entities.file_entity import FileEntity
 from app.entities.modification_type_entity import ModificationTypeEntity
 from app.entities.modification_value_entity import ModificationValueEntity
@@ -22,7 +24,9 @@ from app.entities.product_category_entity import ProductCategoryEntity
 from app.entities.product_entity import ProductEntity
 from app.entities.product_gallery_entity import ProductGalleryEntity
 from app.entities.product_variant_entity import ProductVariantEntity
-from app.entities.product_variant_modification_entity import ProductVariantModificationEntity
+from app.entities.product_variant_modification_entity import (
+    ProductVariantModificationEntity,
+)
 from app.entities.request_material_entity import RequestMaterialEntity
 from app.entities.request_to_academy_group_entity import RequestToAcademyGroupEntity
 from app.entities.role_entity import RoleEntity
@@ -65,10 +69,4 @@ __all__ = [
     AcademyGroupStudentEntity.__name__,
     CartEntity.__name__,
     CartItemEntity.__name__,
-
 ]
-
-
-
-
-

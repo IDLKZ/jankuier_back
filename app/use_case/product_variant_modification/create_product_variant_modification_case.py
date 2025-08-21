@@ -1,16 +1,27 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.product_variant_modification.product_variant_modification_dto import ProductVariantModificationCDTO, ProductVariantModificationWithRelationsRDTO
-from app.adapters.repository.modification_value.modification_value_repository import ModificationValueRepository
-from app.adapters.repository.product_variant.product_variant_repository import ProductVariantRepository
-from app.adapters.repository.product_variant_modification.product_variant_modification_repository import ProductVariantModificationRepository
+from app.adapters.dto.product_variant_modification.product_variant_modification_dto import (
+    ProductVariantModificationCDTO,
+    ProductVariantModificationWithRelationsRDTO,
+)
+from app.adapters.repository.modification_value.modification_value_repository import (
+    ModificationValueRepository,
+)
+from app.adapters.repository.product_variant.product_variant_repository import (
+    ProductVariantRepository,
+)
+from app.adapters.repository.product_variant_modification.product_variant_modification_repository import (
+    ProductVariantModificationRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import ProductVariantModificationEntity
 from app.i18n.i18n_wrapper import i18n
 from app.use_case.base_case import BaseUseCase
 
 
-class CreateProductVariantModificationCase(BaseUseCase[ProductVariantModificationWithRelationsRDTO]):
+class CreateProductVariantModificationCase(
+    BaseUseCase[ProductVariantModificationWithRelationsRDTO]
+):
     """
     Класс Use Case для создания новой модификации варианта товара.
 
@@ -46,7 +57,9 @@ class CreateProductVariantModificationCase(BaseUseCase[ProductVariantModificatio
         self.modification_value_repository = ModificationValueRepository(db)
         self.model: ProductVariantModificationEntity | None = None
 
-    async def execute(self, dto: ProductVariantModificationCDTO) -> ProductVariantModificationWithRelationsRDTO:
+    async def execute(
+        self, dto: ProductVariantModificationCDTO
+    ) -> ProductVariantModificationWithRelationsRDTO:
         """
         Выполняет операцию создания новой модификации варианта товара.
 
@@ -84,7 +97,9 @@ class CreateProductVariantModificationCase(BaseUseCase[ProductVariantModificatio
             )
 
         # Проверка существования значения модификации
-        if (await self.modification_value_repository.get(dto.modification_value_id)) is None:
+        if (
+            await self.modification_value_repository.get(dto.modification_value_id)
+        ) is None:
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("modification_value_not_found_by_id")
             )
@@ -93,7 +108,8 @@ class CreateProductVariantModificationCase(BaseUseCase[ProductVariantModificatio
         existed = await self.repository.get_first_with_filters(
             filters=[
                 self.repository.model.variant_id == dto.variant_id,
-                self.repository.model.modification_value_id == dto.modification_value_id
+                self.repository.model.modification_value_id
+                == dto.modification_value_id,
             ]
         )
         if existed:

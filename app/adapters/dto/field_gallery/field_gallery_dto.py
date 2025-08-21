@@ -14,8 +14,12 @@ class FieldGalleryDTO(BaseModel):
 
 class FieldGalleryCDTO(BaseModel):
     field_id: DTOConstant.StandardUnsignedIntegerField(description="ID поля")
-    party_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID площадки (опционально)")
-    file_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID файла изображения")
+    party_id: DTOConstant.StandardNullableUnsignedIntegerField(
+        description="ID площадки (опционально)"
+    )
+    file_id: DTOConstant.StandardNullableUnsignedIntegerField(
+        description="ID файла изображения"
+    )
 
     class Config:
         from_attributes = True
@@ -23,8 +27,12 @@ class FieldGalleryCDTO(BaseModel):
 
 class FieldGalleryRDTO(FieldGalleryDTO):
     field_id: DTOConstant.StandardUnsignedIntegerField(description="ID поля")
-    party_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID площадки (опционально)")
-    file_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID файла изображения")
+    party_id: DTOConstant.StandardNullableUnsignedIntegerField(
+        description="ID площадки (опционально)"
+    )
+    file_id: DTOConstant.StandardNullableUnsignedIntegerField(
+        description="ID файла изображения"
+    )
 
     created_at: DTOConstant.StandardCreatedAt
     updated_at: DTOConstant.StandardUpdatedAt
@@ -44,9 +52,17 @@ class FieldGalleryWithRelationsRDTO(FieldGalleryRDTO):
 
 class FieldGalleryBulkCDTO(BaseModel):
     """DTO для массового создания изображений галереи поля"""
+
     field_id: DTOConstant.StandardUnsignedIntegerField(description="ID поля")
-    party_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID площадки (опционально)") | None = None
-    file_ids: list[DTOConstant.StandardUnsignedIntegerField(description="ID файла изображения")] = []
+    party_id: (
+        DTOConstant.StandardNullableUnsignedIntegerField(
+            description="ID площадки (опционально)"
+        )
+        | None
+    ) = None
+    file_ids: list[
+        DTOConstant.StandardUnsignedIntegerField(description="ID файла изображения")
+    ] = []
 
     class Config:
         from_attributes = True
@@ -54,8 +70,17 @@ class FieldGalleryBulkCDTO(BaseModel):
 
 class FieldGalleryUpdateDTO(BaseModel):
     """DTO для обновления изображения в галерее поля"""
-    party_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID площадки") | None = None
-    file_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID файла изображения") | None = None
+
+    party_id: (
+        DTOConstant.StandardNullableUnsignedIntegerField(description="ID площадки")
+        | None
+    ) = None
+    file_id: (
+        DTOConstant.StandardNullableUnsignedIntegerField(
+            description="ID файла изображения"
+        )
+        | None
+    ) = None
 
     class Config:
         from_attributes = True

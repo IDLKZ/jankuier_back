@@ -35,16 +35,20 @@ class RequestMaterialEntity(Base):
     updated_at: Mapped[DbColumnConstants.UpdatedAt]
 
     # Relationships
-    request: Mapped[AppEntityNames.RequestToAcademyGroupEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.RequestToAcademyGroupEntityName,
-        back_populates="request_materials",
-        foreign_keys=f"{AppEntityNames.RequestMaterialEntityName}.request_id",
+    request: Mapped[AppEntityNames.RequestToAcademyGroupEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.RequestToAcademyGroupEntityName,
+            back_populates="request_materials",
+            foreign_keys=f"{AppEntityNames.RequestMaterialEntityName}.request_id",
+        )
     )
 
-    student: Mapped[AppEntityNames.StudentEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.StudentEntityName,
-        back_populates="request_materials",
-        foreign_keys=f"{AppEntityNames.RequestMaterialEntityName}.student_id",
+    student: Mapped[AppEntityNames.StudentEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.StudentEntityName,
+            back_populates="request_materials",
+            foreign_keys=f"{AppEntityNames.RequestMaterialEntityName}.student_id",
+        )
     )
 
     file: Mapped[AppEntityNames.FileEntityName] = DbRelationshipConstants.many_to_one(

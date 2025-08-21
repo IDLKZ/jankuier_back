@@ -1,6 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.repository.product_gallery.product_gallery_repository import ProductGalleryRepository
+from app.adapters.repository.product_gallery.product_gallery_repository import (
+    ProductGalleryRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import ProductGalleryEntity
 from app.i18n.i18n_wrapper import i18n

@@ -48,33 +48,45 @@ class AllCartItemsCase(BaseUseCase[list[CartItemWithRelationsRDTO]]):
             list[CartItemWithRelationsRDTO]: Список товаров в корзинах с связями.
         """
         await self.validate(filter)
-        
+
         # Применяем фильтры
         filters = []
-        if hasattr(filter, 'search') and filter.search:
+        if hasattr(filter, "search") and filter.search:
             search_term = f"%{filter.search.lower()}%"
             # Поиск по SKU, названию товара или цене
             filters.append(
                 or_(
                     func.lower(self.repository.model.sku).like(search_term),
-                    func.lower(self.repository.model.product.title_ru).like(search_term),
-                    func.lower(self.repository.model.product.title_kk).like(search_term),
-                    func.lower(self.repository.model.product.title_en).like(search_term),
-                    func.cast(self.repository.model.unit_price, func.text('TEXT')).like(search_term),
-                    func.cast(self.repository.model.total_price, func.text('TEXT')).like(search_term),
-                    func.cast(self.repository.model.qty, func.text('TEXT')).like(search_term),
+                    func.lower(self.repository.model.product.title_ru).like(
+                        search_term
+                    ),
+                    func.lower(self.repository.model.product.title_kk).like(
+                        search_term
+                    ),
+                    func.lower(self.repository.model.product.title_en).like(
+                        search_term
+                    ),
+                    func.cast(self.repository.model.unit_price, func.text("TEXT")).like(
+                        search_term
+                    ),
+                    func.cast(
+                        self.repository.model.total_price, func.text("TEXT")
+                    ).like(search_term),
+                    func.cast(self.repository.model.qty, func.text("TEXT")).like(
+                        search_term
+                    ),
                 )
             )
-        
+
         # Получаем данные из репозитория
         models = await self.repository.get_with_filters(
             filters=filters,
-            order_by=getattr(filter, 'order_by', 'created_at'),
-            order_direction=getattr(filter, 'order_direction', 'desc'),
-            include_deleted_filter=not getattr(filter, 'is_show_deleted', False),
+            order_by=getattr(filter, "order_by", "created_at"),
+            order_direction=getattr(filter, "order_direction", "desc"),
+            include_deleted_filter=not getattr(filter, "is_show_deleted", False),
             options=self.repository.default_relationships(),
         )
-        
+
         return [CartItemWithRelationsRDTO.from_orm(model) for model in models]
 
     async def validate(self, filter: BaseFilter) -> None:

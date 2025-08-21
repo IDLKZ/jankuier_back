@@ -81,14 +81,7 @@ class FieldPartyPaginationFilter(BasePaginationFilter[FieldPartyEntity]):
         self.is_show_deleted = is_show_deleted
 
     def get_search_filters(self) -> list[str] | None:
-        return [
-            "title_ru",
-            "title_kk",
-            "title_en",
-            "value",
-            "latitude",
-            "longitude"
-        ]
+        return ["title_ru", "title_kk", "title_en", "value", "latitude", "longitude"]
 
     def apply(self) -> list[SQLAlchemyQuery]:
         filters = []

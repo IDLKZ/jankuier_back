@@ -36,21 +36,26 @@ class AcademyGroupStudentEntity(Base):
     updated_at: Mapped[DbColumnConstants.UpdatedAt]
 
     # Relationships
-    student: Mapped[AppEntityNames.StudentEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.StudentEntityName,
-        back_populates="academy_group_students",
-        foreign_keys=f"{AppEntityNames.AcademyGroupStudentEntityName}.student_id",
+    student: Mapped[AppEntityNames.StudentEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.StudentEntityName,
+            back_populates="academy_group_students",
+            foreign_keys=f"{AppEntityNames.AcademyGroupStudentEntityName}.student_id",
+        )
     )
 
-    group: Mapped[AppEntityNames.AcademyGroupEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.AcademyGroupEntityName,
-        back_populates="academy_group_students",
-        foreign_keys=f"{AppEntityNames.AcademyGroupStudentEntityName}.group_id",
+    group: Mapped[AppEntityNames.AcademyGroupEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.AcademyGroupEntityName,
+            back_populates="academy_group_students",
+            foreign_keys=f"{AppEntityNames.AcademyGroupStudentEntityName}.group_id",
+        )
     )
 
-    request: Mapped[AppEntityNames.RequestToAcademyGroupEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.RequestToAcademyGroupEntityName,
-        back_populates="academy_group_students",
-        foreign_keys=f"{AppEntityNames.AcademyGroupStudentEntityName}.request_id",
+    request: Mapped[AppEntityNames.RequestToAcademyGroupEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.RequestToAcademyGroupEntityName,
+            back_populates="academy_group_students",
+            foreign_keys=f"{AppEntityNames.AcademyGroupStudentEntityName}.request_id",
+        )
     )
-

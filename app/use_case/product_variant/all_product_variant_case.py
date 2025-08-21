@@ -1,8 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.product_variant.product_variant_dto import ProductVariantWithRelationsRDTO
-from app.adapters.filters.product_variant.product_variant_filter import ProductVariantFilter
-from app.adapters.repository.product_variant.product_variant_repository import ProductVariantRepository
+from app.adapters.dto.product_variant.product_variant_dto import (
+    ProductVariantWithRelationsRDTO,
+)
+from app.adapters.filters.product_variant.product_variant_filter import (
+    ProductVariantFilter,
+)
+from app.adapters.repository.product_variant.product_variant_repository import (
+    ProductVariantRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
@@ -33,7 +39,9 @@ class AllProductVariantCase(BaseUseCase[list[ProductVariantWithRelationsRDTO]]):
         """
         self.repository = ProductVariantRepository(db)
 
-    async def execute(self, filter: ProductVariantFilter) -> list[ProductVariantWithRelationsRDTO]:
+    async def execute(
+        self, filter: ProductVariantFilter
+    ) -> list[ProductVariantWithRelationsRDTO]:
         """
         Выполняет операцию получения списка всех вариантов товаров.
 

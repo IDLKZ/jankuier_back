@@ -1,9 +1,14 @@
 from fastapi import UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.product_category.product_category_dto import ProductCategoryCDTO, ProductCategoryWithRelationsRDTO
+from app.adapters.dto.product_category.product_category_dto import (
+    ProductCategoryCDTO,
+    ProductCategoryWithRelationsRDTO,
+)
 from app.adapters.repository.file.file_repository import FileRepository
-from app.adapters.repository.product_category.product_category_repository import ProductCategoryRepository
+from app.adapters.repository.product_category.product_category_repository import (
+    ProductCategoryRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import ProductCategoryEntity
 from app.i18n.i18n_wrapper import i18n
@@ -76,7 +81,9 @@ class CreateProductCategoryCase(BaseUseCase[ProductCategoryWithRelationsRDTO]):
         )
         return ProductCategoryWithRelationsRDTO.from_orm(self.model)
 
-    async def validate(self, dto: ProductCategoryCDTO, file: UploadFile | None = None) -> None:
+    async def validate(
+        self, dto: ProductCategoryCDTO, file: UploadFile | None = None
+    ) -> None:
         """
         Валидирует данные перед созданием категории товара.
 

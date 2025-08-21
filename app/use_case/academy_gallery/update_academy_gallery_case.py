@@ -1,9 +1,16 @@
 from fastapi import UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.academy_gallery.academy_gallery_dto import AcademyGalleryUpdateDTO, AcademyGalleryWithRelationsRDTO
-from app.adapters.repository.academy_gallery.academy_gallery_repository import AcademyGalleryRepository
-from app.adapters.repository.academy_group.academy_group_repository import AcademyGroupRepository
+from app.adapters.dto.academy_gallery.academy_gallery_dto import (
+    AcademyGalleryUpdateDTO,
+    AcademyGalleryWithRelationsRDTO,
+)
+from app.adapters.repository.academy_gallery.academy_gallery_repository import (
+    AcademyGalleryRepository,
+)
+from app.adapters.repository.academy_group.academy_group_repository import (
+    AcademyGroupRepository,
+)
 from app.adapters.repository.file.file_repository import FileRepository
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import AcademyGalleryEntity
@@ -102,7 +109,7 @@ class UpdateAcademyGalleryCase(BaseUseCase[AcademyGalleryWithRelationsRDTO]):
                     raise AppExceptionResponse.bad_request(
                         message=i18n.gettext("academy_group_not_found")
                     )
-                
+
                 # Проверка, что группа принадлежит той же академии
                 if group.academy_id != model.academy_id:
                     raise AppExceptionResponse.bad_request(
@@ -113,7 +120,7 @@ class UpdateAcademyGalleryCase(BaseUseCase[AcademyGalleryWithRelationsRDTO]):
         if file:
             # Валидация типа и размера файла
             self.file_service.validate_file(file, self.extensions)
-            
+
             # Дополнительная проверка на тип изображения
             if not any(file.filename.lower().endswith(ext) for ext in self.extensions):
                 raise AppExceptionResponse.bad_request(
@@ -127,7 +134,7 @@ class UpdateAcademyGalleryCase(BaseUseCase[AcademyGalleryWithRelationsRDTO]):
                 raise AppExceptionResponse.bad_request(
                     message=i18n.gettext("file_not_found")
                 )
-            
+
             # Проверка на дублирование: этот файл уже не должен быть в галерее данной академии
             # (исключаем текущую запись)
             duplicate_gallery_item = await self.repository.get_first_with_filters(
@@ -162,11 +169,17 @@ class UpdateAcademyGalleryCase(BaseUseCase[AcademyGalleryWithRelationsRDTO]):
                 await self.file_service.delete_file(file_id=self.model.file_id)
 
             # Определяем папку для загрузки на основе академии и группы
-            academy_value = self.model.academy.value if self.model.academy.value else str(self.model.academy_id)
-            
+            academy_value = (
+                self.model.academy.value
+                if self.model.academy.value
+                else str(self.model.academy_id)
+            )
+
             # Определяем группу для папки (берем обновленную или текущую)
-            target_group_id = dto.group_id if dto.group_id is not None else self.model.group_id
-            
+            target_group_id = (
+                dto.group_id if dto.group_id is not None else self.model.group_id
+            )
+
             if target_group_id:
                 group = await self.group_repository.get(target_group_id)
                 group_value = group.value if group.value else str(target_group_id)

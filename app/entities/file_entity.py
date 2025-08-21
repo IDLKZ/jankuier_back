@@ -128,4 +128,3 @@ class FileEntity(Base):
             foreign_keys=f"{AppEntityNames.FieldPartyEntityName}.image_id",
         )
     )
-

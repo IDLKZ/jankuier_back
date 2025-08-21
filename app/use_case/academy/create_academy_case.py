@@ -134,13 +134,16 @@ class CreateAcademyCase(BaseUseCase[AcademyWithRelationsRDTO]):
             self._validate_phone(dto.additional_phone)
 
         # Валидация средней цены (если указана)
-        if dto.average_price is not None and dto.average_price <= Decimal('0'):
+        if dto.average_price is not None and dto.average_price <= Decimal("0"):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("average_price_validation_error")
             )
 
         # Валидация времени тренировки (если указано)
-        if dto.average_training_time_in_minute is not None and dto.average_training_time_in_minute <= 0:
+        if (
+            dto.average_training_time_in_minute is not None
+            and dto.average_training_time_in_minute <= 0
+        ):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("training_time_validation_error")
             )
@@ -187,7 +190,7 @@ class CreateAcademyCase(BaseUseCase[AcademyWithRelationsRDTO]):
         Raises:
             AppExceptionResponse: Если email невалиден.
         """
-        email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        email_pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
         if not re.match(email_pattern, email):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("invalid_email_format")
@@ -204,7 +207,7 @@ class CreateAcademyCase(BaseUseCase[AcademyWithRelationsRDTO]):
             AppExceptionResponse: Если телефон невалиден.
         """
         # Простая валидация телефона (только цифры, +, -, (, ), пробелы)
-        phone_pattern = r'^[\+]?[0-9\s\-\(\)]{7,20}$'
+        phone_pattern = r"^[\+]?[0-9\s\-\(\)]{7,20}$"
         if not re.match(phone_pattern, phone):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("invalid_phone_format")

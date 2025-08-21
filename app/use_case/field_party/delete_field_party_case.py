@@ -1,6 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.repository.field_party.field_party_repository import FieldPartyRepository
+from app.adapters.repository.field_party.field_party_repository import (
+    FieldPartyRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import FieldPartyEntity
 from app.i18n.i18n_wrapper import i18n
@@ -57,11 +59,11 @@ class DeleteFieldPartyByIdCase(BaseUseCase[bool]):
         """
         await self.validate(id=id)
         result = await self.repository.delete(id=id, force_delete=force_delete)
-        
+
         # Удаление связанного файла при успешном удалении
         if self.file_id and result:
             await self.file_service.delete_file(file_id=self.file_id)
-        
+
         return result
 
     async def validate(self, id: int) -> None:
@@ -77,7 +79,7 @@ class DeleteFieldPartyByIdCase(BaseUseCase[bool]):
         self.model = await self.repository.get(id, include_deleted_filter=True)
         if not self.model:
             raise AppExceptionResponse.not_found(message=i18n.gettext("not_found"))
-        
+
         # Сохранение ID файла для последующего удаления
         if self.model.image_id:
             self.file_id = self.model.image_id

@@ -147,7 +147,9 @@ class UpdateFieldCase(BaseUseCase[FieldWithRelationsRDTO]):
 
         # Обработка файла
         if file:
-            self.upload_folder = AppFileExtensionConstants.field_image_directory(dto.value)
+            self.upload_folder = AppFileExtensionConstants.field_image_directory(
+                dto.value
+            )
             if self.model.image_id:
                 # Обновление существующего файла
                 file_entity = await self.file_service.update_file(

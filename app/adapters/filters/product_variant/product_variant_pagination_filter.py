@@ -25,10 +25,14 @@ class ProductVariantPaginationFilter(BasePaginationFilter[ProductVariantEntity])
         ),
         product_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по товарам"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по товарам"
+        ),
         city_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по городам"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по городам"
+        ),
         min_stock: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
             "Минимальное количество на складе"
         ),

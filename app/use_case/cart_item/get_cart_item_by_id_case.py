@@ -48,13 +48,11 @@ class GetCartItemByIdCase(BaseUseCase[CartItemRDTO]):
             AppExceptionResponse: Если товар в корзине не найден.
         """
         await self.validate(id)
-        
+
         model = await self.repository.get(id, include_deleted_filter=True)
         if not model:
-            raise AppExceptionResponse.not_found(
-                i18n.gettext("cart_item_not_found")
-            )
-        
+            raise AppExceptionResponse.not_found(i18n.gettext("cart_item_not_found"))
+
         return CartItemRDTO.from_orm(model)
 
     async def validate(self, id: int) -> None:

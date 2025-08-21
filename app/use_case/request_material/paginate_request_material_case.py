@@ -1,17 +1,27 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.pagination_dto import PaginationRequestMaterialWithRelationsRDTO
-from app.adapters.dto.request_material.request_material_dto import RequestMaterialWithRelationsRDTO
-from app.adapters.filters.request_material.request_material_pagination_filter import RequestMaterialPaginationFilter
-from app.adapters.repository.request_material.request_material_repository import RequestMaterialRepository
+from app.adapters.dto.request_material.request_material_dto import (
+    RequestMaterialWithRelationsRDTO,
+)
+from app.adapters.filters.request_material.request_material_pagination_filter import (
+    RequestMaterialPaginationFilter,
+)
+from app.adapters.repository.request_material.request_material_repository import (
+    RequestMaterialRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
-class PaginateRequestMaterialCase(BaseUseCase[PaginationRequestMaterialWithRelationsRDTO]):
+class PaginateRequestMaterialCase(
+    BaseUseCase[PaginationRequestMaterialWithRelationsRDTO]
+):
     def __init__(self, db: AsyncSession) -> None:
         self.repository = RequestMaterialRepository(db)
 
-    async def execute(self, filter: RequestMaterialPaginationFilter) -> PaginationRequestMaterialWithRelationsRDTO:
+    async def execute(
+        self, filter: RequestMaterialPaginationFilter
+    ) -> PaginationRequestMaterialWithRelationsRDTO:
         pagination = await self.repository.paginate(
             dto=RequestMaterialWithRelationsRDTO,
             order_by=filter.order_by,

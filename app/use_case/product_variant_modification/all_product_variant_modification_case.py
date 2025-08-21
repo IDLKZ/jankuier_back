@@ -1,12 +1,20 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.product_variant_modification.product_variant_modification_dto import ProductVariantModificationWithRelationsRDTO
-from app.adapters.filters.product_variant_modification.product_variant_modification_filter import ProductVariantModificationFilter
-from app.adapters.repository.product_variant_modification.product_variant_modification_repository import ProductVariantModificationRepository
+from app.adapters.dto.product_variant_modification.product_variant_modification_dto import (
+    ProductVariantModificationWithRelationsRDTO,
+)
+from app.adapters.filters.product_variant_modification.product_variant_modification_filter import (
+    ProductVariantModificationFilter,
+)
+from app.adapters.repository.product_variant_modification.product_variant_modification_repository import (
+    ProductVariantModificationRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
-class AllProductVariantModificationCase(BaseUseCase[list[ProductVariantModificationWithRelationsRDTO]]):
+class AllProductVariantModificationCase(
+    BaseUseCase[list[ProductVariantModificationWithRelationsRDTO]]
+):
     """
     Класс Use Case для получения списка всех модификаций вариантов товаров.
 
@@ -33,7 +41,9 @@ class AllProductVariantModificationCase(BaseUseCase[list[ProductVariantModificat
         """
         self.repository = ProductVariantModificationRepository(db)
 
-    async def execute(self, filter: ProductVariantModificationFilter) -> list[ProductVariantModificationWithRelationsRDTO]:
+    async def execute(
+        self, filter: ProductVariantModificationFilter
+    ) -> list[ProductVariantModificationWithRelationsRDTO]:
         """
         Выполняет операцию получения списка всех модификаций вариантов товаров.
 
@@ -50,7 +60,10 @@ class AllProductVariantModificationCase(BaseUseCase[list[ProductVariantModificat
             order_direction=filter.order_direction,
             include_deleted_filter=filter.is_show_deleted,
         )
-        return [ProductVariantModificationWithRelationsRDTO.from_orm(model) for model in models]
+        return [
+            ProductVariantModificationWithRelationsRDTO.from_orm(model)
+            for model in models
+        ]
 
     async def validate(self) -> None:
         """

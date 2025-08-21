@@ -53,10 +53,12 @@ class AcademyGroupEntity(Base):
     updated_at: Mapped[DbColumnConstants.UpdatedAt]
 
     # Relationships
-    academy: Mapped[AppEntityNames.AcademyEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.AcademyEntityName,
-        back_populates="academy_groups",
-        foreign_keys=f"{AppEntityNames.AcademyGroupEntityName}.academy_id",
+    academy: Mapped[AppEntityNames.AcademyEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.AcademyEntityName,
+            back_populates="academy_groups",
+            foreign_keys=f"{AppEntityNames.AcademyGroupEntityName}.academy_id",
+        )
     )
 
     image: Mapped[AppEntityNames.FileEntityName] = DbRelationshipConstants.many_to_one(
@@ -65,20 +67,20 @@ class AcademyGroupEntity(Base):
         foreign_keys=f"{AppEntityNames.AcademyGroupEntityName}.image_id",
     )
 
-    academy_group_schedules: Mapped[list[AppEntityNames.AcademyGroupScheduleEntityName]] = (
-        DbRelationshipConstants.one_to_many(
-            target=AppEntityNames.AcademyGroupScheduleEntityName,
-            back_populates="group",
-            foreign_keys=f"{AppEntityNames.AcademyGroupScheduleEntityName}.group_id",
-        )
+    academy_group_schedules: Mapped[
+        list[AppEntityNames.AcademyGroupScheduleEntityName]
+    ] = DbRelationshipConstants.one_to_many(
+        target=AppEntityNames.AcademyGroupScheduleEntityName,
+        back_populates="group",
+        foreign_keys=f"{AppEntityNames.AcademyGroupScheduleEntityName}.group_id",
     )
 
-    academy_group_students: Mapped[list[AppEntityNames.AcademyGroupStudentEntityName]] = (
-        DbRelationshipConstants.one_to_many(
-            target=AppEntityNames.AcademyGroupStudentEntityName,
-            back_populates="group",
-            foreign_keys=f"{AppEntityNames.AcademyGroupStudentEntityName}.group_id",
-        )
+    academy_group_students: Mapped[
+        list[AppEntityNames.AcademyGroupStudentEntityName]
+    ] = DbRelationshipConstants.one_to_many(
+        target=AppEntityNames.AcademyGroupStudentEntityName,
+        back_populates="group",
+        foreign_keys=f"{AppEntityNames.AcademyGroupStudentEntityName}.group_id",
     )
 
     academy_materials: Mapped[list[AppEntityNames.AcademyMaterialEntityName]] = (
@@ -89,12 +91,12 @@ class AcademyGroupEntity(Base):
         )
     )
 
-    request_to_academy_groups: Mapped[list[AppEntityNames.RequestToAcademyGroupEntityName]] = (
-        DbRelationshipConstants.one_to_many(
-            target=AppEntityNames.RequestToAcademyGroupEntityName,
-            back_populates="group",
-            foreign_keys=f"{AppEntityNames.RequestToAcademyGroupEntityName}.group_id",
-        )
+    request_to_academy_groups: Mapped[
+        list[AppEntityNames.RequestToAcademyGroupEntityName]
+    ] = DbRelationshipConstants.one_to_many(
+        target=AppEntityNames.RequestToAcademyGroupEntityName,
+        back_populates="group",
+        foreign_keys=f"{AppEntityNames.RequestToAcademyGroupEntityName}.group_id",
     )
 
     academy_galleries: Mapped[list[AppEntityNames.AcademyGalleryEntityName]] = (
@@ -104,4 +106,3 @@ class AcademyGroupEntity(Base):
             foreign_keys=f"{AppEntityNames.AcademyGalleryEntityName}.group_id",
         )
     )
-

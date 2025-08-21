@@ -16,7 +16,9 @@ class CartEntity(Base):
         )
     ]
     total_price: Mapped[DbColumnConstants.StandardZeroDecimal]
-    cart_items: Mapped[DbColumnConstants.StandardNullableJSONB]  # хранение snapshot товаров
+    cart_items: Mapped[
+        DbColumnConstants.StandardNullableJSONB
+    ]  # хранение snapshot товаров
     created_at: Mapped[DbColumnConstants.CreatedAt]
     updated_at: Mapped[DbColumnConstants.UpdatedAt]
     deleted_at: Mapped[DbColumnConstants.DeletedAt]
@@ -35,4 +37,3 @@ class CartEntity(Base):
             foreign_keys=f"{AppEntityNames.CartItemEntityName}.cart_id",
         )
     )
-

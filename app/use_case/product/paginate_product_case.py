@@ -2,7 +2,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.pagination_dto import PaginationProductWithRelationsRDTO
 from app.adapters.dto.product.product_dto import ProductWithRelationsRDTO
-from app.adapters.filters.product.product_pagination_filter import ProductPaginationFilter
+from app.adapters.filters.product.product_pagination_filter import (
+    ProductPaginationFilter,
+)
 from app.adapters.repository.product.product_repository import ProductRepository
 from app.use_case.base_case import BaseUseCase
 
@@ -35,7 +37,9 @@ class PaginateProductCase(BaseUseCase[PaginationProductWithRelationsRDTO]):
         """
         self.repository = ProductRepository(db)
 
-    async def execute(self, filter: ProductPaginationFilter) -> PaginationProductWithRelationsRDTO:
+    async def execute(
+        self, filter: ProductPaginationFilter
+    ) -> PaginationProductWithRelationsRDTO:
         """
         Выполняет операцию получения пагинированного списка товаров.
 

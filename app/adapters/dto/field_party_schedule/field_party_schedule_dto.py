@@ -1,6 +1,8 @@
 from pydantic import BaseModel
 from app.adapters.dto.field_party.field_party_dto import FieldPartyRDTO
-from app.adapters.dto.field_party_schedule_settings.field_party_schedule_settings_dto import FieldPartyScheduleSettingsRDTO
+from app.adapters.dto.field_party_schedule_settings.field_party_schedule_settings_dto import (
+    FieldPartyScheduleSettingsRDTO,
+)
 from app.shared.dto_constants import DTOConstant
 
 
@@ -13,7 +15,9 @@ class FieldPartyScheduleDTO(BaseModel):
 
 class FieldPartyScheduleCDTO(BaseModel):
     party_id: DTOConstant.StandardUnsignedIntegerField(description="ID площадки")
-    setting_id: DTOConstant.StandardUnsignedIntegerField(description="ID настроек расписания")
+    setting_id: DTOConstant.StandardUnsignedIntegerField(
+        description="ID настроек расписания"
+    )
     day: DTOConstant.StandardDateField(description="Дата")
     start_at: DTOConstant.StandardTimeField(description="Время начала")
     end_at: DTOConstant.StandardTimeField(description="Время окончания")
@@ -27,7 +31,9 @@ class FieldPartyScheduleCDTO(BaseModel):
 
 class FieldPartyScheduleRDTO(FieldPartyScheduleDTO):
     party_id: DTOConstant.StandardUnsignedIntegerField(description="ID площадки")
-    setting_id: DTOConstant.StandardUnsignedIntegerField(description="ID настроек расписания")
+    setting_id: DTOConstant.StandardUnsignedIntegerField(
+        description="ID настроек расписания"
+    )
     day: DTOConstant.StandardDateField(description="Дата")
     start_at: DTOConstant.StandardTimeField(description="Время начала")
     end_at: DTOConstant.StandardTimeField(description="Время окончания")
@@ -53,11 +59,14 @@ class FieldPartyScheduleWithRelationsRDTO(FieldPartyScheduleRDTO):
 
 class FieldPartyScheduleUpdateDTO(BaseModel):
     """DTO для обновления расписания площадки - все поля опциональные"""
+
     day: DTOConstant.StandardDateField(description="Дата") | None = None
     start_at: DTOConstant.StandardTimeField(description="Время начала") | None = None
     end_at: DTOConstant.StandardTimeField(description="Время окончания") | None = None
     price: DTOConstant.StandardPriceField(description="Цена за период") | None = None
-    is_booked: DTOConstant.StandardBooleanFalseField(description="Забронировано") | None = None
+    is_booked: (
+        DTOConstant.StandardBooleanFalseField(description="Забронировано") | None
+    ) = None
     is_paid: DTOConstant.StandardBooleanFalseField(description="Оплачено") | None = None
 
     class Config:
@@ -66,9 +75,14 @@ class FieldPartyScheduleUpdateDTO(BaseModel):
 
 class FieldPartyScheduleBulkCDTO(BaseModel):
     """DTO для массового создания расписаний площадки"""
+
     party_id: DTOConstant.StandardUnsignedIntegerField(description="ID площадки")
-    setting_id: DTOConstant.StandardUnsignedIntegerField(description="ID настроек расписания")
-    schedules: list[dict] = []  # [{"day": "2025-01-01", "start_at": "09:00", "end_at": "10:00", "price": 15000}]
+    setting_id: DTOConstant.StandardUnsignedIntegerField(
+        description="ID настроек расписания"
+    )
+    schedules: list[dict] = (
+        []
+    )  # [{"day": "2025-01-01", "start_at": "09:00", "end_at": "10:00", "price": 15000}]
 
     class Config:
         from_attributes = True

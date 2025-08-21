@@ -1,8 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.product_category.product_category_dto import ProductCategoryWithRelationsRDTO
-from app.adapters.filters.product_category.product_category_filter import ProductCategoryFilter
-from app.adapters.repository.product_category.product_category_repository import ProductCategoryRepository
+from app.adapters.dto.product_category.product_category_dto import (
+    ProductCategoryWithRelationsRDTO,
+)
+from app.adapters.filters.product_category.product_category_filter import (
+    ProductCategoryFilter,
+)
+from app.adapters.repository.product_category.product_category_repository import (
+    ProductCategoryRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
@@ -33,7 +39,9 @@ class AllProductCategoryCase(BaseUseCase[list[ProductCategoryWithRelationsRDTO]]
         """
         self.repository = ProductCategoryRepository(db)
 
-    async def execute(self, filter: ProductCategoryFilter) -> list[ProductCategoryWithRelationsRDTO]:
+    async def execute(
+        self, filter: ProductCategoryFilter
+    ) -> list[ProductCategoryWithRelationsRDTO]:
         """
         Выполняет операцию получения списка всех категорий товаров.
 

@@ -16,10 +16,14 @@ class ProductVariantModificationFilter(BaseFilter[ProductVariantModificationEnti
         ),
         variant_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по вариантам товара"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по вариантам товара"
+        ),
         modification_value_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по значениям модификаций"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по значениям модификаций"
+        ),
         is_show_deleted: bool = AppQueryConstants.StandardBooleanQuery(
             "Показывать удаленные данные?"
         ),
@@ -41,9 +45,15 @@ class ProductVariantModificationFilter(BaseFilter[ProductVariantModificationEnti
         filters = []
 
         if self.variant_ids:
-            filters.append(ProductVariantModificationEntity.variant_id.in_(self.variant_ids))
+            filters.append(
+                ProductVariantModificationEntity.variant_id.in_(self.variant_ids)
+            )
 
         if self.modification_value_ids:
-            filters.append(ProductVariantModificationEntity.modification_value_id.in_(self.modification_value_ids))
+            filters.append(
+                ProductVariantModificationEntity.modification_value_id.in_(
+                    self.modification_value_ids
+                )
+            )
 
         return filters

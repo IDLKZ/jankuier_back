@@ -14,9 +14,15 @@ class RequestToAcademyGroupDTO(BaseModel):
 class RequestToAcademyGroupCDTO(BaseModel):
     student_id: DTOConstant.StandardUnsignedIntegerField(description="ID студента")
     group_id: DTOConstant.StandardUnsignedIntegerField(description="ID группы академии")
-    checked_by: DTOConstant.StandardNullableUnsignedIntegerField(description="ID пользователя, проверившего заявку")
-    status: DTOConstant.StandardIntegerField(description="Статус заявки: 0-не просмотрена, 1-принята, -1-отклонена")
-    info: DTOConstant.StandardNullableTextField(description="Дополнительная информация о заявке")
+    checked_by: DTOConstant.StandardNullableUnsignedIntegerField(
+        description="ID пользователя, проверившего заявку"
+    )
+    status: DTOConstant.StandardIntegerField(
+        description="Статус заявки: 0-не просмотрена, 1-принята, -1-отклонена"
+    )
+    info: DTOConstant.StandardNullableTextField(
+        description="Дополнительная информация о заявке"
+    )
 
     class Config:
         from_attributes = True
@@ -25,9 +31,15 @@ class RequestToAcademyGroupCDTO(BaseModel):
 class RequestToAcademyGroupRDTO(RequestToAcademyGroupDTO):
     student_id: DTOConstant.StandardUnsignedIntegerField(description="ID студента")
     group_id: DTOConstant.StandardUnsignedIntegerField(description="ID группы академии")
-    checked_by: DTOConstant.StandardNullableUnsignedIntegerField(description="ID пользователя, проверившего заявку")
-    status: DTOConstant.StandardIntegerField(description="Статус заявки: 0-не просмотрена, 1-принята, -1-отклонена")
-    info: DTOConstant.StandardNullableTextField(description="Дополнительная информация о заявке")
+    checked_by: DTOConstant.StandardNullableUnsignedIntegerField(
+        description="ID пользователя, проверившего заявку"
+    )
+    status: DTOConstant.StandardIntegerField(
+        description="Статус заявки: 0-не просмотрена, 1-принята, -1-отклонена"
+    )
+    info: DTOConstant.StandardNullableTextField(
+        description="Дополнительная информация о заявке"
+    )
 
     created_at: DTOConstant.StandardCreatedAt
     updated_at: DTOConstant.StandardUpdatedAt
@@ -46,9 +58,25 @@ class RequestToAcademyGroupWithRelationsRDTO(RequestToAcademyGroupRDTO):
 
 class RequestToAcademyGroupUpdateDTO(BaseModel):
     """DTO для обновления заявки в группу академии"""
-    checked_by: DTOConstant.StandardNullableUnsignedIntegerField(description="ID пользователя, проверившего заявку") | None = None
-    status: DTOConstant.StandardIntegerField(description="Статус заявки: 0-не просмотрена, 1-принята, -1-отклонена") | None = None
-    info: DTOConstant.StandardNullableTextField(description="Дополнительная информация о заявке") | None = None
+
+    checked_by: (
+        DTOConstant.StandardNullableUnsignedIntegerField(
+            description="ID пользователя, проверившего заявку"
+        )
+        | None
+    ) = None
+    status: (
+        DTOConstant.StandardIntegerField(
+            description="Статус заявки: 0-не просмотрена, 1-принята, -1-отклонена"
+        )
+        | None
+    ) = None
+    info: (
+        DTOConstant.StandardNullableTextField(
+            description="Дополнительная информация о заявке"
+        )
+        | None
+    ) = None
 
     class Config:
         from_attributes = True
@@ -56,9 +84,16 @@ class RequestToAcademyGroupUpdateDTO(BaseModel):
 
 class RequestToAcademyGroupBulkUpdateDTO(BaseModel):
     """DTO для массового обновления статуса заявок"""
-    request_ids: list[DTOConstant.StandardUnsignedIntegerField(description="ID заявки")] = []
-    checked_by: DTOConstant.StandardNullableUnsignedIntegerField(description="ID пользователя, проверившего заявки")
-    status: DTOConstant.StandardIntegerField(description="Статус заявок: 0-не просмотрена, 1-принята, -1-отклонена")
+
+    request_ids: list[
+        DTOConstant.StandardUnsignedIntegerField(description="ID заявки")
+    ] = []
+    checked_by: DTOConstant.StandardNullableUnsignedIntegerField(
+        description="ID пользователя, проверившего заявки"
+    )
+    status: DTOConstant.StandardIntegerField(
+        description="Статус заявок: 0-не просмотрена, 1-принята, -1-отклонена"
+    )
 
     class Config:
         from_attributes = True

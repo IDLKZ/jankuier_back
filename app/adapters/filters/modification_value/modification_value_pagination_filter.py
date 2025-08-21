@@ -24,10 +24,14 @@ class ModificationValuePaginationFilter(BasePaginationFilter[ModificationValueEn
         ),
         modification_type_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по типам модификаций"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по типам модификаций"
+        ),
         product_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по товарам"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по товарам"
+        ),
         is_active: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
             "Фильтрация по активности значения модификации"
         ),
@@ -55,7 +59,7 @@ class ModificationValuePaginationFilter(BasePaginationFilter[ModificationValueEn
             "title_en",
             "description_ru",
             "description_kk",
-            "description_en"
+            "description_en",
         ]
 
     def apply(self) -> list[SQLAlchemyQuery]:
@@ -77,7 +81,11 @@ class ModificationValuePaginationFilter(BasePaginationFilter[ModificationValueEn
                 )
 
         if self.modification_type_ids:
-            filters.append(ModificationValueEntity.modification_type_id.in_(self.modification_type_ids))
+            filters.append(
+                ModificationValueEntity.modification_type_id.in_(
+                    self.modification_type_ids
+                )
+            )
 
         if self.product_ids:
             filters.append(ModificationValueEntity.product_id.in_(self.product_ids))

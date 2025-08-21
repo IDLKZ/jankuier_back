@@ -1,8 +1,12 @@
 from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.product_variant.product_variant_dto import ProductVariantWithRelationsRDTO
-from app.adapters.repository.product_variant.product_variant_repository import ProductVariantRepository
+from app.adapters.dto.product_variant.product_variant_dto import (
+    ProductVariantWithRelationsRDTO,
+)
+from app.adapters.repository.product_variant.product_variant_repository import (
+    ProductVariantRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import ProductVariantEntity
 from app.i18n.i18n_wrapper import i18n

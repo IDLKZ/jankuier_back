@@ -35,7 +35,9 @@ class PaginateCityCase(BaseUseCase[PaginationCityWithRelationsRDTO]):
         """
         self.repository = CityRepository(db)
 
-    async def execute(self, filter: CityPaginationFilter) -> PaginationCityWithRelationsRDTO:
+    async def execute(
+        self, filter: CityPaginationFilter
+    ) -> PaginationCityWithRelationsRDTO:
         """
         Выполняет операцию получения городов с пагинацией.
 

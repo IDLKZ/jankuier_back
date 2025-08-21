@@ -84,7 +84,7 @@ class CreateCartCase(BaseUseCase[CartRDTO]):
             )
 
         # Валидация общей стоимости
-        if dto.total_price < Decimal('0'):
+        if dto.total_price < Decimal("0"):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("cart_total_calculation_error")
             )
@@ -110,14 +110,14 @@ class CreateCartCase(BaseUseCase[CartRDTO]):
                 parsed_items = cart_items
             else:
                 raise ValueError("Invalid JSON format")
-            
+
             # Дополнительная валидация структуры товаров (если нужно)
             if isinstance(parsed_items, list):
                 for item in parsed_items:
                     if not isinstance(item, dict):
                         raise ValueError("Each cart item must be an object")
                     # Можно добавить проверки обязательных полей товара
-                    
+
         except (json.JSONDecodeError, ValueError):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("cart_items_invalid_format")

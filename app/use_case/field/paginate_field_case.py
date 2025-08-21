@@ -35,7 +35,9 @@ class PaginateFieldCase(BaseUseCase[PaginationFieldWithRelationsRDTO]):
         """
         self.repository = FieldRepository(db)
 
-    async def execute(self, filter: FieldPaginationFilter) -> PaginationFieldWithRelationsRDTO:
+    async def execute(
+        self, filter: FieldPaginationFilter
+    ) -> PaginationFieldWithRelationsRDTO:
         """
         Выполняет операцию получения полей с пагинацией.
 

@@ -2,11 +2,16 @@ from fastapi import UploadFile
 from sqlalchemy import or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.product_variant.product_variant_dto import ProductVariantCDTO, ProductVariantWithRelationsRDTO
+from app.adapters.dto.product_variant.product_variant_dto import (
+    ProductVariantCDTO,
+    ProductVariantWithRelationsRDTO,
+)
 from app.adapters.repository.city.city_repository import CityRepository
 from app.adapters.repository.file.file_repository import FileRepository
 from app.adapters.repository.product.product_repository import ProductRepository
-from app.adapters.repository.product_variant.product_variant_repository import ProductVariantRepository
+from app.adapters.repository.product_variant.product_variant_repository import (
+    ProductVariantRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import ProductVariantEntity
 from app.i18n.i18n_wrapper import i18n
@@ -83,7 +88,9 @@ class CreateProductVariantCase(BaseUseCase[ProductVariantWithRelationsRDTO]):
         )
         return ProductVariantWithRelationsRDTO.from_orm(self.model)
 
-    async def validate(self, dto: ProductVariantCDTO, file: UploadFile | None = None) -> None:
+    async def validate(
+        self, dto: ProductVariantCDTO, file: UploadFile | None = None
+    ) -> None:
         """
         Валидирует данные перед созданием варианта товара.
 
@@ -103,9 +110,7 @@ class CreateProductVariantCase(BaseUseCase[ProductVariantWithRelationsRDTO]):
         if dto.sku is not None:
             filters.append(self.repository.model.sku == dto.sku)
 
-        existed = await self.repository.get_first_with_filters(
-            filters=[or_(*filters)]
-        )
+        existed = await self.repository.get_first_with_filters(filters=[or_(*filters)])
         if existed:
             if existed.value == dto.value:
                 raise AppExceptionResponse.bad_request(
@@ -149,7 +154,9 @@ class CreateProductVariantCase(BaseUseCase[ProductVariantWithRelationsRDTO]):
             file (UploadFile | None): Опциональный файл изображения для сохранения.
         """
         # Определение папки для загрузки изображений вариантов товаров
-        self.upload_folder = f"{AppFileExtensionConstants.ProductFolderName}/variants/{dto.value}"
+        self.upload_folder = (
+            f"{AppFileExtensionConstants.ProductFolderName}/variants/{dto.value}"
+        )
 
         # Сохранение файла если предоставлен
         if file:

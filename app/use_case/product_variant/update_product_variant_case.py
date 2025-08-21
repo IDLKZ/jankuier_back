@@ -2,11 +2,16 @@ from fastapi import UploadFile
 from sqlalchemy import or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.product_variant.product_variant_dto import ProductVariantUpdateDTO, ProductVariantWithRelationsRDTO
+from app.adapters.dto.product_variant.product_variant_dto import (
+    ProductVariantUpdateDTO,
+    ProductVariantWithRelationsRDTO,
+)
 from app.adapters.repository.city.city_repository import CityRepository
 from app.adapters.repository.file.file_repository import FileRepository
 from app.adapters.repository.product.product_repository import ProductRepository
-from app.adapters.repository.product_variant.product_variant_repository import ProductVariantRepository
+from app.adapters.repository.product_variant.product_variant_repository import (
+    ProductVariantRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import ProductVariantEntity
 from app.i18n.i18n_wrapper import i18n
@@ -84,7 +89,9 @@ class UpdateProductVariantCase(BaseUseCase[ProductVariantWithRelationsRDTO]):
         )
         return ProductVariantWithRelationsRDTO.from_orm(self.model)
 
-    async def validate(self, id: int, dto: ProductVariantUpdateDTO, file: UploadFile | None = None) -> None:
+    async def validate(
+        self, id: int, dto: ProductVariantUpdateDTO, file: UploadFile | None = None
+    ) -> None:
         """
         Валидирует данные перед обновлением варианта товара.
 
@@ -107,17 +114,17 @@ class UpdateProductVariantCase(BaseUseCase[ProductVariantWithRelationsRDTO]):
 
         # Проверка уникальности value и sku (если указаны и изменились)
         filters = []
-        
+
         if dto.value is not None and dto.value != self.model.value:
             filters.append(self.repository.model.value == dto.value)
-        
+
         if dto.sku is not None and dto.sku != self.model.sku:
             filters.append(self.repository.model.sku == dto.sku)
 
         if filters:
             # Исключаем текущую запись из проверки
             filters.append(self.repository.model.id != id)
-            
+
             existed = await self.repository.get_first_with_filters(
                 filters=[or_(*filters)]
             )
@@ -156,7 +163,9 @@ class UpdateProductVariantCase(BaseUseCase[ProductVariantWithRelationsRDTO]):
                     message=i18n.gettext("image_not_found_by_id")
                 )
 
-    async def transform(self, dto: ProductVariantUpdateDTO, file: UploadFile | None = None):
+    async def transform(
+        self, dto: ProductVariantUpdateDTO, file: UploadFile | None = None
+    ):
         """
         Трансформирует данные перед обновлением варианта товара.
 
@@ -166,7 +175,9 @@ class UpdateProductVariantCase(BaseUseCase[ProductVariantWithRelationsRDTO]):
         """
         # Определение папки для загрузки изображений вариантов товаров
         variant_value = dto.value if dto.value is not None else self.model.value
-        self.upload_folder = f"{AppFileExtensionConstants.ProductFolderName}/variants/{variant_value}"
+        self.upload_folder = (
+            f"{AppFileExtensionConstants.ProductFolderName}/variants/{variant_value}"
+        )
 
         # Обработка файла изображения
         if file:

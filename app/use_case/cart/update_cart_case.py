@@ -67,12 +67,10 @@ class UpdateCartCase(BaseUseCase[CartRDTO]):
         # Проверка существования корзины
         model = await self.repository.get(id, include_deleted_filter=True)
         if not model:
-            raise AppExceptionResponse.not_found(
-                message=i18n.gettext("cart_not_found")
-            )
+            raise AppExceptionResponse.not_found(message=i18n.gettext("cart_not_found"))
 
         # Валидация общей стоимости (если обновляется)
-        if dto.total_price is not None and dto.total_price < Decimal('0'):
+        if dto.total_price is not None and dto.total_price < Decimal("0"):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("cart_total_calculation_error")
             )
@@ -98,14 +96,14 @@ class UpdateCartCase(BaseUseCase[CartRDTO]):
                 parsed_items = cart_items
             else:
                 raise ValueError("Invalid JSON format")
-            
+
             # Дополнительная валидация структуры товаров (если нужно)
             if isinstance(parsed_items, list):
                 for item in parsed_items:
                     if not isinstance(item, dict):
                         raise ValueError("Each cart item must be an object")
                     # Можно добавить проверки обязательных полей товара
-                    
+
         except (json.JSONDecodeError, ValueError):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("cart_items_invalid_format")
@@ -149,12 +147,12 @@ class UpdateCartCase(BaseUseCase[CartRDTO]):
             if not isinstance(items, list):
                 return None
 
-            total = Decimal('0')
+            total = Decimal("0")
             for item in items:
                 if isinstance(item, dict):
                     # Предполагается структура с полями quantity, price или total_price
-                    item_total = item.get('total_price') or (
-                        item.get('quantity', 0) * item.get('price', 0)
+                    item_total = item.get("total_price") or (
+                        item.get("quantity", 0) * item.get("price", 0)
                     )
                     if item_total:
                         total += Decimal(str(item_total))

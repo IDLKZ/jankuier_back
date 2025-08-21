@@ -14,7 +14,9 @@ class FileCDTO(BaseModel):
     file_path: DTOConstant.StandardTextField(description="Путь к файлу")
     file_size: DTOConstant.StandardIntegerField(description="Размер файла в байтах")
     content_type: DTOConstant.StandardVarcharField(description="MIME тип файла")
-    is_remote: DTOConstant.StandardBooleanFalseField(description="Хранится ли файл удаленно")
+    is_remote: DTOConstant.StandardBooleanFalseField(
+        description="Хранится ли файл удаленно"
+    )
 
     class Config:
         from_attributes = True
@@ -25,7 +27,9 @@ class FileRDTO(FileDTO):
     file_path: DTOConstant.StandardTextField(description="Путь к файлу")
     file_size: DTOConstant.StandardIntegerField(description="Размер файла в байтах")
     content_type: DTOConstant.StandardVarcharField(description="MIME тип файла")
-    is_remote: DTOConstant.StandardBooleanFalseField(description="Хранится ли файл удаленно")
+    is_remote: DTOConstant.StandardBooleanFalseField(
+        description="Хранится ли файл удаленно"
+    )
 
     created_at: DTOConstant.StandardCreatedAt
     updated_at: DTOConstant.StandardUpdatedAt
@@ -36,6 +40,7 @@ class FileRDTO(FileDTO):
 
 class FileUploadResponseDTO(FileRDTO):
     """DTO для ответа после загрузки файла с дополнительной информацией"""
+
     url: DTOConstant.StandardTextField(description="URL для доступа к файлу")
 
     class Config:

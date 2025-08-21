@@ -1,8 +1,15 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.modification_value.modification_value_dto import ModificationValueUpdateDTO, ModificationValueWithRelationsRDTO
-from app.adapters.repository.modification_type.modification_type_repository import ModificationTypeRepository
-from app.adapters.repository.modification_value.modification_value_repository import ModificationValueRepository
+from app.adapters.dto.modification_value.modification_value_dto import (
+    ModificationValueUpdateDTO,
+    ModificationValueWithRelationsRDTO,
+)
+from app.adapters.repository.modification_type.modification_type_repository import (
+    ModificationTypeRepository,
+)
+from app.adapters.repository.modification_value.modification_value_repository import (
+    ModificationValueRepository,
+)
 from app.adapters.repository.product.product_repository import ProductRepository
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import ModificationValueEntity
@@ -46,7 +53,9 @@ class UpdateModificationValueCase(BaseUseCase[ModificationValueWithRelationsRDTO
         self.product_repository = ProductRepository(db)
         self.model: ModificationValueEntity | None = None
 
-    async def execute(self, id: int, dto: ModificationValueUpdateDTO) -> ModificationValueWithRelationsRDTO:
+    async def execute(
+        self, id: int, dto: ModificationValueUpdateDTO
+    ) -> ModificationValueWithRelationsRDTO:
         """
         Выполняет операцию обновления значения модификации.
 

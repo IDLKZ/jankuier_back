@@ -1,14 +1,20 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.product_variant_modification.product_variant_modification_dto import ProductVariantModificationWithRelationsRDTO
-from app.adapters.repository.product_variant_modification.product_variant_modification_repository import ProductVariantModificationRepository
+from app.adapters.dto.product_variant_modification.product_variant_modification_dto import (
+    ProductVariantModificationWithRelationsRDTO,
+)
+from app.adapters.repository.product_variant_modification.product_variant_modification_repository import (
+    ProductVariantModificationRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import ProductVariantModificationEntity
 from app.i18n.i18n_wrapper import i18n
 from app.use_case.base_case import BaseUseCase
 
 
-class GetProductVariantModificationByIdCase(BaseUseCase[ProductVariantModificationWithRelationsRDTO]):
+class GetProductVariantModificationByIdCase(
+    BaseUseCase[ProductVariantModificationWithRelationsRDTO]
+):
     """
     Класс Use Case для получения модификации варианта товара по ID.
 

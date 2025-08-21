@@ -1,9 +1,15 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.pagination_dto import PaginationModificationTypeRDTO
-from app.adapters.dto.modification_type.modification_type_dto import ModificationTypeRDTO
-from app.adapters.filters.modification_type.modification_type_pagination_filter import ModificationTypePaginationFilter
-from app.adapters.repository.modification_type.modification_type_repository import ModificationTypeRepository
+from app.adapters.dto.modification_type.modification_type_dto import (
+    ModificationTypeRDTO,
+)
+from app.adapters.filters.modification_type.modification_type_pagination_filter import (
+    ModificationTypePaginationFilter,
+)
+from app.adapters.repository.modification_type.modification_type_repository import (
+    ModificationTypeRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
@@ -35,7 +41,9 @@ class PaginateModificationTypeCase(BaseUseCase[PaginationModificationTypeRDTO]):
         """
         self.repository = ModificationTypeRepository(db)
 
-    async def execute(self, filter: ModificationTypePaginationFilter) -> PaginationModificationTypeRDTO:
+    async def execute(
+        self, filter: ModificationTypePaginationFilter
+    ) -> PaginationModificationTypeRDTO:
         """
         Выполняет операцию получения пагинированного списка типов модификаций.
 

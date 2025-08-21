@@ -52,18 +52,16 @@ class GetCartByUserIdCase(BaseUseCase[CartRDTO]):
             AppExceptionResponse: Если корзина не найдена.
         """
         await self.validate(user_id)
-        
+
         # Ищем активную корзину пользователя
         model = await self.repository.get_first_with_filters(
             filters=[self.repository.model.user_id == user_id],
             include_deleted_filter=True,
         )
-        
+
         if not model:
-            raise AppExceptionResponse.not_found(
-                i18n.gettext("cart_not_found")
-            )
-        
+            raise AppExceptionResponse.not_found(i18n.gettext("cart_not_found"))
+
         return CartRDTO.from_orm(model)
 
     async def validate(self, user_id: int) -> None:
@@ -80,13 +78,11 @@ class GetCartByUserIdCase(BaseUseCase[CartRDTO]):
             raise AppExceptionResponse.bad_request(
                 i18n.gettext("user_id_validation_error")
             )
-        
+
         # Проверяем существование пользователя
         user = await self.user_repository.get(user_id)
         if not user:
-            raise AppExceptionResponse.not_found(
-                i18n.gettext("user_not_found")
-            )
+            raise AppExceptionResponse.not_found(i18n.gettext("user_not_found"))
 
     async def transform(self) -> None:
         """

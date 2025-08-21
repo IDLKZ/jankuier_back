@@ -8,7 +8,9 @@ from app.shared.query_constants import AppQueryConstants
 class CartItemFilter(BaseFilter[CartItemEntity]):
     def __init__(
         self,
-        search: str | None = AppQueryConstants.StandardOptionalSearchQuery("Поиск по SKU товара"),
+        search: str | None = AppQueryConstants.StandardOptionalSearchQuery(
+            "Поиск по SKU товара"
+        ),
         order_by: str | None = AppQueryConstants.StandardSortFieldQuery(
             "Поле сортировки"
         ),
@@ -17,37 +19,43 @@ class CartItemFilter(BaseFilter[CartItemEntity]):
         ),
         cart_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по корзинам"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по корзинам"
+        ),
         product_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по товарам"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по товарам"
+        ),
         variant_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по вариантам товаров"),
-        qty_from: (
-            int | None
-        ) = AppQueryConstants.StandardOptionalIntegerQuery("Количество товара от"),
-        qty_to: (
-            int | None
-        ) = AppQueryConstants.StandardOptionalIntegerQuery("Количество товара до"),
-        unit_price_from: (
-            float | None
-        ) = AppQueryConstants.StandardOptionalDecimalQuery("Цена за единицу от"),
-        unit_price_to: (
-            float | None
-        ) = AppQueryConstants.StandardOptionalDecimalQuery("Цена за единицу до"),
-        total_price_from: (
-            float | None
-        ) = AppQueryConstants.StandardOptionalDecimalQuery("Общая стоимость позиции от"),
-        total_price_to: (
-            float | None
-        ) = AppQueryConstants.StandardOptionalDecimalQuery("Общая стоимость позиции до"),
-        has_variant: (
-            bool | None
-        ) = AppQueryConstants.StandardOptionalBooleanQuery("Фильтрация по наличию варианта товара"),
-        has_discount: (
-            bool | None
-        ) = AppQueryConstants.StandardOptionalBooleanQuery("Фильтрация по наличию скидки (отрицательная delta_price)"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по вариантам товаров"
+        ),
+        qty_from: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
+            "Количество товара от"
+        ),
+        qty_to: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
+            "Количество товара до"
+        ),
+        unit_price_from: float | None = AppQueryConstants.StandardOptionalDecimalQuery(
+            "Цена за единицу от"
+        ),
+        unit_price_to: float | None = AppQueryConstants.StandardOptionalDecimalQuery(
+            "Цена за единицу до"
+        ),
+        total_price_from: float | None = AppQueryConstants.StandardOptionalDecimalQuery(
+            "Общая стоимость позиции от"
+        ),
+        total_price_to: float | None = AppQueryConstants.StandardOptionalDecimalQuery(
+            "Общая стоимость позиции до"
+        ),
+        has_variant: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
+            "Фильтрация по наличию варианта товара"
+        ),
+        has_discount: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
+            "Фильтрация по наличию скидки (отрицательная delta_price)"
+        ),
         is_show_deleted: bool = AppQueryConstants.StandardBooleanQuery(
             "Показывать удаленные данные?"
         ),

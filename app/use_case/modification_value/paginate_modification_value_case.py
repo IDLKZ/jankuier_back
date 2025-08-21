@@ -1,13 +1,21 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.pagination_dto import PaginationModificationValueWithRelationsRDTO
-from app.adapters.dto.modification_value.modification_value_dto import ModificationValueWithRelationsRDTO
-from app.adapters.filters.modification_value.modification_value_pagination_filter import ModificationValuePaginationFilter
-from app.adapters.repository.modification_value.modification_value_repository import ModificationValueRepository
+from app.adapters.dto.modification_value.modification_value_dto import (
+    ModificationValueWithRelationsRDTO,
+)
+from app.adapters.filters.modification_value.modification_value_pagination_filter import (
+    ModificationValuePaginationFilter,
+)
+from app.adapters.repository.modification_value.modification_value_repository import (
+    ModificationValueRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
-class PaginateModificationValueCase(BaseUseCase[PaginationModificationValueWithRelationsRDTO]):
+class PaginateModificationValueCase(
+    BaseUseCase[PaginationModificationValueWithRelationsRDTO]
+):
     """
     Класс Use Case для получения пагинированного списка значений модификаций.
 
@@ -35,7 +43,9 @@ class PaginateModificationValueCase(BaseUseCase[PaginationModificationValueWithR
         """
         self.repository = ModificationValueRepository(db)
 
-    async def execute(self, filter: ModificationValuePaginationFilter) -> PaginationModificationValueWithRelationsRDTO:
+    async def execute(
+        self, filter: ModificationValuePaginationFilter
+    ) -> PaginationModificationValueWithRelationsRDTO:
         """
         Выполняет операцию получения пагинированного списка значений модификаций.
 

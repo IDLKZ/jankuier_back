@@ -1,9 +1,13 @@
 from sqlalchemy import func, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.academy_group.academy_group_dto import AcademyGroupWithRelationsRDTO
+from app.adapters.dto.academy_group.academy_group_dto import (
+    AcademyGroupWithRelationsRDTO,
+)
 from app.adapters.filter.base_filter import BaseFilter
-from app.adapters.repository.academy_group.academy_group_repository import AcademyGroupRepository
+from app.adapters.repository.academy_group.academy_group_repository import (
+    AcademyGroupRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
@@ -48,10 +52,10 @@ class AllAcademyGroupsCase(BaseUseCase[list[AcademyGroupWithRelationsRDTO]]):
             list[AcademyGroupWithRelationsRDTO]: Список групп академий с связями.
         """
         await self.validate(filter)
-        
+
         # Применяем фильтры
         filters = []
-        if hasattr(filter, 'search') and filter.search:
+        if hasattr(filter, "search") and filter.search:
             search_term = f"%{filter.search.lower()}%"
             filters.append(
                 or_(
@@ -62,16 +66,16 @@ class AllAcademyGroupsCase(BaseUseCase[list[AcademyGroupWithRelationsRDTO]]):
                     func.lower(self.repository.model.value).like(search_term),
                 )
             )
-        
+
         # Получаем данные из репозитория
         models = await self.repository.get_with_filters(
             filters=filters,
-            order_by=getattr(filter, 'order_by', 'id'),
-            order_direction=getattr(filter, 'order_direction', 'asc'),
-            include_deleted_filter=not getattr(filter, 'is_show_deleted', False),
+            order_by=getattr(filter, "order_by", "id"),
+            order_direction=getattr(filter, "order_direction", "asc"),
+            include_deleted_filter=not getattr(filter, "is_show_deleted", False),
             options=self.repository.default_relationships(),
         )
-        
+
         return [AcademyGroupWithRelationsRDTO.from_orm(model) for model in models]
 
     async def validate(self, filter: BaseFilter) -> None:

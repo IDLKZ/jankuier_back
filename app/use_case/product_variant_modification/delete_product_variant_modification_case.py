@@ -1,6 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.repository.product_variant_modification.product_variant_modification_repository import ProductVariantModificationRepository
+from app.adapters.repository.product_variant_modification.product_variant_modification_repository import (
+    ProductVariantModificationRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import ProductVariantModificationEntity
 from app.i18n.i18n_wrapper import i18n

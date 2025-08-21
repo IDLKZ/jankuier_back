@@ -1,6 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.repository.field_party_schedule.field_party_schedule_repository import FieldPartyScheduleRepository
+from app.adapters.repository.field_party_schedule.field_party_schedule_repository import (
+    FieldPartyScheduleRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import FieldPartyScheduleEntity
 from app.i18n.i18n_wrapper import i18n
@@ -44,7 +46,7 @@ class DeleteFieldPartyScheduleCase(BaseUseCase[bool]):
             AppExceptionResponse: Если валидация не прошла.
         """
         await self.validate(id=id, force_delete=force_delete)
-        
+
         result = await self.repository.delete(id, force_delete=force_delete)
         return result
 

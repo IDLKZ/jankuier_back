@@ -57,5 +57,4 @@ class CountryPaginationFilter(BasePaginationFilter[CountryEntity]):
                     )
                 )
 
-
         return filters

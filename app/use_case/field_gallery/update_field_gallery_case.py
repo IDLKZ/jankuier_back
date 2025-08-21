@@ -2,9 +2,16 @@ from fastapi import UploadFile
 from sqlalchemy import and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.field_gallery.field_gallery_dto import FieldGalleryUpdateDTO, FieldGalleryWithRelationsRDTO
-from app.adapters.repository.field_gallery.field_gallery_repository import FieldGalleryRepository
-from app.adapters.repository.field_party.field_party_repository import FieldPartyRepository
+from app.adapters.dto.field_gallery.field_gallery_dto import (
+    FieldGalleryUpdateDTO,
+    FieldGalleryWithRelationsRDTO,
+)
+from app.adapters.repository.field_gallery.field_gallery_repository import (
+    FieldGalleryRepository,
+)
+from app.adapters.repository.field_party.field_party_repository import (
+    FieldPartyRepository,
+)
 from app.adapters.repository.file.file_repository import FileRepository
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import FieldGalleryEntity
@@ -156,7 +163,7 @@ class UpdateFieldGalleryCase(BaseUseCase[FieldGalleryWithRelationsRDTO]):
                     FieldGalleryEntity.id != id,  # Исключаем текущее изображение
                     FieldGalleryEntity.field_id == model.field_id,
                     FieldGalleryEntity.file_id == file_id,
-                    FieldGalleryEntity.party_id == party_id
+                    FieldGalleryEntity.party_id == party_id,
                 )
             ]
         )
@@ -178,7 +185,7 @@ class UpdateFieldGalleryCase(BaseUseCase[FieldGalleryWithRelationsRDTO]):
         """
         if not filename:
             return False
-        
+
         # Получаем расширение файла
         extension = "." + filename.split(".")[-1].lower() if "." in filename else ""
         return extension in self.extensions
@@ -203,7 +210,11 @@ class UpdateFieldGalleryCase(BaseUseCase[FieldGalleryWithRelationsRDTO]):
                 await self.file_service.delete_file(file_id=self.model.file_id)
 
             # Определяем папку для загрузки
-            if self.model.field and hasattr(self.model.field, 'value') and self.model.field.value:
+            if (
+                self.model.field
+                and hasattr(self.model.field, "value")
+                and self.model.field.value
+            ):
                 self.upload_folder = f"{AppFileExtensionConstants.FieldFolderName}/gallery/{self.model.field.value}"
             else:
                 self.upload_folder = f"{AppFileExtensionConstants.FieldFolderName}/gallery/{self.model.field_id}"

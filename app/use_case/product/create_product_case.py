@@ -6,7 +6,9 @@ from app.adapters.dto.product.product_dto import ProductCDTO, ProductWithRelatio
 from app.adapters.repository.city.city_repository import CityRepository
 from app.adapters.repository.file.file_repository import FileRepository
 from app.adapters.repository.product.product_repository import ProductRepository
-from app.adapters.repository.product_category.product_category_repository import ProductCategoryRepository
+from app.adapters.repository.product_category.product_category_repository import (
+    ProductCategoryRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import ProductEntity
 from app.i18n.i18n_wrapper import i18n
@@ -151,7 +153,9 @@ class CreateProductCase(BaseUseCase[ProductWithRelationsRDTO]):
             file (UploadFile | None): Опциональный файл изображения для сохранения.
         """
         # Определение папки для загрузки изображений товаров с использованием helper функции
-        self.upload_folder = AppFileExtensionConstants.product_image_directory(dto.value)
+        self.upload_folder = AppFileExtensionConstants.product_image_directory(
+            dto.value
+        )
 
         # Сохранение файла если предоставлен
         if file:

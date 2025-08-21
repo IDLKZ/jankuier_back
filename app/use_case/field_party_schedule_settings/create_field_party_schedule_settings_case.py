@@ -2,16 +2,25 @@ import json
 from datetime import date
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.field_party_schedule_settings.field_party_schedule_settings_dto import FieldPartyScheduleSettingsCDTO, FieldPartyScheduleSettingsWithRelationsRDTO
-from app.adapters.repository.field_party_schedule_settings.field_party_schedule_settings_repository import FieldPartyScheduleSettingsRepository
-from app.adapters.repository.field_party.field_party_repository import FieldPartyRepository
+from app.adapters.dto.field_party_schedule_settings.field_party_schedule_settings_dto import (
+    FieldPartyScheduleSettingsCDTO,
+    FieldPartyScheduleSettingsWithRelationsRDTO,
+)
+from app.adapters.repository.field_party_schedule_settings.field_party_schedule_settings_repository import (
+    FieldPartyScheduleSettingsRepository,
+)
+from app.adapters.repository.field_party.field_party_repository import (
+    FieldPartyRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import FieldPartyScheduleSettingsEntity
 from app.i18n.i18n_wrapper import i18n
 from app.use_case.base_case import BaseUseCase
 
 
-class CreateFieldPartyScheduleSettingsCase(BaseUseCase[FieldPartyScheduleSettingsWithRelationsRDTO]):
+class CreateFieldPartyScheduleSettingsCase(
+    BaseUseCase[FieldPartyScheduleSettingsWithRelationsRDTO]
+):
     """
     Класс Use Case для создания новых настроек расписания площадки.
 
@@ -38,7 +47,9 @@ class CreateFieldPartyScheduleSettingsCase(BaseUseCase[FieldPartyScheduleSetting
         self.field_party_repository = FieldPartyRepository(db)
         self.model: FieldPartyScheduleSettingsEntity | None = None
 
-    async def execute(self, dto: FieldPartyScheduleSettingsCDTO) -> FieldPartyScheduleSettingsWithRelationsRDTO:
+    async def execute(
+        self, dto: FieldPartyScheduleSettingsCDTO
+    ) -> FieldPartyScheduleSettingsWithRelationsRDTO:
         """
         Выполняет операцию создания настроек расписания площадки.
 
@@ -103,11 +114,15 @@ class CreateFieldPartyScheduleSettingsCase(BaseUseCase[FieldPartyScheduleSetting
 
         # Валидация рабочего времени
         if dto.working_time:
-            self._validate_time_json(dto.working_time, "working_time", ["start_at", "end_at"])
+            self._validate_time_json(
+                dto.working_time, "working_time", ["start_at", "end_at"]
+            )
 
         # Валидация времени перерыва
         if dto.break_time:
-            self._validate_time_json(dto.break_time, "break_time", ["start_at", "end_at"])
+            self._validate_time_json(
+                dto.break_time, "break_time", ["start_at", "end_at"]
+            )
 
         # Валидация цен по времени
         if dto.price_per_time:
@@ -129,7 +144,9 @@ class CreateFieldPartyScheduleSettingsCase(BaseUseCase[FieldPartyScheduleSetting
                 message=i18n.gettext("booked_limit_validation_error")
             )
 
-    def _validate_time_json(self, time_data: any, field_name: str, required_fields: list[str]) -> None:
+    def _validate_time_json(
+        self, time_data: any, field_name: str, required_fields: list[str]
+    ) -> None:
         """
         Валидация JSON данных времени.
 
@@ -151,20 +168,28 @@ class CreateFieldPartyScheduleSettingsCase(BaseUseCase[FieldPartyScheduleSetting
         for item in time_list:
             if not isinstance(item, dict):
                 raise AppExceptionResponse.bad_request(
-                    message=i18n.gettext("json_object_error").format(field_name=field_name)
+                    message=i18n.gettext("json_object_error").format(
+                        field_name=field_name
+                    )
                 )
 
             for field in required_fields:
                 if field not in item:
                     raise AppExceptionResponse.bad_request(
-                        message=i18n.gettext("required_field_error").format(field=field, field_name=field_name)
+                        message=i18n.gettext("required_field_error").format(
+                            field=field, field_name=field_name
+                        )
                     )
 
                 # Валидация формата времени (HH:MM)
                 time_value = item[field]
-                if not isinstance(time_value, str) or not self._is_valid_time_format(time_value):
+                if not isinstance(time_value, str) or not self._is_valid_time_format(
+                    time_value
+                ):
                     raise AppExceptionResponse.bad_request(
-                        message=i18n.gettext("time_format_error").format(field_name=field_name, field=field, value=time_value)
+                        message=i18n.gettext("time_format_error").format(
+                            field_name=field_name, field=field, value=time_value
+                        )
                     )
 
     def _validate_price_time_json(self, price_data: any) -> None:
@@ -187,25 +212,37 @@ class CreateFieldPartyScheduleSettingsCase(BaseUseCase[FieldPartyScheduleSetting
         for item in price_list:
             if not isinstance(item, dict):
                 raise AppExceptionResponse.bad_request(
-                    message=i18n.gettext("json_object_error").format(field_name="price_per_time")
+                    message=i18n.gettext("json_object_error").format(
+                        field_name="price_per_time"
+                    )
                 )
 
             required_fields = ["start_at", "end_at", "price"]
             for field in required_fields:
                 if field not in item:
                     raise AppExceptionResponse.bad_request(
-                        message=i18n.gettext("required_field_error").format(field=field, field_name="price_per_time")
+                        message=i18n.gettext("required_field_error").format(
+                            field=field, field_name="price_per_time"
+                        )
                     )
 
             # Валидация времени
             if not self._is_valid_time_format(item["start_at"]):
                 raise AppExceptionResponse.bad_request(
-                    message=i18n.gettext("time_format_error").format(field_name="price_per_time", field="start_at", value=item["start_at"])
+                    message=i18n.gettext("time_format_error").format(
+                        field_name="price_per_time",
+                        field="start_at",
+                        value=item["start_at"],
+                    )
                 )
 
             if not self._is_valid_time_format(item["end_at"]):
                 raise AppExceptionResponse.bad_request(
-                    message=i18n.gettext("time_format_error").format(field_name="price_per_time", field="end_at", value=item["end_at"])
+                    message=i18n.gettext("time_format_error").format(
+                        field_name="price_per_time",
+                        field="end_at",
+                        value=item["end_at"],
+                    )
                 )
 
             # Валидация цены
@@ -217,7 +254,9 @@ class CreateFieldPartyScheduleSettingsCase(BaseUseCase[FieldPartyScheduleSetting
                     )
             except (ValueError, TypeError):
                 raise AppExceptionResponse.bad_request(
-                    message=i18n.gettext("price_format_error").format(price=item["price"])
+                    message=i18n.gettext("price_format_error").format(
+                        price=item["price"]
+                    )
                 )
 
     def _is_valid_time_format(self, time_str: str) -> bool:
@@ -234,11 +273,11 @@ class CreateFieldPartyScheduleSettingsCase(BaseUseCase[FieldPartyScheduleSetting
             parts = time_str.split(":")
             if len(parts) != 2:
                 return False
-            
+
             hour, minute = parts
             hour_int = int(hour)
             minute_int = int(minute)
-            
+
             return 0 <= hour_int <= 23 and 0 <= minute_int <= 59
         except (ValueError, AttributeError):
             return False

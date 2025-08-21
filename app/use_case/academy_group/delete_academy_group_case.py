@@ -1,6 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.repository.academy_group.academy_group_repository import AcademyGroupRepository
+from app.adapters.repository.academy_group.academy_group_repository import (
+    AcademyGroupRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import AcademyGroupEntity
 from app.i18n.i18n_wrapper import i18n
@@ -33,7 +35,9 @@ class DeleteAcademyGroupCase(BaseUseCase[bool]):
         self.file_service = FileService(db)
         self.model: AcademyGroupEntity | None = None
 
-    async def execute(self, id: int, force_delete: bool = False, delete_image: bool = True) -> bool:
+    async def execute(
+        self, id: int, force_delete: bool = False, delete_image: bool = True
+    ) -> bool:
         """
         Выполняет операцию удаления группы академии.
 
@@ -49,11 +53,11 @@ class DeleteAcademyGroupCase(BaseUseCase[bool]):
             AppExceptionResponse: Если валидация не прошла.
         """
         await self.validate(id=id, force_delete=force_delete)
-        
+
         # Удаление связанного изображения (если требуется и изображение существует)
         if delete_image and self.model.image_id:
             await self.file_service.delete_file(file_id=self.model.image_id)
-        
+
         result = await self.repository.delete(id, force_delete=force_delete)
         return result
 
@@ -86,12 +90,12 @@ class DeleteAcademyGroupCase(BaseUseCase[bool]):
             # Проверка на существование связанных студентов
             # Проверка на существование активных расписаний
             # Другие бизнес-ограничения
-            
+
             # Примеры проверок (можно реализовать через дополнительные запросы):
             # - Есть ли активные студенты в группе
             # - Есть ли будущие расписания занятий
             # - Другие связанные записи, которые могут препятствовать удалению
-            
+
             # Пока заглушка - можно добавить конкретную логику
             pass
 

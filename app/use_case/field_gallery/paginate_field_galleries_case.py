@@ -1,9 +1,15 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.field_gallery.field_gallery_dto import FieldGalleryWithRelationsRDTO
+from app.adapters.dto.field_gallery.field_gallery_dto import (
+    FieldGalleryWithRelationsRDTO,
+)
 from app.adapters.dto.pagination_dto import PaginationFieldGalleryWithRelationsRDTO
-from app.adapters.filters.field_gallery.field_gallery_pagination_filter import FieldGalleryPaginationFilter
-from app.adapters.repository.field_gallery.field_gallery_repository import FieldGalleryRepository
+from app.adapters.filters.field_gallery.field_gallery_pagination_filter import (
+    FieldGalleryPaginationFilter,
+)
+from app.adapters.repository.field_gallery.field_gallery_repository import (
+    FieldGalleryRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
@@ -34,7 +40,9 @@ class PaginateFieldGalleriesCase(BaseUseCase[PaginationFieldGalleryWithRelations
         """
         self.repository = FieldGalleryRepository(db)
 
-    async def execute(self, filter: FieldGalleryPaginationFilter) -> PaginationFieldGalleryWithRelationsRDTO:
+    async def execute(
+        self, filter: FieldGalleryPaginationFilter
+    ) -> PaginationFieldGalleryWithRelationsRDTO:
         """
         Выполняет операцию получения пагинированного списка изображений галереи полей.
 

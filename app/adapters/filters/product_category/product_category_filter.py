@@ -40,9 +40,9 @@ class ProductCategoryFilter(BaseFilter[ProductCategoryEntity]):
             "title_kk",
             "title_en",
             "description_ru",
-            "description_kk", 
+            "description_kk",
             "description_en",
-            "value"
+            "value",
         ]
 
     def apply(self) -> list[SQLAlchemyQuery]:

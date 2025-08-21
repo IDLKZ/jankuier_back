@@ -64,9 +64,9 @@ class GetFieldByIdCase(BaseUseCase[FieldWithRelationsRDTO]):
             AppExceptionResponse: Если поле не найдено.
         """
         self.model = await self.repository.get(
-            id, 
+            id,
             options=self.repository.default_relationships(),
-            include_deleted_filter=True
+            include_deleted_filter=True,
         )
         if not self.model:
             raise AppExceptionResponse.not_found(message=i18n.gettext("not_found"))

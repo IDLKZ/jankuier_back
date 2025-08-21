@@ -8,7 +8,9 @@ from app.shared.query_constants import AppQueryConstants
 class AcademyMaterialFilter(BaseFilter[AcademyMaterialEntity]):
     def __init__(
         self,
-        search: str | None = AppQueryConstants.StandardSearchQuery("Поиск по названию материала"),
+        search: str | None = AppQueryConstants.StandardSearchQuery(
+            "Поиск по названию материала"
+        ),
         order_by: str | None = AppQueryConstants.StandardSortFieldQuery(
             "Поле сортировки"
         ),
@@ -17,10 +19,14 @@ class AcademyMaterialFilter(BaseFilter[AcademyMaterialEntity]):
         ),
         academy_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по академиям"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по академиям"
+        ),
         group_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по группам академий"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по группам академий"
+        ),
         file_ids: (
             list[int] | None
         ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по файлам"),

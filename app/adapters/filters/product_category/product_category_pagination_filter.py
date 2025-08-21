@@ -43,12 +43,12 @@ class ProductCategoryPaginationFilter(BasePaginationFilter[ProductCategoryEntity
     def get_search_filters(self) -> list[str] | None:
         return [
             "title_ru",
-            "title_kk", 
+            "title_kk",
             "title_en",
             "description_ru",
             "description_kk",
             "description_en",
-            "value"
+            "value",
         ]
 
     def apply(self) -> list[SQLAlchemyQuery]:

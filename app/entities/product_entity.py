@@ -46,7 +46,9 @@ class ProductEntity(Base):
     base_price: Mapped[DbColumnConstants.StandardPrice]
     old_price: Mapped[DbColumnConstants.StandardNullablePrice]
 
-    gender: Mapped[DbColumnConstants.StandardTinyInteger]  # 0 - unisex, 1 - male, 2 - female
+    gender: Mapped[
+        DbColumnConstants.StandardTinyInteger
+    ]  # 0 - unisex, 1 - male, 2 - female
     is_for_children: Mapped[DbColumnConstants.StandardBooleanFalse]
     is_recommended: Mapped[DbColumnConstants.StandardBooleanFalse]
     is_active: Mapped[DbColumnConstants.StandardBooleanTrue]
@@ -68,10 +70,12 @@ class ProductEntity(Base):
         foreign_keys=f"{AppEntityNames.ProductEntityName}.city_id",
     )
 
-    category: Mapped[AppEntityNames.ProductCategoryEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.ProductCategoryEntityName,
-        back_populates="products",
-        foreign_keys=f"{AppEntityNames.ProductEntityName}.category_id",
+    category: Mapped[AppEntityNames.ProductCategoryEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.ProductCategoryEntityName,
+            back_populates="products",
+            foreign_keys=f"{AppEntityNames.ProductEntityName}.category_id",
+        )
     )
 
     product_variants: Mapped[list[AppEntityNames.ProductVariantEntityName]] = (

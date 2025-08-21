@@ -1,7 +1,11 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.academy_group_schedule.academy_group_schedule_dto import AcademyGroupScheduleRDTO
-from app.adapters.repository.academy_group_schedule.academy_group_schedule_repository import AcademyGroupScheduleRepository
+from app.adapters.dto.academy_group_schedule.academy_group_schedule_dto import (
+    AcademyGroupScheduleRDTO,
+)
+from app.adapters.repository.academy_group_schedule.academy_group_schedule_repository import (
+    AcademyGroupScheduleRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.i18n.i18n_wrapper import i18n
 from app.use_case.base_case import BaseUseCase
@@ -48,13 +52,13 @@ class GetAcademyGroupScheduleByIdCase(BaseUseCase[AcademyGroupScheduleRDTO]):
             AppExceptionResponse: Если расписание не найдено.
         """
         await self.validate(id)
-        
+
         model = await self.repository.get(id, include_deleted_filter=True)
         if not model:
             raise AppExceptionResponse.not_found(
                 i18n.gettext("academy_group_schedule_not_found")
             )
-        
+
         return AcademyGroupScheduleRDTO.from_orm(model)
 
     async def validate(self, id: int) -> None:

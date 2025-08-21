@@ -1,6 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.repository.request_to_academy_group.request_to_academy_group_repository import RequestToAcademyGroupRepository
+from app.adapters.repository.request_to_academy_group.request_to_academy_group_repository import (
+    RequestToAcademyGroupRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import RequestToAcademyGroupEntity
 from app.i18n.i18n_wrapper import i18n

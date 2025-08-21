@@ -1,11 +1,18 @@
 from fastapi import UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.product_gallery.product_gallery_dto import ProductGalleryCDTO, ProductGalleryWithRelationsRDTO
+from app.adapters.dto.product_gallery.product_gallery_dto import (
+    ProductGalleryCDTO,
+    ProductGalleryWithRelationsRDTO,
+)
 from app.adapters.repository.file.file_repository import FileRepository
 from app.adapters.repository.product.product_repository import ProductRepository
-from app.adapters.repository.product_gallery.product_gallery_repository import ProductGalleryRepository
-from app.adapters.repository.product_variant.product_variant_repository import ProductVariantRepository
+from app.adapters.repository.product_gallery.product_gallery_repository import (
+    ProductGalleryRepository,
+)
+from app.adapters.repository.product_variant.product_variant_repository import (
+    ProductVariantRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import ProductGalleryEntity
 from app.i18n.i18n_wrapper import i18n
@@ -81,7 +88,9 @@ class CreateProductGalleryCase(BaseUseCase[ProductGalleryWithRelationsRDTO]):
         )
         return ProductGalleryWithRelationsRDTO.from_orm(self.model)
 
-    async def validate(self, dto: ProductGalleryCDTO, file: UploadFile | None = None) -> None:
+    async def validate(
+        self, dto: ProductGalleryCDTO, file: UploadFile | None = None
+    ) -> None:
         """
         Валидирует данные перед созданием изображения галереи товара.
 
@@ -106,7 +115,7 @@ class CreateProductGalleryCase(BaseUseCase[ProductGalleryWithRelationsRDTO]):
                 raise AppExceptionResponse.bad_request(
                     message=i18n.gettext("product_variant_not_found_by_id")
                 )
-            
+
             # Проверка что вариант принадлежит указанному товару
             if variant.product_id != dto.product_id:
                 raise AppExceptionResponse.bad_request(
@@ -140,7 +149,9 @@ class CreateProductGalleryCase(BaseUseCase[ProductGalleryWithRelationsRDTO]):
         """
         # Получение значения товара для папки загрузки
         product = await self.product_repository.get(dto.product_id)
-        self.upload_folder = AppFileExtensionConstants.product_image_directory(product.value)
+        self.upload_folder = AppFileExtensionConstants.product_image_directory(
+            product.value
+        )
 
         # Сохранение файла если предоставлен
         if file:

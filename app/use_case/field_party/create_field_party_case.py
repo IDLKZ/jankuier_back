@@ -2,8 +2,13 @@ from fastapi import UploadFile
 from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.field_party.field_party_dto import FieldPartyCDTO, FieldPartyWithRelationsRDTO
-from app.adapters.repository.field_party.field_party_repository import FieldPartyRepository
+from app.adapters.dto.field_party.field_party_dto import (
+    FieldPartyCDTO,
+    FieldPartyWithRelationsRDTO,
+)
+from app.adapters.repository.field_party.field_party_repository import (
+    FieldPartyRepository,
+)
 from app.adapters.repository.field.field_repository import FieldRepository
 from app.adapters.repository.file.file_repository import FileRepository
 from app.core.app_exception_response import AppExceptionResponse
@@ -74,7 +79,9 @@ class CreateFieldPartyCase(BaseUseCase[FieldPartyWithRelationsRDTO]):
         )
         return FieldPartyWithRelationsRDTO.from_orm(model)
 
-    async def validate(self, dto: FieldPartyCDTO, file: UploadFile | None = None) -> None:
+    async def validate(
+        self, dto: FieldPartyCDTO, file: UploadFile | None = None
+    ) -> None:
         """
         Валидация перед выполнением.
 
@@ -115,7 +122,9 @@ class CreateFieldPartyCase(BaseUseCase[FieldPartyWithRelationsRDTO]):
                     message=i18n.gettext("image_not_found_by_id")
                 )
 
-    async def transform(self, dto: FieldPartyCDTO, file: UploadFile | None = None) -> None:
+    async def transform(
+        self, dto: FieldPartyCDTO, file: UploadFile | None = None
+    ) -> None:
         """
         Преобразование DTO в модель.
 
@@ -129,7 +138,9 @@ class CreateFieldPartyCase(BaseUseCase[FieldPartyWithRelationsRDTO]):
 
         # Сохранение файла
         if file:
-            self.upload_folder = AppFileExtensionConstants.field_party_image_directory(dto.value)
+            self.upload_folder = AppFileExtensionConstants.field_party_image_directory(
+                dto.value
+            )
             file_entity = await self.file_service.save_file(
                 file, self.upload_folder, self.extensions
             )

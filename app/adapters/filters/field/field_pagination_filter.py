@@ -24,7 +24,9 @@ class FieldPaginationFilter(BasePaginationFilter[FieldEntity]):
         ),
         city_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по городам"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по городам"
+        ),
         is_active: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
             "Фильтрация по активности поля"
         ),
@@ -52,7 +54,7 @@ class FieldPaginationFilter(BasePaginationFilter[FieldEntity]):
         return [
             "title_ru",
             "title_kk",
-            "title_en", 
+            "title_en",
             "description_ru",
             "description_kk",
             "description_en",
@@ -68,7 +70,7 @@ class FieldPaginationFilter(BasePaginationFilter[FieldEntity]):
             "whatsapp",
             "telegram",
             "instagram",
-            "tiktok"
+            "tiktok",
         ]
 
     def apply(self) -> list[SQLAlchemyQuery]:

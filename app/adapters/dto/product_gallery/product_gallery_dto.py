@@ -14,8 +14,12 @@ class ProductGalleryDTO(BaseModel):
 
 class ProductGalleryCDTO(BaseModel):
     product_id: DTOConstant.StandardUnsignedIntegerField(description="ID товара")
-    variant_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID варианта товара (опционально)")
-    file_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID файла изображения")
+    variant_id: DTOConstant.StandardNullableUnsignedIntegerField(
+        description="ID варианта товара (опционально)"
+    )
+    file_id: DTOConstant.StandardNullableUnsignedIntegerField(
+        description="ID файла изображения"
+    )
 
     class Config:
         from_attributes = True
@@ -23,8 +27,12 @@ class ProductGalleryCDTO(BaseModel):
 
 class ProductGalleryRDTO(ProductGalleryDTO):
     product_id: DTOConstant.StandardUnsignedIntegerField(description="ID товара")
-    variant_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID варианта товара (опционально)")
-    file_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID файла изображения")
+    variant_id: DTOConstant.StandardNullableUnsignedIntegerField(
+        description="ID варианта товара (опционально)"
+    )
+    file_id: DTOConstant.StandardNullableUnsignedIntegerField(
+        description="ID файла изображения"
+    )
 
     created_at: DTOConstant.StandardCreatedAt
     updated_at: DTOConstant.StandardUpdatedAt
@@ -44,9 +52,17 @@ class ProductGalleryWithRelationsRDTO(ProductGalleryRDTO):
 
 class ProductGalleryBulkCDTO(BaseModel):
     """DTO для массового создания изображений галереи"""
+
     product_id: DTOConstant.StandardUnsignedIntegerField(description="ID товара")
-    variant_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID варианта товара (опционально)") | None = None
-    file_ids: list[DTOConstant.StandardUnsignedIntegerField(description="ID файла изображения")] = []
+    variant_id: (
+        DTOConstant.StandardNullableUnsignedIntegerField(
+            description="ID варианта товара (опционально)"
+        )
+        | None
+    ) = None
+    file_ids: list[
+        DTOConstant.StandardUnsignedIntegerField(description="ID файла изображения")
+    ] = []
 
     class Config:
         from_attributes = True
@@ -54,8 +70,19 @@ class ProductGalleryBulkCDTO(BaseModel):
 
 class ProductGalleryUpdateDTO(BaseModel):
     """DTO для обновления изображения в галерее"""
-    variant_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID варианта товара") | None = None
-    file_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID файла изображения") | None = None
+
+    variant_id: (
+        DTOConstant.StandardNullableUnsignedIntegerField(
+            description="ID варианта товара"
+        )
+        | None
+    ) = None
+    file_id: (
+        DTOConstant.StandardNullableUnsignedIntegerField(
+            description="ID файла изображения"
+        )
+        | None
+    ) = None
 
     class Config:
         from_attributes = True

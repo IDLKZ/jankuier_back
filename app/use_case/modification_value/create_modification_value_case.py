@@ -1,8 +1,15 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.modification_value.modification_value_dto import ModificationValueCDTO, ModificationValueWithRelationsRDTO
-from app.adapters.repository.modification_type.modification_type_repository import ModificationTypeRepository
-from app.adapters.repository.modification_value.modification_value_repository import ModificationValueRepository
+from app.adapters.dto.modification_value.modification_value_dto import (
+    ModificationValueCDTO,
+    ModificationValueWithRelationsRDTO,
+)
+from app.adapters.repository.modification_type.modification_type_repository import (
+    ModificationTypeRepository,
+)
+from app.adapters.repository.modification_value.modification_value_repository import (
+    ModificationValueRepository,
+)
 from app.adapters.repository.product.product_repository import ProductRepository
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import ModificationValueEntity
@@ -46,7 +53,9 @@ class CreateModificationValueCase(BaseUseCase[ModificationValueWithRelationsRDTO
         self.product_repository = ProductRepository(db)
         self.model: ModificationValueEntity | None = None
 
-    async def execute(self, dto: ModificationValueCDTO) -> ModificationValueWithRelationsRDTO:
+    async def execute(
+        self, dto: ModificationValueCDTO
+    ) -> ModificationValueWithRelationsRDTO:
         """
         Выполняет операцию создания нового значения модификации.
 
@@ -78,7 +87,9 @@ class CreateModificationValueCase(BaseUseCase[ModificationValueWithRelationsRDTO
             AppExceptionResponse: Если связанные сущности не найдены.
         """
         # Проверка существования типа модификации
-        if (await self.modification_type_repository.get(dto.modification_type_id)) is None:
+        if (
+            await self.modification_type_repository.get(dto.modification_type_id)
+        ) is None:
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("modification_type_not_found_by_id")
             )

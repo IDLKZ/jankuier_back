@@ -24,10 +24,12 @@ class CityEntity(Base):
     deleted_at: Mapped[DbColumnConstants.DeletedAt]
 
     # Relationships
-    country: Mapped[AppEntityNames.CountryEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.CountryEntityName,
-        back_populates="cities",
-        foreign_keys=f"{AppEntityNames.CityEntityName}.country_id",
+    country: Mapped[AppEntityNames.CountryEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.CountryEntityName,
+            back_populates="cities",
+            foreign_keys=f"{AppEntityNames.CityEntityName}.country_id",
+        )
     )
 
     academies: Mapped[list[AppEntityNames.AcademyEntityName]] = (

@@ -1,7 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.academy_gallery.academy_gallery_dto import AcademyGalleryRDTO
-from app.adapters.repository.academy_gallery.academy_gallery_repository import AcademyGalleryRepository
+from app.adapters.repository.academy_gallery.academy_gallery_repository import (
+    AcademyGalleryRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.i18n.i18n_wrapper import i18n
 from app.use_case.base_case import BaseUseCase
@@ -48,13 +50,13 @@ class GetAcademyGalleryByIdCase(BaseUseCase[AcademyGalleryRDTO]):
             AppExceptionResponse: Если изображение галереи не найдено.
         """
         await self.validate(id)
-        
+
         model = await self.repository.get(id, include_deleted_filter=True)
         if not model:
             raise AppExceptionResponse.not_found(
                 i18n.gettext("academy_gallery_not_found")
             )
-        
+
         return AcademyGalleryRDTO.from_orm(model)
 
     async def validate(self, id: int) -> None:

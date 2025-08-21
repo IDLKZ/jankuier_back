@@ -1,8 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.request_material.request_material_dto import RequestMaterialWithRelationsRDTO
-from app.adapters.filters.request_material.request_material_filter import RequestMaterialFilter
-from app.adapters.repository.request_material.request_material_repository import RequestMaterialRepository
+from app.adapters.dto.request_material.request_material_dto import (
+    RequestMaterialWithRelationsRDTO,
+)
+from app.adapters.filters.request_material.request_material_filter import (
+    RequestMaterialFilter,
+)
+from app.adapters.repository.request_material.request_material_repository import (
+    RequestMaterialRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
@@ -10,7 +16,9 @@ class AllRequestMaterialCase(BaseUseCase[list[RequestMaterialWithRelationsRDTO]]
     def __init__(self, db: AsyncSession) -> None:
         self.repository = RequestMaterialRepository(db)
 
-    async def execute(self, filter: RequestMaterialFilter) -> list[RequestMaterialWithRelationsRDTO]:
+    async def execute(
+        self, filter: RequestMaterialFilter
+    ) -> list[RequestMaterialWithRelationsRDTO]:
         models = await self.repository.get_with_filters(
             order_by=filter.order_by,
             order_direction=filter.order_direction,

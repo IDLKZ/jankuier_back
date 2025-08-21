@@ -8,7 +8,9 @@ from app.shared.query_constants import AppQueryConstants
 class AcademyFilter(BaseFilter[AcademyEntity]):
     def __init__(
         self,
-        search: str | None = AppQueryConstants.StandardOptionalSearchQuery("Поиск по названию, описанию, адресу"),
+        search: str | None = AppQueryConstants.StandardOptionalSearchQuery(
+            "Поиск по названию, описанию, адресу"
+        ),
         order_by: str | None = AppQueryConstants.StandardSortFieldQuery(
             "Поле сортировки"
         ),
@@ -17,31 +19,33 @@ class AcademyFilter(BaseFilter[AcademyEntity]):
         ),
         city_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по городам"),
-        gender: (
-            int | None
-        ) = AppQueryConstants.StandardOptionalIntegerQuery("Фильтрация по полу (0-любой, 1-мужской, 2-женский)"),
-        is_active: (
-            bool | None
-        ) = AppQueryConstants.StandardOptionalBooleanQuery("Фильтрация по статусу активности"),
-        min_age_from: (
-            int | None
-        ) = AppQueryConstants.StandardOptionalIntegerQuery("Минимальный возраст от"),
-        min_age_to: (
-            int | None
-        ) = AppQueryConstants.StandardOptionalIntegerQuery("Минимальный возраст до"),
-        max_age_from: (
-            int | None
-        ) = AppQueryConstants.StandardOptionalIntegerQuery("Максимальный возраст от"),
-        max_age_to: (
-            int | None
-        ) = AppQueryConstants.StandardOptionalIntegerQuery("Максимальный возраст до"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по городам"
+        ),
+        gender: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
+            "Фильтрация по полу (0-любой, 1-мужской, 2-женский)"
+        ),
+        is_active: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
+            "Фильтрация по статусу активности"
+        ),
+        min_age_from: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
+            "Минимальный возраст от"
+        ),
+        min_age_to: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
+            "Минимальный возраст до"
+        ),
+        max_age_from: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
+            "Максимальный возраст от"
+        ),
+        max_age_to: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
+            "Максимальный возраст до"
+        ),
         average_price_from: (
             float | None
         ) = AppQueryConstants.StandardOptionalDecimalQuery("Средняя цена от"),
-        average_price_to: (
-            float | None
-        ) = AppQueryConstants.StandardOptionalDecimalQuery("Средняя цена до"),
+        average_price_to: float | None = AppQueryConstants.StandardOptionalDecimalQuery(
+            "Средняя цена до"
+        ),
         is_show_deleted: bool = AppQueryConstants.StandardBooleanQuery(
             "Показывать удаленные данные?"
         ),
@@ -66,7 +70,7 @@ class AcademyFilter(BaseFilter[AcademyEntity]):
     def get_search_filters(self) -> list[str] | None:
         return [
             "title_ru",
-            "title_kk", 
+            "title_kk",
             "title_en",
             "description_ru",
             "description_kk",
@@ -76,7 +80,7 @@ class AcademyFilter(BaseFilter[AcademyEntity]):
             "address_en",
             "value",
             "phone",
-            "email"
+            "email",
         ]
 
     def apply(self) -> list[SQLAlchemyQuery]:

@@ -1,7 +1,10 @@
 from sqlalchemy import func, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.cart_item.cart_item_dto import CartItemWithRelationsRDTO, PaginationCartItemWithRelationsRDTO
+from app.adapters.dto.cart_item.cart_item_dto import (
+    CartItemWithRelationsRDTO,
+    PaginationCartItemWithRelationsRDTO,
+)
 from app.adapters.filter.pagination_filter import PaginationFilter
 from app.adapters.repository.cart_item.cart_item_repository import CartItemRepository
 from app.use_case.base_case import BaseUseCase
@@ -37,7 +40,9 @@ class PaginateCartItemsCase(BaseUseCase[PaginationCartItemWithRelationsRDTO]):
         """
         self.repository = CartItemRepository(db)
 
-    async def execute(self, filter: PaginationFilter) -> PaginationCartItemWithRelationsRDTO:
+    async def execute(
+        self, filter: PaginationFilter
+    ) -> PaginationCartItemWithRelationsRDTO:
         """
         Выполняет операцию получения товаров в корзинах с пагинацией.
 
@@ -48,36 +53,48 @@ class PaginateCartItemsCase(BaseUseCase[PaginationCartItemWithRelationsRDTO]):
             PaginationCartItemWithRelationsRDTO: Пагинированный список товаров в корзинах с связями.
         """
         await self.validate(filter)
-        
+
         # Применяем фильтры
         filters = []
-        if hasattr(filter, 'search') and filter.search:
+        if hasattr(filter, "search") and filter.search:
             search_term = f"%{filter.search.lower()}%"
             # Поиск по SKU, названию товара, цене или количеству
             filters.append(
                 or_(
                     func.lower(self.repository.model.sku).like(search_term),
-                    func.lower(self.repository.model.product.title_ru).like(search_term),
-                    func.lower(self.repository.model.product.title_kk).like(search_term),
-                    func.lower(self.repository.model.product.title_en).like(search_term),
-                    func.cast(self.repository.model.unit_price, func.text('TEXT')).like(search_term),
-                    func.cast(self.repository.model.total_price, func.text('TEXT')).like(search_term),
-                    func.cast(self.repository.model.qty, func.text('TEXT')).like(search_term),
+                    func.lower(self.repository.model.product.title_ru).like(
+                        search_term
+                    ),
+                    func.lower(self.repository.model.product.title_kk).like(
+                        search_term
+                    ),
+                    func.lower(self.repository.model.product.title_en).like(
+                        search_term
+                    ),
+                    func.cast(self.repository.model.unit_price, func.text("TEXT")).like(
+                        search_term
+                    ),
+                    func.cast(
+                        self.repository.model.total_price, func.text("TEXT")
+                    ).like(search_term),
+                    func.cast(self.repository.model.qty, func.text("TEXT")).like(
+                        search_term
+                    ),
                 )
             )
-        
+
         # Получаем данные из репозитория с пагинацией
         result = await self.repository.paginate(
             dto=CartItemWithRelationsRDTO,
             filters=filters,
             page=filter.page,
             per_page=filter.per_page,
-            order_by=getattr(filter, 'order_by', 'created_at'),
-            order_direction=getattr(filter, 'order_direction', 'desc'),
-            include_deleted_filter=not getattr(filter, 'is_show_deleted', False),
+            order_by=getattr(filter, "order_by", "created_at"),
+            order_direction=getattr(filter, "order_direction", "desc"),
+            include_deleted_filter=not getattr(filter, "is_show_deleted", False),
             options=self.repository.default_relationships(),
         )
-        
+
         return result
 
     async def validate(self, filter: PaginationFilter) -> None:

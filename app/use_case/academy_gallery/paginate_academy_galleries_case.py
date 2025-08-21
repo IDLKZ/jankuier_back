@@ -1,13 +1,20 @@
 from sqlalchemy import func, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.academy_gallery.academy_gallery_dto import AcademyGalleryWithRelationsRDTO, PaginationAcademyGalleryWithRelationsRDTO
+from app.adapters.dto.academy_gallery.academy_gallery_dto import (
+    AcademyGalleryWithRelationsRDTO,
+    PaginationAcademyGalleryWithRelationsRDTO,
+)
 from app.adapters.filter.pagination_filter import PaginationFilter
-from app.adapters.repository.academy_gallery.academy_gallery_repository import AcademyGalleryRepository
+from app.adapters.repository.academy_gallery.academy_gallery_repository import (
+    AcademyGalleryRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
-class PaginateAcademyGalleriesCase(BaseUseCase[PaginationAcademyGalleryWithRelationsRDTO]):
+class PaginateAcademyGalleriesCase(
+    BaseUseCase[PaginationAcademyGalleryWithRelationsRDTO]
+):
     """
     Класс Use Case для получения изображений галереи академий с пагинацией.
 
@@ -37,7 +44,9 @@ class PaginateAcademyGalleriesCase(BaseUseCase[PaginationAcademyGalleryWithRelat
         """
         self.repository = AcademyGalleryRepository(db)
 
-    async def execute(self, filter: PaginationFilter) -> PaginationAcademyGalleryWithRelationsRDTO:
+    async def execute(
+        self, filter: PaginationFilter
+    ) -> PaginationAcademyGalleryWithRelationsRDTO:
         """
         Выполняет операцию получения изображений галереи академий с пагинацией.
 
@@ -48,34 +57,40 @@ class PaginateAcademyGalleriesCase(BaseUseCase[PaginationAcademyGalleryWithRelat
             PaginationAcademyGalleryWithRelationsRDTO: Пагинированный список изображений галереи с связями.
         """
         await self.validate(filter)
-        
+
         # Применяем фильтры
         filters = []
-        if hasattr(filter, 'search') and filter.search:
+        if hasattr(filter, "search") and filter.search:
             search_term = f"%{filter.search.lower()}%"
             # Поиск по полям связанных сущностей
             filters.append(
                 or_(
-                    func.lower(self.repository.model.academy.title_ru).like(search_term),
-                    func.lower(self.repository.model.academy.title_kk).like(search_term),
-                    func.lower(self.repository.model.academy.title_en).like(search_term),
+                    func.lower(self.repository.model.academy.title_ru).like(
+                        search_term
+                    ),
+                    func.lower(self.repository.model.academy.title_kk).like(
+                        search_term
+                    ),
+                    func.lower(self.repository.model.academy.title_en).like(
+                        search_term
+                    ),
                     func.lower(self.repository.model.group.name).like(search_term),
                     func.lower(self.repository.model.file.filename).like(search_term),
                 )
             )
-        
+
         # Получаем данные из репозитория с пагинацией
         result = await self.repository.paginate(
             dto=AcademyGalleryWithRelationsRDTO,
             filters=filters,
             page=filter.page,
             per_page=filter.per_page,
-            order_by=getattr(filter, 'order_by', 'created_at'),
-            order_direction=getattr(filter, 'order_direction', 'desc'),
-            include_deleted_filter=not getattr(filter, 'is_show_deleted', False),
+            order_by=getattr(filter, "order_by", "created_at"),
+            order_direction=getattr(filter, "order_direction", "desc"),
+            include_deleted_filter=not getattr(filter, "is_show_deleted", False),
             options=self.repository.default_relationships(),
         )
-        
+
         return result
 
     async def validate(self, filter: PaginationFilter) -> None:

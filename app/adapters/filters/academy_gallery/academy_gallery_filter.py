@@ -16,10 +16,14 @@ class AcademyGalleryFilter(BaseFilter[AcademyGalleryEntity]):
         ),
         academy_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по академиям"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по академиям"
+        ),
         group_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по группам академий"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по группам академий"
+        ),
         file_ids: (
             list[int] | None
         ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по файлам"),

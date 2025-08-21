@@ -1,8 +1,15 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.request_to_academy_group.request_to_academy_group_dto import RequestToAcademyGroupCDTO, RequestToAcademyGroupWithRelationsRDTO
-from app.adapters.repository.academy_group.academy_group_repository import AcademyGroupRepository
-from app.adapters.repository.request_to_academy_group.request_to_academy_group_repository import RequestToAcademyGroupRepository
+from app.adapters.dto.request_to_academy_group.request_to_academy_group_dto import (
+    RequestToAcademyGroupCDTO,
+    RequestToAcademyGroupWithRelationsRDTO,
+)
+from app.adapters.repository.academy_group.academy_group_repository import (
+    AcademyGroupRepository,
+)
+from app.adapters.repository.request_to_academy_group.request_to_academy_group_repository import (
+    RequestToAcademyGroupRepository,
+)
 from app.adapters.repository.student.student_repository import StudentRepository
 from app.adapters.repository.user.user_repository import UserRepository
 from app.core.app_exception_response import AppExceptionResponse
@@ -11,7 +18,9 @@ from app.i18n.i18n_wrapper import i18n
 from app.use_case.base_case import BaseUseCase
 
 
-class CreateRequestToAcademyGroupCase(BaseUseCase[RequestToAcademyGroupWithRelationsRDTO]):
+class CreateRequestToAcademyGroupCase(
+    BaseUseCase[RequestToAcademyGroupWithRelationsRDTO]
+):
     """
     Класс Use Case для создания новой заявки в академическую группу.
 
@@ -49,7 +58,9 @@ class CreateRequestToAcademyGroupCase(BaseUseCase[RequestToAcademyGroupWithRelat
         self.user_repository = UserRepository(db)
         self.model: RequestToAcademyGroupEntity | None = None
 
-    async def execute(self, dto: RequestToAcademyGroupCDTO) -> RequestToAcademyGroupWithRelationsRDTO:
+    async def execute(
+        self, dto: RequestToAcademyGroupCDTO
+    ) -> RequestToAcademyGroupWithRelationsRDTO:
         """
         Выполняет операцию создания новой заявки в академическую группу.
 
@@ -103,7 +114,7 @@ class CreateRequestToAcademyGroupCase(BaseUseCase[RequestToAcademyGroupWithRelat
         existed = await self.repository.get_first_with_filters(
             filters=[
                 self.repository.model.student_id == dto.student_id,
-                self.repository.model.group_id == dto.group_id
+                self.repository.model.group_id == dto.group_id,
             ]
         )
         if existed:

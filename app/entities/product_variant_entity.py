@@ -50,10 +50,12 @@ class ProductVariantEntity(Base):
     deleted_at: Mapped[DbColumnConstants.DeletedAt]
 
     # Relationships
-    product: Mapped[AppEntityNames.ProductEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.ProductEntityName,
-        back_populates="product_variants",
-        foreign_keys=f"{AppEntityNames.ProductVariantEntityName}.product_id",
+    product: Mapped[AppEntityNames.ProductEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.ProductEntityName,
+            back_populates="product_variants",
+            foreign_keys=f"{AppEntityNames.ProductVariantEntityName}.product_id",
+        )
     )
 
     image: Mapped[AppEntityNames.FileEntityName] = DbRelationshipConstants.many_to_one(
@@ -68,12 +70,12 @@ class ProductVariantEntity(Base):
         foreign_keys=f"{AppEntityNames.ProductVariantEntityName}.city_id",
     )
 
-    product_variant_modifications: Mapped[list[AppEntityNames.ProductVariantModificationEntityName]] = (
-        DbRelationshipConstants.one_to_many(
-            target=AppEntityNames.ProductVariantModificationEntityName,
-            back_populates="variant",
-            foreign_keys=f"{AppEntityNames.ProductVariantModificationEntityName}.variant_id",
-        )
+    product_variant_modifications: Mapped[
+        list[AppEntityNames.ProductVariantModificationEntityName]
+    ] = DbRelationshipConstants.one_to_many(
+        target=AppEntityNames.ProductVariantModificationEntityName,
+        back_populates="variant",
+        foreign_keys=f"{AppEntityNames.ProductVariantModificationEntityName}.variant_id",
     )
 
     cart_items: Mapped[list[AppEntityNames.CartItemEntityName]] = (
@@ -91,4 +93,3 @@ class ProductVariantEntity(Base):
             foreign_keys=f"{AppEntityNames.ProductGalleryEntityName}.variant_id",
         )
     )
-

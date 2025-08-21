@@ -49,16 +49,14 @@ class GetAcademyByValueCase(BaseUseCase[AcademyRDTO]):
             AppExceptionResponse: Если академия не найдена.
         """
         await self.validate(value)
-        
+
         model = await self.repository.get_first_with_filters(
             filters=[func.lower(self.repository.model.value) == value.lower()],
             include_deleted_filter=True,
         )
         if not model:
-            raise AppExceptionResponse.not_found(
-                i18n.gettext("academy_not_found")
-            )
-        
+            raise AppExceptionResponse.not_found(i18n.gettext("academy_not_found"))
+
         return AcademyRDTO.from_orm(model)
 
     async def validate(self, value: str) -> None:

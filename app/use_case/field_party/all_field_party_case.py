@@ -2,7 +2,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.field_party.field_party_dto import FieldPartyWithRelationsRDTO
 from app.adapters.filters.field_party.field_party_filter import FieldPartyFilter
-from app.adapters.repository.field_party.field_party_repository import FieldPartyRepository
+from app.adapters.repository.field_party.field_party_repository import (
+    FieldPartyRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
@@ -33,7 +35,9 @@ class AllFieldPartyCase(BaseUseCase[list[FieldPartyWithRelationsRDTO]]):
         """
         self.repository = FieldPartyRepository(db)
 
-    async def execute(self, filter: FieldPartyFilter) -> list[FieldPartyWithRelationsRDTO]:
+    async def execute(
+        self, filter: FieldPartyFilter
+    ) -> list[FieldPartyWithRelationsRDTO]:
         """
         Выполняет операцию получения списка всех площадок полей.
 

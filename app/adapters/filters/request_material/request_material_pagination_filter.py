@@ -12,7 +12,9 @@ class RequestMaterialPaginationFilter(BasePaginationFilter[RequestMaterialEntity
             "Количество материалов заявок на странице"
         ),
         page: int = AppQueryConstants.StandardPageQuery("Номер страницы"),
-        search: str | None = AppQueryConstants.StandardOptionalSearchQuery("Поиск по названию материала заявки"),
+        search: str | None = AppQueryConstants.StandardOptionalSearchQuery(
+            "Поиск по названию материала заявки"
+        ),
         order_by: str | None = AppQueryConstants.StandardSortFieldQuery(
             "Поле сортировки"
         ),
@@ -21,16 +23,20 @@ class RequestMaterialPaginationFilter(BasePaginationFilter[RequestMaterialEntity
         ),
         request_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по заявкам в академические группы"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по заявкам в академические группы"
+        ),
         student_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по студентам"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по студентам"
+        ),
         file_ids: (
             list[int] | None
         ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по файлам"),
-        has_file: (
-            bool | None
-        ) = AppQueryConstants.StandardOptionalBooleanQuery("Фильтрация по наличию прикрепленного файла"),
+        has_file: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
+            "Фильтрация по наличию прикрепленного файла"
+        ),
         is_show_deleted: bool = AppQueryConstants.StandardBooleanQuery(
             "Показывать удаленные данные?"
         ),

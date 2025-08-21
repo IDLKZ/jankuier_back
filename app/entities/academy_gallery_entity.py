@@ -31,16 +31,20 @@ class AcademyGalleryEntity(Base):
     updated_at: Mapped[DbColumnConstants.UpdatedAt]
 
     # Relationships
-    academy: Mapped[AppEntityNames.AcademyEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.AcademyEntityName,
-        back_populates="academy_galleries",
-        foreign_keys=f"{AppEntityNames.AcademyGalleryEntityName}.academy_id",
+    academy: Mapped[AppEntityNames.AcademyEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.AcademyEntityName,
+            back_populates="academy_galleries",
+            foreign_keys=f"{AppEntityNames.AcademyGalleryEntityName}.academy_id",
+        )
     )
 
-    group: Mapped[AppEntityNames.AcademyGroupEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.AcademyGroupEntityName,
-        back_populates="academy_galleries",
-        foreign_keys=f"{AppEntityNames.AcademyGalleryEntityName}.group_id",
+    group: Mapped[AppEntityNames.AcademyGroupEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.AcademyGroupEntityName,
+            back_populates="academy_galleries",
+            foreign_keys=f"{AppEntityNames.AcademyGalleryEntityName}.group_id",
+        )
     )
 
     file: Mapped[AppEntityNames.FileEntityName] = DbRelationshipConstants.many_to_one(

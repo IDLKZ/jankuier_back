@@ -13,10 +13,18 @@ class CityDTO(BaseModel):
 class CityCDTO(BaseModel):
     country_id: DTOConstant.StandardUnsignedIntegerField(description="ID страны")
     title_ru: DTOConstant.StandardVarcharField(description="Название города на русском")
-    title_kk: DTOConstant.StandardNullableVarcharField(description="Название города на казахском")
-    title_en: DTOConstant.StandardNullableVarcharField(description="Название города на английском")
-    ticketon_city_id: DTOConstant.StandardNullableIntegerField(description="ID города в системе Ticketon")
-    ticketon_tag: DTOConstant.StandardNullableVarcharField(description="Тег города в системе Ticketon")
+    title_kk: DTOConstant.StandardNullableVarcharField(
+        description="Название города на казахском"
+    )
+    title_en: DTOConstant.StandardNullableVarcharField(
+        description="Название города на английском"
+    )
+    ticketon_city_id: DTOConstant.StandardNullableIntegerField(
+        description="ID города в системе Ticketon"
+    )
+    ticketon_tag: DTOConstant.StandardNullableVarcharField(
+        description="Тег города в системе Ticketon"
+    )
 
     class Config:
         from_attributes = True
@@ -25,10 +33,18 @@ class CityCDTO(BaseModel):
 class CityRDTO(CityDTO):
     country_id: DTOConstant.StandardUnsignedIntegerField(description="ID страны")
     title_ru: DTOConstant.StandardVarcharField(description="Название города на русском")
-    title_kk: DTOConstant.StandardNullableVarcharField(description="Название города на казахском")
-    title_en: DTOConstant.StandardNullableVarcharField(description="Название города на английском")
-    ticketon_city_id: DTOConstant.StandardNullableIntegerField(description="ID города в системе Ticketon")
-    ticketon_tag: DTOConstant.StandardNullableVarcharField(description="Тег города в системе Ticketon")
+    title_kk: DTOConstant.StandardNullableVarcharField(
+        description="Название города на казахском"
+    )
+    title_en: DTOConstant.StandardNullableVarcharField(
+        description="Название города на английском"
+    )
+    ticketon_city_id: DTOConstant.StandardNullableIntegerField(
+        description="ID города в системе Ticketon"
+    )
+    ticketon_tag: DTOConstant.StandardNullableVarcharField(
+        description="Тег города в системе Ticketon"
+    )
 
     created_at: DTOConstant.StandardCreatedAt
     updated_at: DTOConstant.StandardUpdatedAt

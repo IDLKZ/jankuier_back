@@ -1,7 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.field_party.field_party_dto import FieldPartyWithRelationsRDTO
-from app.adapters.repository.field_party.field_party_repository import FieldPartyRepository
+from app.adapters.repository.field_party.field_party_repository import (
+    FieldPartyRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import FieldPartyEntity
 from app.i18n.i18n_wrapper import i18n
@@ -64,9 +66,9 @@ class GetFieldPartyByIdCase(BaseUseCase[FieldPartyWithRelationsRDTO]):
             AppExceptionResponse: Если площадка поля не найдена.
         """
         self.model = await self.repository.get(
-            id, 
+            id,
             options=self.repository.default_relationships(),
-            include_deleted_filter=True
+            include_deleted_filter=True,
         )
         if not self.model:
             raise AppExceptionResponse.not_found(message=i18n.gettext("not_found"))

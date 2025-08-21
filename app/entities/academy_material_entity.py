@@ -32,16 +32,20 @@ class AcademyMaterialEntity(Base):
     updated_at: Mapped[DbColumnConstants.UpdatedAt]
 
     # Relationships
-    academy: Mapped[AppEntityNames.AcademyEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.AcademyEntityName,
-        back_populates="academy_materials",
-        foreign_keys=f"{AppEntityNames.AcademyMaterialEntityName}.academy_id",
+    academy: Mapped[AppEntityNames.AcademyEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.AcademyEntityName,
+            back_populates="academy_materials",
+            foreign_keys=f"{AppEntityNames.AcademyMaterialEntityName}.academy_id",
+        )
     )
 
-    group: Mapped[AppEntityNames.AcademyGroupEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.AcademyGroupEntityName,
-        back_populates="academy_materials",
-        foreign_keys=f"{AppEntityNames.AcademyMaterialEntityName}.group_id",
+    group: Mapped[AppEntityNames.AcademyGroupEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.AcademyGroupEntityName,
+            back_populates="academy_materials",
+            foreign_keys=f"{AppEntityNames.AcademyMaterialEntityName}.group_id",
+        )
     )
 
     file: Mapped[AppEntityNames.FileEntityName] = DbRelationshipConstants.many_to_one(
@@ -49,5 +53,3 @@ class AcademyMaterialEntity(Base):
         back_populates="academy_materials",
         foreign_keys=f"{AppEntityNames.AcademyMaterialEntityName}.file_id",
     )
-
-

@@ -44,7 +44,7 @@ class DeleteCartItemCase(BaseUseCase[bool]):
             AppExceptionResponse: Если валидация не прошла.
         """
         await self.validate(id=id, force_delete=force_delete)
-        
+
         result = await self.repository.delete(id, force_delete=force_delete)
         return result
 
@@ -68,9 +68,7 @@ class DeleteCartItemCase(BaseUseCase[bool]):
         # Проверка существования товара в корзине
         model = await self.repository.get(id, include_deleted_filter=True)
         if not model:
-            raise AppExceptionResponse.not_found(
-                i18n.gettext("cart_item_not_found")
-            )
+            raise AppExceptionResponse.not_found(i18n.gettext("cart_item_not_found"))
 
         # Бизнес-правила для удаления
         if not force_delete:
@@ -78,11 +76,11 @@ class DeleteCartItemCase(BaseUseCase[bool]):
             # - Проверка на активные заказы, содержащие данный товар
             # - Проверка прав доступа к корзине
             # - Другие бизнес-ограничения
-            
+
             # Например, можно проверить, не заблокирована ли корзина для изменений
             # if model.cart.is_locked:
             #     raise AppExceptionResponse.bad_request("Cart is locked for modifications")
-            
+
             pass
 
         self.model = model

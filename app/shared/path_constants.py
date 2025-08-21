@@ -20,7 +20,6 @@ class AppPathConstants:
     FilePathName = "file"
     FileTagName = "Файлы"
 
-
     RolePathName = "role"
     RoleTagName = "Роли"
 

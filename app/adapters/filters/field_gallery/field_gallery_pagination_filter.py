@@ -23,7 +23,9 @@ class FieldGalleryPaginationFilter(BasePaginationFilter[FieldGalleryEntity]):
         ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по полям"),
         party_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по площадкам"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по площадкам"
+        ),
         file_ids: (
             list[int] | None
         ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по файлам"),

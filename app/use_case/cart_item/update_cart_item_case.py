@@ -1,7 +1,10 @@
 from decimal import Decimal
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.cart_item.cart_item_dto import CartItemUpdateDTO, CartItemWithRelationsRDTO
+from app.adapters.dto.cart_item.cart_item_dto import (
+    CartItemUpdateDTO,
+    CartItemWithRelationsRDTO,
+)
 from app.adapters.repository.cart_item.cart_item_repository import CartItemRepository
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import CartItemEntity
@@ -85,7 +88,7 @@ class UpdateCartItemCase(BaseUseCase[CartItemWithRelationsRDTO]):
         # Но общая цена за единицу не должна быть отрицательной
         if dto.delta_price is not None:
             expected_unit_price = model.product_price + dto.delta_price
-            if expected_unit_price < Decimal('0'):
+            if expected_unit_price < Decimal("0"):
                 raise AppExceptionResponse.bad_request(
                     message=i18n.gettext("cart_item_price_invalid")
                 )
@@ -102,8 +105,10 @@ class UpdateCartItemCase(BaseUseCase[CartItemWithRelationsRDTO]):
 
         # Автоматический пересчет цен при обновлении количества или дельты
         current_qty = dto.qty if dto.qty is not None else self.model.qty
-        current_delta_price = dto.delta_price if dto.delta_price is not None else self.model.delta_price
-        
+        current_delta_price = (
+            dto.delta_price if dto.delta_price is not None else self.model.delta_price
+        )
+
         # Пересчитываем unit_price и total_price
         new_unit_price = self.model.product_price + current_delta_price
         new_total_price = new_unit_price * current_qty

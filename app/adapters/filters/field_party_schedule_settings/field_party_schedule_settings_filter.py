@@ -21,7 +21,9 @@ class FieldPartyScheduleSettingsFilter(BaseFilter[FieldPartyScheduleSettingsEnti
         ),
         party_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по площадкам"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по площадкам"
+        ),
         active_start_from: date | None = AppQueryConstants.StandardOptionalDateQuery(
             "Начало активности от"
         ),
@@ -40,10 +42,14 @@ class FieldPartyScheduleSettingsFilter(BaseFilter[FieldPartyScheduleSettingsEnti
         max_session_minute: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
             "Максимальная длительность сессии в минутах"
         ),
-        min_break_between_session: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
+        min_break_between_session: (
+            int | None
+        ) = AppQueryConstants.StandardOptionalIntegerQuery(
             "Минимальный перерыв между сессиями в минутах"
         ),
-        max_break_between_session: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
+        max_break_between_session: (
+            int | None
+        ) = AppQueryConstants.StandardOptionalIntegerQuery(
             "Максимальный перерыв между сессиями в минутах"
         ),
         min_booked_limit: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
@@ -97,36 +103,63 @@ class FieldPartyScheduleSettingsFilter(BaseFilter[FieldPartyScheduleSettingsEnti
                 )
 
         if self.party_ids:
-            filters.append(FieldPartyScheduleSettingsEntity.party_id.in_(self.party_ids))
+            filters.append(
+                FieldPartyScheduleSettingsEntity.party_id.in_(self.party_ids)
+            )
 
         if self.active_start_from is not None:
-            filters.append(FieldPartyScheduleSettingsEntity.active_start_at >= self.active_start_from)
+            filters.append(
+                FieldPartyScheduleSettingsEntity.active_start_at
+                >= self.active_start_from
+            )
 
         if self.active_start_to is not None:
-            filters.append(FieldPartyScheduleSettingsEntity.active_start_at <= self.active_start_to)
+            filters.append(
+                FieldPartyScheduleSettingsEntity.active_start_at <= self.active_start_to
+            )
 
         if self.active_end_from is not None:
-            filters.append(FieldPartyScheduleSettingsEntity.active_end_at >= self.active_end_from)
+            filters.append(
+                FieldPartyScheduleSettingsEntity.active_end_at >= self.active_end_from
+            )
 
         if self.active_end_to is not None:
-            filters.append(FieldPartyScheduleSettingsEntity.active_end_at <= self.active_end_to)
+            filters.append(
+                FieldPartyScheduleSettingsEntity.active_end_at <= self.active_end_to
+            )
 
         if self.min_session_minute is not None:
-            filters.append(FieldPartyScheduleSettingsEntity.session_minute_int >= self.min_session_minute)
+            filters.append(
+                FieldPartyScheduleSettingsEntity.session_minute_int
+                >= self.min_session_minute
+            )
 
         if self.max_session_minute is not None:
-            filters.append(FieldPartyScheduleSettingsEntity.session_minute_int <= self.max_session_minute)
+            filters.append(
+                FieldPartyScheduleSettingsEntity.session_minute_int
+                <= self.max_session_minute
+            )
 
         if self.min_break_between_session is not None:
-            filters.append(FieldPartyScheduleSettingsEntity.break_between_session_int >= self.min_break_between_session)
+            filters.append(
+                FieldPartyScheduleSettingsEntity.break_between_session_int
+                >= self.min_break_between_session
+            )
 
         if self.max_break_between_session is not None:
-            filters.append(FieldPartyScheduleSettingsEntity.break_between_session_int <= self.max_break_between_session)
+            filters.append(
+                FieldPartyScheduleSettingsEntity.break_between_session_int
+                <= self.max_break_between_session
+            )
 
         if self.min_booked_limit is not None:
-            filters.append(FieldPartyScheduleSettingsEntity.booked_limit >= self.min_booked_limit)
+            filters.append(
+                FieldPartyScheduleSettingsEntity.booked_limit >= self.min_booked_limit
+            )
 
         if self.max_booked_limit is not None:
-            filters.append(FieldPartyScheduleSettingsEntity.booked_limit <= self.max_booked_limit)
+            filters.append(
+                FieldPartyScheduleSettingsEntity.booked_limit <= self.max_booked_limit
+            )
 
         return filters

@@ -23,7 +23,9 @@ class CartItemEntity(Base):
     ]
     variant_id: Mapped[
         DbColumnConstants.ForeignKeyNullableInteger(
-            AppTableNames.ProductVariantTableName, onupdate="CASCADE", ondelete="SET NULL"
+            AppTableNames.ProductVariantTableName,
+            onupdate="CASCADE",
+            ondelete="SET NULL",
         )
     ]
 
@@ -47,15 +49,18 @@ class CartItemEntity(Base):
         foreign_keys=f"{AppEntityNames.CartItemEntityName}.cart_id",
     )
 
-    product: Mapped[AppEntityNames.ProductEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.ProductEntityName,
-        back_populates="cart_items",
-        foreign_keys=f"{AppEntityNames.CartItemEntityName}.product_id",
+    product: Mapped[AppEntityNames.ProductEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.ProductEntityName,
+            back_populates="cart_items",
+            foreign_keys=f"{AppEntityNames.CartItemEntityName}.product_id",
+        )
     )
 
-    variant: Mapped[AppEntityNames.ProductVariantEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.ProductVariantEntityName,
-        back_populates="cart_items",
-        foreign_keys=f"{AppEntityNames.CartItemEntityName}.variant_id",
+    variant: Mapped[AppEntityNames.ProductVariantEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.ProductVariantEntityName,
+            back_populates="cart_items",
+            foreign_keys=f"{AppEntityNames.CartItemEntityName}.variant_id",
+        )
     )
-

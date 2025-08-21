@@ -2,7 +2,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.pagination_dto import PaginationCountryRDTO
 from app.adapters.dto.country.country_dto import CountryRDTO
-from app.adapters.filters.country.country_pagination_filter import CountryPaginationFilter
+from app.adapters.filters.country.country_pagination_filter import (
+    CountryPaginationFilter,
+)
 from app.adapters.repository.country.country_repository import CountryRepository
 from app.use_case.base_case import BaseUseCase
 

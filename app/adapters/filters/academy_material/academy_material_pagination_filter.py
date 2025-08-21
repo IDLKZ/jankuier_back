@@ -12,7 +12,9 @@ class AcademyMaterialPaginationFilter(BasePaginationFilter[AcademyMaterialEntity
             "Количество материалов академий на странице"
         ),
         page: int = AppQueryConstants.StandardPageQuery("Номер страницы"),
-        search: str | None = AppQueryConstants.StandardSearchQuery("Поиск по названию материала"),
+        search: str | None = AppQueryConstants.StandardSearchQuery(
+            "Поиск по названию материала"
+        ),
         order_by: str | None = AppQueryConstants.StandardSortFieldQuery(
             "Поле сортировки"
         ),
@@ -21,10 +23,14 @@ class AcademyMaterialPaginationFilter(BasePaginationFilter[AcademyMaterialEntity
         ),
         academy_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по академиям"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по академиям"
+        ),
         group_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по группам академий"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по группам академий"
+        ),
         file_ids: (
             list[int] | None
         ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по файлам"),

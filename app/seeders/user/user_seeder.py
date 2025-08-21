@@ -55,7 +55,7 @@ class UserSeeder(BaseSeeder):
                 is_verified=True,
                 created_at=datetime.now(),
                 updated_at=datetime.now(),
-            )
+            ),
         ]
 
     def get_prod_data(self) -> list[UserEntity]:

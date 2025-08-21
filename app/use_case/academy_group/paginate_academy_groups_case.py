@@ -1,9 +1,14 @@
 from sqlalchemy import func, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.academy_group.academy_group_dto import AcademyGroupWithRelationsRDTO, PaginationAcademyGroupWithRelationsRDTO
+from app.adapters.dto.academy_group.academy_group_dto import (
+    AcademyGroupWithRelationsRDTO,
+    PaginationAcademyGroupWithRelationsRDTO,
+)
 from app.adapters.filter.pagination_filter import PaginationFilter
-from app.adapters.repository.academy_group.academy_group_repository import AcademyGroupRepository
+from app.adapters.repository.academy_group.academy_group_repository import (
+    AcademyGroupRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
@@ -37,7 +42,9 @@ class PaginateAcademyGroupsCase(BaseUseCase[PaginationAcademyGroupWithRelationsR
         """
         self.repository = AcademyGroupRepository(db)
 
-    async def execute(self, filter: PaginationFilter) -> PaginationAcademyGroupWithRelationsRDTO:
+    async def execute(
+        self, filter: PaginationFilter
+    ) -> PaginationAcademyGroupWithRelationsRDTO:
         """
         Выполняет операцию получения групп академий с пагинацией.
 
@@ -48,10 +55,10 @@ class PaginateAcademyGroupsCase(BaseUseCase[PaginationAcademyGroupWithRelationsR
             PaginationAcademyGroupWithRelationsRDTO: Пагинированный список групп академий с связями.
         """
         await self.validate(filter)
-        
+
         # Применяем фильтры
         filters = []
-        if hasattr(filter, 'search') and filter.search:
+        if hasattr(filter, "search") and filter.search:
             search_term = f"%{filter.search.lower()}%"
             filters.append(
                 or_(
@@ -62,19 +69,19 @@ class PaginateAcademyGroupsCase(BaseUseCase[PaginationAcademyGroupWithRelationsR
                     func.lower(self.repository.model.value).like(search_term),
                 )
             )
-        
+
         # Получаем данные из репозитория с пагинацией
         result = await self.repository.paginate(
             dto=AcademyGroupWithRelationsRDTO,
             filters=filters,
             page=filter.page,
             per_page=filter.per_page,
-            order_by=getattr(filter, 'order_by', 'id'),
-            order_direction=getattr(filter, 'order_direction', 'asc'),
-            include_deleted_filter=not getattr(filter, 'is_show_deleted', False),
+            order_by=getattr(filter, "order_by", "id"),
+            order_direction=getattr(filter, "order_direction", "asc"),
+            include_deleted_filter=not getattr(filter, "is_show_deleted", False),
             options=self.repository.default_relationships(),
         )
-        
+
         return result
 
     async def validate(self, filter: PaginationFilter) -> None:

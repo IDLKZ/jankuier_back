@@ -2,7 +2,9 @@ from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.field_party.field_party_dto import FieldPartyWithRelationsRDTO
-from app.adapters.repository.field_party.field_party_repository import FieldPartyRepository
+from app.adapters.repository.field_party.field_party_repository import (
+    FieldPartyRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import FieldPartyEntity
 from app.i18n.i18n_wrapper import i18n

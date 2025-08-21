@@ -7,7 +7,9 @@ from app.adapters.repository.base_repository import BaseRepository
 from app.entities import FieldPartyScheduleSettingsEntity
 
 
-class FieldPartyScheduleSettingsRepository(BaseRepository[FieldPartyScheduleSettingsEntity]):
+class FieldPartyScheduleSettingsRepository(
+    BaseRepository[FieldPartyScheduleSettingsEntity]
+):
     def __init__(self, db: AsyncSession) -> None:
         super().__init__(FieldPartyScheduleSettingsEntity, db)
 

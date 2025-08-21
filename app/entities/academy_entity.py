@@ -97,4 +97,3 @@ class AcademyEntity(Base):
             foreign_keys=f"{AppEntityNames.AcademyMaterialEntityName}.academy_id",
         )
     )
-

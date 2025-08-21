@@ -13,46 +13,94 @@ class ProductDTO(BaseModel):
 
 
 class ProductCDTO(BaseModel):
-    image_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID главного изображения товара")
+    image_id: DTOConstant.StandardNullableUnsignedIntegerField(
+        description="ID главного изображения товара"
+    )
     city_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID города")
-    category_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID категории товара")
+    category_id: DTOConstant.StandardNullableUnsignedIntegerField(
+        description="ID категории товара"
+    )
     title_ru: DTOConstant.StandardVarcharField(description="Название товара на русском")
-    title_kk: DTOConstant.StandardNullableVarcharField(description="Название товара на казахском")
-    title_en: DTOConstant.StandardNullableVarcharField(description="Название товара на английском")
-    description_ru: DTOConstant.StandardNullableTextField(description="Описание товара на русском")
-    description_kk: DTOConstant.StandardNullableTextField(description="Описание товара на казахском")
-    description_en: DTOConstant.StandardNullableTextField(description="Описание товара на английском")
-    value: DTOConstant.StandardUniqueValueField(description="Уникальное значение товара")
+    title_kk: DTOConstant.StandardNullableVarcharField(
+        description="Название товара на казахском"
+    )
+    title_en: DTOConstant.StandardNullableVarcharField(
+        description="Название товара на английском"
+    )
+    description_ru: DTOConstant.StandardNullableTextField(
+        description="Описание товара на русском"
+    )
+    description_kk: DTOConstant.StandardNullableTextField(
+        description="Описание товара на казахском"
+    )
+    description_en: DTOConstant.StandardNullableTextField(
+        description="Описание товара на английском"
+    )
+    value: DTOConstant.StandardUniqueValueField(
+        description="Уникальное значение товара"
+    )
     sku: DTOConstant.StandardUniqueValueField(description="SKU товара")
     base_price: DTOConstant.StandardPriceField(description="Базовая цена товара")
     old_price: DTOConstant.StandardNullablePriceField(description="Старая цена товара")
-    gender: DTOConstant.StandardIntegerField(description="Пол: 0-унисекс, 1-мужской, 2-женский")
-    is_for_children: DTOConstant.StandardBooleanFalseField(description="Товар для детей")
-    is_recommended: DTOConstant.StandardBooleanFalseField(description="Рекомендованный товар")
-    is_active: DTOConstant.StandardBooleanTrueField(description="Флаг активности товара")
+    gender: DTOConstant.StandardIntegerField(
+        description="Пол: 0-унисекс, 1-мужской, 2-женский"
+    )
+    is_for_children: DTOConstant.StandardBooleanFalseField(
+        description="Товар для детей"
+    )
+    is_recommended: DTOConstant.StandardBooleanFalseField(
+        description="Рекомендованный товар"
+    )
+    is_active: DTOConstant.StandardBooleanTrueField(
+        description="Флаг активности товара"
+    )
 
     class Config:
         from_attributes = True
 
 
 class ProductRDTO(ProductDTO):
-    image_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID главного изображения товара")
+    image_id: DTOConstant.StandardNullableUnsignedIntegerField(
+        description="ID главного изображения товара"
+    )
     city_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID города")
-    category_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID категории товара")
+    category_id: DTOConstant.StandardNullableUnsignedIntegerField(
+        description="ID категории товара"
+    )
     title_ru: DTOConstant.StandardVarcharField(description="Название товара на русском")
-    title_kk: DTOConstant.StandardNullableVarcharField(description="Название товара на казахском")
-    title_en: DTOConstant.StandardNullableVarcharField(description="Название товара на английском")
-    description_ru: DTOConstant.StandardNullableTextField(description="Описание товара на русском")
-    description_kk: DTOConstant.StandardNullableTextField(description="Описание товара на казахском")
-    description_en: DTOConstant.StandardNullableTextField(description="Описание товара на английском")
-    value: DTOConstant.StandardUniqueValueField(description="Уникальное значение товара")
+    title_kk: DTOConstant.StandardNullableVarcharField(
+        description="Название товара на казахском"
+    )
+    title_en: DTOConstant.StandardNullableVarcharField(
+        description="Название товара на английском"
+    )
+    description_ru: DTOConstant.StandardNullableTextField(
+        description="Описание товара на русском"
+    )
+    description_kk: DTOConstant.StandardNullableTextField(
+        description="Описание товара на казахском"
+    )
+    description_en: DTOConstant.StandardNullableTextField(
+        description="Описание товара на английском"
+    )
+    value: DTOConstant.StandardUniqueValueField(
+        description="Уникальное значение товара"
+    )
     sku: DTOConstant.StandardUniqueValueField(description="SKU товара")
     base_price: DTOConstant.StandardPriceField(description="Базовая цена товара")
     old_price: DTOConstant.StandardNullablePriceField(description="Старая цена товара")
-    gender: DTOConstant.StandardIntegerField(description="Пол: 0-унисекс, 1-мужской, 2-женский")
-    is_for_children: DTOConstant.StandardBooleanFalseField(description="Товар для детей")
-    is_recommended: DTOConstant.StandardBooleanFalseField(description="Рекомендованный товар")
-    is_active: DTOConstant.StandardBooleanTrueField(description="Флаг активности товара")
+    gender: DTOConstant.StandardIntegerField(
+        description="Пол: 0-унисекс, 1-мужской, 2-женский"
+    )
+    is_for_children: DTOConstant.StandardBooleanFalseField(
+        description="Товар для детей"
+    )
+    is_recommended: DTOConstant.StandardBooleanFalseField(
+        description="Рекомендованный товар"
+    )
+    is_active: DTOConstant.StandardBooleanTrueField(
+        description="Флаг активности товара"
+    )
 
     created_at: DTOConstant.StandardCreatedAt
     updated_at: DTOConstant.StandardUpdatedAt
@@ -73,21 +121,77 @@ class ProductWithRelationsRDTO(ProductRDTO):
 
 class ProductUpdateDTO(BaseModel):
     """DTO для обновления товара - все поля опциональные"""
-    image_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID главного изображения товара") | None = None
-    city_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID города") | None = None
-    category_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID категории товара") | None = None
-    title_ru: DTOConstant.StandardVarcharField(description="Название товара на русском") | None = None
-    title_kk: DTOConstant.StandardNullableVarcharField(description="Название товара на казахском") | None = None
-    title_en: DTOConstant.StandardNullableVarcharField(description="Название товара на английском") | None = None
-    description_ru: DTOConstant.StandardNullableTextField(description="Описание товара на русском") | None = None
-    description_kk: DTOConstant.StandardNullableTextField(description="Описание товара на казахском") | None = None
-    description_en: DTOConstant.StandardNullableTextField(description="Описание товара на английском") | None = None
-    base_price: DTOConstant.StandardPriceField(description="Базовая цена товара") | None = None
-    old_price: DTOConstant.StandardNullablePriceField(description="Старая цена товара") | None = None
-    gender: DTOConstant.StandardIntegerField(description="Пол: 0-унисекс, 1-мужской, 2-женский") | None = None
-    is_for_children: DTOConstant.StandardBooleanFalseField(description="Товар для детей") | None = None
-    is_recommended: DTOConstant.StandardBooleanFalseField(description="Рекомендованный товар") | None = None
-    is_active: DTOConstant.StandardBooleanTrueField(description="Флаг активности товара") | None = None
+
+    image_id: (
+        DTOConstant.StandardNullableUnsignedIntegerField(
+            description="ID главного изображения товара"
+        )
+        | None
+    ) = None
+    city_id: (
+        DTOConstant.StandardNullableUnsignedIntegerField(description="ID города") | None
+    ) = None
+    category_id: (
+        DTOConstant.StandardNullableUnsignedIntegerField(
+            description="ID категории товара"
+        )
+        | None
+    ) = None
+    title_ru: (
+        DTOConstant.StandardVarcharField(description="Название товара на русском")
+        | None
+    ) = None
+    title_kk: (
+        DTOConstant.StandardNullableVarcharField(
+            description="Название товара на казахском"
+        )
+        | None
+    ) = None
+    title_en: (
+        DTOConstant.StandardNullableVarcharField(
+            description="Название товара на английском"
+        )
+        | None
+    ) = None
+    description_ru: (
+        DTOConstant.StandardNullableTextField(description="Описание товара на русском")
+        | None
+    ) = None
+    description_kk: (
+        DTOConstant.StandardNullableTextField(
+            description="Описание товара на казахском"
+        )
+        | None
+    ) = None
+    description_en: (
+        DTOConstant.StandardNullableTextField(
+            description="Описание товара на английском"
+        )
+        | None
+    ) = None
+    base_price: (
+        DTOConstant.StandardPriceField(description="Базовая цена товара") | None
+    ) = None
+    old_price: (
+        DTOConstant.StandardNullablePriceField(description="Старая цена товара") | None
+    ) = None
+    gender: (
+        DTOConstant.StandardIntegerField(
+            description="Пол: 0-унисекс, 1-мужской, 2-женский"
+        )
+        | None
+    ) = None
+    is_for_children: (
+        DTOConstant.StandardBooleanFalseField(description="Товар для детей") | None
+    ) = None
+    is_recommended: (
+        DTOConstant.StandardBooleanFalseField(description="Рекомендованный товар")
+        | None
+    ) = None
+    is_active: (
+        DTOConstant.StandardBooleanTrueField(description="Флаг активности товара")
+        | None
+    ) = None
 
     class Config:
         from_attributes = True

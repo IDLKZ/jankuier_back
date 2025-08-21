@@ -1,12 +1,20 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.field_party_schedule.field_party_schedule_dto import FieldPartyScheduleWithRelationsRDTO
-from app.adapters.filters.field_party_schedule.field_party_schedule_filter import FieldPartyScheduleFilter
-from app.adapters.repository.field_party_schedule.field_party_schedule_repository import FieldPartyScheduleRepository
+from app.adapters.dto.field_party_schedule.field_party_schedule_dto import (
+    FieldPartyScheduleWithRelationsRDTO,
+)
+from app.adapters.filters.field_party_schedule.field_party_schedule_filter import (
+    FieldPartyScheduleFilter,
+)
+from app.adapters.repository.field_party_schedule.field_party_schedule_repository import (
+    FieldPartyScheduleRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
-class AllFieldPartySchedulesCase(BaseUseCase[list[FieldPartyScheduleWithRelationsRDTO]]):
+class AllFieldPartySchedulesCase(
+    BaseUseCase[list[FieldPartyScheduleWithRelationsRDTO]]
+):
     """
     Класс Use Case для получения списка всех расписаний площадок.
 
@@ -33,7 +41,9 @@ class AllFieldPartySchedulesCase(BaseUseCase[list[FieldPartyScheduleWithRelation
         """
         self.repository = FieldPartyScheduleRepository(db)
 
-    async def execute(self, filter: FieldPartyScheduleFilter) -> list[FieldPartyScheduleWithRelationsRDTO]:
+    async def execute(
+        self, filter: FieldPartyScheduleFilter
+    ) -> list[FieldPartyScheduleWithRelationsRDTO]:
         """
         Выполняет операцию получения списка всех расписаний площадок.
 

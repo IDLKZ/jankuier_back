@@ -14,17 +14,33 @@ class ProductVariantDTO(BaseModel):
 
 class ProductVariantCDTO(BaseModel):
     product_id: DTOConstant.StandardUnsignedIntegerField(description="ID товара")
-    image_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID изображения варианта")
+    image_id: DTOConstant.StandardNullableUnsignedIntegerField(
+        description="ID изображения варианта"
+    )
     city_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID города")
-    title_ru: DTOConstant.StandardVarcharField(description="Название варианта на русском")
-    title_kk: DTOConstant.StandardNullableVarcharField(description="Название варианта на казахском")
-    title_en: DTOConstant.StandardNullableVarcharField(description="Название варианта на английском")
-    value: DTOConstant.StandardUniqueValueField(description="Уникальное значение варианта")
+    title_ru: DTOConstant.StandardVarcharField(
+        description="Название варианта на русском"
+    )
+    title_kk: DTOConstant.StandardNullableVarcharField(
+        description="Название варианта на казахском"
+    )
+    title_en: DTOConstant.StandardNullableVarcharField(
+        description="Название варианта на английском"
+    )
+    value: DTOConstant.StandardUniqueValueField(
+        description="Уникальное значение варианта"
+    )
     sku: DTOConstant.StandardNullableVarcharField(description="SKU варианта товара")
-    price_delta: DTOConstant.StandardNullablePriceField(description="Изменение цены относительно базовой")
+    price_delta: DTOConstant.StandardNullablePriceField(
+        description="Изменение цены относительно базовой"
+    )
     stock: DTOConstant.StandardIntegerField(description="Количество на складе")
-    is_active: DTOConstant.StandardBooleanTrueField(description="Флаг активности варианта")
-    is_default: DTOConstant.StandardBooleanFalseField(description="Вариант по умолчанию")
+    is_active: DTOConstant.StandardBooleanTrueField(
+        description="Флаг активности варианта"
+    )
+    is_default: DTOConstant.StandardBooleanFalseField(
+        description="Вариант по умолчанию"
+    )
 
     class Config:
         from_attributes = True
@@ -32,17 +48,33 @@ class ProductVariantCDTO(BaseModel):
 
 class ProductVariantRDTO(ProductVariantDTO):
     product_id: DTOConstant.StandardUnsignedIntegerField(description="ID товара")
-    image_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID изображения варианта")
+    image_id: DTOConstant.StandardNullableUnsignedIntegerField(
+        description="ID изображения варианта"
+    )
     city_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID города")
-    title_ru: DTOConstant.StandardVarcharField(description="Название варианта на русском")
-    title_kk: DTOConstant.StandardNullableVarcharField(description="Название варианта на казахском")
-    title_en: DTOConstant.StandardNullableVarcharField(description="Название варианта на английском")
-    value: DTOConstant.StandardUniqueValueField(description="Уникальное значение варианта")
+    title_ru: DTOConstant.StandardVarcharField(
+        description="Название варианта на русском"
+    )
+    title_kk: DTOConstant.StandardNullableVarcharField(
+        description="Название варианта на казахском"
+    )
+    title_en: DTOConstant.StandardNullableVarcharField(
+        description="Название варианта на английском"
+    )
+    value: DTOConstant.StandardUniqueValueField(
+        description="Уникальное значение варианта"
+    )
     sku: DTOConstant.StandardNullableVarcharField(description="SKU варианта товара")
-    price_delta: DTOConstant.StandardNullablePriceField(description="Изменение цены относительно базовой")
+    price_delta: DTOConstant.StandardNullablePriceField(
+        description="Изменение цены относительно базовой"
+    )
     stock: DTOConstant.StandardIntegerField(description="Количество на складе")
-    is_active: DTOConstant.StandardBooleanTrueField(description="Флаг активности варианта")
-    is_default: DTOConstant.StandardBooleanFalseField(description="Вариант по умолчанию")
+    is_active: DTOConstant.StandardBooleanTrueField(
+        description="Флаг активности варианта"
+    )
+    is_default: DTOConstant.StandardBooleanFalseField(
+        description="Вариант по умолчанию"
+    )
 
     created_at: DTOConstant.StandardCreatedAt
     updated_at: DTOConstant.StandardUpdatedAt
@@ -63,16 +95,52 @@ class ProductVariantWithRelationsRDTO(ProductVariantRDTO):
 
 class ProductVariantUpdateDTO(BaseModel):
     """DTO для обновления варианта товара - все поля опциональные"""
-    image_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID изображения варианта") | None = None
-    city_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID города") | None = None
-    title_ru: DTOConstant.StandardVarcharField(description="Название варианта на русском") | None = None
-    title_kk: DTOConstant.StandardNullableVarcharField(description="Название варианта на казахском") | None = None
-    title_en: DTOConstant.StandardNullableVarcharField(description="Название варианта на английском") | None = None
-    sku: DTOConstant.StandardNullableVarcharField(description="SKU варианта товара") | None = None
-    price_delta: DTOConstant.StandardNullablePriceField(description="Изменение цены относительно базовой") | None = None
-    stock: DTOConstant.StandardIntegerField(description="Количество на складе") | None = None
-    is_active: DTOConstant.StandardBooleanTrueField(description="Флаг активности варианта") | None = None
-    is_default: DTOConstant.StandardBooleanFalseField(description="Вариант по умолчанию") | None = None
+
+    image_id: (
+        DTOConstant.StandardNullableUnsignedIntegerField(
+            description="ID изображения варианта"
+        )
+        | None
+    ) = None
+    city_id: (
+        DTOConstant.StandardNullableUnsignedIntegerField(description="ID города") | None
+    ) = None
+    title_ru: (
+        DTOConstant.StandardVarcharField(description="Название варианта на русском")
+        | None
+    ) = None
+    title_kk: (
+        DTOConstant.StandardNullableVarcharField(
+            description="Название варианта на казахском"
+        )
+        | None
+    ) = None
+    title_en: (
+        DTOConstant.StandardNullableVarcharField(
+            description="Название варианта на английском"
+        )
+        | None
+    ) = None
+    sku: (
+        DTOConstant.StandardNullableVarcharField(description="SKU варианта товара")
+        | None
+    ) = None
+    price_delta: (
+        DTOConstant.StandardNullablePriceField(
+            description="Изменение цены относительно базовой"
+        )
+        | None
+    ) = None
+    stock: (
+        DTOConstant.StandardIntegerField(description="Количество на складе") | None
+    ) = None
+    is_active: (
+        DTOConstant.StandardBooleanTrueField(description="Флаг активности варианта")
+        | None
+    ) = None
+    is_default: (
+        DTOConstant.StandardBooleanFalseField(description="Вариант по умолчанию") | None
+    ) = None
 
     class Config:
         from_attributes = True

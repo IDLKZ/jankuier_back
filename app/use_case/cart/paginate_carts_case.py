@@ -48,33 +48,37 @@ class PaginateCartsCase(BaseUseCase[PaginationCartRDTO]):
             PaginationCartRDTO: Пагинированный список корзин.
         """
         await self.validate(filter)
-        
+
         # Применяем фильтры
         filters = []
-        if hasattr(filter, 'search') and filter.search:
+        if hasattr(filter, "search") and filter.search:
             search_term = f"%{filter.search.lower()}%"
             # Поиск по ID пользователя, общей стоимости или данным пользователя
             filters.append(
                 or_(
-                    func.cast(self.repository.model.user_id, func.text('TEXT')).like(search_term),
-                    func.cast(self.repository.model.total_price, func.text('TEXT')).like(search_term),
+                    func.cast(self.repository.model.user_id, func.text("TEXT")).like(
+                        search_term
+                    ),
+                    func.cast(
+                        self.repository.model.total_price, func.text("TEXT")
+                    ).like(search_term),
                     func.lower(self.repository.model.user.username).like(search_term),
                     func.lower(self.repository.model.user.email).like(search_term),
                 )
             )
-        
+
         # Получаем данные из репозитория с пагинацией
         result = await self.repository.paginate(
             dto=CartRDTO,
             filters=filters,
             page=filter.page,
             per_page=filter.per_page,
-            order_by=getattr(filter, 'order_by', 'created_at'),
-            order_direction=getattr(filter, 'order_direction', 'desc'),
-            include_deleted_filter=not getattr(filter, 'is_show_deleted', False),
+            order_by=getattr(filter, "order_by", "created_at"),
+            order_direction=getattr(filter, "order_direction", "desc"),
+            include_deleted_filter=not getattr(filter, "is_show_deleted", False),
             options=self.repository.default_relationships(),
         )
-        
+
         return result
 
     async def validate(self, filter: PaginationFilter) -> None:

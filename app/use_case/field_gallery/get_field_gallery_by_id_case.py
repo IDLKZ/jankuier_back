@@ -1,7 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.field_gallery.field_gallery_dto import FieldGalleryRDTO
-from app.adapters.repository.field_gallery.field_gallery_repository import FieldGalleryRepository
+from app.adapters.repository.field_gallery.field_gallery_repository import (
+    FieldGalleryRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.i18n.i18n_wrapper import i18n
 from app.use_case.base_case import BaseUseCase
@@ -48,13 +50,13 @@ class GetFieldGalleryByIdCase(BaseUseCase[FieldGalleryRDTO]):
             AppExceptionResponse: Если изображение галереи поля не найдено.
         """
         await self.validate(id)
-        
+
         model = await self.repository.get(id, include_deleted_filter=True)
         if not model:
             raise AppExceptionResponse.not_found(
                 i18n.gettext("field_gallery_not_found")
             )
-        
+
         return FieldGalleryRDTO.from_orm(model)
 
     async def validate(self, id: int) -> None:

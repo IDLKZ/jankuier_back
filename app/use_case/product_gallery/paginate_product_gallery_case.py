@@ -1,13 +1,21 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.pagination_dto import PaginationProductGalleryWithRelationsRDTO
-from app.adapters.dto.product_gallery.product_gallery_dto import ProductGalleryWithRelationsRDTO
-from app.adapters.filters.product_gallery.product_gallery_pagination_filter import ProductGalleryPaginationFilter
-from app.adapters.repository.product_gallery.product_gallery_repository import ProductGalleryRepository
+from app.adapters.dto.product_gallery.product_gallery_dto import (
+    ProductGalleryWithRelationsRDTO,
+)
+from app.adapters.filters.product_gallery.product_gallery_pagination_filter import (
+    ProductGalleryPaginationFilter,
+)
+from app.adapters.repository.product_gallery.product_gallery_repository import (
+    ProductGalleryRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
-class PaginateProductGalleryCase(BaseUseCase[PaginationProductGalleryWithRelationsRDTO]):
+class PaginateProductGalleryCase(
+    BaseUseCase[PaginationProductGalleryWithRelationsRDTO]
+):
     """
     Класс Use Case для получения пагинированного списка изображений галереи товаров.
 
@@ -35,7 +43,9 @@ class PaginateProductGalleryCase(BaseUseCase[PaginationProductGalleryWithRelatio
         """
         self.repository = ProductGalleryRepository(db)
 
-    async def execute(self, filter: ProductGalleryPaginationFilter) -> PaginationProductGalleryWithRelationsRDTO:
+    async def execute(
+        self, filter: ProductGalleryPaginationFilter
+    ) -> PaginationProductGalleryWithRelationsRDTO:
         """
         Выполняет операцию получения пагинированного списка изображений галереи товаров.
 

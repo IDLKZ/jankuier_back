@@ -9,7 +9,9 @@ from app.shared.query_constants import AppQueryConstants
 class StudentFilter(BaseFilter[StudentEntity]):
     def __init__(
         self,
-        search: str | None = AppQueryConstants.StandardOptionalSearchQuery("Поиск по имени, фамилии, телефону, email"),
+        search: str | None = AppQueryConstants.StandardOptionalSearchQuery(
+            "Поиск по имени, фамилии, телефону, email"
+        ),
         order_by: str | None = AppQueryConstants.StandardSortFieldQuery(
             "Поле сортировки"
         ),
@@ -18,28 +20,30 @@ class StudentFilter(BaseFilter[StudentEntity]):
         ),
         created_by_ids: (
             list[int] | None
-        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery("Фильтрация по создателям"),
-        gender: (
-            int | None
-        ) = AppQueryConstants.StandardOptionalIntegerQuery("Фильтрация по полу (0-любой, 1-мужской, 2-женский)"),
-        birthdate_from: (
-            date | None
-        ) = AppQueryConstants.StandardOptionalDateQuery("Дата рождения от"),
-        birthdate_to: (
-            date | None
-        ) = AppQueryConstants.StandardOptionalDateQuery("Дата рождения до"),
-        age_from: (
-            int | None
-        ) = AppQueryConstants.StandardOptionalIntegerQuery("Возраст от"),
-        age_to: (
-            int | None
-        ) = AppQueryConstants.StandardOptionalIntegerQuery("Возраст до"),
-        has_phone: (
-            bool | None
-        ) = AppQueryConstants.StandardOptionalBooleanQuery("Фильтрация по наличию телефона"),
-        has_email: (
-            bool | None
-        ) = AppQueryConstants.StandardOptionalBooleanQuery("Фильтрация по наличию email"),
+        ) = AppQueryConstants.StandardOptionalIntegerArrayQuery(
+            "Фильтрация по создателям"
+        ),
+        gender: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
+            "Фильтрация по полу (0-любой, 1-мужской, 2-женский)"
+        ),
+        birthdate_from: date | None = AppQueryConstants.StandardOptionalDateQuery(
+            "Дата рождения от"
+        ),
+        birthdate_to: date | None = AppQueryConstants.StandardOptionalDateQuery(
+            "Дата рождения до"
+        ),
+        age_from: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
+            "Возраст от"
+        ),
+        age_to: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
+            "Возраст до"
+        ),
+        has_phone: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
+            "Фильтрация по наличию телефона"
+        ),
+        has_email: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
+            "Фильтрация по наличию email"
+        ),
         is_show_deleted: bool = AppQueryConstants.StandardBooleanQuery(
             "Показывать удаленные данные?"
         ),
@@ -68,7 +72,7 @@ class StudentFilter(BaseFilter[StudentEntity]):
             "phone",
             "additional_phone",
             "email",
-            "info"
+            "info",
         ]
 
     def apply(self) -> list[SQLAlchemyQuery]:
@@ -89,12 +93,14 @@ class StudentFilter(BaseFilter[StudentEntity]):
         # Возраст рассчитывается от даты рождения
         if self.age_from is not None:
             from sqlalchemy import func
+
             current_date = func.current_date()
             max_birthdate = current_date - func.make_interval(years=self.age_from)
             filters.append(StudentEntity.birthdate <= max_birthdate)
 
         if self.age_to is not None:
             from sqlalchemy import func
+
             current_date = func.current_date()
             min_birthdate = current_date - func.make_interval(years=self.age_to + 1)
             filters.append(StudentEntity.birthdate > min_birthdate)

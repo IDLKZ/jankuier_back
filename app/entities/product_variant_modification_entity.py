@@ -31,14 +31,18 @@ class ProductVariantModificationEntity(Base):
     deleted_at: Mapped[DbColumnConstants.DeletedAt]
 
     # Relationships
-    variant: Mapped[AppEntityNames.ProductVariantEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.ProductVariantEntityName,
-        back_populates="product_variant_modifications",
-        foreign_keys=f"{AppEntityNames.ProductVariantModificationEntityName}.variant_id",
+    variant: Mapped[AppEntityNames.ProductVariantEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.ProductVariantEntityName,
+            back_populates="product_variant_modifications",
+            foreign_keys=f"{AppEntityNames.ProductVariantModificationEntityName}.variant_id",
+        )
     )
 
-    modification_value: Mapped[AppEntityNames.ModificationValueEntityName] = DbRelationshipConstants.many_to_one(
-        target=AppEntityNames.ModificationValueEntityName,
-        back_populates="product_variant_modifications",
-        foreign_keys=f"{AppEntityNames.ProductVariantModificationEntityName}.modification_value_id",
+    modification_value: Mapped[AppEntityNames.ModificationValueEntityName] = (
+        DbRelationshipConstants.many_to_one(
+            target=AppEntityNames.ModificationValueEntityName,
+            back_populates="product_variant_modifications",
+            foreign_keys=f"{AppEntityNames.ProductVariantModificationEntityName}.modification_value_id",
+        )
     )

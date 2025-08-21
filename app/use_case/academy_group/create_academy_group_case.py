@@ -3,9 +3,14 @@ from fastapi import UploadFile
 from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.academy_group.academy_group_dto import AcademyGroupCDTO, AcademyGroupWithRelationsRDTO
+from app.adapters.dto.academy_group.academy_group_dto import (
+    AcademyGroupCDTO,
+    AcademyGroupWithRelationsRDTO,
+)
 from app.adapters.repository.academy.academy_repository import AcademyRepository
-from app.adapters.repository.academy_group.academy_group_repository import AcademyGroupRepository
+from app.adapters.repository.academy_group.academy_group_repository import (
+    AcademyGroupRepository,
+)
 from app.adapters.repository.file.file_repository import FileRepository
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import AcademyGroupEntity
@@ -75,7 +80,9 @@ class CreateAcademyGroupCase(BaseUseCase[AcademyGroupWithRelationsRDTO]):
         )
         return AcademyGroupWithRelationsRDTO.from_orm(model)
 
-    async def validate(self, dto: AcademyGroupCDTO, file: UploadFile | None = None) -> None:
+    async def validate(
+        self, dto: AcademyGroupCDTO, file: UploadFile | None = None
+    ) -> None:
         """
         Валидация перед выполнением.
 
@@ -129,19 +136,24 @@ class CreateAcademyGroupCase(BaseUseCase[AcademyGroupWithRelationsRDTO]):
             )
 
         # Валидация цены (если указана)
-        if dto.price is not None and dto.price <= Decimal('0'):
+        if dto.price is not None and dto.price <= Decimal("0"):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("average_price_validation_error")
             )
 
         # Валидация описания цены (если цена указана, нужно хотя бы одно описание)
-        if dto.price is not None and not any([dto.price_per_ru, dto.price_per_kk, dto.price_per_en]):
+        if dto.price is not None and not any(
+            [dto.price_per_ru, dto.price_per_kk, dto.price_per_en]
+        ):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("price_per_validation_error")
             )
 
         # Валидация времени тренировки (если указано)
-        if dto.average_training_time_in_minute is not None and dto.average_training_time_in_minute <= 0:
+        if (
+            dto.average_training_time_in_minute is not None
+            and dto.average_training_time_in_minute <= 0
+        ):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("training_time_validation_error")
             )
@@ -158,7 +170,9 @@ class CreateAcademyGroupCase(BaseUseCase[AcademyGroupWithRelationsRDTO]):
                     message=i18n.gettext("file_not_found")
                 )
 
-    async def transform(self, dto: AcademyGroupCDTO, file: UploadFile | None = None) -> None:
+    async def transform(
+        self, dto: AcademyGroupCDTO, file: UploadFile | None = None
+    ) -> None:
         """
         Преобразование DTO в модель.
 

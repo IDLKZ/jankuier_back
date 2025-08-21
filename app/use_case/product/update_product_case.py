@@ -2,11 +2,16 @@ from fastapi import UploadFile
 from sqlalchemy import and_, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.product.product_dto import ProductUpdateDTO, ProductWithRelationsRDTO
+from app.adapters.dto.product.product_dto import (
+    ProductUpdateDTO,
+    ProductWithRelationsRDTO,
+)
 from app.adapters.repository.city.city_repository import CityRepository
 from app.adapters.repository.file.file_repository import FileRepository
 from app.adapters.repository.product.product_repository import ProductRepository
-from app.adapters.repository.product_category.product_category_repository import ProductCategoryRepository
+from app.adapters.repository.product_category.product_category_repository import (
+    ProductCategoryRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import ProductEntity
 from app.i18n.i18n_wrapper import i18n
@@ -84,7 +89,9 @@ class UpdateProductCase(BaseUseCase[ProductWithRelationsRDTO]):
         )
         return ProductWithRelationsRDTO.from_orm(self.model)
 
-    async def validate(self, id: int, dto: ProductUpdateDTO, file: UploadFile | None = None) -> None:
+    async def validate(
+        self, id: int, dto: ProductUpdateDTO, file: UploadFile | None = None
+    ) -> None:
         """
         Валидирует данные перед обновлением товара.
 
@@ -106,21 +113,16 @@ class UpdateProductCase(BaseUseCase[ProductWithRelationsRDTO]):
             dto.value = DbValueConstants.get_value(dto.title_ru)
 
         # Проверка уникальности value и sku (исключая текущую запись)
-        if dto.value is not None or hasattr(dto, 'sku') and dto.sku is not None:
+        if dto.value is not None or hasattr(dto, "sku") and dto.sku is not None:
             filters = []
             if dto.value is not None:
                 filters.append(self.repository.model.value == dto.value)
-            if hasattr(dto, 'sku') and dto.sku is not None:
+            if hasattr(dto, "sku") and dto.sku is not None:
                 filters.append(self.repository.model.sku == dto.sku)
-            
+
             if filters:
                 existed = await self.repository.get_first_with_filters(
-                    filters=[
-                        and_(
-                            self.repository.model.id != id,
-                            or_(*filters)
-                        )
-                    ],
+                    filters=[and_(self.repository.model.id != id, or_(*filters))],
                     include_deleted_filter=True,
                 )
                 if existed:
@@ -128,7 +130,11 @@ class UpdateProductCase(BaseUseCase[ProductWithRelationsRDTO]):
                         raise AppExceptionResponse.bad_request(
                             message=f"{i18n.gettext('the_next_value_already_exists')}{dto.value}"
                         )
-                    if hasattr(dto, 'sku') and dto.sku is not None and existed.sku == dto.sku:
+                    if (
+                        hasattr(dto, "sku")
+                        and dto.sku is not None
+                        and existed.sku == dto.sku
+                    ):
                         raise AppExceptionResponse.bad_request(
                             message=f"{i18n.gettext('sku_already_exists')}{dto.sku}"
                         )
@@ -158,7 +164,9 @@ class UpdateProductCase(BaseUseCase[ProductWithRelationsRDTO]):
                     message=i18n.gettext("image_not_found_by_id")
                 )
 
-    async def transform(self, dto: ProductUpdateDTO, file: UploadFile | None = None) -> ProductUpdateDTO:
+    async def transform(
+        self, dto: ProductUpdateDTO, file: UploadFile | None = None
+    ) -> ProductUpdateDTO:
         """
         Трансформирует данные перед обновлением товара.
 
@@ -171,7 +179,9 @@ class UpdateProductCase(BaseUseCase[ProductWithRelationsRDTO]):
         """
         # Определение папки для загрузки изображений товаров
         current_value = dto.value if dto.value is not None else self.model.value
-        self.upload_folder = AppFileExtensionConstants.product_image_directory(current_value)
+        self.upload_folder = AppFileExtensionConstants.product_image_directory(
+            current_value
+        )
 
         # Обработка файла изображения
         if file:

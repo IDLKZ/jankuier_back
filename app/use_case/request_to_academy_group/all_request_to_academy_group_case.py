@@ -1,12 +1,20 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.request_to_academy_group.request_to_academy_group_dto import RequestToAcademyGroupWithRelationsRDTO
-from app.adapters.filters.request_to_academy_group.request_to_academy_group_filter import RequestToAcademyGroupFilter
-from app.adapters.repository.request_to_academy_group.request_to_academy_group_repository import RequestToAcademyGroupRepository
+from app.adapters.dto.request_to_academy_group.request_to_academy_group_dto import (
+    RequestToAcademyGroupWithRelationsRDTO,
+)
+from app.adapters.filters.request_to_academy_group.request_to_academy_group_filter import (
+    RequestToAcademyGroupFilter,
+)
+from app.adapters.repository.request_to_academy_group.request_to_academy_group_repository import (
+    RequestToAcademyGroupRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
-class AllRequestToAcademyGroupCase(BaseUseCase[list[RequestToAcademyGroupWithRelationsRDTO]]):
+class AllRequestToAcademyGroupCase(
+    BaseUseCase[list[RequestToAcademyGroupWithRelationsRDTO]]
+):
     """
     Класс Use Case для получения списка всех заявок в академические группы.
 
@@ -33,7 +41,9 @@ class AllRequestToAcademyGroupCase(BaseUseCase[list[RequestToAcademyGroupWithRel
         """
         self.repository = RequestToAcademyGroupRepository(db)
 
-    async def execute(self, filter: RequestToAcademyGroupFilter) -> list[RequestToAcademyGroupWithRelationsRDTO]:
+    async def execute(
+        self, filter: RequestToAcademyGroupFilter
+    ) -> list[RequestToAcademyGroupWithRelationsRDTO]:
         """
         Выполняет операцию получения списка всех заявок в академические группы.
 
@@ -50,7 +60,9 @@ class AllRequestToAcademyGroupCase(BaseUseCase[list[RequestToAcademyGroupWithRel
             order_direction=filter.order_direction,
             include_deleted_filter=filter.is_show_deleted,
         )
-        return [RequestToAcademyGroupWithRelationsRDTO.from_orm(model) for model in models]
+        return [
+            RequestToAcademyGroupWithRelationsRDTO.from_orm(model) for model in models
+        ]
 
     async def validate(self) -> None:
         """

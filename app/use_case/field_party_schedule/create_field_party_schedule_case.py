@@ -3,10 +3,19 @@ from decimal import Decimal
 from sqlalchemy import and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.field_party_schedule.field_party_schedule_dto import FieldPartyScheduleCDTO, FieldPartyScheduleWithRelationsRDTO
-from app.adapters.repository.field_party_schedule.field_party_schedule_repository import FieldPartyScheduleRepository
-from app.adapters.repository.field_party.field_party_repository import FieldPartyRepository
-from app.adapters.repository.field_party_schedule_settings.field_party_schedule_settings_repository import FieldPartyScheduleSettingsRepository
+from app.adapters.dto.field_party_schedule.field_party_schedule_dto import (
+    FieldPartyScheduleCDTO,
+    FieldPartyScheduleWithRelationsRDTO,
+)
+from app.adapters.repository.field_party_schedule.field_party_schedule_repository import (
+    FieldPartyScheduleRepository,
+)
+from app.adapters.repository.field_party.field_party_repository import (
+    FieldPartyRepository,
+)
+from app.adapters.repository.field_party_schedule_settings.field_party_schedule_settings_repository import (
+    FieldPartyScheduleSettingsRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import FieldPartyScheduleEntity
 from app.i18n.i18n_wrapper import i18n
@@ -43,7 +52,9 @@ class CreateFieldPartyScheduleCase(BaseUseCase[FieldPartyScheduleWithRelationsRD
         self.settings_repository = FieldPartyScheduleSettingsRepository(db)
         self.model: FieldPartyScheduleEntity | None = None
 
-    async def execute(self, dto: FieldPartyScheduleCDTO) -> FieldPartyScheduleWithRelationsRDTO:
+    async def execute(
+        self, dto: FieldPartyScheduleCDTO
+    ) -> FieldPartyScheduleWithRelationsRDTO:
         """
         Выполняет операцию создания расписания площадки.
 
@@ -95,7 +106,7 @@ class CreateFieldPartyScheduleCase(BaseUseCase[FieldPartyScheduleWithRelationsRD
             )
 
         # Валидация цены
-        if dto.price <= Decimal('0'):
+        if dto.price <= Decimal("0"):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("price_validation_error")
             )
@@ -124,8 +135,8 @@ class CreateFieldPartyScheduleCase(BaseUseCase[FieldPartyScheduleWithRelationsRD
                     # (start_at < existing_end_at) AND (end_at > existing_start_at)
                     and_(
                         dto.start_at < FieldPartyScheduleEntity.end_at,
-                        dto.end_at > FieldPartyScheduleEntity.start_at
-                    )
+                        dto.end_at > FieldPartyScheduleEntity.start_at,
+                    ),
                 )
             ]
         )

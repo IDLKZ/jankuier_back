@@ -1,6 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.repository.field_party_schedule_settings.field_party_schedule_settings_repository import FieldPartyScheduleSettingsRepository
+from app.adapters.repository.field_party_schedule_settings.field_party_schedule_settings_repository import (
+    FieldPartyScheduleSettingsRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import FieldPartyScheduleSettingsEntity
 from app.i18n.i18n_wrapper import i18n
@@ -44,7 +46,7 @@ class DeleteFieldPartyScheduleSettingsCase(BaseUseCase[bool]):
             AppExceptionResponse: Если валидация не прошла.
         """
         await self.validate(id=id)
-        
+
         result = await self.repository.delete(id, force_delete=force_delete)
         return result
 
@@ -60,9 +62,7 @@ class DeleteFieldPartyScheduleSettingsCase(BaseUseCase[bool]):
         """
         # Проверка валидности ID
         if not isinstance(id, int) or id <= 0:
-            raise AppExceptionResponse.bad_request(
-                i18n.gettext("id_validation_error")
-            )
+            raise AppExceptionResponse.bad_request(i18n.gettext("id_validation_error"))
 
         # Проверка существования настроек расписания
         model = await self.repository.get(id, include_deleted_filter=True)

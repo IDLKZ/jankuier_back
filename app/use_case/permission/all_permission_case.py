@@ -3,7 +3,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.adapters.dto.pagination_dto import PaginationPermissionRDTO
 from app.adapters.dto.permission.permission_dto import PermissionRDTO
 from app.adapters.filters.permission.permission_filter import PermissionFilter
-from app.adapters.repository.permission.permission_repository import PermissionRepository
+from app.adapters.repository.permission.permission_repository import (
+    PermissionRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 

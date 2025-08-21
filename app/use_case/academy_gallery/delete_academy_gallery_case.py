@@ -1,6 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.repository.academy_gallery.academy_gallery_repository import AcademyGalleryRepository
+from app.adapters.repository.academy_gallery.academy_gallery_repository import (
+    AcademyGalleryRepository,
+)
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import AcademyGalleryEntity
 from app.i18n.i18n_wrapper import i18n
@@ -33,7 +35,9 @@ class DeleteAcademyGalleryCase(BaseUseCase[bool]):
         self.file_service = FileService(db)
         self.model: AcademyGalleryEntity | None = None
 
-    async def execute(self, id: int, force_delete: bool = False, delete_file: bool = True) -> bool:
+    async def execute(
+        self, id: int, force_delete: bool = False, delete_file: bool = True
+    ) -> bool:
         """
         Выполняет операцию удаления изображения из галереи академии.
 
@@ -49,11 +53,11 @@ class DeleteAcademyGalleryCase(BaseUseCase[bool]):
             AppExceptionResponse: Если валидация не прошла.
         """
         await self.validate(id=id, force_delete=force_delete)
-        
+
         # Удаление связанного файла изображения (если требуется и файл существует)
         if delete_file and self.model.file_id:
             await self.file_service.delete_file(file_id=self.model.file_id)
-        
+
         result = await self.repository.delete(id, force_delete=force_delete)
         return result
 

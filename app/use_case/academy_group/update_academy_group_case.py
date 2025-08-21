@@ -3,8 +3,13 @@ from fastapi import UploadFile
 from sqlalchemy import func, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.academy_group.academy_group_dto import AcademyGroupUpdateDTO, AcademyGroupWithRelationsRDTO
-from app.adapters.repository.academy_group.academy_group_repository import AcademyGroupRepository
+from app.adapters.dto.academy_group.academy_group_dto import (
+    AcademyGroupUpdateDTO,
+    AcademyGroupWithRelationsRDTO,
+)
+from app.adapters.repository.academy_group.academy_group_repository import (
+    AcademyGroupRepository,
+)
 from app.adapters.repository.file.file_repository import FileRepository
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import AcademyGroupEntity
@@ -95,7 +100,7 @@ class UpdateAcademyGroupCase(BaseUseCase[AcademyGroupWithRelationsRDTO]):
         # Валидация возрастного диапазона
         min_age = dto.min_age if dto.min_age is not None else model.min_age
         max_age = dto.max_age if dto.max_age is not None else model.max_age
-        
+
         if min_age >= max_age:
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("age_range_validation_error")
@@ -108,25 +113,33 @@ class UpdateAcademyGroupCase(BaseUseCase[AcademyGroupWithRelationsRDTO]):
             )
 
         # Валидация количества мест
-        booked_space = dto.booked_space if dto.booked_space is not None else model.booked_space
+        booked_space = (
+            dto.booked_space if dto.booked_space is not None else model.booked_space
+        )
         free_space = dto.free_space if dto.free_space is not None else model.free_space
-        
+
         if booked_space > free_space:
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("group_space_validation_error")
             )
 
         # Валидация цены (если обновляется)
-        if dto.price is not None and dto.price <= Decimal('0'):
+        if dto.price is not None and dto.price <= Decimal("0"):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("average_price_validation_error")
             )
 
         # Валидация описания цены (если цена указана, нужно хотя бы одно описание)
         price = dto.price if dto.price is not None else model.price
-        price_per_ru = dto.price_per_ru if dto.price_per_ru is not None else model.price_per_ru
-        price_per_kk = dto.price_per_kk if dto.price_per_kk is not None else model.price_per_kk
-        price_per_en = dto.price_per_en if dto.price_per_en is not None else model.price_per_en
+        price_per_ru = (
+            dto.price_per_ru if dto.price_per_ru is not None else model.price_per_ru
+        )
+        price_per_kk = (
+            dto.price_per_kk if dto.price_per_kk is not None else model.price_per_kk
+        )
+        price_per_en = (
+            dto.price_per_en if dto.price_per_en is not None else model.price_per_en
+        )
 
         if price is not None and not any([price_per_ru, price_per_kk, price_per_en]):
             raise AppExceptionResponse.bad_request(
@@ -134,7 +147,10 @@ class UpdateAcademyGroupCase(BaseUseCase[AcademyGroupWithRelationsRDTO]):
             )
 
         # Валидация времени тренировки (если обновляется)
-        if dto.average_training_time_in_minute is not None and dto.average_training_time_in_minute <= 0:
+        if (
+            dto.average_training_time_in_minute is not None
+            and dto.average_training_time_in_minute <= 0
+        ):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("training_time_validation_error")
             )
@@ -178,7 +194,9 @@ class UpdateAcademyGroupCase(BaseUseCase[AcademyGroupWithRelationsRDTO]):
 
             # Определяем папку для загрузки
             value = self.model.value if self.model.value else str(id)
-            self.upload_folder = f"{AppFileExtensionConstants.FieldFolderName}/academy_groups/{value}"
+            self.upload_folder = (
+                f"{AppFileExtensionConstants.FieldFolderName}/academy_groups/{value}"
+            )
 
             # Сохраняем новый файл
             file_entity = await self.file_service.save_file(

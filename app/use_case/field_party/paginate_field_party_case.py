@@ -2,8 +2,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.pagination_dto import PaginationFieldPartyWithRelationsRDTO
 from app.adapters.dto.field_party.field_party_dto import FieldPartyWithRelationsRDTO
-from app.adapters.filters.field_party.field_party_pagination_filter import FieldPartyPaginationFilter
-from app.adapters.repository.field_party.field_party_repository import FieldPartyRepository
+from app.adapters.filters.field_party.field_party_pagination_filter import (
+    FieldPartyPaginationFilter,
+)
+from app.adapters.repository.field_party.field_party_repository import (
+    FieldPartyRepository,
+)
 from app.use_case.base_case import BaseUseCase
 
 
@@ -35,7 +39,9 @@ class PaginateFieldPartyCase(BaseUseCase[PaginationFieldPartyWithRelationsRDTO])
         """
         self.repository = FieldPartyRepository(db)
 
-    async def execute(self, filter: FieldPartyPaginationFilter) -> PaginationFieldPartyWithRelationsRDTO:
+    async def execute(
+        self, filter: FieldPartyPaginationFilter
+    ) -> PaginationFieldPartyWithRelationsRDTO:
         """
         Выполняет операцию получения площадок полей с пагинацией.
 

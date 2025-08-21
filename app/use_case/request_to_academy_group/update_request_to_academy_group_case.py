@@ -1,7 +1,12 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.request_to_academy_group.request_to_academy_group_dto import RequestToAcademyGroupUpdateDTO, RequestToAcademyGroupWithRelationsRDTO
-from app.adapters.repository.request_to_academy_group.request_to_academy_group_repository import RequestToAcademyGroupRepository
+from app.adapters.dto.request_to_academy_group.request_to_academy_group_dto import (
+    RequestToAcademyGroupUpdateDTO,
+    RequestToAcademyGroupWithRelationsRDTO,
+)
+from app.adapters.repository.request_to_academy_group.request_to_academy_group_repository import (
+    RequestToAcademyGroupRepository,
+)
 from app.adapters.repository.user.user_repository import UserRepository
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import RequestToAcademyGroupEntity
@@ -9,7 +14,9 @@ from app.i18n.i18n_wrapper import i18n
 from app.use_case.base_case import BaseUseCase
 
 
-class UpdateRequestToAcademyGroupCase(BaseUseCase[RequestToAcademyGroupWithRelationsRDTO]):
+class UpdateRequestToAcademyGroupCase(
+    BaseUseCase[RequestToAcademyGroupWithRelationsRDTO]
+):
     """
     Класс Use Case для обновления заявки в академическую группу.
 
@@ -43,7 +50,9 @@ class UpdateRequestToAcademyGroupCase(BaseUseCase[RequestToAcademyGroupWithRelat
         self.user_repository = UserRepository(db)
         self.model: RequestToAcademyGroupEntity | None = None
 
-    async def execute(self, id: int, dto: RequestToAcademyGroupUpdateDTO) -> RequestToAcademyGroupWithRelationsRDTO:
+    async def execute(
+        self, id: int, dto: RequestToAcademyGroupUpdateDTO
+    ) -> RequestToAcademyGroupWithRelationsRDTO:
         """
         Выполняет операцию обновления заявки в академическую группу.
 
@@ -95,16 +104,26 @@ class UpdateRequestToAcademyGroupCase(BaseUseCase[RequestToAcademyGroupWithRelat
             )
 
         # Бизнес-правило: нельзя сбросить статус с принятого/отклоненного на "не просмотрена" без снятия проверяющего
-        if (dto.status is not None and dto.status == 0 and 
-            self.model.status in [1, -1] and 
-            dto.checked_by is None and self.model.checked_by is not None):
+        if (
+            dto.status is not None
+            and dto.status == 0
+            and self.model.status in [1, -1]
+            and dto.checked_by is None
+            and self.model.checked_by is not None
+        ):
             raise AppExceptionResponse.bad_request(
-                message=i18n.gettext("cannot_reset_checked_request_without_removing_checker")
+                message=i18n.gettext(
+                    "cannot_reset_checked_request_without_removing_checker"
+                )
             )
 
         # Бизнес-правило: при принятии или отклонении заявки должен быть указан проверяющий
-        if (dto.status is not None and dto.status in [1, -1] and 
-            dto.checked_by is None and self.model.checked_by is None):
+        if (
+            dto.status is not None
+            and dto.status in [1, -1]
+            and dto.checked_by is None
+            and self.model.checked_by is None
+        ):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("checker_required_for_status_change")
             )
