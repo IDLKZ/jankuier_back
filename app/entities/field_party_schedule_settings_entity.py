@@ -24,7 +24,7 @@ class FieldPartyScheduleSettingsEntity(Base):
 
     # JSON поля
     working_days: Mapped[DbColumnConstants.StandardArrayInteger]     # [1,2,3,4,5]
-    excluded_dates: Mapped[DbColumnConstants.StandardNullableVarchar]  # ["2025-10-10","2025-10-20"]
+    excluded_dates: Mapped[DbColumnConstants.StandardNullableArrayDate]  # ["2025-10-10","2025-10-20"]
     working_time: Mapped[DbColumnConstants.StandardJSONB]       # [{"start":"09:00","end":"18:00"}]
     break_time: Mapped[DbColumnConstants.StandardJSONB]         # [{"start":"12:00","end":"13:00"}]
     price_per_time: Mapped[DbColumnConstants.StandardJSONB]     # [{"start":"09:00","end":"12:00","price":15000}]

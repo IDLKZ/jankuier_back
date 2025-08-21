@@ -8,6 +8,11 @@ from app.adapters.dto.city.city_dto import CityRDTO, CityWithRelationsRDTO
 from app.adapters.dto.sport.sport_dto import SportRDTO
 from app.adapters.dto.product_category.product_category_dto import ProductCategoryRDTO, ProductCategoryWithRelationsRDTO
 from app.adapters.dto.field.field_dto import FieldRDTO, FieldWithRelationsRDTO
+from app.adapters.dto.field_party.field_party_dto import FieldPartyRDTO, FieldPartyWithRelationsRDTO
+from app.adapters.dto.field_party_schedule_settings.field_party_schedule_settings_dto import FieldPartyScheduleSettingsRDTO, FieldPartyScheduleSettingsWithRelationsRDTO
+from app.adapters.dto.field_party_schedule.field_party_schedule_dto import FieldPartyScheduleRDTO, FieldPartyScheduleWithRelationsRDTO
+from app.adapters.dto.field_gallery.field_gallery_dto import FieldGalleryRDTO, FieldGalleryWithRelationsRDTO
+from app.adapters.dto.academy.academy_dto import AcademyRDTO, AcademyWithRelationsRDTO
 from app.adapters.dto.product.product_dto import ProductRDTO, ProductWithRelationsRDTO
 from app.adapters.dto.modification_type.modification_type_dto import ModificationTypeRDTO
 from app.adapters.dto.product_variant.product_variant_dto import ProductVariantRDTO, ProductVariantWithRelationsRDTO
@@ -110,6 +115,46 @@ class PaginationFieldRDTO(BasePageModel):
 
 class PaginationFieldWithRelationsRDTO(BasePageModel):
     items: list[FieldWithRelationsRDTO]
+
+
+class PaginationFieldPartyRDTO(BasePageModel):
+    items: list[FieldPartyRDTO]
+
+
+class PaginationFieldPartyWithRelationsRDTO(BasePageModel):
+    items: list[FieldPartyWithRelationsRDTO]
+
+
+class PaginationFieldPartyScheduleSettingsRDTO(BasePageModel):
+    items: list[FieldPartyScheduleSettingsRDTO]
+
+
+class PaginationFieldPartyScheduleSettingsWithRelationsRDTO(BasePageModel):
+    items: list[FieldPartyScheduleSettingsWithRelationsRDTO]
+
+
+class PaginationFieldPartyScheduleRDTO(BasePageModel):
+    items: list[FieldPartyScheduleRDTO]
+
+
+class PaginationFieldPartyScheduleWithRelationsRDTO(BasePageModel):
+    items: list[FieldPartyScheduleWithRelationsRDTO]
+
+
+class PaginationFieldGalleryRDTO(BasePageModel):
+    items: list[FieldGalleryRDTO]
+
+
+class PaginationFieldGalleryWithRelationsRDTO(BasePageModel):
+    items: list[FieldGalleryWithRelationsRDTO]
+
+
+class PaginationAcademyRDTO(BasePageModel):
+    items: list[AcademyRDTO]
+
+
+class PaginationAcademyWithRelationsRDTO(BasePageModel):
+    items: list[AcademyWithRelationsRDTO]
 
 
 class PaginationProductRDTO(BasePageModel):

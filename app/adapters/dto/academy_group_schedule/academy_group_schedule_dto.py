@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from app.adapters.dto.academy_group.academy_group_dto import AcademyGroupRDTO
+from app.adapters.dto.pagination_dto import BasePageModel
 from app.shared.dto_constants import DTOConstant
 
 
@@ -72,3 +73,11 @@ class AcademyGroupScheduleBulkCDTO(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class PaginationAcademyGroupScheduleRDTO(BasePageModel):
+    items: list[AcademyGroupScheduleRDTO]
+
+
+class PaginationAcademyGroupScheduleWithRelationsRDTO(BasePageModel):
+    items: list[AcademyGroupScheduleWithRelationsRDTO]

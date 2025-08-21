@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from app.adapters.dto.pagination_dto import BasePageModel
 from app.shared.dto_constants import DTOConstant
 
 
@@ -46,3 +47,7 @@ class CartCalculateTotalDTO(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class PaginationCartRDTO(BasePageModel):
+    items: list[CartRDTO]

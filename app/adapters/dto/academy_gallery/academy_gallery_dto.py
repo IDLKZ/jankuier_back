@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from app.adapters.dto.academy.academy_dto import AcademyRDTO
 from app.adapters.dto.academy_group.academy_group_dto import AcademyGroupRDTO
 from app.adapters.dto.file.file_dto import FileRDTO
+from app.adapters.dto.pagination_dto import BasePageModel
 from app.shared.dto_constants import DTOConstant
 
 
@@ -59,3 +60,11 @@ class AcademyGalleryUpdateDTO(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class PaginationAcademyGalleryRDTO(BasePageModel):
+    items: list[AcademyGalleryRDTO]
+
+
+class PaginationAcademyGalleryWithRelationsRDTO(BasePageModel):
+    items: list[AcademyGalleryWithRelationsRDTO]

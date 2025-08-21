@@ -218,3 +218,231 @@ msgstr "Рөл ID бойынша табылмады"
 
 msgid "permission_not_found_by_id"
 msgstr "Рұқсат ID бойынша табылмады"
+
+msgid "field_not_found"
+msgstr "Өріс табылмады"
+
+msgid "field_party_not_found"
+msgstr "Алаң табылмады"
+
+msgid "field_party_schedule_settings_not_found"
+msgstr "Алаң кестесінің параметрлері табылмады"
+
+msgid "working_days_validation_error"
+msgstr "Жұмыс күндері 1-ден 7-ге дейінгі сандар болуы керек (1-Дүйсенбі, 7-Жексенбі)"
+
+msgid "excluded_dates_format_error"
+msgstr "Ерекше күндердегі дата форматы дұрыс емес. ЖЖЖЖ-АА-КК форматын қолданыңыз"
+
+msgid "active_dates_validation_error"
+msgstr "Белсенділік басталу күні аяқталу күнінен ерте болуы керек"
+
+msgid "json_format_error"
+msgstr "JSON объектісі немесе массив болуы керек"
+
+msgid "json_object_error"
+msgstr "{field_name} ішіндегі әрбір элемент объект болуы керек"
+
+msgid "required_field_error"
+msgstr "{field_name} ішінде {field} өрісі міндетті"
+
+msgid "time_format_error"
+msgstr "{field_name}.{field} ішіндегі уақыт форматы дұрыс емес: {value}. СС:ММ форматын қолданыңыз"
+
+msgid "price_format_error"
+msgstr "Баға форматы дұрыс емес: {price}"
+
+msgid "negative_price_error"
+msgstr "Баға теріс бола алмайды"
+
+msgid "session_minute_validation_error"
+msgstr "Сессия ұзақтығы оң сан болуы керек"
+
+msgid "break_between_session_validation_error"
+msgstr "Сессиялар арасындағы үзіліс теріс бола алмайды"
+
+msgid "booked_limit_validation_error"
+msgstr "Брондау шегі оң сан болуы керек"
+
+msgid "id_validation_error"
+msgstr "Кесте параметрлерінің ID-сы оң сан болуы керек"
+
+msgid "field_party_schedule_not_found"
+msgstr "Алаң кестесі табылмады"
+
+msgid "schedule_id_validation_error"
+msgstr "Кесте ID-сы оң сан болуы керек"
+
+msgid "time_period_validation_error"
+msgstr "Басталу уақыты аяқталу уақытынан ерте болуы керек"
+
+msgid "schedule_overlap_error"
+msgstr "Уақыт бар кестемен қиылысады"
+
+msgid "price_validation_error"
+msgstr "Баға оң сан болуы керек"
+
+msgid "schedule_already_booked_error"
+msgstr "Кесте қазірдің өзінде брондалған және өзгертілмейді"
+
+msgid "schedule_already_paid_error"
+msgstr "Кесте қазірдің өзінде төленген және өзгертілмейді"
+
+msgid "field_gallery_not_found"
+msgstr "Өріс галереясының суреті табылмады"
+
+msgid "gallery_id_validation_error"
+msgstr "Галерея суретінің ID-сы оң сан болуы керек"
+
+msgid "file_not_found"
+msgstr "Файл табылмады"
+
+msgid "duplicate_gallery_image_error"
+msgstr "Бұл сурет әлдеқашан галереяға қосылған"
+
+msgid "invalid_file_type_for_gallery"
+msgstr "Галерея үшін қолдау көрсетілмейтін файл түрі. Тек суреттерге рұқсат етіледі"
+
+msgid "academy_not_found"
+msgstr "Академия табылмады"
+
+msgid "academy_id_validation_error"
+msgstr "Академия ID-сы оң сан болуы керек"
+
+msgid "city_not_found"
+msgstr "Қала табылмады"
+
+msgid "academy_value_already_exists"
+msgstr "Бұл мәні бар академия қазірдің өзінде бар"
+
+msgid "age_range_validation_error"
+msgstr "Ең төменгі жас ең көп жастан кем болуы керек"
+
+msgid "gender_validation_error"
+msgstr "Жынысы: 0 (кез келген), 1 (ер) немесе 2 (әйел) болуы керек"
+
+msgid "working_time_validation_error"
+msgstr "Жұмыс уақыты JSON форматында болуы керек"
+
+msgid "invalid_email_format"
+msgstr "Email форматы дұрыс емес"
+
+msgid "invalid_phone_format"
+msgstr "Телефон форматы дұрыс емес"
+
+msgid "average_price_validation_error"
+msgstr "Орташа баға оң сан болуы керек"
+
+msgid "training_time_validation_error"
+msgstr "Жаттығу уақыты оң сан болуы керек"
+
+msgid "academy_group_not_found"
+msgstr "Академия тобы табылмады"
+
+msgid "academy_group_id_validation_error"
+msgstr "Академия тобының ID-сы оң сан болуы керек"
+
+msgid "academy_group_value_already_exists"
+msgstr "Бұл мәні бар академия тобы қазірдің өзінде бар"
+
+msgid "academy_group_name_required"
+msgstr "Академия тобының атауы міндетті"
+
+msgid "group_space_validation_error"
+msgstr "Бос орындар жалпы сыйымдылықтан аспауы керек"
+
+msgid "price_per_validation_error"
+msgstr "Баға көрсетілген кезде баға сипаттамасы міндетті"
+
+msgid "academy_group_cannot_update_recruiting"
+msgstr "Жинау мәртебесін өзгерту мүмкін емес. Топта белсенді студенттер бар"
+
+msgid "academy_group_cannot_delete"
+msgstr "Топты жою мүмкін емес. Белсенді студенттер немесе кесте бар"
+
+msgid "academy_group_schedule_not_found"
+msgstr "Академия тобының кестесі табылмады"
+
+msgid "academy_group_schedule_id_validation_error"
+msgstr "Академия тобы кестесінің ID-сы оң сан болуы керек"
+
+msgid "schedule_time_validation_error"
+msgstr "Басталу уақыты аяқталу уақытынан бұрын болуы керек"
+
+msgid "schedule_date_validation_error"
+msgstr "Жаттығу күні өткенде болуы мүмкін емес"
+
+msgid "reschedule_time_validation_error"
+msgstr "Ауыстыру аяқталу уақыты ауыстыру басталу уақытынан кейін болуы керек"
+
+msgid "schedule_conflict_error"
+msgstr "Кесте қолданыстағы жаттығумен қақтығысады"
+
+msgid "schedule_cannot_update_finished"
+msgstr "Аяқталған жаттығуды жаңарту мүмкін емес"
+
+msgid "schedule_cannot_cancel_finished"
+msgstr "Аяқталған жаттығуды болдырмау мүмкін емес"
+
+msgid "schedule_already_started"
+msgstr "Кестені өзгерту мүмкін емес. Жаттығу басталды"
+
+msgid "academy_gallery_not_found"
+msgstr "Академия галереясының суреті табылмады"
+
+msgid "academy_gallery_id_validation_error"
+msgstr "Академия галереясы суретінің ID-сы оң сан болуы керек"
+
+msgid "academy_gallery_file_required"
+msgstr "Галерея суреті үшін файл міндетті"
+
+msgid "academy_gallery_duplicate_file"
+msgstr "Бұл файл академия галереясында қазірдің өзінде бар"
+
+msgid "academy_gallery_invalid_file_type"
+msgstr "Академия галереясында тек сурет файлдарына рұқсат етіледі"
+
+msgid "cart_not_found"
+msgstr "Себет табылмады"
+
+msgid "cart_id_validation_error"
+msgstr "Себет ID-сы оң сан болуы керек"
+
+msgid "cart_user_mismatch"
+msgstr "Себет бұл пайдаланушыға тиесілі емес"
+
+msgid "cart_already_exists"
+msgstr "Пайдаланушыда қазірдің өзінде белсенді себет бар"
+
+msgid "cart_total_calculation_error"
+msgstr "Себет жалпы құнын есептеу қатесі"
+
+msgid "cart_items_invalid_format"
+msgstr "Себет тауарлары JSON форматында болуы керек"
+
+msgid "cart_empty_error"
+msgstr "Бос себетті өңдеу мүмкін емес"
+
+msgid "cart_item_not_found"
+msgstr "Себеттегі тауар табылмады"
+
+msgid "cart_item_id_validation_error"
+msgstr "Себеттегі тауар ID-сы оң сан болуы керек"
+
+msgid "cart_item_quantity_invalid"
+msgstr "Тауар саны оң сан болуы керек"
+
+msgid "cart_item_price_invalid"
+msgstr "Тауар бағасы теріс болуы мүмкін емес"
+
+msgid "cart_item_duplicate"
+msgstr "Бұл тауар нұсқасы себетте қазірдің өзінде бар"
+
+msgid "product_not_found"
+msgstr "Тауар табылмады"
+
+msgid "product_variant_not_found"
+msgstr "Тауар нұсқасы табылмады"
+
+msgid "cart_item_calculation_error"
+msgstr "Себеттегі тауар бағаларын есептеу қатесі"

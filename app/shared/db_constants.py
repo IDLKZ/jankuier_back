@@ -233,6 +233,8 @@ class DbColumnConstants:
         str | None,
         mapped_column(Geometry(geometry_type="POINT", srid=4326), nullable=True),
     ]
+    StandardArrayDate = Annotated[list[datetime.date], mapped_column(ARRAY(Date))]
+    StandardNullableArrayDate = Annotated[list[datetime.date]|None, mapped_column(ARRAY(Date), nullable=True)]
     # ForeignKey унификации с onupdate и ondelete
     ForeignKeyInteger = (
         lambda table_name, onupdate=None, ondelete=None, foreign_column="id": Annotated[

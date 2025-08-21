@@ -11,6 +11,7 @@ class AppFileExtensionConstants:
 
     UserFolderName = "users"
     FieldFolderName = "fields"
+    FieldPartyFolderName = "field_parties"
     ProductFolderName = "products"
     RequestMaterialFolderName = "request_materials"
 
@@ -147,6 +148,10 @@ class AppFileExtensionConstants:
     @staticmethod
     def product_image_directory(product_value: str) -> str:
         return "products/images/" + product_value
+
+    @staticmethod
+    def field_party_image_directory(field_party_value: str) -> str:
+        return "field_parties/images/" + field_party_value
 
     @staticmethod
     def application_document_directory(id: int, department_str: str) -> str:

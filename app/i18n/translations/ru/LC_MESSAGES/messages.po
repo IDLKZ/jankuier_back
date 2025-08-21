@@ -220,3 +220,231 @@ msgstr "Роль не найдена по ID"
 msgid "permission_not_found_by_id"
 msgstr "Разрешение не найдено по ID"
 
+msgid "field_not_found"
+msgstr "Поле не найдено"
+
+msgid "field_party_not_found"
+msgstr "Площадка не найдена"
+
+msgid "field_party_schedule_settings_not_found"
+msgstr "Настройки расписания площадки не найдены"
+
+msgid "working_days_validation_error"
+msgstr "Рабочие дни должны быть числами от 1 до 7 (1-Понедельник, 7-Воскресенье)"
+
+msgid "excluded_dates_format_error"
+msgstr "Неверный формат даты в исключенных датах. Используйте формат ГГГГ-ММ-ДД"
+
+msgid "active_dates_validation_error"
+msgstr "Дата начала активности должна быть раньше даты окончания"
+
+msgid "json_format_error"
+msgstr "должно быть JSON объектом или массивом"
+
+msgid "json_object_error"
+msgstr "Каждый элемент в {field_name} должен быть объектом"
+
+msgid "required_field_error"
+msgstr "Поле {field} обязательно в {field_name}"
+
+msgid "time_format_error"
+msgstr "Неверный формат времени в {field_name}.{field}: {value}. Используйте формат ЧЧ:ММ"
+
+msgid "price_format_error"
+msgstr "Неверный формат цены: {price}"
+
+msgid "negative_price_error"
+msgstr "Цена не может быть отрицательной"
+
+msgid "session_minute_validation_error"
+msgstr "Длительность сессии должна быть положительным числом"
+
+msgid "break_between_session_validation_error"
+msgstr "Перерыв между сессиями не может быть отрицательным"
+
+msgid "booked_limit_validation_error"
+msgstr "Лимит бронирований должен быть положительным числом"
+
+msgid "id_validation_error"
+msgstr "ID настроек расписания должен быть положительным числом"
+
+msgid "field_party_schedule_not_found"
+msgstr "Расписание площадки не найдено"
+
+msgid "schedule_id_validation_error"
+msgstr "ID расписания должен быть положительным числом"
+
+msgid "time_period_validation_error"
+msgstr "Время начала должно быть раньше времени окончания"
+
+msgid "schedule_overlap_error"
+msgstr "Время пересекается с существующим расписанием"
+
+msgid "price_validation_error"
+msgstr "Цена должна быть положительным числом"
+
+msgid "schedule_already_booked_error"
+msgstr "Расписание уже забронировано и не может быть изменено"
+
+msgid "schedule_already_paid_error"
+msgstr "Расписание уже оплачено и не может быть изменено"
+
+msgid "field_gallery_not_found"
+msgstr "Изображение галереи поля не найдено"
+
+msgid "gallery_id_validation_error"
+msgstr "ID изображения галереи должен быть положительным числом"
+
+msgid "file_not_found"
+msgstr "Файл не найден"
+
+msgid "duplicate_gallery_image_error"
+msgstr "Это изображение уже добавлено в галерею"
+
+msgid "invalid_file_type_for_gallery"
+msgstr "Неподдерживаемый тип файла для галереи. Разрешены только изображения"
+
+msgid "academy_not_found"
+msgstr "Академия не найдена"
+
+msgid "academy_id_validation_error"
+msgstr "ID академии должен быть положительным числом"
+
+msgid "city_not_found"
+msgstr "Город не найден"
+
+msgid "academy_value_already_exists"
+msgstr "Академия с таким значением уже существует"
+
+msgid "age_range_validation_error"
+msgstr "Минимальный возраст должен быть меньше максимального"
+
+msgid "gender_validation_error"
+msgstr "Пол должен быть: 0 (любой), 1 (мужской) или 2 (женский)"
+
+msgid "working_time_validation_error"
+msgstr "Рабочее время должно быть в формате JSON"
+
+msgid "invalid_email_format"
+msgstr "Неверный формат email"
+
+msgid "invalid_phone_format"
+msgstr "Неверный формат телефона"
+
+msgid "average_price_validation_error"
+msgstr "Средняя цена должна быть положительным числом"
+
+msgid "training_time_validation_error"
+msgstr "Время тренировки должно быть положительным числом"
+
+msgid "academy_group_not_found"
+msgstr "Группа академии не найдена"
+
+msgid "academy_group_id_validation_error"
+msgstr "ID группы академии должен быть положительным числом"
+
+msgid "academy_group_value_already_exists"
+msgstr "Группа академии с таким значением уже существует"
+
+msgid "academy_group_name_required"
+msgstr "Название группы академии обязательно"
+
+msgid "group_space_validation_error"
+msgstr "Занятые места не могут превышать общую вместимость"
+
+msgid "price_per_validation_error"
+msgstr "Описание цены обязательно при указании цены"
+
+msgid "academy_group_cannot_update_recruiting"
+msgstr "Невозможно изменить статус набора. В группе есть активные студенты"
+
+msgid "academy_group_cannot_delete"
+msgstr "Невозможно удалить группу. Есть активные студенты или расписания"
+
+msgid "academy_group_schedule_not_found"
+msgstr "Расписание группы академии не найдено"
+
+msgid "academy_group_schedule_id_validation_error"
+msgstr "ID расписания группы академии должен быть положительным числом"
+
+msgid "schedule_time_validation_error"
+msgstr "Время начала должно быть раньше времени окончания"
+
+msgid "schedule_date_validation_error"
+msgstr "Дата тренировки не может быть в прошлом"
+
+msgid "reschedule_time_validation_error"
+msgstr "Время окончания переноса должно быть после времени начала переноса"
+
+msgid "schedule_conflict_error"
+msgstr "Расписание конфликтует с существующей тренировкой"
+
+msgid "schedule_cannot_update_finished"
+msgstr "Невозможно обновить завершенную тренировку"
+
+msgid "schedule_cannot_cancel_finished"
+msgstr "Невозможно отменить завершенную тренировку"
+
+msgid "schedule_already_started"
+msgstr "Невозможно изменить расписание. Тренировка уже началась"
+
+msgid "academy_gallery_not_found"
+msgstr "Изображение галереи академии не найдено"
+
+msgid "academy_gallery_id_validation_error"
+msgstr "ID изображения галереи академии должен быть положительным числом"
+
+msgid "academy_gallery_file_required"
+msgstr "Файл обязателен для изображения галереи"
+
+msgid "academy_gallery_duplicate_file"
+msgstr "Этот файл уже есть в галерее академии"
+
+msgid "academy_gallery_invalid_file_type"
+msgstr "В галерее академии разрешены только файлы изображений"
+
+msgid "cart_not_found"
+msgstr "Корзина не найдена"
+
+msgid "cart_id_validation_error"
+msgstr "ID корзины должен быть положительным числом"
+
+msgid "cart_user_mismatch"
+msgstr "Корзина не принадлежит этому пользователю"
+
+msgid "cart_already_exists"
+msgstr "У пользователя уже есть активная корзина"
+
+msgid "cart_total_calculation_error"
+msgstr "Ошибка расчета общей стоимости корзины"
+
+msgid "cart_items_invalid_format"
+msgstr "Товары корзины должны быть в формате JSON"
+
+msgid "cart_empty_error"
+msgstr "Невозможно обработать пустую корзину"
+
+msgid "cart_item_not_found"
+msgstr "Товар в корзине не найден"
+
+msgid "cart_item_id_validation_error"
+msgstr "ID товара в корзине должен быть положительным числом"
+
+msgid "cart_item_quantity_invalid"
+msgstr "Количество товара должно быть положительным числом"
+
+msgid "cart_item_price_invalid"
+msgstr "Цена товара не может быть отрицательной"
+
+msgid "cart_item_duplicate"
+msgstr "Этот вариант товара уже есть в корзине"
+
+msgid "product_not_found"
+msgstr "Товар не найден"
+
+msgid "product_variant_not_found"
+msgstr "Вариант товара не найден"
+
+msgid "cart_item_calculation_error"
+msgstr "Ошибка расчета цен товара в корзине"
+

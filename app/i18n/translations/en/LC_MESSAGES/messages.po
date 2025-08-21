@@ -225,3 +225,231 @@ msgstr "Role not found by ID."
 msgid "permission_not_found_by_id"
 msgstr "Permission not found by ID."
 
+msgid "field_not_found"
+msgstr "Field not found."
+
+msgid "field_party_not_found"
+msgstr "Field party not found."
+
+msgid "field_party_schedule_settings_not_found"
+msgstr "Field party schedule settings not found."
+
+msgid "working_days_validation_error"
+msgstr "Working days must be numbers from 1 to 7 (1-Monday, 7-Sunday)."
+
+msgid "excluded_dates_format_error"
+msgstr "Invalid date format in excluded dates. Use YYYY-MM-DD format."
+
+msgid "active_dates_validation_error"
+msgstr "Active start date must be earlier than active end date."
+
+msgid "json_format_error"
+msgstr "must be a JSON object or array."
+
+msgid "json_object_error"
+msgstr "Each element in {field_name} must be an object."
+
+msgid "required_field_error"
+msgstr "Field {field} is required in {field_name}."
+
+msgid "time_format_error"
+msgstr "Invalid time format in {field_name}.{field}: {value}. Use HH:MM format."
+
+msgid "price_format_error"
+msgstr "Invalid price format: {price}."
+
+msgid "negative_price_error"
+msgstr "Price cannot be negative."
+
+msgid "session_minute_validation_error"
+msgstr "Session duration must be a positive number."
+
+msgid "break_between_session_validation_error"
+msgstr "Break between sessions cannot be negative."
+
+msgid "booked_limit_validation_error"
+msgstr "Booking limit must be a positive number."
+
+msgid "id_validation_error"
+msgstr "Schedule settings ID must be a positive number."
+
+msgid "field_party_schedule_not_found"
+msgstr "Field party schedule not found."
+
+msgid "schedule_id_validation_error"
+msgstr "Schedule ID must be a positive number."
+
+msgid "time_period_validation_error"
+msgstr "Start time must be earlier than end time."
+
+msgid "schedule_overlap_error"
+msgstr "Time overlaps with existing schedule."
+
+msgid "price_validation_error"
+msgstr "Price must be a positive number."
+
+msgid "schedule_already_booked_error"
+msgstr "Schedule is already booked and cannot be changed."
+
+msgid "schedule_already_paid_error"
+msgstr "Schedule is already paid and cannot be changed."
+
+msgid "field_gallery_not_found"
+msgstr "Field gallery image not found."
+
+msgid "gallery_id_validation_error"
+msgstr "Gallery image ID must be a positive number."
+
+msgid "file_not_found"
+msgstr "File not found."
+
+msgid "duplicate_gallery_image_error"
+msgstr "This image is already added to the gallery."
+
+msgid "invalid_file_type_for_gallery"
+msgstr "Unsupported file type for gallery. Only images are allowed."
+
+msgid "academy_not_found"
+msgstr "Academy not found."
+
+msgid "academy_id_validation_error"
+msgstr "Academy ID must be a positive number."
+
+msgid "city_not_found"
+msgstr "City not found."
+
+msgid "academy_value_already_exists"
+msgstr "Academy with this value already exists."
+
+msgid "age_range_validation_error"
+msgstr "Minimum age must be less than maximum age."
+
+msgid "gender_validation_error"
+msgstr "Gender must be: 0 (any), 1 (male) or 2 (female)."
+
+msgid "working_time_validation_error"
+msgstr "Working time must be in JSON format."
+
+msgid "invalid_email_format"
+msgstr "Invalid email format."
+
+msgid "invalid_phone_format"
+msgstr "Invalid phone format."
+
+msgid "average_price_validation_error"
+msgstr "Average price must be a positive number."
+
+msgid "training_time_validation_error"
+msgstr "Training time must be a positive number."
+
+msgid "academy_group_not_found"
+msgstr "Academy group not found."
+
+msgid "academy_group_id_validation_error"
+msgstr "Academy group ID must be a positive number."
+
+msgid "academy_group_value_already_exists"
+msgstr "Academy group with this value already exists."
+
+msgid "academy_group_name_required"
+msgstr "Academy group name is required."
+
+msgid "group_space_validation_error"
+msgstr "Booked space cannot exceed total capacity."
+
+msgid "price_per_validation_error"
+msgstr "Price description is required when price is specified."
+
+msgid "academy_group_cannot_update_recruiting"
+msgstr "Cannot update recruiting status. There are active students in the group."
+
+msgid "academy_group_cannot_delete"
+msgstr "Cannot delete group. There are active students or schedules."
+
+msgid "academy_group_schedule_not_found"
+msgstr "Academy group schedule not found."
+
+msgid "academy_group_schedule_id_validation_error"
+msgstr "Academy group schedule ID must be a positive number."
+
+msgid "schedule_time_validation_error"
+msgstr "Start time must be before end time."
+
+msgid "schedule_date_validation_error"
+msgstr "Training date cannot be in the past."
+
+msgid "reschedule_time_validation_error"
+msgstr "Reschedule end time must be after reschedule start time."
+
+msgid "schedule_conflict_error"
+msgstr "Schedule conflicts with existing training session."
+
+msgid "schedule_cannot_update_finished"
+msgstr "Cannot update finished training session."
+
+msgid "schedule_cannot_cancel_finished"
+msgstr "Cannot cancel finished training session."
+
+msgid "schedule_already_started"
+msgstr "Cannot modify schedule. Training has already started."
+
+msgid "academy_gallery_not_found"
+msgstr "Academy gallery image not found."
+
+msgid "academy_gallery_id_validation_error"
+msgstr "Academy gallery image ID must be a positive number."
+
+msgid "academy_gallery_file_required"
+msgstr "File is required for gallery image."
+
+msgid "academy_gallery_duplicate_file"
+msgstr "This file is already in the academy gallery."
+
+msgid "academy_gallery_invalid_file_type"
+msgstr "Only image files are allowed in academy gallery."
+
+msgid "cart_not_found"
+msgstr "Cart not found."
+
+msgid "cart_id_validation_error"
+msgstr "Cart ID must be a positive number."
+
+msgid "cart_user_mismatch"
+msgstr "Cart does not belong to this user."
+
+msgid "cart_already_exists"
+msgstr "User already has an active cart."
+
+msgid "cart_total_calculation_error"
+msgstr "Error calculating cart total price."
+
+msgid "cart_items_invalid_format"
+msgstr "Cart items must be in valid JSON format."
+
+msgid "cart_empty_error"
+msgstr "Cannot process empty cart."
+
+msgid "cart_item_not_found"
+msgstr "Cart item not found."
+
+msgid "cart_item_id_validation_error"
+msgstr "Cart item ID must be a positive number."
+
+msgid "cart_item_quantity_invalid"
+msgstr "Cart item quantity must be a positive number."
+
+msgid "cart_item_price_invalid"
+msgstr "Cart item price cannot be negative."
+
+msgid "cart_item_duplicate"
+msgstr "This product variant is already in the cart."
+
+msgid "product_not_found"
+msgstr "Product not found."
+
+msgid "product_variant_not_found"
+msgstr "Product variant not found."
+
+msgid "cart_item_calculation_error"
+msgstr "Error calculating cart item prices."
+
