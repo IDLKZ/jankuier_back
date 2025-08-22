@@ -4,6 +4,7 @@ from app.adapters.dto.request_to_academy_group.request_to_academy_group_dto impo
 )
 from app.adapters.dto.student.student_dto import StudentRDTO
 from app.adapters.dto.file.file_dto import FileRDTO
+from app.adapters.dto.pagination_dto import BasePageModel
 from app.shared.dto_constants import DTOConstant
 
 
@@ -85,3 +86,11 @@ class RequestMaterialUpdateDTO(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class PaginationRequestMaterialRDTO(BasePageModel):
+    items: list[RequestMaterialRDTO]
+
+
+class PaginationRequestMaterialWithRelationsRDTO(BasePageModel):
+    items: list[RequestMaterialWithRelationsRDTO]

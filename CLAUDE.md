@@ -420,6 +420,138 @@ def parse_entity_dto_from_form(
 
 This architecture ensures consistency across all APIs while maintaining clean separation between HTTP concerns and business logic through the Use Case pattern.
 
+## Route Management and Role-Based Access Control
+
+### Route Registration Architecture
+
+The project uses a sophisticated dual-layer route registration system that separates route inclusion from role assignment:
+
+#### Layer 1: Main Route Registration (`app/main.py`)
+Main application routes are registered directly in `main.py`:
+
+```python
+# Standard entity routes (registered in main.py)
+app.include_router(
+    AcademyApi().router,
+    prefix=f"{RoutePathConstants.BasePathName}/academy",
+    tags=["Академии"],
+)
+```
+
+#### Layer 2: Special Routes System (`app/routes/`)
+Critical system routes (user, role, permission) use a separate registration system:
+
+**File Structure:**
+- **`app/routes/registry_route.py`** - Main coordinator
+- **`app/routes/include_routes.py`** - Route registration for special entities
+- **`app/routes/assign_roles.py`** - Role assignment coordinator
+- **`app/routes/base_route.py`** - Base role assignment functionality
+- **`app/routes/{entity}/{entity}_route.py`** - Entity-specific role assignments
+
+#### Route Constants (`app/shared/route_constants.py`)
+
+**Standard Route Paths:**
+```python
+class RoutePathConstants:
+    # Base paths
+    BasePathName = "/api"
+    
+    # Special entity paths
+    RolePathName = "/role"
+    PermissionPathName = "/permission" 
+    UserPathName = "/user"
+    
+    # Standard CRUD paths
+    IndexPathName = "/"                    # GET /
+    AllPathName = "/all"                   # GET /all
+    CreatePathName = "/create"             # POST /create
+    UpdatePathName = "/update/{id}"        # PUT /update/{id}
+    GetByIdPathName = "/get/{id}"         # GET /get/{id}
+    DeleteByIdPathName = "/delete/{id}"   # DELETE /delete/{id}
+    GetByValuePathName = "/get-by-value/{value}"  # GET /get-by-value/{value}
+    
+    # Path parameters
+    IDPath = Annotated[int, Path(gt=0, description="Уникальный идентификатор")]
+    ValuePath = Annotated[str, Path(max_length=255, description="Уникальное значение")]
+```
+
+#### Role-Based Access Control
+
+**Role Constants (`app/shared/role_route_constants.py`):**
+```python
+class RoleRouteConstant:
+    AdministratorTagName = "administrator"  # Admin access
+    ClientTagName = "client"               # User access  
+    CommonTagName = "common"               # Public access
+```
+
+**Role Assignment Pattern:**
+```python
+def assign_entity_roles(app) -> None:
+    base_url = f"{RoutePathConstants.BasePathName}{RoutePathConstants.EntityPathName}"
+    
+    # Admin-only endpoints
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}{RoutePathConstants.CreatePathName}",
+        roles=[RoleRouteConstant.AdministratorTagName]
+    )
+    
+    # Public endpoints  
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}{RoutePathConstants.GetByIdPathName}",
+        roles=[RoleRouteConstant.CommonTagName]
+    )
+```
+
+### Route Registration Workflow
+
+#### For Special Entities (User/Role/Permission):
+1. **Route Registration**: `include_routes.py` registers the API routes
+2. **Role Assignment**: `assign_roles.py` assigns roles to each endpoint  
+3. **Coordination**: `registry_route.py` orchestrates the process
+4. **Activation**: `enable_routes(app)` called from middleware or main setup
+
+#### For Standard Entities:
+1. **Direct Registration**: Routes registered directly in `main.py`
+2. **Manual Role Assignment**: Roles assigned through middleware or decorators if needed
+
+### Best Practices for New API Controllers
+
+#### Standard Entity APIs:
+```python
+# Register in main.py
+app.include_router(
+    EntityApi().router,
+    prefix=f"{RoutePathConstants.BasePathName}/entity",
+    tags=["Entity Name"],
+)
+```
+
+#### Special System APIs (if needed):
+1. Add route registration to `app/routes/include_routes.py`
+2. Create `app/routes/entity/entity_route.py` for role assignments
+3. Update `app/routes/assign_roles.py` to include the new entity
+4. Use `RoutePathConstants` for consistent path naming
+
+#### Consistent Path Naming:
+- Always use `RoutePathConstants` for path definitions
+- Follow the established CRUD pattern
+- Use descriptive prefixes that match entity names
+- Include proper tags for API documentation grouping
+
+### Route Security and Authorization
+
+The route management system provides:
+- **Centralized role assignment** for critical system endpoints
+- **Flexible role-based access control** with multiple role types
+- **Consistent path structure** across all APIs
+- **Proper separation** between public and administrative functionality
+- **Extensible architecture** for adding new entities and roles
+
+This dual-layer approach ensures that critical system routes (user management, roles, permissions) have proper role-based access control while allowing standard business entity routes to be registered simply and efficiently.
+
 ## Development Notes
 
 - The project uses async/await patterns throughout
@@ -429,3 +561,5 @@ This architecture ensures consistency across all APIs while maintaining clean se
 - All entities support soft deletes via `deleted_at` timestamp
 - Use the base repository for consistent CRUD operations
 - Follow the use case pattern for business logic
+- Critical system routes use the special route management system in `app/routes/`
+- Standard business entity routes are registered directly in `main.py`

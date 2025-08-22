@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from app.adapters.dto.file.file_dto import FileRDTO
+from app.adapters.dto.pagination_dto import BasePageModel
 from app.shared.dto_constants import DTOConstant
 
 
@@ -114,3 +115,11 @@ class StudentUpdateDTO(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class PaginationStudentRDTO(BasePageModel):
+    items: list[StudentRDTO]
+
+
+class PaginationStudentWithRelationsRDTO(BasePageModel):
+    items: list[StudentWithRelationsRDTO]
