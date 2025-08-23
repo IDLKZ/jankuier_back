@@ -40,7 +40,7 @@ class AllRoleCase(BaseUseCase[list[RoleRDTO]]):
         Returns:
             list[RoleRDTO]: Список объектов ролей.
         """
-        models = await self.repository.get_all(
+        models = await self.repository.get_with_filters(
             order_by=filter.order_by,
             order_direction=filter.order_direction,
             filters=filter.apply(),

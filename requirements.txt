@@ -32,3 +32,5 @@ loguru==0.7.3
 babel==2.17.0
 python-slugify==8.0.4
 GeoAlchemy2==0.17.1
+starlette-admin==0.15.1
+psycopg2==2.9.10
