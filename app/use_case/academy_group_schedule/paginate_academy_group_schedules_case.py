@@ -5,7 +5,7 @@ from app.adapters.dto.academy_group_schedule.academy_group_schedule_dto import (
     AcademyGroupScheduleWithRelationsRDTO,
     PaginationAcademyGroupScheduleWithRelationsRDTO,
 )
-from app.adapters.filter.pagination_filter import PaginationFilter
+from app.adapters.filters.base_pagination_filter import BasePaginationFilter
 from app.adapters.repository.academy_group_schedule.academy_group_schedule_repository import (
     AcademyGroupScheduleRepository,
 )
@@ -27,9 +27,9 @@ class PaginateAcademyGroupSchedulesCase(
         repository (AcademyGroupScheduleRepository): Репозиторий для работы с расписаниями.
 
     Методы:
-        execute(filter: PaginationFilter) -> PaginationAcademyGroupScheduleWithRelationsRDTO:
+        execute(filter: BasePaginationFilter) -> PaginationAcademyGroupScheduleWithRelationsRDTO:
             Выполняет запрос и возвращает расписания с пагинацией.
-        validate(filter: PaginationFilter):
+        validate(filter: BasePaginationFilter):
             Валидация входных параметров.
         transform():
             Преобразование данных (не используется в данном случае).
@@ -45,7 +45,7 @@ class PaginateAcademyGroupSchedulesCase(
         self.repository = AcademyGroupScheduleRepository(db)
 
     async def execute(
-        self, filter: PaginationFilter
+        self, filter: BasePaginationFilter
     ) -> PaginationAcademyGroupScheduleWithRelationsRDTO:
         """
         Выполняет операцию получения расписаний групп академий с пагинацией.
@@ -92,7 +92,7 @@ class PaginateAcademyGroupSchedulesCase(
 
         return result
 
-    async def validate(self, filter: PaginationFilter) -> None:
+    async def validate(self, filter: BasePaginationFilter) -> None:
         """
         Валидация входных параметров.
 

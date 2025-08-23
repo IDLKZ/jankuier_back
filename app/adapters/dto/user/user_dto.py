@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 
 from app.adapters.dto.file.file_dto import FileRDTO
-from app.adapters.dto.region.region_dto import RegionRDTO
 from app.adapters.dto.role.role_dto import RoleRDTO
 from app.shared.dto_constants import DTOConstant
 
@@ -83,7 +82,6 @@ class UserRDTO(UserDTO):
 class UserWithRelationsRDTO(UserRDTO):
     role: RoleRDTO | None = None
     image: FileRDTO | None = None
-    region: RegionRDTO | None = None
 
     class Config:
         from_attributes = True

@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from app.adapters.dto.academy_group.academy_group_dto import AcademyGroupRDTO
-from app.adapters.dto.pagination_dto import BasePageModel
+from app.adapters.dto.base_pagination_dto import BasePageModel
 from app.shared.dto_constants import DTOConstant
 
 

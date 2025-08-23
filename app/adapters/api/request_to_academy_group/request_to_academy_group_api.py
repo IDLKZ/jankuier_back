@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.adapters.dto.pagination_dto import PaginationRequestToAcademyGroupWithRelationsRDTO
 from app.adapters.dto.request_to_academy_group.request_to_academy_group_dto import (
     RequestToAcademyGroupWithRelationsRDTO,
     RequestToAcademyGroupCDTO,
-    PaginationRequestToAcademyGroupWithRelationsRDTO,
     RequestToAcademyGroupUpdateDTO,
 )
 from app.helpers.form_helper import FormParserHelper

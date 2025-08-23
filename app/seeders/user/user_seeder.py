@@ -11,7 +11,7 @@ from app.shared.db_value_constants import DbValueConstants
 
 class UserSeeder(BaseSeeder):
     async def seed(self, session: AsyncSession) -> None:
-        roles = self.get_data()
+        roles = self.get_prod_data()
         await self.load_seeders(UserEntity, session, AppTableNames.UserTableName, roles)
 
     def get_dev_data(self) -> list[UserEntity]:
@@ -20,7 +20,6 @@ class UserSeeder(BaseSeeder):
                 id=1,
                 role_id=DbValueConstants.AdminRoleConstantID,
                 image_id=None,
-                region_id=None,
                 email="admin@example.com",
                 phone="+77000000001",
                 sex=1,
@@ -40,7 +39,6 @@ class UserSeeder(BaseSeeder):
                 id=2,
                 role_id=DbValueConstants.ClientRoleConstantID,
                 image_id=None,
-                region_id=None,
                 email="client@example.com",
                 phone="+77000000002",
                 sex=1,

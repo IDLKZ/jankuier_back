@@ -5,7 +5,7 @@ from app.adapters.dto.cart_item.cart_item_dto import (
     CartItemWithRelationsRDTO,
     PaginationCartItemWithRelationsRDTO,
 )
-from app.adapters.filter.pagination_filter import PaginationFilter
+from app.adapters.filters.base_pagination_filter import BasePaginationFilter
 from app.adapters.repository.cart_item.cart_item_repository import CartItemRepository
 from app.use_case.base_case import BaseUseCase
 
@@ -23,9 +23,9 @@ class PaginateCartItemsCase(BaseUseCase[PaginationCartItemWithRelationsRDTO]):
         repository (CartItemRepository): Репозиторий для работы с товарами в корзинах.
 
     Методы:
-        execute(filter: PaginationFilter) -> PaginationCartItemWithRelationsRDTO:
+        execute(filter: BasePaginationFilter) -> PaginationCartItemWithRelationsRDTO:
             Выполняет запрос и возвращает товары в корзинах с пагинацией.
-        validate(filter: PaginationFilter):
+        validate(filter: BasePaginationFilter):
             Валидация входных параметров.
         transform():
             Преобразование данных (не используется в данном случае).
@@ -41,7 +41,7 @@ class PaginateCartItemsCase(BaseUseCase[PaginationCartItemWithRelationsRDTO]):
         self.repository = CartItemRepository(db)
 
     async def execute(
-        self, filter: PaginationFilter
+        self, filter: BasePaginationFilter
     ) -> PaginationCartItemWithRelationsRDTO:
         """
         Выполняет операцию получения товаров в корзинах с пагинацией.
@@ -97,7 +97,7 @@ class PaginateCartItemsCase(BaseUseCase[PaginationCartItemWithRelationsRDTO]):
 
         return result
 
-    async def validate(self, filter: PaginationFilter) -> None:
+    async def validate(self, filter: BasePaginationFilter) -> None:
         """
         Валидация входных параметров.
 

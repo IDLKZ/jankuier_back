@@ -8,7 +8,6 @@ from packaging.utils import _
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.relation_dto.user_relation import LocalUserWithRelationsDTO
 from app.adapters.dto.user.user_dto import UserWithRelationsRDTO
 from app.core.app_exception_response import AppExceptionResponse
 from app.infrastructure.app_config import app_config
@@ -52,7 +51,7 @@ def create_refresh_token(data: int) -> str:
 # === Получение текущего пользователя ===
 async def get_current_user(
     token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)
-) -> LocalUserWithRelationsDTO:
+) -> UserWithRelationsRDTO:
     use_case = GetCurrentUserCase(db)
     user = await use_case.execute(token)
     if not user:

@@ -28,6 +28,6 @@ class UserVerificationEntity(Base):
 
     user: Mapped[AppEntityNames.UserEntityName] = DbRelationshipConstants.many_to_one(
         target=AppEntityNames.UserEntityName,
-        back_populates="verifications",
+        back_populates="user_verifications",
         foreign_keys=f"{AppEntityNames.UserVerificationEntityName}.user_id",
     )

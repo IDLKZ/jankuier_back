@@ -81,6 +81,16 @@ class AppQueryConstants:
         )
 
     @staticmethod
+    def StandardOptionalDecimalQuery(
+        description: str | None = "Опциональное десятичное значение",
+    ) -> Query:
+        return Query(
+            default=None,
+            gt=0,
+            description=description,
+        )
+
+    @staticmethod
     def StandardBooleanQuery(description: str | None = "Логическое значение") -> Query:
         return Query(
             default=False,
@@ -170,6 +180,15 @@ class AppQueryConstants:
     @staticmethod
     def StandardOptionalDateQuery(
         description: str | None = "Опциональный дата",
+    ) -> Query:
+        return Query(
+            default=None,
+            description=description,
+        )
+
+    @staticmethod
+    def StandardOptionalTimeQuery(
+        description: str | None = "Опциональное время",
     ) -> Query:
         return Query(
             default=None,

@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.adapters.dto.academy_group_schedule.academy_group_schedule_dto import (
     AcademyGroupScheduleWithRelationsRDTO,
 )
-from app.adapters.filter.base_filter import BaseFilter
+from app.adapters.filters.base_filter import BaseFilter
 from app.adapters.repository.academy_group_schedule.academy_group_schedule_repository import (
     AcademyGroupScheduleRepository,
 )

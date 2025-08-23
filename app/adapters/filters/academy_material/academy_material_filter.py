@@ -8,7 +8,7 @@ from app.shared.query_constants import AppQueryConstants
 class AcademyMaterialFilter(BaseFilter[AcademyMaterialEntity]):
     def __init__(
         self,
-        search: str | None = AppQueryConstants.StandardSearchQuery(
+        search: str | None = AppQueryConstants.StandardOptionalSearchQuery(
             "Поиск по названию материала"
         ),
         order_by: str | None = AppQueryConstants.StandardSortFieldQuery(

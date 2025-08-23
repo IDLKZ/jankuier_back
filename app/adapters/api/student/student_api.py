@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.adapters.dto.pagination_dto import PaginationStudentWithRelationsRDTO
 from app.adapters.dto.student.student_dto import (
     StudentWithRelationsRDTO,
     StudentCDTO,
-    PaginationStudentWithRelationsRDTO,
     StudentUpdateDTO,
 )
 from app.helpers.form_helper import FormParserHelper

@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from app.adapters.dto.cart.cart_dto import CartRDTO
-from app.adapters.dto.pagination_dto import BasePageModel
+from app.adapters.dto.base_pagination_dto import BasePageModel
 from app.adapters.dto.product.product_dto import ProductRDTO
 from app.adapters.dto.product_variant.product_variant_dto import ProductVariantRDTO
 from app.shared.dto_constants import DTOConstant

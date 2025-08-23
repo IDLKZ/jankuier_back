@@ -1,287 +1,245 @@
-from typing import Generic, TypeVar
+from typing import TYPE_CHECKING, Any
 
-from pydantic import BaseModel
+from app.adapters.dto.base_pagination_dto import Pagination, BasePageModel
 
-from app.adapters.dto.permission.permission_dto import PermissionRDTO
-from app.adapters.dto.country.country_dto import CountryRDTO
-from app.adapters.dto.city.city_dto import CityRDTO, CityWithRelationsRDTO
-from app.adapters.dto.sport.sport_dto import SportRDTO
-from app.adapters.dto.product_category.product_category_dto import (
-    ProductCategoryRDTO,
-    ProductCategoryWithRelationsRDTO,
-)
-from app.adapters.dto.field.field_dto import FieldRDTO, FieldWithRelationsRDTO
-from app.adapters.dto.field_party.field_party_dto import (
-    FieldPartyRDTO,
-    FieldPartyWithRelationsRDTO,
-)
-from app.adapters.dto.field_party_schedule_settings.field_party_schedule_settings_dto import (
-    FieldPartyScheduleSettingsRDTO,
-    FieldPartyScheduleSettingsWithRelationsRDTO,
-)
-from app.adapters.dto.field_party_schedule.field_party_schedule_dto import (
-    FieldPartyScheduleRDTO,
-    FieldPartyScheduleWithRelationsRDTO,
-)
-from app.adapters.dto.field_gallery.field_gallery_dto import (
-    FieldGalleryRDTO,
-    FieldGalleryWithRelationsRDTO,
-)
-from app.adapters.dto.academy.academy_dto import AcademyRDTO, AcademyWithRelationsRDTO
-from app.adapters.dto.product.product_dto import ProductRDTO, ProductWithRelationsRDTO
-from app.adapters.dto.modification_type.modification_type_dto import (
-    ModificationTypeRDTO,
-)
-from app.adapters.dto.product_variant.product_variant_dto import (
-    ProductVariantRDTO,
-    ProductVariantWithRelationsRDTO,
-)
-from app.adapters.dto.modification_value.modification_value_dto import (
-    ModificationValueRDTO,
-    ModificationValueWithRelationsRDTO,
-)
-from app.adapters.dto.product_variant_modification.product_variant_modification_dto import (
-    ProductVariantModificationRDTO,
-    ProductVariantModificationWithRelationsRDTO,
-)
-from app.adapters.dto.category_modification.category_modification_dto import (
-    CategoryModificationRDTO,
-    CategoryModificationWithRelationsRDTO,
-)
-from app.adapters.dto.product_gallery.product_gallery_dto import (
-    ProductGalleryRDTO,
-    ProductGalleryWithRelationsRDTO,
-)
-from app.adapters.dto.student.student_dto import StudentRDTO, StudentWithRelationsRDTO
-from app.adapters.dto.request_to_academy_group.request_to_academy_group_dto import (
-    RequestToAcademyGroupRDTO,
-    RequestToAcademyGroupWithRelationsRDTO,
-)
-from app.adapters.dto.request_material.request_material_dto import (
-    RequestMaterialRDTO,
-    RequestMaterialWithRelationsRDTO,
-)
-from app.adapters.dto.academy_group_student.academy_group_student_dto import (
-    AcademyGroupStudentRDTO,
-    AcademyGroupStudentWithRelationsRDTO,
-)
-from app.adapters.dto.user.user_dto import UserWithRelationsRDTO
-
-T = TypeVar("T")
-
-
-class Pagination(Generic[T]):
-    """
-    Обобщенная модель пагинации.
-
-    Атрибуты:
-        current_page (int): Текущая страница.
-        last_page (int): Последняя страница.
-        total_pages (int): Общее количество страниц.
-        total_items (int): Общее количество элементов.
-        items (list[T]): Список элементов текущей страницы.
-    """
-
-    current_page: int
-    per_page: int
-    last_page: int
-    total_pages: int
-    total_items: int
-    items: list[T]
-
-    def __init__(
-        self,
-        items: list[T],
-        total_pages: int,
-        total_items: int,
-        per_page: int,
-        page: int,
-    ) -> None:
-        self.items = items
-        self.total_pages = total_pages
-        self.total_items = total_items
-        self.current_page = page
-        self.per_page = per_page
-        self.last_page = (total_pages + per_page - 1) // per_page
-
-
-class BasePageModel(BaseModel):
-    """
-    Базовая модель пагинации.
-    Атрибуты:
-       current_page (int): Текущая страница.
-       last_page (int): Последняя страница.
-       total_pages (int): Общее количество страниц.
-       total_items (int): Общее количество элементов.
-       items (list[T]): Список элементов текущей страницы.
-    """
-
-    current_page: int
-    per_page: int
-    last_page: int
-    total_pages: int
-    total_items: int
+if TYPE_CHECKING:
+    from app.adapters.dto.permission.permission_dto import PermissionRDTO
+    from app.adapters.dto.country.country_dto import CountryRDTO
+    from app.adapters.dto.city.city_dto import CityRDTO, CityWithRelationsRDTO
+    from app.adapters.dto.sport.sport_dto import SportRDTO
+    from app.adapters.dto.product_category.product_category_dto import (
+        ProductCategoryRDTO,
+        ProductCategoryWithRelationsRDTO,
+    )
+    from app.adapters.dto.field.field_dto import FieldRDTO, FieldWithRelationsRDTO
+    from app.adapters.dto.field_party.field_party_dto import (
+        FieldPartyRDTO,
+        FieldPartyWithRelationsRDTO,
+    )
+    from app.adapters.dto.field_party_schedule_settings.field_party_schedule_settings_dto import (
+        FieldPartyScheduleSettingsRDTO,
+        FieldPartyScheduleSettingsWithRelationsRDTO,
+    )
+    from app.adapters.dto.field_party_schedule.field_party_schedule_dto import (
+        FieldPartyScheduleRDTO,
+        FieldPartyScheduleWithRelationsRDTO,
+    )
+    from app.adapters.dto.field_gallery.field_gallery_dto import (
+        FieldGalleryRDTO,
+        FieldGalleryWithRelationsRDTO,
+    )
+    from app.adapters.dto.academy.academy_dto import AcademyRDTO, AcademyWithRelationsRDTO
+    from app.adapters.dto.academy_group.academy_group_dto import (
+        AcademyGroupRDTO,
+        AcademyGroupWithRelationsRDTO,
+    )
+    from app.adapters.dto.product.product_dto import ProductRDTO, ProductWithRelationsRDTO
+    from app.adapters.dto.modification_type.modification_type_dto import (
+        ModificationTypeRDTO,
+    )
+    from app.adapters.dto.product_variant.product_variant_dto import (
+        ProductVariantRDTO,
+        ProductVariantWithRelationsRDTO,
+    )
+    from app.adapters.dto.modification_value.modification_value_dto import (
+        ModificationValueRDTO,
+        ModificationValueWithRelationsRDTO,
+    )
+    from app.adapters.dto.product_variant_modification.product_variant_modification_dto import (
+        ProductVariantModificationRDTO,
+        ProductVariantModificationWithRelationsRDTO,
+    )
+    from app.adapters.dto.category_modification.category_modification_dto import (
+        CategoryModificationRDTO,
+        CategoryModificationWithRelationsRDTO,
+    )
+    from app.adapters.dto.product_gallery.product_gallery_dto import (
+        ProductGalleryRDTO,
+        ProductGalleryWithRelationsRDTO,
+    )
+    from app.adapters.dto.student.student_dto import StudentRDTO, StudentWithRelationsRDTO
+    from app.adapters.dto.request_to_academy_group.request_to_academy_group_dto import (
+        RequestToAcademyGroupRDTO,
+        RequestToAcademyGroupWithRelationsRDTO,
+    )
+    from app.adapters.dto.request_material.request_material_dto import (
+        RequestMaterialRDTO,
+        RequestMaterialWithRelationsRDTO,
+    )
+    from app.adapters.dto.academy_group_student.academy_group_student_dto import (
+        AcademyGroupStudentRDTO,
+        AcademyGroupStudentWithRelationsRDTO,
+    )
+    from app.adapters.dto.user.user_dto import UserWithRelationsRDTO
 
 
 class PaginationPermissionRDTO(BasePageModel):
-    items: list[PermissionRDTO]
+    items: list[Any]
 
 
 class PaginationCountryRDTO(BasePageModel):
-    items: list[CountryRDTO]
+    items: list[Any]
 
 
 class PaginationCityRDTO(BasePageModel):
-    items: list[CityRDTO]
+    items: list[Any]
 
 
 class PaginationCityWithRelationsRDTO(BasePageModel):
-    items: list[CityWithRelationsRDTO]
+    items: list[Any]
 
 
 class PaginationSportRDTO(BasePageModel):
-    items: list[SportRDTO]
+    items: list[Any]
 
 
 class PaginationProductCategoryRDTO(BasePageModel):
-    items: list[ProductCategoryRDTO]
+    items: list[Any]
 
 
 class PaginationProductCategoryWithRelationsRDTO(BasePageModel):
-    items: list[ProductCategoryWithRelationsRDTO]
+    items: list[Any]
 
 
 class PaginationFieldRDTO(BasePageModel):
-    items: list[FieldRDTO]
+    items: list[Any]
 
 
 class PaginationFieldWithRelationsRDTO(BasePageModel):
-    items: list[FieldWithRelationsRDTO]
+    items: list[Any]
 
 
 class PaginationFieldPartyRDTO(BasePageModel):
-    items: list[FieldPartyRDTO]
+    items: list[Any]
 
 
 class PaginationFieldPartyWithRelationsRDTO(BasePageModel):
-    items: list[FieldPartyWithRelationsRDTO]
+    items: list[Any]
 
 
 class PaginationFieldPartyScheduleSettingsRDTO(BasePageModel):
-    items: list[FieldPartyScheduleSettingsRDTO]
+    items: list[Any]
 
 
 class PaginationFieldPartyScheduleSettingsWithRelationsRDTO(BasePageModel):
-    items: list[FieldPartyScheduleSettingsWithRelationsRDTO]
+    items: list[Any]
 
 
 class PaginationFieldPartyScheduleRDTO(BasePageModel):
-    items: list[FieldPartyScheduleRDTO]
+    items: list[Any]
 
 
 class PaginationFieldPartyScheduleWithRelationsRDTO(BasePageModel):
-    items: list[FieldPartyScheduleWithRelationsRDTO]
+    items: list[Any]
 
 
 class PaginationFieldGalleryRDTO(BasePageModel):
-    items: list[FieldGalleryRDTO]
+    items: list[Any]
 
 
 class PaginationFieldGalleryWithRelationsRDTO(BasePageModel):
-    items: list[FieldGalleryWithRelationsRDTO]
+    items: list[Any]
 
 
 class PaginationAcademyRDTO(BasePageModel):
-    items: list[AcademyRDTO]
+    items: list[Any]
 
 
 class PaginationAcademyWithRelationsRDTO(BasePageModel):
-    items: list[AcademyWithRelationsRDTO]
+    items: list[Any]
+
+
+class PaginationAcademyGroupRDTO(BasePageModel):
+    items: list[Any]
+
+
+class PaginationAcademyGroupWithRelationsRDTO(BasePageModel):
+    items: list[Any]
 
 
 class PaginationProductRDTO(BasePageModel):
-    items: list[ProductRDTO]
+    items: list[Any]
 
 
 class PaginationProductWithRelationsRDTO(BasePageModel):
-    items: list[ProductWithRelationsRDTO]
+    items: list[Any]
 
 
 class PaginationModificationTypeRDTO(BasePageModel):
-    items: list[ModificationTypeRDTO]
+    items: list[Any]
 
 
 class PaginationProductVariantRDTO(BasePageModel):
-    items: list[ProductVariantRDTO]
+    items: list[Any]
 
 
 class PaginationProductVariantWithRelationsRDTO(BasePageModel):
-    items: list[ProductVariantWithRelationsRDTO]
+    items: list[Any]
 
 
 class PaginationModificationValueRDTO(BasePageModel):
-    items: list[ModificationValueRDTO]
+    items: list[Any]
 
 
 class PaginationModificationValueWithRelationsRDTO(BasePageModel):
-    items: list[ModificationValueWithRelationsRDTO]
+    items: list[Any]
 
 
 class PaginationProductVariantModificationRDTO(BasePageModel):
-    items: list[ProductVariantModificationRDTO]
+    items: list[Any]
 
 
 class PaginationProductVariantModificationWithRelationsRDTO(BasePageModel):
-    items: list[ProductVariantModificationWithRelationsRDTO]
+    items: list[Any]
 
 
 class PaginationCategoryModificationRDTO(BasePageModel):
-    items: list[CategoryModificationRDTO]
+    items: list[Any]
 
 
 class PaginationCategoryModificationWithRelationsRDTO(BasePageModel):
-    items: list[CategoryModificationWithRelationsRDTO]
+    items: list[Any]
 
 
 class PaginationProductGalleryRDTO(BasePageModel):
-    items: list[ProductGalleryRDTO]
+    items: list[Any]
 
 
 class PaginationProductGalleryWithRelationsRDTO(BasePageModel):
-    items: list[ProductGalleryWithRelationsRDTO]
+    items: list[Any]
 
 
 class PaginationStudentRDTO(BasePageModel):
-    items: list[StudentRDTO]
+    items: list[Any]
 
 
 class PaginationStudentWithRelationsRDTO(BasePageModel):
-    items: list[StudentWithRelationsRDTO]
+    items: list[Any]
 
 
 class PaginationRequestToAcademyGroupRDTO(BasePageModel):
-    items: list[RequestToAcademyGroupRDTO]
+    items: list[Any]
 
 
 class PaginationRequestToAcademyGroupWithRelationsRDTO(BasePageModel):
-    items: list[RequestToAcademyGroupWithRelationsRDTO]
+    items: list[Any]
 
 
 class PaginationRequestMaterialRDTO(BasePageModel):
-    items: list[RequestMaterialRDTO]
+    items: list[Any]
 
 
 class PaginationRequestMaterialWithRelationsRDTO(BasePageModel):
-    items: list[RequestMaterialWithRelationsRDTO]
+    items: list[Any]
 
 
 class PaginationAcademyGroupStudentRDTO(BasePageModel):
-    items: list[AcademyGroupStudentRDTO]
+    items: list[Any]
 
 
 class PaginationAcademyGroupStudentWithRelationsRDTO(BasePageModel):
-    items: list[AcademyGroupStudentWithRelationsRDTO]
+    items: list[Any]
 
 
 class PaginationUserWithRelationsRDTO(BasePageModel):
-    items: list[UserWithRelationsRDTO]
+    items: list[Any]

@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.academy_group.academy_group_dto import AcademyGroupWithRelationsRDTO, AcademyGroupCDTO
 from app.helpers.form_helper import FormParserHelper
-from app.adapters.dto.academy_group.academy_group_dto import PaginationAcademyGroupWithRelationsRDTO
+from app.adapters.dto.pagination_dto import PaginationAcademyGroupWithRelationsRDTO
 from app.adapters.filters.academy_group.academy_group_filter import AcademyGroupFilter
 from app.adapters.filters.academy_group.academy_group_pagination_filter import (
     AcademyGroupPaginationFilter,

@@ -5,7 +5,7 @@ from app.adapters.dto.academy_gallery.academy_gallery_dto import (
     AcademyGalleryWithRelationsRDTO,
     PaginationAcademyGalleryWithRelationsRDTO,
 )
-from app.adapters.filter.pagination_filter import PaginationFilter
+from app.adapters.filters.base_pagination_filter import BasePaginationFilter
 from app.adapters.repository.academy_gallery.academy_gallery_repository import (
     AcademyGalleryRepository,
 )
@@ -27,9 +27,9 @@ class PaginateAcademyGalleriesCase(
         repository (AcademyGalleryRepository): Репозиторий для работы с галереей академий.
 
     Методы:
-        execute(filter: PaginationFilter) -> PaginationAcademyGalleryWithRelationsRDTO:
+        execute(filter: BasePaginationFilter) -> PaginationAcademyGalleryWithRelationsRDTO:
             Выполняет запрос и возвращает изображения галереи с пагинацией.
-        validate(filter: PaginationFilter):
+        validate(filter: BasePaginationFilter):
             Валидация входных параметров.
         transform():
             Преобразование данных (не используется в данном случае).
@@ -45,7 +45,7 @@ class PaginateAcademyGalleriesCase(
         self.repository = AcademyGalleryRepository(db)
 
     async def execute(
-        self, filter: PaginationFilter
+        self, filter: BasePaginationFilter
     ) -> PaginationAcademyGalleryWithRelationsRDTO:
         """
         Выполняет операцию получения изображений галереи академий с пагинацией.
@@ -93,7 +93,7 @@ class PaginateAcademyGalleriesCase(
 
         return result
 
-    async def validate(self, filter: PaginationFilter) -> None:
+    async def validate(self, filter: BasePaginationFilter) -> None:
         """
         Валидация входных параметров.
 

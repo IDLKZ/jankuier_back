@@ -2,7 +2,7 @@ from sqlalchemy import func, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.cart.cart_dto import CartRDTO
-from app.adapters.filter.base_filter import BaseFilter
+from app.adapters.filters.base_filter import BaseFilter
 from app.adapters.repository.cart.cart_repository import CartRepository
 from app.use_case.base_case import BaseUseCase
 

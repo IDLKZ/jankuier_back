@@ -12,7 +12,7 @@ class AcademyMaterialPaginationFilter(BasePaginationFilter[AcademyMaterialEntity
             "Количество материалов академий на странице"
         ),
         page: int = AppQueryConstants.StandardPageQuery("Номер страницы"),
-        search: str | None = AppQueryConstants.StandardSearchQuery(
+        search: str | None = AppQueryConstants.StandardOptionalSearchQuery(
             "Поиск по названию материала"
         ),
         order_by: str | None = AppQueryConstants.StandardSortFieldQuery(

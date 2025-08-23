@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.adapters.dto.academy_gallery.academy_gallery_dto import (
     AcademyGalleryWithRelationsRDTO,
 )
-from app.adapters.filter.base_filter import BaseFilter
+from app.adapters.filters.base_filter import BaseFilter
 from app.adapters.repository.academy_gallery.academy_gallery_repository import (
     AcademyGalleryRepository,
 )

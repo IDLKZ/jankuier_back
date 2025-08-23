@@ -1,33 +1,339 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ru">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Сервис Paryz.Education</title>
-    <link rel="stylesheet" href="{{template_folder}}/css/bootstrap_min_5.3.3.css">
-    <link rel="stylesheet" href="{{template_folder}}/css/my_style.css">
-  </head>
-  <body>
-  <div class="banner">
-    <div class="container">
-        <div class="row">
-          <div class="col-span-12 text-center py-4 mt-4 mb-2">
-            <h1 class="text-white fw-bold fs-1">
-              Paryz.Education API
-            </h1>
-          </div>
-          <div class="col-span-12 text-center py-4 my-4">
-            <h2 class="text-white mb-4 fw-bolder">Выбор документации API по роли</h2>
-                    <ul class="list-unstyled">
-                        <li><a class="btn bg-white btn-lg my-2" target="_blank" href="{{admin_docs_url}}">Администратор</a></li>
-                        <li><a class="btn bg-white btn-lg my-2" target="_blank" href="{{client_docs_url}}">Пользователи</a></li>
-                        <li><a class="btn bg-white btn-lg my-2" target="_blank" href="{{common_docs_url}}">Общедоступные</a></li>
-                    </ul>
-          </div>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>⚽ Janquer API - Футбольная платформа</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+      * {
+        font-family: 'Poppins', sans-serif;
+      }
+      
+      body {
+        background: linear-gradient(135deg, #0f4c3a 0%, #1a5d4a 25%, #2d8659 50%, #0f4c3a 75%, #061a14 100%);
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+        position: relative;
+        overflow-x: hidden;
+      }
 
+      @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      /* Football field pattern */
+      body::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: 
+          linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+          linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+        background-size: 50px 50px;
+        opacity: 0.3;
+        z-index: 1;
+      }
+
+      /* Football floating animation */
+      @keyframes footballBounce {
+        0%, 100% { 
+          transform: translateY(0px) rotate(0deg); 
+          filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+        }
+        25% { 
+          transform: translateY(-20px) rotate(90deg); 
+          filter: drop-shadow(0 25px 35px rgba(0,0,0,0.4));
+        }
+        50% { 
+          transform: translateY(-40px) rotate(180deg); 
+          filter: drop-shadow(0 40px 50px rgba(0,0,0,0.5));
+        }
+        75% { 
+          transform: translateY(-20px) rotate(270deg); 
+          filter: drop-shadow(0 25px 35px rgba(0,0,0,0.4));
+        }
+      }
+
+      .football {
+        animation: footballBounce 3s ease-in-out infinite;
+        transition: all 0.3s ease;
+      }
+
+      .football:hover {
+        transform: scale(1.2) rotate(360deg) !important;
+        filter: drop-shadow(0 20px 40px rgba(255,255,255,0.2)) !important;
+      }
+
+      /* Card styling */
+      .api-card {
+        background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255,255,255,0.2);
+        box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        position: relative;
+        z-index: 10;
+      }
+
+      .api-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        padding: 2px;
+        background: linear-gradient(45deg, #00ff88, #00cc6a, #009951, #00ff88);
+        border-radius: inherit;
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        -webkit-mask-composite: xor;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .api-card:hover::before {
+        opacity: 1;
+      }
+
+      /* Button styling */
+      .role-btn {
+        background: linear-gradient(145deg, #00ff88, #00cc6a);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        border: none;
+      }
+
+      .role-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        transition: left 0.6s;
+      }
+
+      .role-btn:hover::before {
+        left: 100%;
+      }
+
+      .role-btn:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 20px 40px rgba(0, 255, 136, 0.3);
+        background: linear-gradient(145deg, #00ff88, #00e672);
+      }
+
+      .role-btn:active {
+        transform: translateY(-1px) scale(1.02);
+      }
+
+      /* Title glow effect */
+      .title-glow {
+        text-shadow: 0 0 20px rgba(0, 255, 136, 0.5),
+                     0 0 40px rgba(0, 255, 136, 0.3),
+                     0 0 80px rgba(0, 255, 136, 0.1);
+      }
+
+      /* Floating particles */
+      .particle {
+        position: absolute;
+        background: rgba(0, 255, 136, 0.6);
+        border-radius: 50%;
+        pointer-events: none;
+        animation: float 6s infinite linear;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(100vh) rotate(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 640px) {
+        .api-card {
+          margin: 1rem;
+        }
+        
+        .role-btn {
+          font-size: 1rem;
+          padding: 0.75rem 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col items-center justify-center text-white relative">
+    <!-- Floating particles -->
+    <div class="particle" style="left: 10%; width: 4px; height: 4px; animation-delay: 0s;"></div>
+    <div class="particle" style="left: 20%; width: 6px; height: 6px; animation-delay: 2s;"></div>
+    <div class="particle" style="left: 30%; width: 3px; height: 3px; animation-delay: 4s;"></div>
+    <div class="particle" style="left: 40%; width: 5px; height: 5px; animation-delay: 1s;"></div>
+    <div class="particle" style="left: 50%; width: 4px; height: 4px; animation-delay: 3s;"></div>
+    <div class="particle" style="left: 60%; width: 6px; height: 6px; animation-delay: 5s;"></div>
+    <div class="particle" style="left: 70%; width: 3px; height: 3px; animation-delay: 2s;"></div>
+    <div class="particle" style="left: 80%; width: 5px; height: 5px; animation-delay: 4s;"></div>
+    <div class="particle" style="left: 90%; width: 4px; height: 4px; animation-delay: 1s;"></div>
+
+    <!-- Main content -->
+    <div class="api-card rounded-3xl p-8 md:p-12 max-w-4xl mx-4 text-center relative z-20">
+      <!-- Football icon -->
+      <div class="flex justify-center mb-8">
+        <div class="football w-24 h-24 md:w-32 md:h-32 bg-white rounded-full flex items-center justify-center text-6xl md:text-7xl cursor-pointer">
+          ⚽
         </div>
+      </div>
+
+      <!-- Title -->
+      <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold title-glow mb-6 leading-tight">
+        <span class="bg-gradient-to-r from-green-300 to-green-100 bg-clip-text text-transparent">
+          Janquer
+        </span>
+        <span class="text-white block md:inline"> API</span>
+      </h1>
+
+      <!-- Subtitle -->
+      <div class="mb-10">
+        <p class="text-lg md:text-xl text-green-100 mb-4 leading-relaxed max-w-3xl mx-auto">
+          ⚽ <strong class="text-green-300">Футбольная платформа</strong> для управления спортивными лицензиями
+        </p>
+        <p class="text-base md:text-lg text-gray-300 leading-relaxed max-w-2xl mx-auto">
+          Выберите свою роль для доступа к соответствующей документации API
+        </p>
+      </div>
+
+      <!-- Role buttons -->
+      <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8">
+        <a
+          href="{{admin_docs_url}}"
+          target="_blank"
+          class="role-btn px-8 py-4 text-black text-lg font-bold rounded-2xl shadow-2xl transform transition-all duration-300 min-w-[200px] flex items-center justify-center gap-3"
+        >
+          <span class="text-2xl">🏆</span>
+          <span>Администратор</span>
+        </a>
+        
+        <a
+          href="{{client_docs_url}}"
+          target="_blank"
+          class="role-btn px-8 py-4 text-black text-lg font-bold rounded-2xl shadow-2xl transform transition-all duration-300 min-w-[200px] flex items-center justify-center gap-3"
+        >
+          <span class="text-2xl">👥</span>
+          <span>Пользователи</span>
+        </a>
+        
+        <a
+          href="{{common_docs_url}}"
+          target="_blank"
+          class="role-btn px-8 py-4 text-black text-lg font-bold rounded-2xl shadow-2xl transform transition-all duration-300 min-w-[200px] flex items-center justify-center gap-3"
+        >
+          <span class="text-2xl">🌍</span>
+          <span>Общедоступные</span>
+        </a>
+      </div>
+
+      <!-- Features showcase -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 text-sm">
+        <div class="bg-gradient-to-br from-green-500/20 to-green-700/10 rounded-2xl p-6 border border-green-400/20">
+          <div class="text-3xl mb-3">⚡</div>
+          <h3 class="font-bold text-green-300 mb-2">Быстрый API</h3>
+          <p class="text-gray-300">Высокая производительность и надежность</p>
+        </div>
+        
+        <div class="bg-gradient-to-br from-blue-500/20 to-blue-700/10 rounded-2xl p-6 border border-blue-400/20">
+          <div class="text-3xl mb-3">🔒</div>
+          <h3 class="font-bold text-blue-300 mb-2">Безопасность</h3>
+          <p class="text-gray-300">Современные методы аутентификации</p>
+        </div>
+        
+        <div class="bg-gradient-to-br from-purple-500/20 to-purple-700/10 rounded-2xl p-6 border border-purple-400/20">
+          <div class="text-3xl mb-3">📊</div>
+          <h3 class="font-bold text-purple-300 mb-2">Аналитика</h3>
+          <p class="text-gray-300">Подробная статистика и отчеты</p>
+        </div>
+      </div>
     </div>
-  </div>
-    <script src="{{template_folder}}/js/bootstrap_min_5.3.3.js"></script>
+
+    <!-- Footer -->
+    <footer class="mt-8 mb-4 text-center z-20 relative">
+      <p class="text-sm text-green-200/70">
+        ⚽ © 2025 <strong class="text-green-300">Janquer</strong> - Футбольная лицензионная платформа
+      </p>
+      <p class="text-xs text-gray-400 mt-2">
+        Все права защищены | Разработано с ❤️ для футбольного сообщества
+      </p>
+    </footer>
+
+    <script>
+      // Add interactive effects
+      document.addEventListener('DOMContentLoaded', function() {
+        // Create additional floating particles dynamically
+        function createParticle() {
+          const particle = document.createElement('div');
+          particle.className = 'particle';
+          particle.style.left = Math.random() * 100 + '%';
+          particle.style.width = particle.style.height = (Math.random() * 4 + 2) + 'px';
+          particle.style.animationDelay = Math.random() * 6 + 's';
+          particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
+          document.body.appendChild(particle);
+          
+          // Remove particle after animation
+          setTimeout(() => {
+            particle.remove();
+          }, 10000);
+        }
+
+        // Create particles periodically
+        setInterval(createParticle, 2000);
+
+        // Add mousemove effect to the card
+        const card = document.querySelector('.api-card');
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          
+          const rotateX = (y - centerY) / 10;
+          const rotateY = (centerX - x) / 10;
+          
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+        });
+
+        // Football click effect
+        const football = document.querySelector('.football');
+        football.addEventListener('click', () => {
+          football.style.animation = 'none';
+          football.offsetHeight; // Trigger reflow
+          football.style.animation = 'footballBounce 0.6s ease-in-out';
+          
+          setTimeout(() => {
+            football.style.animation = 'footballBounce 3s ease-in-out infinite';
+          }, 600);
+        });
+      });
+    </script>
   </body>
 </html>

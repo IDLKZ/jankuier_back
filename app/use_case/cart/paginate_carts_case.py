@@ -2,7 +2,7 @@ from sqlalchemy import func, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.cart.cart_dto import CartRDTO, PaginationCartRDTO
-from app.adapters.filter.pagination_filter import PaginationFilter
+from app.adapters.filters.base_pagination_filter import BasePaginationFilter
 from app.adapters.repository.cart.cart_repository import CartRepository
 from app.use_case.base_case import BaseUseCase
 
@@ -20,9 +20,9 @@ class PaginateCartsCase(BaseUseCase[PaginationCartRDTO]):
         repository (CartRepository): Репозиторий для работы с корзинами.
 
     Методы:
-        execute(filter: PaginationFilter) -> PaginationCartRDTO:
+        execute(filter: BasePaginationFilter) -> PaginationCartRDTO:
             Выполняет запрос и возвращает корзины с пагинацией.
-        validate(filter: PaginationFilter):
+        validate(filter: BasePaginationFilter):
             Валидация входных параметров.
         transform():
             Преобразование данных (не используется в данном случае).
@@ -37,7 +37,7 @@ class PaginateCartsCase(BaseUseCase[PaginationCartRDTO]):
         """
         self.repository = CartRepository(db)
 
-    async def execute(self, filter: PaginationFilter) -> PaginationCartRDTO:
+    async def execute(self, filter: BasePaginationFilter) -> PaginationCartRDTO:
         """
         Выполняет операцию получения корзин с пагинацией.
 
@@ -81,7 +81,7 @@ class PaginateCartsCase(BaseUseCase[PaginationCartRDTO]):
 
         return result
 
-    async def validate(self, filter: PaginationFilter) -> None:
+    async def validate(self, filter: BasePaginationFilter) -> None:
         """
         Валидация входных параметров.
 

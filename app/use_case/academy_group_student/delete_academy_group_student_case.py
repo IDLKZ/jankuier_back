@@ -9,21 +9,16 @@ from app.shared.dto_constants import DTOConstant
 from app.use_case.base_case import BaseUseCase
 
 
-class DeleteAcademyGroupStudentCase(BaseUseCase[DTOConstant.StandardResponseDTO]):
+class DeleteAcademyGroupStudentCase(BaseUseCase[bool]):
     def __init__(self, db: AsyncSession) -> None:
         self.repository = AcademyGroupStudentRepository(db)
         self.model: AcademyGroupStudentEntity | None = None
 
     async def execute(
         self, id: int, force_delete: bool = False
-    ) -> DTOConstant.StandardResponseDTO:
+    ) -> bool:
         await self.validate(id)
-
-        await self.repository.delete(id=id, force_delete=force_delete)
-
-        return DTOConstant.StandardResponseDTO(
-            message="Студент успешно исключен из группы"
-        )
+        return await self.repository.delete(id=id, force_delete=force_delete)
 
     async def validate(self, id: int) -> None:
         if not id or id <= 0:

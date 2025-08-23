@@ -1,11 +1,9 @@
 from sqlalchemy import func, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.academy_group.academy_group_dto import (
-    AcademyGroupWithRelationsRDTO,
-    PaginationAcademyGroupWithRelationsRDTO,
-)
-from app.adapters.filter.pagination_filter import PaginationFilter
+from app.adapters.dto.academy_group.academy_group_dto import AcademyGroupWithRelationsRDTO
+from app.adapters.dto.pagination_dto import PaginationAcademyGroupWithRelationsRDTO
+from app.adapters.filters.base_pagination_filter import BasePaginationFilter
 from app.adapters.repository.academy_group.academy_group_repository import (
     AcademyGroupRepository,
 )
@@ -25,9 +23,9 @@ class PaginateAcademyGroupsCase(BaseUseCase[PaginationAcademyGroupWithRelationsR
         repository (AcademyGroupRepository): Репозиторий для работы с группами академий.
 
     Методы:
-        execute(filter: PaginationFilter) -> PaginationAcademyGroupWithRelationsRDTO:
+        execute(filter: BasePaginationFilter) -> PaginationAcademyGroupWithRelationsRDTO:
             Выполняет запрос и возвращает группы академий с пагинацией.
-        validate(filter: PaginationFilter):
+        validate(filter: BasePaginationFilter):
             Валидация входных параметров.
         transform():
             Преобразование данных (не используется в данном случае).
@@ -43,7 +41,7 @@ class PaginateAcademyGroupsCase(BaseUseCase[PaginationAcademyGroupWithRelationsR
         self.repository = AcademyGroupRepository(db)
 
     async def execute(
-        self, filter: PaginationFilter
+        self, filter: BasePaginationFilter
     ) -> PaginationAcademyGroupWithRelationsRDTO:
         """
         Выполняет операцию получения групп академий с пагинацией.
@@ -84,7 +82,7 @@ class PaginateAcademyGroupsCase(BaseUseCase[PaginationAcademyGroupWithRelationsR
 
         return result
 
-    async def validate(self, filter: PaginationFilter) -> None:
+    async def validate(self, filter: BasePaginationFilter) -> None:
         """
         Валидация входных параметров.
 

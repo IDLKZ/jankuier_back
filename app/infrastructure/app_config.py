@@ -22,7 +22,6 @@ class AppConfiguration(BaseSettings):
     app_administrator_docs_url: str = Field(
         default="administrator", env="APP_ADMINISTRATOR_DOCS_URL"
     )
-    app_employee_docs_url: str = Field(default="employee", env="APP_EMPLOYEE_DOCS_URL")
     app_client_docs_url: str = Field(default="club", env="APP_CLIENT_DOCS_URL")
     # CORS MIDDLEWARE
     app_cors_enabled: bool = Field(default=False, env="APP_CORS_ENABLED")

@@ -10,7 +10,7 @@ from app.shared.dto_constants import DTOConstant
 from app.use_case.base_case import BaseUseCase
 
 
-class DeleteRequestMaterialCase(BaseUseCase[DTOConstant.StandardResponseDTO]):
+class DeleteRequestMaterialCase(BaseUseCase[bool]):
     def __init__(self, db: AsyncSession) -> None:
         self.repository = RequestMaterialRepository(db)
         self.file_service = FileService(db)
@@ -18,15 +18,13 @@ class DeleteRequestMaterialCase(BaseUseCase[DTOConstant.StandardResponseDTO]):
 
     async def execute(
         self, id: int, force_delete: bool = False
-    ) -> DTOConstant.StandardResponseDTO:
+    ) -> bool:
         await self.validate(id)
 
         if self.model.file_id:
             await self.file_service.delete_file(file_id=self.model.file_id)
 
-        await self.repository.delete(id=id, force_delete=force_delete)
-
-        return DTOConstant.StandardResponseDTO(message="Материал заявки успешно удален")
+        return await self.repository.delete(id=id, force_delete=force_delete)
 
     async def validate(self, id: int) -> None:
         if not id or id <= 0:

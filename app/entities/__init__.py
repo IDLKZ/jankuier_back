@@ -34,6 +34,7 @@ from app.entities.role_permission_entity import RolePermissionEntity
 from app.entities.sport_entity import SportEntity
 from app.entities.student_entity import StudentEntity
 from app.entities.user_entity import UserEntity
+from app.entities.user_verification_entity import UserVerificationEntity
 
 
 __all__ = [
@@ -45,6 +46,7 @@ __all__ = [
     PermissionEntity.__name__,
     RolePermissionEntity.__name__,
     UserEntity.__name__,
+    UserVerificationEntity.__name__,
     ProductCategoryEntity.__name__,
     ProductEntity.__name__,
     ModificationTypeEntity.__name__,
@@ -70,3 +72,4 @@ __all__ = [
     CartEntity.__name__,
     CartItemEntity.__name__,
 ]
+
