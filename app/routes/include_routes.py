@@ -8,6 +8,7 @@ from app.adapters.api.academy_group_schedule.academy_group_schedule_api import (
 from app.adapters.api.academy_group_student.academy_group_student_api import (
     AcademyGroupStudentApi,
 )
+from app.adapters.api.auth.auth_api import AuthApi
 from app.adapters.api.category_modification.category_modification_api import (
     CategoryModificationApi,
 )
@@ -240,4 +241,9 @@ def include_routers(app) -> None:
         TestApi().router,
         prefix=f"{RoutePathConstants.BasePathName}test",
         tags=["Тестовые роуты"],
+    )
+    app.include_router(
+        AuthApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}{RoutePathConstants.AuthPathName}",
+        tags=[RoutePathConstants.AuthTagName],
     )
