@@ -11,6 +11,7 @@ from app.core.app_cors import set_up_cors
 from app.core.file_core import include_static_files
 from app.core.role_docs import setup_role_documentation
 from app.infrastructure.app_config import app_config
+from app.infrastructure.redis_client import check_redis_connection
 from app.middleware.auth_wrapper_core import AuthWrapper
 from app.middleware.registry_middleware import registry_middleware
 from app.routes.registry_route import enable_routes
@@ -23,6 +24,7 @@ async def lifespan(app: FastAPI):
     Контекстный менеджер жизненного цикла приложения.
     """
     await run_seeders()
+    check_redis_connection()
     yield
 
 

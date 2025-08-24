@@ -82,6 +82,24 @@ class AppConfiguration(BaseSettings):
     logger_backtrace: bool = Field(default=True, env="LOGGER_BACKTRACE")
     logger_diagnose: bool = Field(default=False, env="LOGGER_DIAGNOSE")
 
+    redis_host: str = Field(default="localhost", env="REDIS_HOST")
+    redis_port: int = Field(default=6379, env="REDIS_PORT")
+    redis_password: str | None = Field(default=None, env="REDIS_PASSWORD")
+    redis_db: int = Field(default=0, env="REDIS_DB")
+
+    # SOTA Auth
+    sota_auth_api: str = Field(default="https://sota.id/api/auth/token/", env="SOTA_AUTH_API")
+    sota_auth_email: str = Field(..., env="SOTA_AUTH_EMAIL")
+    sota_auth_password: str = Field(..., env="SOTA_AUTH_PASSWORD")
+    sota_token_save_minutes: int = Field(default=60, env="SOTA_TOKEN_SAVE_MINUTES")
+
+    # SOTA Registers
+    sota_get_country_api: str = Field(default="https://sota.id/api/registers/countries/", env="SOTA_GET_COUNTRY_API")
+    sota_get_sports_api: str = Field(default="https://sota.id/api/registers/sports/", env="SOTA_GET_SPORTS_API")
+
+    # Ticketon
+    ticketon_get_cities: str = Field(default="https://api.ticketon.kz/get_cities", env="TICKETON_GET_CITIES")
+
     @property
     def get_connection_url(self) -> str:
         """Get the connection URL for the chosen database."""

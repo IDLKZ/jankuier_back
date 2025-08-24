@@ -51,3 +51,5 @@ class RoutePathConstants:
     LoginSwaggerPathName = "/login-swagger"
     ResetPasswordPathName = "/reset-password"
     GetMePathName = "/me"
+    TestGetPathName = "/test-get"
+    TestPostPathName = "/test-post"

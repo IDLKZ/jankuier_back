@@ -11,8 +11,8 @@ from app.shared.db_value_constants import DbValueConstants
 
 class UserSeeder(BaseSeeder):
     async def seed(self, session: AsyncSession) -> None:
-        roles = self.get_prod_data()
-        await self.load_seeders(UserEntity, session, AppTableNames.UserTableName, roles)
+        users = self.get_prod_data()
+        await self.load_seeders(UserEntity, session, AppTableNames.UserTableName, users)
 
     def get_dev_data(self) -> list[UserEntity]:
         return [

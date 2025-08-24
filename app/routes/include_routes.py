@@ -43,6 +43,7 @@ from app.adapters.api.request_material.request_material_api import RequestMateri
 from app.adapters.api.role.role_api import RoleApi
 from app.adapters.api.sport.sport_api import SportApi
 from app.adapters.api.student.student_api import StudentApi
+from app.adapters.api.test.test_api import TestApi
 from app.adapters.api.user.user_api import UserApi
 from app.shared.route_constants import RoutePathConstants
 
@@ -234,4 +235,9 @@ def include_routers(app) -> None:
         UserApi().router,
         prefix=f"{RoutePathConstants.BasePathName}{RoutePathConstants.UserPathName}",
         tags=[RoutePathConstants.UserTagName],
+    )
+    app.include_router(
+        TestApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}test",
+        tags=["Тестовые роуты"],
     )

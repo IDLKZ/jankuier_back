@@ -27,6 +27,7 @@ from app.routes.request_to_academy_group.request_to_academy_group_route import a
 from app.routes.role.role_route import assign_role_roles
 from app.routes.sport.sport_route import assign_sport_roles
 from app.routes.student.student_route import assign_student_roles
+from app.routes.test.test_route import assign_test_roles
 from app.routes.user.user_route import assign_user_roles
 
 
@@ -80,3 +81,6 @@ def assign_roles_to_all_routes(app) -> None:
     assign_role_roles(app)
     assign_permission_roles(app)
     assign_user_roles(app)
+
+    #Test
+    assign_test_roles(app)
