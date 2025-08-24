@@ -35,13 +35,14 @@ class BaseRepository(Generic[T]):
 
     async def get_all(
         self,
+        filters: list[Any] | None = None,
         options: list[Any] | None = None,
         order_by: str | None = None,
         order_direction: str = "asc",
         include_deleted_filter: bool = False,
     ) -> list[T]:
         """Получение всех объектов с поддержкой сортировки."""
-        filters = self._apply_soft_delete_filter([], include_deleted_filter)
+        filters = self._apply_soft_delete_filter(filters, include_deleted_filter)
         query = select(self.model).filter(*filters)
         if options:
             query = query.options(*options)

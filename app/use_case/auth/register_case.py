@@ -2,16 +2,16 @@ from sqlalchemy import or_, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.auth.register_dto import RegisterDTO
-from app.adapters.dto.user.user_dto import UserCDTO, UserWithRelationsDTO
-from app.adapters.repositories.role.role_repository import RoleRepository
-from app.adapters.repositories.user.user_repository import UserRepository
+from app.adapters.dto.user.user_dto import UserWithRelationsRDTO
+from app.adapters.repository.role.role_repository import RoleRepository
+from app.adapters.repository.user.user_repository import UserRepository
 from app.core.app_exception_response import AppExceptionResponse
 from app.core.auth_core import get_password_hash
 from app.i18n.i18n_wrapper import i18n
 from app.use_case.base_case import BaseUseCase
 
 
-class RegisterCase(BaseUseCase[UserWithRelationsDTO]):
+class RegisterCase(BaseUseCase[UserWithRelationsRDTO]):
     """
     Use case для аутентификации пользователей.
 
@@ -19,12 +19,12 @@ class RegisterCase(BaseUseCase[UserWithRelationsDTO]):
         repository (UserRepository): Репозиторий для работы с пользователями.
     """
 
-    def __init__(self, db: AsyncSession) -> UserWithRelationsDTO:
+    def __init__(self, db: AsyncSession) -> UserWithRelationsRDTO:
 
         self.repository = UserRepository(db)
         self.role_repository = RoleRepository(db)
 
-    async def execute(self, dto: RegisterDTO) -> UserWithRelationsDTO:
+    async def execute(self, dto: RegisterDTO) -> UserWithRelationsRDTO:
         await self.validate(dto)
         obj = dto.dict()
         obj["password"] = get_password_hash(obj["password"])
@@ -35,7 +35,7 @@ class RegisterCase(BaseUseCase[UserWithRelationsDTO]):
             model = await self.repository.get(
                 id=model.id, options=self.repository.default_relationships()
             )
-            return UserWithRelationsDTO.from_orm(model)
+            return UserWithRelationsRDTO.from_orm(model)
         raise AppExceptionResponse.internal_error(
             message=i18n.gettext("something_went_wrong")
         )

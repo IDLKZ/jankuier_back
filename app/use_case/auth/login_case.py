@@ -3,7 +3,7 @@ from app.adapters.dto.auth.token_dto import BearerTokenDTO
 from sqlalchemy import and_, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.repositories.user.user_repository import UserRepository
+from app.adapters.repository.user.user_repository import UserRepository
 from app.core.app_exception_response import AppExceptionResponse
 from app.core.auth_core import (
     create_access_token,
@@ -59,7 +59,7 @@ class LoginCase(BaseUseCase[BearerTokenDTO]):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("user_not_active")
             )
-        result = verify_password(dto.password, user.password)
+        result = verify_password(dto.password, user.password_hash)
         if not result:
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("data_not_ready")

@@ -4,6 +4,7 @@ from app.routes.academy_group.academy_group_route import assign_academy_group_ro
 from app.routes.academy_group_schedule.academy_group_schedule_route import assign_academy_group_schedule_roles
 from app.routes.academy_group_student.academy_group_student_route import assign_academy_group_student_roles
 from app.routes.academy_material.academy_material_route import assign_academy_material_roles
+from app.routes.auth.auth_route import assign_auth_roles
 from app.routes.cart.cart_route import assign_cart_roles
 from app.routes.cart_item.cart_item_route import assign_cart_item_roles
 from app.routes.category_modification.category_modification_route import assign_category_modification_roles
@@ -80,3 +81,6 @@ def assign_roles_to_all_routes(app) -> None:
     assign_role_roles(app)
     assign_permission_roles(app)
     assign_user_roles(app)
+
+    # Auth
+    assign_auth_roles(app)
