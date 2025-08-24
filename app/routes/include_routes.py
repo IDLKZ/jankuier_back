@@ -45,7 +45,6 @@ from app.adapters.api.role.role_api import RoleApi
 from app.adapters.api.sport.sport_api import SportApi
 from app.adapters.api.student.student_api import StudentApi
 from app.adapters.api.user.user_api import UserApi
-from app.adapters.web.admin.admin_api import AdminApi
 from app.shared.route_constants import RoutePathConstants
 
 
@@ -241,11 +240,4 @@ def include_routers(app) -> None:
         AuthApi().router,
         prefix=f"{RoutePathConstants.BasePathName}{RoutePathConstants.AuthPathName}",
         tags=[RoutePathConstants.AuthTagName],
-    )
-    
-    # Admin panel routes
-    app.include_router(
-        AdminApi().router,
-        prefix="/admin",
-        tags=["Админ-панель"],
     )
