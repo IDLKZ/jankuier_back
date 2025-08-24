@@ -6,6 +6,7 @@ import uvicorn
 from fastapi import FastAPI, Depends
 from starlette.staticfiles import StaticFiles
 
+from app.admin_dashboard.admin_dashboard import setup_admin_dashboard
 from app.core.app_cors import set_up_cors
 from app.core.file_core import include_static_files
 from app.core.role_docs import setup_role_documentation
@@ -55,7 +56,8 @@ for static_path in [app_config.static_folder, app_config.template]:
 setup_role_documentation(app)
 # 🌐 Настройка CORS
 set_up_cors(app)
-
+# 🚀 Запуск админ панели
+setup_admin_dashboard(app)
 
 async def main():
     print("Starting application ...")

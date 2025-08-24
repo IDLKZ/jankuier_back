@@ -1,4 +1,6 @@
 from contextlib import contextmanager
+
+from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 from app.infrastructure.app_config import app_config
@@ -13,6 +15,8 @@ engine_async = create_async_engine(
     pool_recycle=app_config.db_pool_recycle,
 )
 
+engine_sync = create_engine(app_config.get_connection_sync_url())
+
 # 🎯 Создаём фабрику сессий
 AsyncSessionLocal = sessionmaker(
     bind=engine_async, class_=AsyncSession, expire_on_commit=False
@@ -20,7 +24,6 @@ AsyncSessionLocal = sessionmaker(
 
 
 async def get_db() -> AsyncSession:
-    """📌 Асинхронная сессия с установкой часового пояса"""
     async with AsyncSessionLocal() as session:
         try:
             yield session

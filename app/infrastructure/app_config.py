@@ -92,6 +92,22 @@ class AppConfiguration(BaseSettings):
         get_connection_err_msg = "Неверная строка подключения"
         raise ValueError(get_connection_err_msg)
 
+    def get_connection_sync_url(self) -> str:
+        """Get the connection URL for the chosen database (synchronous)."""
+        if self.app_database == "postgresql":
+            # Используем синхронный драйвер psycopg2
+            return (
+                f"postgresql+psycopg2://{self.pg_db_user}:{self.pg_db_password}"
+                f"@{self.pg_db_host}:{self.pg_db_port}/{self.pg_db_name}"
+            )
+
+        if self.app_database == "mysql":
+            # Используем синхронный драйвер pymysql
+            return (
+                f"mysql+pymysql://{self.mysql_db_user}:{self.mysql_db_password}"
+                f"@{self.mysql_db_host}:{self.mysql_db_port}/{self.mysql_db_name}"
+            )
+
     @field_validator("app_status")
     def validate_app_status(cls, v: str | None):  # noqa:ANN201
         if v.lower() not in {"development", "production"}:
