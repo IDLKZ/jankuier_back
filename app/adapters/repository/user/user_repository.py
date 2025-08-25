@@ -14,6 +14,5 @@ class UserRepository(BaseRepository[UserEntity]):
     def default_relationships(self) -> list[Any]:
         return [
             selectinload(self.model.role),
-            selectinload(self.model.image),
-            selectinload(self.model.region),
+            selectinload(self.model.image)
         ]

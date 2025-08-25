@@ -55,7 +55,7 @@ class FormParserHelper:
     def parse_user_dto_from_form(
         role_id: Optional[int] = Form(None, description="ID роли"),
         image_id: Optional[int] = Form(None, description="ID изображения"),
-        region_id: Optional[int] = Form(None, description="ID региона"),
+        # region_id: Optional[int] = Form(None, description="ID региона"),
         first_name: str = Form(..., description="Имя"),
         last_name: str = Form(..., description="Фамилия"),
         patronomic: Optional[str] = Form(None, description="Отчество"),
@@ -69,6 +69,7 @@ class FormParserHelper:
         birthdate: date = Form(..., description="Дата рождения"),
         is_active: bool = Form(False, description="Активен"),
         is_verified: bool = Form(False, description="Подтвержден"),
+        password_hash: str = Form(..., description="Подтвержден"),
     ) -> UserCDTO:
         """
         Парсит `FormData` и возвращает `UserCDTO`.
@@ -78,7 +79,7 @@ class FormParserHelper:
         return UserCDTO(
             role_id=role_id,
             image_id=image_id,
-            region_id=region_id,
+            # region_id=region_id,
             first_name=first_name,
             last_name=last_name,
             patronomic=patronomic,
@@ -90,6 +91,7 @@ class FormParserHelper:
             birthdate=birthdate,
             is_active=is_active,
             is_verified=is_verified,
+            password_hash=password_hash,
         )
 
     @staticmethod

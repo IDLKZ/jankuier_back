@@ -44,7 +44,8 @@ class CreateUserCase(BaseUseCase[UserWithRelationsRDTO]):
                     func.lower(self.repository.model.phone) == dto.phone.lower(),
                     func.lower(self.repository.model.iin) == dto.iin.lower(),
                 )
-            ]
+            ],
+            include_deleted_filter=True
         )
         if user:
             if user.email.lower() == dto.email.lower():
@@ -80,8 +81,8 @@ class CreateUserCase(BaseUseCase[UserWithRelationsRDTO]):
         self.upload_folder = AppFileExtensionConstants.user_profile_photo_directory(
             dto.username
         )
-        if dto.password:
-            dto.password = get_password_hash(dto.password)
+        if dto.password_hash:
+            dto.password_hash = get_password_hash(dto.password_hash)
         if file:
             file = await self.file_service.save_file(
                 file, self.upload_folder, self.extensions
