@@ -4,7 +4,10 @@
       "Bash(find:*)",
       "Bash(mkdir:*)",
       "Bash(python:*)",
-      "Bash(timeout 10s python:*)"
+      "Bash(timeout 10s python:*)",
+      "WebFetch(domain:jowilf.github.io)",
+      "WebSearch",
+      "WebFetch(domain:stackoverflow.com)"
     ],
     "deny": [],
     "ask": [],

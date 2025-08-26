@@ -552,6 +552,160 @@ The route management system provides:
 
 This dual-layer approach ensures that critical system routes (user management, roles, permissions) have proper role-based access control while allowing standard business entity routes to be registered simply and efficiently.
 
+## Data Seeding System
+
+### Overview
+The project includes a comprehensive seeding system (`app/seeders/`) for populating the database with initial and test data. The system supports both development and production environments with different datasets.
+
+### Core Architecture
+
+#### Seeding Entry Point
+- **`app/seeders/runner.py`** - Main entry point that executes all registered seeders
+- **Command**: `python -c "import asyncio; from app.seeders.runner import run_seeders; asyncio.run(run_seeders())"`
+- **Execution**: Runs all seeders sequentially using async database sessions
+
+#### Base Seeder Pattern
+**`app/seeders/base_seeder.py`** provides the abstract foundation:
+
+```python
+class BaseSeeder(ABC):
+    @abstractmethod
+    async def seed(session: AsyncSession) -> None
+    @abstractmethod 
+    def get_dev_data() -> list
+    @abstractmethod
+    def get_prod_data() -> list
+    @abstractmethod
+    def get_dev_updated_data() -> list
+    @abstractmethod
+    def get_prod_updated_data() -> list
+```
+
+#### Environment-Aware Data Loading
+- **`get_data()`** - Automatically selects dev/prod data based on `app_config.app_status`
+- **`get_updated_data()`** - Environment-specific update data for existing records
+- **Environment Detection**: Uses `app_config.app_status` (`"production"` vs development)
+
+#### Core Seeding Methods
+
+**Primary Seeding (`load_seeders`)**:
+- Checks if table already contains data (prevents duplicate seeding)
+- Inserts data only if table is empty
+- Supports PostgreSQL sequence reset after bulk insert
+- Logs seeding status and record counts
+
+**Update Seeding (`update_seeders`)**:
+- Updates existing records by identification field (usually `id` or `value`)
+- Supports adding new records if `add_if_not_exists=True`
+- Only updates changed fields (differential updates)
+- Handles both entity objects and dictionaries
+
+#### Database Support
+- **PostgreSQL**: Full support including sequence reset via `setval()`
+- **MySQL**: Basic support (sequence reset not implemented)
+- **Transaction Safety**: All operations use database transactions
+
+### Registered Seeders
+
+#### Seeder Registry (`app/seeders/registry.py`)
+Execution order ensures proper foreign key dependencies:
+
+1. **`RoleSeeder`** - System roles (Administrator, Client)
+2. **`UserSeeder`** - Default admin and client users  
+3. **`CountrySeeder`** - Countries from SOTA API service
+4. **`SportSeeder`** - Sport types from SOTA API service
+5. **`CitySeeder`** - Cities from Ticketon API service (Kazakhstan only)
+
+### Individual Seeder Implementations
+
+#### RoleSeeder (`app/seeders/role/role_seeder.py`)
+- **System Roles**: Administrator (admin access) and Client (user access)
+- **Data Source**: Hardcoded system roles with multilingual titles
+- **Features**: Uses `DbValueConstants` for consistent role IDs and values
+- **Properties**: Includes `can_register`, `is_system`, `is_administrative` flags
+
+#### UserSeeder (`app/seeders/user/user_seeder.py`)  
+- **Default Users**: Admin user (`admin/admin123`) and client user (`client/client123`)
+- **Security**: Uses `get_password_hash()` for secure password storage
+- **Data**: Includes sample personal information (names, emails, phones, IIN)
+- **Relationships**: Links to appropriate role IDs from `DbValueConstants`
+
+#### External API Seeders
+**CountrySeeder** (`app/seeders/country/country_seeder.py`):
+- **Data Source**: SOTA API service (`SotaService.get_countries_all_languages()`)
+- **Content**: Multi-language country names, SOTA codes, flag images
+- **Filtering**: Only includes countries with non-empty Russian names
+
+**SportSeeder** (`app/seeders/sport/sport_seeder.py`):
+- **Data Source**: SOTA API service (`SotaService.get_sport_types()`)
+- **Content**: Multi-language sport type names
+- **Processing**: Uses `slugify()` to generate URL-friendly values
+
+**CitySeeder** (`app/seeders/city/city_seeder.py`):
+- **Data Source**: Ticketon API service (`TicketonServiceAPI.get_ticketon_cities()`)
+- **Scope**: Kazakhstan cities only (filters by `sota_code = "KZ"`)
+- **Dependencies**: Requires CountrySeeder to run first
+- **Content**: Multi-language city names, Ticketon IDs and tags
+
+### Seeding Patterns and Best Practices
+
+#### Seeder Implementation Pattern
+```python
+class EntitySeeder(BaseSeeder):
+    async def seed(self, session: AsyncSession) -> None:
+        # For external API data, check if already populated
+        if self.needs_external_data():
+            data = await self.fetch_external_data()
+            entities = self.get_dev_data() 
+        else:
+            entities = []
+        await self.load_seeders(EntityModel, session, AppTableNames.EntityTableName, entities)
+
+    def get_dev_data(self) -> list[EntityModel]:
+        # Transform external data to entity objects
+        return [EntityModel(**item_data) for item_data in self.external_data]
+
+    def get_prod_data(self) -> list[EntityModel]:
+        return self.get_dev_data()  # Usually same data for both environments
+```
+
+#### External API Integration
+- **Check Before Fetch**: Verify table is empty before making API calls
+- **Error Handling**: Handle API failures gracefully 
+- **Data Transformation**: Convert external API formats to entity models
+- **Caching**: Store fetched data in instance variables for reuse
+
+#### Multi-language Support
+- All seeders include Russian (`title_ru`), Kazakh (`title_kk`), and English (`title_en`) content
+- External APIs provide localized data where available
+- Fallback strategies for missing translations
+
+### Integration with Application
+
+#### Automatic Sequence Management
+- PostgreSQL sequences automatically reset after bulk inserts
+- Ensures proper ID generation for subsequent records
+- Uses `pg_get_serial_sequence()` for dynamic sequence detection
+
+#### Table Name Constants
+- All seeders use `AppTableNames` constants for consistency
+- Enables easy table name changes without affecting seeders
+- Supports logging and error reporting with correct table names
+
+#### Development Workflow
+1. **Initial Setup**: Run seeders after database migration (`alembic upgrade head`)
+2. **Development**: Seeders create admin/client users for immediate testing
+3. **Production**: Same seeders provide initial system data
+4. **Updates**: Use `update_seeders()` for incremental data changes
+
+#### Error Handling and Logging
+- Comprehensive logging of seeding operations
+- Graceful handling of duplicate data scenarios
+- Transaction rollback on failures
+- Clear error messages for troubleshooting
+
+This seeding system provides a robust foundation for database initialization, supporting both development convenience and production deployment requirements while maintaining data consistency across environments.
+
 ## Development Notes
 
 - The project uses async/await patterns throughout
