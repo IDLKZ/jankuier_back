@@ -91,10 +91,10 @@ class UpdateUserCase(BaseUseCase[UserWithRelationsRDTO]):
         self.upload_folder = AppFileExtensionConstants.user_profile_photo_directory(
             dto.username
         )
-        if dto.password:
-            dto.password = get_password_hash(dto.password)
-        if not dto.password:
-            dto.password = self.model.password
+        if dto.password_hash:
+            dto.password_hash = get_password_hash(dto.password_hash)
+        if not dto.password_hash:
+            dto.password_hash = self.model.password_hash
         if file:
             if self.model.image_id != None:
                 file = await self.file_service.update_file(

@@ -17,9 +17,9 @@ class UserCDTO(BaseModel):
     image_id: DTOConstant.StandardNullableUnsignedIntegerField(
         description="ID изображения"
     )
-    region_id: DTOConstant.StandardNullableUnsignedIntegerField(
-        description="ID региона"
-    )
+    # region_id: DTOConstant.StandardNullableUnsignedIntegerField(
+    #     description="ID региона"
+    # )
 
     first_name: DTOConstant.StandardVarcharField(description="Имя")
     last_name: DTOConstant.StandardVarcharField(description="Фамилия")
@@ -40,6 +40,8 @@ class UserCDTO(BaseModel):
     is_active: DTOConstant.StandardBooleanFalseField(description="Активен")
     is_verified: DTOConstant.StandardBooleanFalseField(description="Подтвержден")
 
+    password_hash: DTOConstant.StandardPasswordField(description="Password")
+
     class Config:
         from_attributes = True
 
@@ -49,9 +51,9 @@ class UserRDTO(UserDTO):
     image_id: DTOConstant.StandardNullableUnsignedIntegerField(
         description="ID изображения"
     )
-    region_id: DTOConstant.StandardNullableUnsignedIntegerField(
-        description="ID региона"
-    )
+    # region_id: DTOConstant.StandardNullableUnsignedIntegerField(
+    #     description="ID региона"
+    # )
 
     first_name: DTOConstant.StandardVarcharField(description="Имя")
     last_name: DTOConstant.StandardVarcharField(description="Фамилия")
@@ -66,7 +68,6 @@ class UserRDTO(UserDTO):
 
     iin: DTOConstant.StandardNullableVarcharField(description="ИИН")
     birthdate: DTOConstant.StandardDateField(description="Дата рождения")
-    password_hash: DTOConstant.StandardNullableTextField(description="Хеш пароля")
 
     is_active: DTOConstant.StandardBooleanFalseField(description="Активен")
     is_verified: DTOConstant.StandardBooleanFalseField(description="Подтвержден")
