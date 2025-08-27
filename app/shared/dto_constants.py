@@ -316,6 +316,36 @@ class DTOConstant:
         ]
 
     @staticmethod
+    def StandardWorkingTimeField(description: str | None = None) -> Annotated:
+        msg = "Рабочее время в виде списка объектов с днями и временем"
+        return Annotated[
+            List[dict],
+            Field(
+                description=description or msg,
+            ),
+        ]
+
+    @staticmethod
+    def StandardScheduleTimeField(description: str | None = None) -> Annotated:
+        msg = "Время расписания в виде списка объектов с периодами времени"
+        return Annotated[
+            List[dict],
+            Field(
+                description=description or msg,
+            ),
+        ]
+
+    @staticmethod
+    def StandardPricePerTimeField(description: str | None = None) -> Annotated:
+        msg = "Цены по времени в виде списка объектов с периодами и ценами"
+        return Annotated[
+            List[dict],
+            Field(
+                description=description or msg,
+            ),
+        ]
+
+    @staticmethod
     def StandardNullableJSONField(description: str | None = None) -> Annotated:
         msg = "Опциональные JSON данные"
         return Annotated[

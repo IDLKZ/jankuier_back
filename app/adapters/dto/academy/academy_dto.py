@@ -44,7 +44,7 @@ class AcademyCDTO(BaseModel):
     address_en: DTOConstant.StandardNullableVarcharField(
         description="Адрес на английском"
     )
-    working_time: DTOConstant.StandardJSONField(
+    working_time: DTOConstant.StandardWorkingTimeField(
         description="Рабочее время в формате JSON"
     )
     is_active: DTOConstant.StandardBooleanTrueField(
@@ -107,7 +107,7 @@ class AcademyRDTO(AcademyDTO):
     address_en: DTOConstant.StandardNullableVarcharField(
         description="Адрес на английском"
     )
-    working_time: DTOConstant.StandardJSONField(
+    working_time: DTOConstant.StandardWorkingTimeField(
         description="Рабочее время в формате JSON"
     )
     is_active: DTOConstant.StandardBooleanTrueField(
@@ -207,7 +207,7 @@ class AcademyUpdateDTO(BaseModel):
         | None
     ) = None
     working_time: (
-        DTOConstant.StandardJSONField(description="Рабочее время в формате JSON") | None
+        DTOConstant.StandardWorkingTimeField(description="Рабочее время в формате JSON") | None
     ) = None
     is_active: (
         DTOConstant.StandardBooleanTrueField(description="Флаг активности академии")

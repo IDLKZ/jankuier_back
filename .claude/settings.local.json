@@ -7,7 +7,8 @@
       "Bash(timeout 10s python:*)",
       "WebFetch(domain:jowilf.github.io)",
       "WebSearch",
-      "WebFetch(domain:stackoverflow.com)"
+      "WebFetch(domain:stackoverflow.com)",
+      "Bash(uvicorn:*)"
     ],
     "deny": [],
     "ask": [],

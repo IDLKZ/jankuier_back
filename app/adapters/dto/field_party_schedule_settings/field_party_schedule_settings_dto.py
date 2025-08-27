@@ -22,13 +22,13 @@ class FieldPartyScheduleSettingsCDTO(BaseModel):
     excluded_dates: DTOConstant.StandardNullableArrayDateField(
         description="Исключенные даты [гггг-мм-дд]"
     )
-    working_time: DTOConstant.StandardJSONField(
+    working_time: DTOConstant.StandardScheduleTimeField(
         description="Рабочее время в формате JSON 1:[{start_at:09:00, end_at:00:00}]"
     )
-    break_time: DTOConstant.StandardJSONField(
+    break_time: DTOConstant.StandardScheduleTimeField(
         description="Время перерыва в формате JSON 1:[09:00 - 16:00]"
     )
-    price_per_time: DTOConstant.StandardJSONField(
+    price_per_time: DTOConstant.StandardPricePerTimeField(
         description="Цены по времени в формате JSON 1:[{start_at:09:00, end_at: 18:00, price: 16 000.00, start_at:18:00, end_at:00:00, price:20 000. 00}"
     )
     session_minute_int: DTOConstant.StandardIntegerField(
@@ -55,13 +55,13 @@ class FieldPartyScheduleSettingsRDTO(FieldPartyScheduleSettingsDTO):
     excluded_dates: DTOConstant.StandardNullableArrayDateField(
         description="Исключенные даты [гггг-мм-дд]"
     )
-    working_time: DTOConstant.StandardJSONField(
+    working_time: DTOConstant.StandardScheduleTimeField(
         description="Рабочее время в формате JSON"
     )
-    break_time: DTOConstant.StandardJSONField(
+    break_time: DTOConstant.StandardScheduleTimeField(
         description="Время перерыва в формате JSON"
     )
-    price_per_time: DTOConstant.StandardJSONField(
+    price_per_time: DTOConstant.StandardPricePerTimeField(
         description="Цены по времени в формате JSON"
     )
     session_minute_int: DTOConstant.StandardIntegerField(
@@ -107,14 +107,14 @@ class FieldPartyScheduleSettingsUpdateDTO(BaseModel):
         | None
     ) = None
     working_time: (
-        DTOConstant.StandardJSONField(description="Рабочее время в формате JSON") | None
+        DTOConstant.StandardScheduleTimeField(description="Рабочее время в формате JSON") | None
     ) = None
     break_time: (
-        DTOConstant.StandardJSONField(description="Время перерыва в формате JSON")
+        DTOConstant.StandardScheduleTimeField(description="Время перерыва в формате JSON")
         | None
     ) = None
     price_per_time: (
-        DTOConstant.StandardJSONField(description="Цены по времени в формате JSON")
+        DTOConstant.StandardPricePerTimeField(description="Цены по времени в формате JSON")
         | None
     ) = None
     session_minute_int: (

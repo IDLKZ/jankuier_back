@@ -33,13 +33,13 @@ class AcademySeeder(BaseSeeder):
                 address_kk="Төле би көшесі, 59, Алматы",
                 address_en="Tole bi Street, 59, Almaty",
                 working_time=[
-                    {"day": "monday", "start": "08:00", "end": "20:00"},
-                    {"day": "tuesday", "start": "08:00", "end": "20:00"},
-                    {"day": "wednesday", "start": "08:00", "end": "20:00"},
-                    {"day": "thursday", "start": "08:00", "end": "20:00"},
-                    {"day": "friday", "start": "08:00", "end": "20:00"},
-                    {"day": "saturday", "start": "09:00", "end": "18:00"},
-                    {"day": "sunday", "start": "09:00", "end": "18:00"}
+                    {"day": 1, "start": "08:00", "end": "20:00"},
+                    {"day": 2, "start": "08:00", "end": "20:00"},
+                    {"day": 3, "start": "08:00", "end": "20:00"},
+                    {"day": 4, "start": "08:00", "end": "20:00"},
+                    {"day": 5, "start": "08:00", "end": "20:00"},
+                    {"day": 6, "start": "09:00", "end": "18:00"},
+                    {"day": 7, "start": "09:00", "end": "18:00"}
                 ],
                 is_active=True,
                 gender=0,  # для всех
@@ -71,13 +71,13 @@ class AcademySeeder(BaseSeeder):
                 address_kk="Әл-Фараби даңғылы, 77, Алматы",
                 address_en="Al-Farabi Avenue, 77, Almaty",
                 working_time=[
-                    {"day": "monday", "start": "15:00", "end": "21:00"},
-                    {"day": "tuesday", "start": "15:00", "end": "21:00"},
-                    {"day": "wednesday", "start": "15:00", "end": "21:00"},
-                    {"day": "thursday", "start": "15:00", "end": "21:00"},
-                    {"day": "friday", "start": "15:00", "end": "21:00"},
-                    {"day": "saturday", "start": "10:00", "end": "18:00"},
-                    {"day": "sunday", "start": "10:00", "end": "18:00"}
+                    {"day": 1, "start": "15:00", "end": "21:00"},
+                    {"day": 2, "start": "15:00", "end": "21:00"},
+                    {"day": 3, "start": "15:00", "end": "21:00"},
+                    {"day": 4, "start": "15:00", "end": "21:00"},
+                    {"day": 5, "start": "15:00", "end": "21:00"},
+                    {"day": 6, "start": "10:00", "end": "18:00"},
+                    {"day": 7, "start": "10:00", "end": "18:00"}
                 ],
                 is_active=True,
                 gender=0,  # для всех
@@ -109,13 +109,13 @@ class AcademySeeder(BaseSeeder):
                 address_kk="Назарбаев көшесі, 223, Алматы",
                 address_en="Nazarbayev Street, 223, Almaty",
                 working_time=[
-                    {"day": "monday", "start": "07:00", "end": "22:00"},
-                    {"day": "tuesday", "start": "07:00", "end": "22:00"},
-                    {"day": "wednesday", "start": "07:00", "end": "22:00"},
-                    {"day": "thursday", "start": "07:00", "end": "22:00"},
-                    {"day": "friday", "start": "07:00", "end": "22:00"},
-                    {"day": "saturday", "start": "08:00", "end": "21:00"},
-                    {"day": "sunday", "start": "08:00", "end": "21:00"}
+                    {"day": 1, "start": "07:00", "end": "22:00"},
+                    {"day": 2, "start": "07:00", "end": "22:00"},
+                    {"day": 3, "start": "07:00", "end": "22:00"},
+                    {"day": 4, "start": "07:00", "end": "22:00"},
+                    {"day": 5, "start": "07:00", "end": "22:00"},
+                    {"day": 6, "start": "08:00", "end": "21:00"},
+                    {"day": 7, "start": "08:00", "end": "21:00"}
                 ],
                 is_active=True,
                 gender=0,  # для всех
@@ -147,13 +147,13 @@ class AcademySeeder(BaseSeeder):
                 address_kk="Абылай хан көшесі, 105, Алматы",
                 address_en="Abylai Khan Street, 105, Almaty",
                 working_time=[
-                    {"day": "monday", "start": "06:00", "end": "22:00"},
-                    {"day": "tuesday", "start": "06:00", "end": "22:00"},
-                    {"day": "wednesday", "start": "06:00", "end": "22:00"},
-                    {"day": "thursday", "start": "06:00", "end": "22:00"},
-                    {"day": "friday", "start": "06:00", "end": "22:00"},
-                    {"day": "saturday", "start": "08:00", "end": "20:00"},
-                    {"day": "sunday", "start": "08:00", "end": "20:00"}
+                    {"day": 1, "start": "06:00", "end": "22:00"},
+                    {"day": 2, "start": "06:00", "end": "22:00"},
+                    {"day": 3, "start": "06:00", "end": "22:00"},
+                    {"day": 4, "start": "06:00", "end": "22:00"},
+                    {"day": 5, "start": "06:00", "end": "22:00"},
+                    {"day": 6, "start": "08:00", "end": "20:00"},
+                    {"day": 7, "start": "08:00", "end": "20:00"}
                 ],
                 is_active=True,
                 gender=0,  # для всех
@@ -185,13 +185,13 @@ class AcademySeeder(BaseSeeder):
                 address_kk="Жандосов көшесі, 140, Алматы",
                 address_en="Zhandosov Street, 140, Almaty",
                 working_time=[
-                    {"day": "monday", "start": "16:00", "end": "21:00"},
-                    {"day": "tuesday", "start": "16:00", "end": "21:00"},
-                    {"day": "wednesday", "start": "16:00", "end": "21:00"},
-                    {"day": "thursday", "start": "16:00", "end": "21:00"},
-                    {"day": "friday", "start": "16:00", "end": "21:00"},
-                    {"day": "saturday", "start": "10:00", "end": "16:00"},
-                    {"day": "sunday", "start": "10:00", "end": "16:00"}
+                    {"day": 1, "start": "16:00", "end": "21:00"},
+                    {"day": 2, "start": "16:00", "end": "21:00"},
+                    {"day": 3, "start": "16:00", "end": "21:00"},
+                    {"day": 4, "start": "16:00", "end": "21:00"},
+                    {"day": 5, "start": "16:00", "end": "21:00"},
+                    {"day": 6, "start": "10:00", "end": "16:00"},
+                    {"day": 7, "start": "10:00", "end": "16:00"}
                 ],
                 is_active=True,
                 gender=1,  # только мальчики
@@ -223,13 +223,13 @@ class AcademySeeder(BaseSeeder):
                 address_kk="Самал-2 ш/а, 111-үй, Алматы",
                 address_en="Samal-2 district, building 111, Almaty",
                 working_time=[
-                    {"day": "monday", "start": "15:00", "end": "20:00"},
-                    {"day": "tuesday", "start": "15:00", "end": "20:00"},
-                    {"day": "wednesday", "start": "15:00", "end": "20:00"},
-                    {"day": "thursday", "start": "15:00", "end": "20:00"},
-                    {"day": "friday", "start": "15:00", "end": "20:00"},
-                    {"day": "saturday", "start": "09:00", "end": "17:00"},
-                    {"day": "sunday", "start": "09:00", "end": "17:00"}
+                    {"day": 1, "start": "15:00", "end": "20:00"},
+                    {"day": 2, "start": "15:00", "end": "20:00"},
+                    {"day": 3, "start": "15:00", "end": "20:00"},
+                    {"day": 4, "start": "15:00", "end": "20:00"},
+                    {"day": 5, "start": "15:00", "end": "20:00"},
+                    {"day": 6, "start": "09:00", "end": "17:00"},
+                    {"day": 7, "start": "09:00", "end": "17:00"}
                 ],
                 is_active=True,
                 gender=2,  # только девочки
