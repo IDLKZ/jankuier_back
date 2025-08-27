@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.product.product_dto import ProductWithRelationsRDTO, ProductCDTO
+from app.adapters.dto.product.full_product_dto import FullProductRDTO
 from app.helpers.form_helper import FormParserHelper
 from app.adapters.dto.pagination_dto import PaginationProductWithRelationsRDTO
 from app.adapters.filters.product.product_filter import ProductFilter
@@ -20,6 +21,7 @@ from app.use_case.product.get_product_by_id_case import GetProductByIdCase
 from app.use_case.product.get_product_by_value_case import GetProductByValueCase
 from app.use_case.product.paginate_product_case import PaginateProductCase
 from app.use_case.product.update_product_case import UpdateProductCase
+from app.use_case.product.get_full_product_by_id_case import GetFullProductByIdCase
 
 
 class ProductApi:
@@ -73,6 +75,13 @@ class ProductApi:
             summary="Получить товар по значению",
             description="Получение информации о товаре по уникальному значению (value)",
         )(self.get_by_value)
+
+        self.router.get(
+            RoutePathConstants.GetFullProductByIdPathName,
+            response_model=FullProductRDTO,
+            summary="Получить полную информацию о товаре по ID",
+            description="Получение полной информации о товаре включая галерею, варианты и модификации",
+        )(self.get_full_product_by_id)
 
         self.router.delete(
             RoutePathConstants.DeleteByIdPathName,
@@ -188,6 +197,22 @@ class ProductApi:
     ) -> bool:
         try:
             return await DeleteProductCase(db).execute(id=id, force_delete=force_delete)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def get_full_product_by_id(
+        self,
+        id: RoutePathConstants.IDPath,
+        db: AsyncSession = Depends(get_db),
+    ) -> FullProductRDTO:
+        try:
+            return await GetFullProductByIdCase(db).execute(id=id)
         except HTTPException:
             raise
         except Exception as exc:

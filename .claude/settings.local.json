@@ -8,7 +8,8 @@
       "WebFetch(domain:jowilf.github.io)",
       "WebSearch",
       "WebFetch(domain:stackoverflow.com)",
-      "Bash(uvicorn:*)"
+      "Bash(uvicorn:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": [],

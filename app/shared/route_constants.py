@@ -43,6 +43,7 @@ class RoutePathConstants:
     CreatePathName = "/create"
     UpdatePathName = "/update/{id}"
     GetByIdPathName = "/get/{id}"
+    GetFullProductByIdPathName = "/get-full-product/{id}"
     DeleteByIdPathName = "/delete/{id}"
     RecoverByIdPathName = "/recover/{id}"
     GetByValuePathName = "/get-by-value/{value}"

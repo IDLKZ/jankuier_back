@@ -32,6 +32,11 @@ def assign_product_roles(app) -> None:
     )
     assign_roles_to_route(
         app=app,
+        path=f"{base_url}{RoutePathConstants.GetFullProductByIdPathName}",
+        roles=[RoleRouteConstant.AdministratorTagName],
+    )
+    assign_roles_to_route(
+        app=app,
         path=f"{base_url}{RoutePathConstants.GetByValuePathName}",
         roles=[RoleRouteConstant.AdministratorTagName],
     )

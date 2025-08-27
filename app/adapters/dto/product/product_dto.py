@@ -1,3 +1,4 @@
+from typing import List
 from pydantic import BaseModel
 from app.adapters.dto.file.file_dto import FileRDTO
 from app.adapters.dto.city.city_dto import CityRDTO
