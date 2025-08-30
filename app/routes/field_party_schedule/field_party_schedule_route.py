@@ -40,3 +40,13 @@ def assign_field_party_schedule_roles(app) -> None:
         path=f"{base_url}{RoutePathConstants.DeleteByIdPathName}",
         roles=[RoleRouteConstant.AdministratorTagName],
     )
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/generate",
+        roles=[RoleRouteConstant.AdministratorTagName],
+    )
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/preview",
+        roles=[RoleRouteConstant.AdministratorTagName, RoleRouteConstant.ClientTagName],
+    )

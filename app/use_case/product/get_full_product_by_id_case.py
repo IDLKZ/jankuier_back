@@ -1,16 +1,22 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import and_, select
 
 from app.adapters.dto.product.product_dto import ProductWithRelationsRDTO
 from app.adapters.dto.product.full_product_dto import FullProductRDTO
 from app.adapters.dto.product_gallery.product_gallery_dto import ProductGalleryWithRelationsRDTO
 from app.adapters.dto.product_variant.product_variant_dto import ProductVariantWithRelationsRDTO
 from app.adapters.dto.modification_value.modification_value_dto import ModificationValueWithRelationsRDTO
+from app.adapters.dto.modification_type.modification_type_dto import ModificationTypeRDTO
+from app.adapters.dto.product_variant_modification.product_variant_modification_dto import ProductVariantModificationWithRelationsRDTO
 from app.adapters.repository.product.product_repository import ProductRepository
 from app.adapters.repository.product_gallery.product_gallery_repository import ProductGalleryRepository
 from app.adapters.repository.product_variant.product_variant_repository import ProductVariantRepository
 from app.adapters.repository.modification_value.modification_value_repository import ModificationValueRepository
+from app.adapters.repository.modification_type.modification_type_repository import ModificationTypeRepository
+from app.adapters.repository.product_variant_modification.product_variant_modification_repository import \
+    ProductVariantModificationRepository
 from app.core.app_exception_response import AppExceptionResponse
-from app.entities import ProductEntity, ProductGalleryEntity, ProductVariantEntity, ModificationValueEntity
+from app.entities import ProductEntity, ProductGalleryEntity, ProductVariantEntity, ModificationValueEntity, ModificationTypeEntity, ProductVariantModificationEntity
 from app.i18n.i18n_wrapper import i18n
 from app.use_case.base_case import BaseUseCase
 
@@ -24,12 +30,14 @@ class GetFullProductByIdCase(BaseUseCase[FullProductRDTO]):
     - Галерея изображений товара
     - Варианты товара
     - Значения модификаций
+    - Типы модификаций
 
     Использует:
         - Репозиторий `ProductRepository` для работы с товарами.
         - Репозиторий `ProductGalleryRepository` для работы с галереей.
         - Репозиторий `ProductVariantRepository` для работы с вариантами.
         - Репозиторий `ModificationValueRepository` для работы с модификациями.
+        - Репозиторий `ModificationTypeRepository` для работы с типами модификаций.
         - DTO `FullProductRDTO` для возврата полных данных.
 
     Атрибуты:
@@ -37,6 +45,7 @@ class GetFullProductByIdCase(BaseUseCase[FullProductRDTO]):
         gallery_repository (ProductGalleryRepository): Репозиторий для работы с галереей.
         variant_repository (ProductVariantRepository): Репозиторий для работы с вариантами.
         modification_repository (ModificationValueRepository): Репозиторий для работы с модификациями.
+        modification_type_repository (ModificationTypeRepository): Репозиторий для работы с типами модификаций.
         product_model (ProductEntity | None): Найденная модель товара.
 
     Методы:
@@ -59,6 +68,8 @@ class GetFullProductByIdCase(BaseUseCase[FullProductRDTO]):
         self.gallery_repository = ProductGalleryRepository(db)
         self.variant_repository = ProductVariantRepository(db)
         self.modification_repository = ModificationValueRepository(db)
+        self.modification_type_repository = ModificationTypeRepository(db)
+        self.product_variant_modification_repository = ProductVariantModificationRepository(db)
         self.product_model: ProductEntity | None = None
 
     async def execute(self, id: int) -> FullProductRDTO:
@@ -129,9 +140,42 @@ class GetFullProductByIdCase(BaseUseCase[FullProductRDTO]):
         )
         modification_values_dto = [ModificationValueWithRelationsRDTO.model_validate(modification) for modification in modification_entities]
 
+        # Получаем уникальные типы модификаций для данного товара
+        modification_type_ids = list(set([mod.modification_type_id for mod in modification_entities]))
+        
+        if modification_type_ids:
+            modification_type_entities = await self.modification_type_repository.get_with_filters(
+                filters=[ModificationTypeEntity.id.in_(modification_type_ids)],
+                options=self.modification_type_repository.default_relationships(),
+            )
+        else:
+            modification_type_entities = []
+            
+        modification_types_dto = [ModificationTypeRDTO.model_validate(mod_type) for mod_type in modification_type_entities]
+
+        # Получаем связи вариантов товара с модификациями
+        
+        # Получаем все variant_id для данного товара
+        variant_ids = [variant.id for variant in variant_entities]
+        
+        if variant_ids:
+            product_variant_modification_entities = await self.product_variant_modification_repository.get_with_filters(
+                filters=[ProductVariantModificationEntity.variant_id.in_(variant_ids)],
+                options=self.product_variant_modification_repository.default_relationships(),
+            )
+        else:
+            product_variant_modification_entities = []
+            
+        product_variant_modifications_dto = [
+            ProductVariantModificationWithRelationsRDTO.model_validate(pvm) 
+            for pvm in product_variant_modification_entities
+        ]
+
         return FullProductRDTO(
             product=product_dto,
             galleries=galleries_dto,
             variants=variants_dto,
-            modification_values=modification_values_dto
+            modification_values=modification_values_dto,
+            modification_types=modification_types_dto,
+            product_variant_modifications=product_variant_modifications_dto,
         )

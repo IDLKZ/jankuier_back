@@ -45,6 +45,7 @@ class ProductEntity(Base):
 
     base_price: Mapped[DbColumnConstants.StandardPrice]
     old_price: Mapped[DbColumnConstants.StandardNullablePrice]
+    stock: Mapped[DbColumnConstants.StandardIntegerDefaultZero]
 
     gender: Mapped[
         DbColumnConstants.StandardTinyInteger

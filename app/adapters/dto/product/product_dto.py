@@ -43,6 +43,7 @@ class ProductCDTO(BaseModel):
     sku: DTOConstant.StandardUniqueValueField(description="SKU товара")
     base_price: DTOConstant.StandardPriceField(description="Базовая цена товара")
     old_price: DTOConstant.StandardNullablePriceField(description="Старая цена товара")
+    stock: DTOConstant.StandardIntegerDefaultZeroField(description="Количество на складе")
     gender: DTOConstant.StandardIntegerField(
         description="Пол: 0-унисекс, 1-мужской, 2-женский"
     )
@@ -90,6 +91,7 @@ class ProductRDTO(ProductDTO):
     sku: DTOConstant.StandardUniqueValueField(description="SKU товара")
     base_price: DTOConstant.StandardPriceField(description="Базовая цена товара")
     old_price: DTOConstant.StandardNullablePriceField(description="Старая цена товара")
+    stock: DTOConstant.StandardIntegerDefaultZeroField(description="Количество на складе")
     gender: DTOConstant.StandardIntegerField(
         description="Пол: 0-унисекс, 1-мужской, 2-женский"
     )
@@ -175,6 +177,9 @@ class ProductUpdateDTO(BaseModel):
     ) = None
     old_price: (
         DTOConstant.StandardNullablePriceField(description="Старая цена товара") | None
+    ) = None
+    stock: (
+        DTOConstant.StandardIntegerDefaultZeroField(description="Количество на складе") | None
     ) = None
     gender: (
         DTOConstant.StandardIntegerField(

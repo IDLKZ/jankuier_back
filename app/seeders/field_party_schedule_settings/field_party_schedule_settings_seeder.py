@@ -20,7 +20,7 @@ class FieldPartyScheduleSettingsSeeder(BaseSeeder):
             FieldPartyScheduleSettingsEntity(
                 id=1,
                 party_id=1,
-                active_start_at=date(2025, 1, 1),
+                active_start_at=date(2025, 12, 8),
                 active_end_at=date(2025, 12, 31),
                 working_days=[1, 2, 3, 4, 5, 6, 7],  # каждый день
                 excluded_dates=[date(2025, 5, 1), date(2025, 5, 9), date(2025, 12, 31)],  # праздничные дни
