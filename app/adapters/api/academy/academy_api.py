@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.adapters.dto.academy.academy_dto import AcademyWithRelationsRDTO, AcademyCDTO
+from app.adapters.dto.academy.academy_dto import AcademyWithRelationsRDTO, AcademyCDTO, GetFullAcademyDTO
 from app.helpers.form_helper import FormParserHelper
 from app.adapters.dto.pagination_dto import PaginationAcademyWithRelationsRDTO
 from app.adapters.filters.academy.academy_filter import AcademyFilter
@@ -20,6 +20,7 @@ from app.use_case.academy.get_academy_by_id_case import GetAcademyByIdCase
 from app.use_case.academy.get_academy_by_value_case import GetAcademyByValueCase
 from app.use_case.academy.paginate_academies_case import PaginateAcademiesCase
 from app.use_case.academy.update_academy_case import UpdateAcademyCase
+from app.use_case.academy.get_full_academy_by_id_case import GetFullAcademyByIdCase
 
 
 class AcademyApi:
@@ -73,6 +74,13 @@ class AcademyApi:
             summary="Получить академию по значению",
             description="Получение информации об академии по уникальному значению (value)",
         )(self.get_by_value)
+
+        self.router.get(
+            "/get-full/{id}",
+            response_model=GetFullAcademyDTO,
+            summary="Получить полную информацию об академии",
+            description="Получение полной информации об академии с галереями и группами",
+        )(self.get_full_by_id)
 
         self.router.delete(
             RoutePathConstants.DeleteByIdPathName,
@@ -188,6 +196,23 @@ class AcademyApi:
     ) -> bool:
         try:
             return await DeleteAcademyCase(db).execute(id=id, force_delete=force_delete)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def get_full_by_id(
+        self,
+        id: RoutePathConstants.IDPath,
+        force_delete: bool | None = AppQueryConstants.StandardForceDeleteQuery(),
+        db: AsyncSession = Depends(get_db),
+    ) -> GetFullAcademyDTO:
+        try:
+            return await GetFullAcademyByIdCase(db).execute(id=id)
         except HTTPException:
             raise
         except Exception as exc:

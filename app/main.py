@@ -14,6 +14,7 @@ from app.middleware.auth_wrapper_core import AuthWrapper
 from app.middleware.registry_middleware import registry_middleware
 from app.routes.registry_route import enable_routes
 from app.seeders.runner import run_seeders
+import app.adapters.dto  # Инициализация DTO моделей
 
 
 @asynccontextmanager

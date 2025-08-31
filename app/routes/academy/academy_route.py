@@ -52,3 +52,11 @@ def assign_academy_roles(app) -> None:
         path=f"{base_url}{RoutePathConstants.DeleteByIdPathName}",
         roles=[RoleRouteConstant.AdministratorTagName],
     )
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/get-full/{{id}}",
+        roles=[
+            RoleRouteConstant.AdministratorTagName,
+            RoleRouteConstant.ClientTagName,
+        ],
+    )

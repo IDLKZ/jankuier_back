@@ -20,7 +20,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=1,
                 group_id=1,
-                training_date=date(2025, 1, 6),  # понедельник
+                training_date=date(2025, 9, 1),  # понедельник
                 start_at=time(16, 0),  # 16:00
                 end_at=time(17, 0),   # 17:00
                 reschedule_start_at=None,
@@ -32,7 +32,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=2,
                 group_id=1,
-                training_date=date(2025, 1, 8),  # среда
+                training_date=date(2025, 9, 3),  # среда
                 start_at=time(16, 0),
                 end_at=time(17, 0),
                 reschedule_start_at=None,
@@ -44,7 +44,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=3,
                 group_id=1,
-                training_date=date(2025, 1, 10),  # пятница
+                training_date=date(2025, 9, 5),  # пятница
                 start_at=time(16, 0),
                 end_at=time(17, 0),
                 reschedule_start_at=None,
@@ -58,7 +58,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=4,
                 group_id=2,
-                training_date=date(2025, 1, 7),  # вторник
+                training_date=date(2025, 9, 2),  # вторник
                 start_at=time(17, 30),
                 end_at=time(19, 0),
                 reschedule_start_at=None,
@@ -70,7 +70,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=5,
                 group_id=2,
-                training_date=date(2025, 1, 9),  # четверг
+                training_date=date(2025, 9, 4),  # четверг
                 start_at=time(17, 30),
                 end_at=time(19, 0),
                 reschedule_start_at=None,
@@ -82,7 +82,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=6,
                 group_id=2,
-                training_date=date(2025, 1, 11),  # суббота
+                training_date=date(2025, 9, 6),  # суббота
                 start_at=time(10, 0),
                 end_at=time(11, 30),
                 reschedule_start_at=None,
@@ -96,7 +96,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=7,
                 group_id=3,
-                training_date=date(2025, 1, 6),  # понедельник
+                training_date=date(2025, 9, 1),  # понедельник
                 start_at=time(19, 0),
                 end_at=time(21, 0),
                 reschedule_start_at=None,
@@ -108,7 +108,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=8,
                 group_id=3,
-                training_date=date(2025, 1, 8),  # среда
+                training_date=date(2025, 9, 3),  # среда
                 start_at=time(19, 0),
                 end_at=time(21, 0),
                 reschedule_start_at=None,
@@ -122,7 +122,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=9,
                 group_id=4,
-                training_date=date(2025, 1, 6),  # понедельник
+                training_date=date(2025, 9, 1),  # понедельник
                 start_at=time(15, 30),
                 end_at=time(17, 0),
                 reschedule_start_at=None,
@@ -134,7 +134,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=10,
                 group_id=4,
-                training_date=date(2025, 1, 8),  # среда
+                training_date=date(2025, 9, 3),  # среда
                 start_at=time(15, 30),
                 end_at=time(17, 0),
                 reschedule_start_at=None,
@@ -148,7 +148,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=11,
                 group_id=5,
-                training_date=date(2025, 1, 7),  # вторник
+                training_date=date(2025, 9, 2),  # вторник
                 start_at=time(17, 0),
                 end_at=time(19, 0),
                 reschedule_start_at=None,
@@ -160,7 +160,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=12,
                 group_id=5,
-                training_date=date(2025, 1, 9),  # четверг
+                training_date=date(2025, 9, 4),  # четверг
                 start_at=time(17, 0),
                 end_at=time(19, 0),
                 reschedule_start_at=None,
@@ -174,7 +174,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=13,
                 group_id=6,
-                training_date=date(2025, 1, 6),  # понедельник
+                training_date=date(2025, 9, 1),  # понедельник
                 start_at=time(19, 30),
                 end_at=time(22, 0),
                 reschedule_start_at=None,
@@ -186,7 +186,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=14,
                 group_id=6,
-                training_date=date(2025, 1, 8),  # среда
+                training_date=date(2025, 9, 3),  # среда
                 start_at=time(19, 30),
                 end_at=time(22, 0),
                 reschedule_start_at=None,
@@ -200,7 +200,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=15,
                 group_id=7,
-                training_date=date(2025, 1, 7),  # вторник
+                training_date=date(2025, 9, 2),  # вторник
                 start_at=time(16, 0),
                 end_at=time(16, 45),
                 reschedule_start_at=None,
@@ -212,7 +212,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=16,
                 group_id=7,
-                training_date=date(2025, 1, 9),  # четверг
+                training_date=date(2025, 9, 4),  # четверг
                 start_at=time(16, 0),
                 end_at=time(16, 45),
                 reschedule_start_at=None,
@@ -226,7 +226,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=17,
                 group_id=8,
-                training_date=date(2025, 1, 6),  # понедельник
+                training_date=date(2025, 9, 1),  # понедельник
                 start_at=time(17, 0),
                 end_at=time(18, 0),
                 reschedule_start_at=None,
@@ -238,7 +238,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=18,
                 group_id=8,
-                training_date=date(2025, 1, 8),  # среда
+                training_date=date(2025, 9, 3),  # среда
                 start_at=time(17, 0),
                 end_at=time(18, 0),
                 reschedule_start_at=None,
@@ -250,7 +250,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=19,
                 group_id=8,
-                training_date=date(2025, 1, 10),  # пятница
+                training_date=date(2025, 9, 5),  # пятница
                 start_at=time(17, 0),
                 end_at=time(18, 0),
                 reschedule_start_at=None,
@@ -264,7 +264,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=20,
                 group_id=9,
-                training_date=date(2025, 1, 8),  # среда
+                training_date=date(2025, 9, 3),  # среда
                 start_at=time(10, 0),
                 end_at=time(10, 30),
                 reschedule_start_at=None,
@@ -276,7 +276,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=21,
                 group_id=9,
-                training_date=date(2025, 1, 11),  # суббота
+                training_date=date(2025, 9, 7),  # суббота
                 start_at=time(10, 0),
                 end_at=time(10, 30),
                 reschedule_start_at=None,
@@ -290,7 +290,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=22,
                 group_id=10,
-                training_date=date(2025, 1, 7),  # вторник
+                training_date=date(2025, 9, 2),  # вторник
                 start_at=time(17, 0),
                 end_at=time(17, 45),
                 reschedule_start_at=None,
@@ -302,7 +302,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=23,
                 group_id=10,
-                training_date=date(2025, 1, 9),  # четверг
+                training_date=date(2025, 9, 4),  # четверг
                 start_at=time(17, 0),
                 end_at=time(17, 45),
                 reschedule_start_at=None,
@@ -316,7 +316,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=24,
                 group_id=11,
-                training_date=date(2025, 1, 6),  # понедельник
+                training_date=date(2025, 9, 1),  # понедельник
                 start_at=time(20, 0),
                 end_at=time(21, 0),
                 reschedule_start_at=None,
@@ -328,7 +328,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=25,
                 group_id=11,
-                training_date=date(2025, 1, 8),  # среда
+                training_date=date(2025, 9, 3),  # среда
                 start_at=time(20, 0),
                 end_at=time(21, 0),
                 reschedule_start_at=None,
@@ -340,7 +340,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=26,
                 group_id=11,
-                training_date=date(2025, 1, 10),  # пятница
+                training_date=date(2025, 9, 5),  # пятница
                 start_at=time(20, 0),
                 end_at=time(21, 0),
                 reschedule_start_at=None,
@@ -354,7 +354,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=27,
                 group_id=12,
-                training_date=date(2025, 1, 6),  # понедельник
+                training_date=date(2025, 9, 1),  # понедельник
                 start_at=time(16, 30),
                 end_at=time(18, 0),
                 reschedule_start_at=None,
@@ -366,7 +366,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=28,
                 group_id=12,
-                training_date=date(2025, 1, 8),  # среда
+                training_date=date(2025, 9, 3),  # среда
                 start_at=time(16, 30),
                 end_at=time(18, 0),
                 reschedule_start_at=None,
@@ -380,11 +380,11 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=29,
                 group_id=13,
-                training_date=date(2025, 1, 7),  # вторник
+                training_date=date(2025, 9, 2),  # вторник
                 start_at=time(18, 30),
                 end_at=time(20, 30),
-                reschedule_start_at=datetime(2025, 1, 8, 19, 0),  # перенесено на среду 19:00
-                reschedule_end_at=datetime(2025, 1, 8, 21, 0),   # до 21:00
+                reschedule_start_at=datetime(2025, 9, 3, 19, 0),  # перенесено на среду 19:00
+                reschedule_end_at=datetime(2025, 9, 3, 21, 0),   # до 21:00
                 is_active=True,
                 is_canceled=False,
                 is_finished=False,
@@ -392,7 +392,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=30,
                 group_id=13,
-                training_date=date(2025, 1, 9),  # четверг
+                training_date=date(2025, 9, 4),  # четверг
                 start_at=time(18, 30),
                 end_at=time(20, 30),
                 reschedule_start_at=None,
@@ -406,7 +406,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=31,
                 group_id=14,
-                training_date=date(2025, 1, 6),  # понедельник
+                training_date=date(2025, 9, 1),  # понедельник
                 start_at=time(15, 30),
                 end_at=time(16, 30),
                 reschedule_start_at=None,
@@ -418,7 +418,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=32,
                 group_id=14,
-                training_date=date(2025, 1, 8),  # среда
+                training_date=date(2025, 9, 3),  # среда
                 start_at=time(15, 30),
                 end_at=time(16, 30),
                 reschedule_start_at=None,
@@ -430,7 +430,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=33,
                 group_id=14,
-                training_date=date(2025, 1, 10),  # пятница
+                training_date=date(2025, 9, 5),  # пятница
                 start_at=time(15, 30),
                 end_at=time(16, 30),
                 reschedule_start_at=None,
@@ -444,7 +444,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=34,
                 group_id=15,
-                training_date=date(2025, 1, 7),  # вторник
+                training_date=date(2025, 9, 2),  # вторник
                 start_at=time(17, 0),
                 end_at=time(18, 30),
                 reschedule_start_at=None,
@@ -456,7 +456,7 @@ class AcademyGroupScheduleSeeder(BaseSeeder):
             AcademyGroupScheduleEntity(
                 id=35,
                 group_id=15,
-                training_date=date(2025, 1, 9),  # четверг
+                training_date=date(2025, 9, 4),  # четверг
                 start_at=time(17, 0),
                 end_at=time(18, 30),
                 reschedule_start_at=None,

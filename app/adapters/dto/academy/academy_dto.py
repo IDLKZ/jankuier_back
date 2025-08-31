@@ -1,7 +1,12 @@
+from typing import TYPE_CHECKING
 from pydantic import BaseModel
 from app.adapters.dto.file.file_dto import FileRDTO
 from app.adapters.dto.city.city_dto import CityRDTO
 from app.shared.dto_constants import DTOConstant
+
+if TYPE_CHECKING:
+    from app.adapters.dto.academy_gallery.academy_gallery_dto import AcademyGalleryWithRelationsRDTO
+    from app.adapters.dto.academy_group.academy_group_dto import AcademyGroupWithRelationsRDTO
 
 
 class AcademyDTO(BaseModel):
@@ -144,6 +149,16 @@ class AcademyRDTO(AcademyDTO):
 class AcademyWithRelationsRDTO(AcademyRDTO):
     image: FileRDTO | None = None
     city: CityRDTO | None = None
+
+    class Config:
+        from_attributes = True
+
+
+class GetFullAcademyDTO(BaseModel):
+    """DTO для получения полной информации об академии с галереями и группами"""
+    academy: AcademyWithRelationsRDTO
+    galleries: list["AcademyGalleryWithRelationsRDTO"] = []
+    groups: list["AcademyGroupWithRelationsRDTO"] = []
 
     class Config:
         from_attributes = True

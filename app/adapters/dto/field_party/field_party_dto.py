@@ -1,7 +1,13 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
 from pydantic import BaseModel
 from app.adapters.dto.file.file_dto import FileRDTO
 from app.adapters.dto.field.field_dto import FieldRDTO
 from app.shared.dto_constants import DTOConstant
+
+if TYPE_CHECKING:
+    from app.adapters.dto.field.field_dto import FieldWithBasicRelationsRDTO
+    from app.adapters.dto.field_party_schedule_settings.field_party_schedule_settings_dto import FieldPartyScheduleSettingsRDTO
 
 
 class FieldPartyDTO(BaseModel):
@@ -89,7 +95,8 @@ class FieldPartyRDTO(FieldPartyDTO):
 
 class FieldPartyWithRelationsRDTO(FieldPartyRDTO):
     image: FileRDTO | None = None
-    field: FieldRDTO | None = None
+    field: FieldWithBasicRelationsRDTO | None = None
+    active_schedule_setting: FieldPartyScheduleSettingsRDTO | None = None
 
     class Config:
         from_attributes = True

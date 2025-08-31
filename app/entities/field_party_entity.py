@@ -1,4 +1,6 @@
+from datetime import date
 from sqlalchemy.orm import Mapped
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from app.infrastructure.db import Base
 from app.shared.db_constants import DbColumnConstants, DbRelationshipConstants
@@ -87,3 +89,28 @@ class FieldPartyEntity(Base):
         back_populates="party",
         foreign_keys=f"{AppEntityNames.FieldPartyScheduleSettingsEntityName}.party_id",
     )
+
+    @property
+    def active_schedule_setting(self):
+        """Возвращает активную настройку расписания или последнюю по дате"""
+        if not self.field_party_schedule_settings:
+            return None
+        
+        today = date.today()
+        
+        # Получаем только неудаленные настройки
+        active_settings = [
+            setting for setting in self.field_party_schedule_settings 
+            if setting.deleted_at is None
+        ]
+        
+        if not active_settings:
+            return None
+        
+        # Сначала ищем активную настройку (текущая дата в диапазоне active_start_at - active_end_at)
+        for setting in active_settings:
+            if setting.active_start_at <= today <= setting.active_end_at:
+                return setting
+        
+        # Если активной нет, возвращаем последнюю по created_at
+        return max(active_settings, key=lambda x: x.created_at)

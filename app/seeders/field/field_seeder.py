@@ -20,7 +20,7 @@ class FieldSeeder(BaseSeeder):
             FieldEntity(
                 id=1,
                 image_id=None,
-                city_id=None,  # Можно потом привязать к конкретному городу
+                city_id=1,  # Можно потом привязать к конкретному городу
                 title_ru="Стадион Централь",
                 title_kk="Централь стадионы",
                 title_en="Central Stadium",
@@ -46,7 +46,7 @@ class FieldSeeder(BaseSeeder):
             FieldEntity(
                 id=2,
                 image_id=None,
-                city_id=None,
+                city_id=2,
                 title_ru="Спорткомплекс Жастар",
                 title_kk="Жастар спорт кешені",
                 title_en="Youth Sports Complex",
@@ -72,7 +72,7 @@ class FieldSeeder(BaseSeeder):
             FieldEntity(
                 id=3,
                 image_id=None,
-                city_id=None,
+                city_id=3,
                 title_ru="Арена Спорт",
                 title_kk="Спорт Аренасы",
                 title_en="Sports Arena",
@@ -98,7 +98,7 @@ class FieldSeeder(BaseSeeder):
             FieldEntity(
                 id=4,
                 image_id=None,
-                city_id=None,
+                city_id=1,
                 title_ru="Футбольная академия Кайрат",
                 title_kk="Қайрат футбол академиясы",
                 title_en="Kairat Football Academy",
@@ -124,7 +124,7 @@ class FieldSeeder(BaseSeeder):
             FieldEntity(
                 id=5,
                 image_id=None,
-                city_id=None,
+                city_id=4,
                 title_ru="Многофункциональный центр Алатау",
                 title_kk="Алатау көпфункционалды орталығы",
                 title_en="Alatau Multifunctional Center",

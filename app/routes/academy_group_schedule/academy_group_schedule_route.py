@@ -40,3 +40,11 @@ def assign_academy_group_schedule_roles(app) -> None:
         path=f"{base_url}{RoutePathConstants.DeleteByIdPathName}",
         roles=[RoleRouteConstant.AdministratorTagName],
     )
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/get-by-day-and-groups",
+        roles=[
+            RoleRouteConstant.AdministratorTagName,
+            RoleRouteConstant.ClientTagName,
+        ],
+    )

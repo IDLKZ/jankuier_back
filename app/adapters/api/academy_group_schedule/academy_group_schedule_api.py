@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException
+from datetime import date
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.academy_group_schedule.academy_group_schedule_dto import (
@@ -35,6 +36,9 @@ from app.use_case.academy_group_schedule.paginate_academy_group_schedules_case i
 )
 from app.use_case.academy_group_schedule.update_academy_group_schedule_case import (
     UpdateAcademyGroupScheduleCase,
+)
+from app.use_case.academy_group_schedule.get_academy_group_schedule_by_day_and_group_case import (
+    GetAcademyGroupScheduleByDayAndGroupUseCase,
 )
 
 
@@ -82,6 +86,13 @@ class AcademyGroupScheduleApi:
             summary="Получить расписание группы академии по ID",
             description="Получение расписания группы академии по ID",
         )(self.get_by_id)
+
+        self.router.get(
+            "/get-by-day-and-groups",
+            response_model=list[AcademyGroupScheduleWithRelationsRDTO],
+            summary="Получить расписание по дню и группам",
+            description="Получение расписания групп академии по конкретной дате и списку ID групп",
+        )(self.get_by_day_and_groups)
 
         self.router.delete(
             RoutePathConstants.DeleteByIdPathName,
@@ -184,6 +195,25 @@ class AcademyGroupScheduleApi:
         try:
             return await DeleteAcademyGroupScheduleCase(db).execute(
                 id=id, force_delete=force_delete
+            )
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def get_by_day_and_groups(
+        self,
+        day: date = Query(..., description="Дата тренировки в формате YYYY-MM-DD"),
+        group_ids: list[int] = Query(..., description="Список ID групп академии"),
+        db: AsyncSession = Depends(get_db),
+    ) -> list[AcademyGroupScheduleWithRelationsRDTO]:
+        try:
+            return await GetAcademyGroupScheduleByDayAndGroupUseCase(db).execute(
+                day=day, group_ids=group_ids
             )
         except HTTPException:
             raise

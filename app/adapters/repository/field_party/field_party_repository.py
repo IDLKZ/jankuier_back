@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.adapters.repository.base_repository import BaseRepository
-from app.entities import FieldPartyEntity
+from app.entities import FieldPartyEntity, FieldEntity, FieldPartyScheduleSettingsEntity
 
 
 class FieldPartyRepository(BaseRepository[FieldPartyEntity]):
@@ -14,5 +14,7 @@ class FieldPartyRepository(BaseRepository[FieldPartyEntity]):
     def default_relationships(self) -> list[Any]:
         return [
             selectinload(self.model.image),
-            selectinload(self.model.field),
+            selectinload(self.model.field).selectinload(FieldEntity.image),
+            selectinload(self.model.field).selectinload(FieldEntity.city),
+            selectinload(self.model.field_party_schedule_settings),
         ]

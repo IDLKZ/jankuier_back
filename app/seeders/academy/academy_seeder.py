@@ -21,7 +21,7 @@ class AcademySeeder(BaseSeeder):
             AcademyEntity(
                 id=1,
                 image_id=None,
-                city_id=None,  # Можно потом привязать к конкретному городу
+                city_id=2,  # Можно потом привязать к конкретному городу
                 title_ru="Футбольная академия Кайрат",
                 title_kk="Қайрат футбол академиясы",
                 title_en="Kairat Football Academy",
@@ -59,7 +59,7 @@ class AcademySeeder(BaseSeeder):
             AcademyEntity(
                 id=2,
                 image_id=None,
-                city_id=None,
+                city_id=1,
                 title_ru="Баскетбольная академия Астана Тайгерс",
                 title_kk="Астана Тайгерс баскетбол академиясы",
                 title_en="Astana Tigers Basketball Academy",
@@ -97,7 +97,7 @@ class AcademySeeder(BaseSeeder):
             AcademyEntity(
                 id=3,
                 image_id=None,
-                city_id=None,
+                city_id=1,
                 title_ru="Теннисная академия Тенис Клуб",
                 title_kk="Теннис Клуб теннис академиясы",
                 title_en="Tennis Club Academy",
@@ -135,7 +135,7 @@ class AcademySeeder(BaseSeeder):
             AcademyEntity(
                 id=4,
                 image_id=None,
-                city_id=None,
+                city_id=2,
                 title_ru="Плавательная школа Дельфин",
                 title_kk="Дельфин жүзу мектебі",
                 title_en="Dolphin Swimming School",
@@ -173,7 +173,7 @@ class AcademySeeder(BaseSeeder):
             AcademyEntity(
                 id=5,
                 image_id=None,
-                city_id=None,
+                city_id=3,
                 title_ru="Академия единоборств Барыс",
                 title_kk="Барыс жекпе-жек академиясы",
                 title_en="Barys Martial Arts Academy",
@@ -211,7 +211,7 @@ class AcademySeeder(BaseSeeder):
             AcademyEntity(
                 id=6,
                 image_id=None,
-                city_id=None,
+                city_id=8,
                 title_ru="Гимнастический центр Грация",
                 title_kk="Грация гимнастика орталығы",
                 title_en="Grace Gymnastics Center",

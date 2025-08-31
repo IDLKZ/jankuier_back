@@ -1,7 +1,12 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
 from pydantic import BaseModel
 from app.adapters.dto.file.file_dto import FileRDTO
 from app.adapters.dto.city.city_dto import CityRDTO
 from app.shared.dto_constants import DTOConstant
+
+if TYPE_CHECKING:
+    from app.adapters.dto.field_party.field_party_dto import FieldPartyWithRelationsRDTO
 
 
 class FieldDTO(BaseModel):
@@ -109,9 +114,19 @@ class FieldRDTO(FieldDTO):
         from_attributes = True
 
 
+class FieldWithBasicRelationsRDTO(FieldRDTO):
+    """DTO для поля с базовыми связями (без field_parties для избежания циклических ссылок)"""
+    image: FileRDTO | None = None
+    city: CityRDTO | None = None
+
+    class Config:
+        from_attributes = True
+
+
 class FieldWithRelationsRDTO(FieldRDTO):
     image: FileRDTO | None = None
     city: CityRDTO | None = None
+    field_parties: list[FieldPartyWithRelationsRDTO] = []
 
     class Config:
         from_attributes = True
