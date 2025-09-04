@@ -37,5 +37,5 @@ class UpdateRoleCase(BaseUseCase[RoleRDTO]):
         )
         if existed:
             raise AppExceptionResponse.bad_request(
-                message=f"{i18n.gettext("the_next_value_already_exists")}{dto.value}"
+                message=f"{i18n.gettext('the_next_value_already_exists')}{dto.value}"
             )
