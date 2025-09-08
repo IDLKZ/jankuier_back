@@ -212,11 +212,11 @@ class UpdateAcademyCase(BaseUseCase[AcademyWithRelationsRDTO]):
             AppExceptionResponse: Если телефон невалиден.
         """
         # Простая валидация телефона (только цифры, +, -, (, ), пробелы)
-        phone_pattern = r"^[\+]?[0-9\s\-\(\)]{7,20}$"
-        if not re.match(phone_pattern, phone):
-            raise AppExceptionResponse.bad_request(
-                message=i18n.gettext("invalid_phone_format")
-            )
+        # phone_pattern = r"^[\+]?[0-9\s\-\(\)]{7,20}$"
+        # if not re.match(phone_pattern, phone):
+        #     raise AppExceptionResponse.bad_request(
+        #         message=i18n.gettext("invalid_phone_format")
+        #     )
 
     async def transform(
         self, id: int, dto: AcademyUpdateDTO, file: UploadFile | None = None

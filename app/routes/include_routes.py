@@ -45,6 +45,7 @@ from app.adapters.api.role.role_api import RoleApi
 from app.adapters.api.sport.sport_api import SportApi
 from app.adapters.api.student.student_api import StudentApi
 from app.adapters.api.test.test_api import TestApi
+from app.adapters.api.ticketon.ticketon_api import TicketonApi
 from app.adapters.api.user.user_api import UserApi
 from app.shared.route_constants import RoutePathConstants
 
@@ -246,4 +247,11 @@ def include_routers(app) -> None:
         AuthApi().router,
         prefix=f"{RoutePathConstants.BasePathName}{RoutePathConstants.AuthPathName}",
         tags=[RoutePathConstants.AuthTagName],
+    )
+    
+    # External API integrations
+    app.include_router(
+        TicketonApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}/ticketon",
+        tags=["Ticketon API"],
     )

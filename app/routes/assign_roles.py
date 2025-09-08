@@ -29,6 +29,7 @@ from app.routes.role.role_route import assign_role_roles
 from app.routes.sport.sport_route import assign_sport_roles
 from app.routes.student.student_route import assign_student_roles
 from app.routes.test.test_route import assign_test_roles
+from app.routes.ticketon.ticketon_route import assign_ticketon_roles
 from app.routes.user.user_route import assign_user_roles
 
 
@@ -88,3 +89,6 @@ def assign_roles_to_all_routes(app) -> None:
 
     # Auth
     assign_auth_roles(app)
+    
+    # External API integrations
+    assign_ticketon_roles(app)

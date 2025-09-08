@@ -15,4 +15,5 @@ class FieldRepository(BaseRepository[FieldEntity]):
         return [
             selectinload(self.model.image),
             selectinload(self.model.city),
+            selectinload(self.model.field_parties),
         ]

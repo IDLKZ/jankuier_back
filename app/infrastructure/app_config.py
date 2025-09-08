@@ -99,6 +99,10 @@ class AppConfiguration(BaseSettings):
 
     # Ticketon
     ticketon_get_cities: str = Field(default="https://api.ticketon.kz/get_cities", env="TICKETON_GET_CITIES")
+    ticketon_get_shows: str = Field(..., env="TICKETON_GET_SHOWS")
+    ticketon_get_show: str = Field(..., env="TICKETON_GET_SHOW")
+    ticketon_update_redis_in_minutes: int = Field(60, env="TICKETON_UPDATE_REDIS_IN_MINUTES")
+    ticketon_api_key:str = Field(...,env="TICKETON_API_KEY")
 
     @property
     def get_connection_url(self) -> str:
