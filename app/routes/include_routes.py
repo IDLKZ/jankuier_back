@@ -30,6 +30,10 @@ from app.adapters.api.modification_value.modification_value_api import (
     ModificationValueApi,
 )
 from app.adapters.api.permission.permission_api import PermissionApi
+from app.adapters.api.payment_transaction_status.payment_transaction_status_api import PaymentTransactionStatusApi
+from app.adapters.api.payment_transaction.payment_transaction_api import PaymentTransactionApi
+from app.adapters.api.ticketon_order_status.ticketon_order_status_api import TicketonOrderStatusApi
+from app.adapters.api.ticketon_order.ticketon_order_api import TicketonOrderApi
 from app.adapters.api.product.product_api import ProductApi
 from app.adapters.api.product_category.product_category_api import ProductCategoryApi
 from app.adapters.api.product_gallery.product_gallery_api import ProductGalleryApi
@@ -237,6 +241,26 @@ def include_routers(app) -> None:
         UserApi().router,
         prefix=f"{RoutePathConstants.BasePathName}{RoutePathConstants.UserPathName}",
         tags=[RoutePathConstants.UserTagName],
+    )
+    app.include_router(
+        PaymentTransactionStatusApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}{RoutePathConstants.PaymentTransactionStatusPathName}",
+        tags=[RoutePathConstants.PaymentTransactionStatusTagName],
+    )
+    app.include_router(
+        PaymentTransactionApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}{RoutePathConstants.PaymentTransactionPathName}",
+        tags=[RoutePathConstants.PaymentTransactionTagName],
+    )
+    app.include_router(
+        TicketonOrderStatusApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}{RoutePathConstants.TicketonOrderStatusPathName}",
+        tags=[RoutePathConstants.TicketonOrderStatusTagName],
+    )
+    app.include_router(
+        TicketonOrderApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}{RoutePathConstants.TicketonOrderPathName}",
+        tags=[RoutePathConstants.TicketonOrderTagName],
     )
     app.include_router(
         TestApi().router,

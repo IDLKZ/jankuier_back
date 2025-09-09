@@ -37,3 +37,7 @@ class AppTableNames:
     AcademyMaterialTableName = "academy_materials"
     CartTableName = "carts"
     CartItemTableName = "cart_items"
+    PaymentTransactionStatusTableName = "payment_transaction_statuses"
+    PaymentTransactionsTableName = "payment_transactions"
+    TicketonOrderStatusTableName = "ticketon_order_statuses"
+    TicketonOrderTableName = "ticketon_orders"

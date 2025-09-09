@@ -17,6 +17,8 @@ from app.routes.field_party_schedule.field_party_schedule_route import assign_fi
 from app.routes.field_party_schedule_settings.field_party_schedule_settings_route import assign_field_party_schedule_settings_roles
 from app.routes.modification_type.modification_type_route import assign_modification_type_roles
 from app.routes.modification_value.modification_value_route import assign_modification_value_roles
+from app.routes.payment_transaction_status.payment_transaction_status_route import assign_payment_transaction_status_roles
+from app.routes.payment_transaction.payment_transaction_route import assign_payment_transaction_roles
 from app.routes.permission.permission_route import assign_permission_roles
 from app.routes.product.product_route import assign_product_roles
 from app.routes.product_category.product_category_route import assign_product_category_roles
@@ -30,6 +32,8 @@ from app.routes.sport.sport_route import assign_sport_roles
 from app.routes.student.student_route import assign_student_roles
 from app.routes.test.test_route import assign_test_roles
 from app.routes.ticketon.ticketon_route import assign_ticketon_roles
+from app.routes.ticketon_order_status.ticketon_order_status_route import assign_ticketon_order_status_roles
+from app.routes.ticketon_order.ticketon_order_route import assign_ticketon_order_roles
 from app.routes.user.user_route import assign_user_roles
 
 
@@ -64,6 +68,10 @@ def assign_roles_to_all_routes(app) -> None:
     assign_modification_type_roles(app)
     assign_modification_value_roles(app)
     
+    # Payment related routes
+    assign_payment_transaction_status_roles(app)
+    assign_payment_transaction_roles(app)
+    
     # Product related routes
     assign_product_roles(app)
     assign_product_category_roles(app)
@@ -92,3 +100,5 @@ def assign_roles_to_all_routes(app) -> None:
     
     # External API integrations
     assign_ticketon_roles(app)
+    assign_ticketon_order_status_roles(app)
+    assign_ticketon_order_roles(app)

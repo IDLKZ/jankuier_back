@@ -53,3 +53,11 @@ class AppEntityNames:
     # Cart entities
     CartEntityName = "CartEntity"
     CartItemEntityName = "CartItemEntity"
+
+    # Payment entities
+    PaymentTransactionStatusEntityName = "PaymentTransactionStatusEntity"
+    PaymentTransactionEntityName = "PaymentTransactionEntity"
+
+    # Ticketon entities
+    TicketonOrderStatusEntityName = "TicketonOrderStatusEntity"
+    TicketonOrderEntityName = "TicketonOrderEntity"

@@ -3,6 +3,8 @@ from datetime import timedelta, datetime
 import httpx
 
 from app.adapters.dto.ticketon.ticketon_city_dto import TicketonCityDTO
+from app.adapters.dto.ticketon.ticketon_get_level_dto import TicketonGetLevelDTO
+from app.adapters.dto.ticketon.ticketon_show_level_dto import TicketonShowLevelDTO
 from app.adapters.dto.ticketon.ticketon_shows_dto import TicketonShowsDataDTO, TicketonGetShowsParameterDTO, \
     TicketonShowsRedisStore
 from app.adapters.dto.ticketon.ticketon_single_show_dto import TicketonSingleShowResponseDTO
@@ -79,6 +81,49 @@ class TicketonServiceAPI:
                 response.raise_for_status()
                 json_data = response.json()
                 data = TicketonSingleShowResponseDTO.from_json(json_data)
+                return data
+        except Exception as e:
+            raise AppExceptionResponse.internal_error(
+                message=f"Ticketon GET Shows ERROR: {str(e)}"
+            ) from e
+
+
+    async def get_ticketon_show_level(self,show_id:int,level_id:int)->TicketonShowLevelDTO:
+        try:
+            url = app_config.ticketon_show_level
+            async with httpx.AsyncClient() as client:
+                # Строим параметры как список строк
+                params = []
+                params.append(f"token={app_config.ticketon_api_key}")
+                params.append(f"id={show_id}")
+                params.append(f"level={level_id}")
+                # Собираем финальный URL
+                url = f"{url}?{'&'.join(params)}"
+                response = await client.get(url)
+                response.raise_for_status()
+                json_data = response.json()
+                data = TicketonShowLevelDTO.from_json(json_data)
+                return data
+        except Exception as e:
+            raise AppExceptionResponse.internal_error(
+                message=f"Ticketon GET Shows ERROR: {str(e)}"
+            ) from e
+
+
+    async def get_ticketon_get_level(self,level_id:int)->TicketonGetLevelDTO:
+        try:
+            url = app_config.ticketon_get_level
+            async with httpx.AsyncClient() as client:
+                # Строим параметры как список строк
+                params = []
+                params.append(f"token={app_config.ticketon_api_key}")
+                params.append(f"id={level_id}")
+                # Собираем финальный URL
+                url = f"{url}?{'&'.join(params)}"
+                response = await client.get(url)
+                response.raise_for_status()
+                json_data = response.json()
+                data = TicketonGetLevelDTO.from_json(json_data)
                 return data
         except Exception as e:
             raise AppExceptionResponse.internal_error(

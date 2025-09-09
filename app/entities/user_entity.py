@@ -82,3 +82,21 @@ class UserEntity(Base):
         back_populates="checked_by_user",
         foreign_keys=f"{AppEntityNames.RequestToAcademyGroupEntityName}.checked_by",
     )
+
+    payment_transactions: Mapped[list["PaymentTransactionEntity"]] = (
+        DbRelationshipConstants.one_to_many(
+            target="PaymentTransactionEntity",
+            back_populates="user",
+            foreign_keys="PaymentTransactionEntity.user_id",
+            cascade="all, delete-orphan"
+        )
+    )
+
+    ticketon_orders: Mapped[list["TicketonOrderEntity"]] = (
+        DbRelationshipConstants.one_to_many(
+            target="TicketonOrderEntity",
+            back_populates="user",
+            foreign_keys="TicketonOrderEntity.user_id",
+            cascade="all, delete-orphan"
+        )
+    )

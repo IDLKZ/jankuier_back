@@ -11,3 +11,6 @@ class FieldConstants:
     IIN_LENGTH = 12
     BIN_LENGTH = 12
     SHORT_LENGTH = 50
+    ORDER_LENGTH_MIN = 6
+    ORDER_LENGTH_MAX = 22
+

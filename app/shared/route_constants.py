@@ -27,6 +27,18 @@ class RoutePathConstants:
     UserPathName = "/user"
     UserTagName = "Пользователь"
 
+    PaymentTransactionStatusPathName = "/payment-transaction-status"
+    PaymentTransactionStatusTagName = "Статус платежной транзакции"
+
+    PaymentTransactionPathName = "/payment-transaction"
+    PaymentTransactionTagName = "Платежная транзакция"
+
+    TicketonOrderStatusPathName = "/ticketon-order-status"
+    TicketonOrderStatusTagName = "Статус заказа Ticketon"
+
+    TicketonOrderPathName = "/ticketon-order"
+    TicketonOrderTagName = "Заказ Ticketon"
+
     IDPath = Annotated[int, Path(gt=0, description="Уникальный идентификатор")]
     ValuePath = Annotated[
         str,

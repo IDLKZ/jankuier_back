@@ -15,9 +15,13 @@ from app.seeders.field_party_schedule_settings.field_party_schedule_settings_see
 from app.seeders.academy.academy_seeder import AcademySeeder
 from app.seeders.academy_group.academy_group_seeder import AcademyGroupSeeder
 from app.seeders.academy_group_schedule.academy_group_schedule_seeder import AcademyGroupScheduleSeeder
+from app.seeders.payment_transaction_status.payment_transaction_status_seeder import PaymentTransactionStatusSeeder
+from app.seeders.ticketon_order_status.ticketon_order_status_seeder import TicketonOrderStatusSeeder
 
 seeders = [
     RoleSeeder(),
+    PaymentTransactionStatusSeeder(),
+    TicketonOrderStatusSeeder(),
     UserSeeder(),
     CountrySeeder(),
     SportSeeder(),

@@ -101,8 +101,15 @@ class AppConfiguration(BaseSettings):
     ticketon_get_cities: str = Field(default="https://api.ticketon.kz/get_cities", env="TICKETON_GET_CITIES")
     ticketon_get_shows: str = Field(..., env="TICKETON_GET_SHOWS")
     ticketon_get_show: str = Field(..., env="TICKETON_GET_SHOW")
+    ticketon_show_level: str = Field(..., env="TICKETON_SHOW_LEVEL")
+    ticketon_get_level: str = Field(..., env="TICKETON_GET_LEVEL")
     ticketon_update_redis_in_minutes: int = Field(60, env="TICKETON_UPDATE_REDIS_IN_MINUTES")
     ticketon_api_key:str = Field(...,env="TICKETON_API_KEY")
+
+    # ALATAU
+    terminal_id: str = Field(..., env="TERMINAL_ID")
+    merchant_id: str = Field(..., env="MERCHANT_ID")
+    shared_secret: str = Field(..., env="SHARED_SECRET")
 
     @property
     def get_connection_url(self) -> str:

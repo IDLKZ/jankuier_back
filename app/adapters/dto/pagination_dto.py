@@ -71,6 +71,18 @@ if TYPE_CHECKING:
         AcademyGroupStudentWithRelationsRDTO,
     )
     from app.adapters.dto.user.user_dto import UserWithRelationsRDTO
+    from app.adapters.dto.payment_transaction_status.payment_transaction_status_dto import (
+        PaymentTransactionStatusWithRelationsRDTO,
+    )
+    from app.adapters.dto.payment_transaction.payment_transaction_dto import (
+        PaymentTransactionWithRelationsRDTO,
+    )
+    from app.adapters.dto.ticketon_order_status.ticketon_order_status_dto import (
+        TicketonOrderStatusWithRelationsRDTO,
+    )
+    from app.adapters.dto.ticketon_order.ticketon_order_dto import (
+        TicketonOrderWithRelationsRDTO,
+    )
 
 
 class PaginationPermissionRDTO(BasePageModel):
@@ -242,4 +254,20 @@ class PaginationAcademyGroupStudentWithRelationsRDTO(BasePageModel):
 
 
 class PaginationUserWithRelationsRDTO(BasePageModel):
+    items: list[Any]
+
+
+class PaginationPaymentTransactionStatusWithRelationsRDTO(BasePageModel):
+    items: list[Any]
+
+
+class PaginationPaymentTransactionWithRelationsRDTO(BasePageModel):
+    items: list[Any]
+
+
+class PaginationTicketonOrderStatusWithRelationsRDTO(BasePageModel):
+    items: list[Any]
+
+
+class PaginationTicketonOrderWithRelationsRDTO(BasePageModel):
     items: list[Any]

@@ -27,3 +27,19 @@ def assign_ticketon_roles(app) -> None:
         path=f"{base_url}/show/{{show_id}}",
         roles=[RoleRouteConstant.AdministratorTagName, RoleRouteConstant.ClientTagName],
     )
+    
+    # GET /api/ticketon/level/{level_id} - Получение данных уровня зала
+    # Доступно администраторам и клиентам для просмотра схемы зала
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/level/{{level_id}}",
+        roles=[RoleRouteConstant.AdministratorTagName, RoleRouteConstant.ClientTagName],
+    )
+    
+    # GET /api/ticketon/show/{show_id}/level/{level_id} - Получение данных уровня зала для сеанса
+    # Доступно администраторам и клиентам для просмотра схемы зала с актуальной информацией о местах
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/show/{{show_id}}/level/{{level_id}}",
+        roles=[RoleRouteConstant.AdministratorTagName, RoleRouteConstant.ClientTagName],
+    )

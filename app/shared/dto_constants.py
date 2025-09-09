@@ -2,8 +2,9 @@ from datetime import date, datetime, time
 from decimal import Decimal
 from typing import Annotated, List
 
-from pydantic import EmailStr, Field
+from pydantic import EmailStr, Field, constr
 
+from app.infrastructure.app_config import app_config
 from app.shared.field_constants import FieldConstants
 from app.shared.validation_constants import app_validation
 
@@ -16,6 +17,10 @@ class DTOConstant:
     @staticmethod
     def StandardID(description: str | None = "Уникальный идентификатор") -> Annotated:
         return Annotated[int, Field(description=description)]
+
+    @staticmethod
+    def StandardNullableID(description: str | None = "Опциональный уникальный идентификатор") -> Annotated:
+        return Annotated[int | None, Field(default=None, description=description)]
 
     @staticmethod
     def StandardTitleField(description: str | None = "Наименование") -> Annotated:
@@ -524,3 +529,67 @@ class DTOConstant:
         description: List[int] | None = "Опциональный числовой массив",
     ) -> Annotated:
         return Annotated[List[int] | None, Field(default=None, description=description)]
+
+    @staticmethod
+    def StandardNullableStringField(description: str | None = None) -> Annotated:
+        msg = "Опциональное строковое поле без ограничений длины"
+        return Annotated[
+            str | None,
+            Field(
+                default=None,
+                description=description or msg,
+            ),
+        ]
+
+    @staticmethod
+    def StandardOrderStringField(description: str | None = None) -> Annotated:
+        msg = description or "Числовая строка длиной от 6 до 22 символов"
+        return Annotated[
+            constr(regex=r"^\d{6,22}$"),  # только цифры, длина от 6 до 22
+            Field(description=msg),
+        ]
+
+    @staticmethod
+    def MerchantIdField(description: str | None = None) -> Annotated:
+        msg = description or "Merchant ID, задан банком"
+        return Annotated[
+            str,
+            Field(default=app_config.merchant_id, description=msg, const=True),
+        ]
+
+    @staticmethod
+    def TerminalIdField(description: str | None = None) -> Annotated:
+        msg = description or "Terminal ID, задан банком"
+        return Annotated[
+            str,
+            Field(default=app_config.terminal_id, description=msg, const=True),
+        ]
+
+    @staticmethod
+    def CurrencyField(description: str | None = None) -> Annotated:
+        msg = description or "ISO 4217 код валюты KZT"
+        return Annotated[
+            str,
+            Field(default="KZT", description=msg, const=True),
+        ]
+
+    @staticmethod
+    def WTypeField(description: str | None = None) -> Annotated:
+        msg = description or "Окно для оплаты (2)"
+        return Annotated[
+            str,
+            Field(default="2", description=msg, const=True),
+        ]
+
+    @staticmethod
+    def StandardOrderDescriptionField(description: str | None = "Текстовое описание заказа") -> Annotated:
+        return Annotated[str, Field(description=description,max_length=50)]
+
+    @staticmethod
+    def StandardNullableFullOrderDescriptionField(description: str | None = "Текстовое описание заказа") -> Annotated:
+        return Annotated[str|None, Field(default=None,description=description, max_length=4000)]
+
+    @staticmethod
+    def StandardPSignField(description: str | None = "Подпись заказа") -> Annotated:
+        return Annotated[str, Field(description=description,min_length=80, max_length=250)]
+

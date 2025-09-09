@@ -3,10 +3,14 @@ from typing import Optional
 
 from app.adapters.dto.ticketon.ticketon_shows_dto import TicketonShowsDataDTO, TicketonGetShowsParameterDTO
 from app.adapters.dto.ticketon.ticketon_single_show_dto import TicketonSingleShowResponseDTO
+from app.adapters.dto.ticketon.ticketon_get_level_dto import TicketonGetLevelDTO
+from app.adapters.dto.ticketon.ticketon_show_level_dto import TicketonShowLevelDTO
 from app.core.app_exception_response import AppExceptionResponse
 from app.i18n.i18n_wrapper import i18n
 from app.use_case.ticketon.get_ticketon_shows_case import GetTicketonShowsCase
 from app.use_case.ticketon.get_ticketon_single_show_case import GetTicketonSingleShowCase
+from app.use_case.ticketon.get_ticketon_level_case import GetTicketonLevelCase
+from app.use_case.ticketon.get_ticketon_show_level_case import GetTicketonShowLevelCase
 
 
 class TicketonApi:
@@ -39,6 +43,20 @@ class TicketonApi:
             summary="Получить подробную информацию о сеансе",
             description="Получение детальной информации о конкретном сеансе включая схему зала и цены",
         )(self.get_single_show)
+
+        self.router.get(
+            "/level/{level_id}",
+            response_model=TicketonGetLevelDTO,
+            summary="Получить данные уровня зала",
+            description="Получение подробных данных уровня зала по его идентификатору",
+        )(self.get_level)
+
+        self.router.get(
+            "/show/{show_id}/level/{level_id}",
+            response_model=TicketonShowLevelDTO,
+            summary="Получить данные уровня зала для сеанса",
+            description="Получение данных уровня зала для конкретного сеанса с информацией о местах и ценах",
+        )(self.get_show_level)
 
     async def get_shows(
         self,
@@ -143,5 +161,91 @@ class TicketonApi:
             raise AppExceptionResponse.internal_error(
                 message=i18n.gettext("internal_server_error"),
                 extra={"details": str(exc), "show_id": show_id},
+                is_custom=True,
+            ) from exc
+
+    async def get_level(
+        self,
+        level_id: int = Path(
+            ...,
+            description="ID уровня зала для получения данных",
+            example=594658,
+            gt=0
+        ),
+    ) -> TicketonGetLevelDTO:
+        """
+        Получение данных уровня зала из Ticketon API.
+        
+        Эндпоинт получает подробную информацию об уровне зала включая:
+        - Основную информацию о месте проведения
+        - Данные зала
+        - Характеристики уровня (размеры, SVG схема)
+        - Список всех мест на уровне с координатами
+        
+        Args:
+            level_id: ID уровня зала (должен быть положительным числом)
+            
+        Returns:
+            TicketonGetLevelDTO: Данные уровня зала
+            
+        Raises:
+            HTTPException: При ошибках валидации или получения данных
+        """
+        try:
+            return await GetTicketonLevelCase().execute(level_id=level_id)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc), "level_id": level_id},
+                is_custom=True,
+            ) from exc
+
+    async def get_show_level(
+        self,
+        show_id: int = Path(
+            ...,
+            description="ID сеанса",
+            example=12345,
+            gt=0
+        ),
+        level_id: int = Path(
+            ...,
+            description="ID уровня зала",
+            example=594658,
+            gt=0
+        ),
+    ) -> TicketonShowLevelDTO:
+        """
+        Получение данных уровня зала для конкретного сеанса из Ticketon API.
+        
+        Эндпоинт получает информацию об уровне зала в контексте конкретного сеанса:
+        - Схему зала с местами
+        - Статус каждого места (свободно/занято/продано)
+        - Типы билетов и цены
+        - Объекты на схеме зала (ряды, входы и т.д.)
+        - SVG данные для визуализации
+        
+        Args:
+            show_id: ID сеанса (должен быть положительным числом)
+            level_id: ID уровня зала (должен быть положительным числом)
+            
+        Returns:
+            TicketonShowLevelDTO: Данные уровня зала для сеанса
+            
+        Raises:
+            HTTPException: При ошибках валидации или получения данных
+        """
+        try:
+            return await GetTicketonShowLevelCase().execute(
+                show_id=show_id, level_id=level_id
+            )
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc), "show_id": show_id, "level_id": level_id},
                 is_custom=True,
             ) from exc
