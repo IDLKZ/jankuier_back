@@ -26,3 +26,17 @@ def assign_ticketon_order_roles(app) -> None:
         path=f"{base_url}{RoutePathConstants.GetByIdPathName}",
         roles=[RoleRouteConstant.AdministratorTagName],
     )
+    
+    # Create sale endpoint - Public access (for ticket purchasing)
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/create-sale",
+        roles=[RoleRouteConstant.ClientTagName],
+    )
+    
+    # Recreate payment endpoint - Public access (for payment recreation)
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/recreate-payment/{{ticketon_order_id}}",
+        roles=[RoleRouteConstant.ClientTagName],
+    )

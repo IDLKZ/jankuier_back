@@ -25,6 +25,7 @@ class PaymentTransactionEntity(Base):
     ]
     transaction_type:Mapped[DbColumnConstants.StandardVarcharIndex]
     order:Mapped[DbColumnConstants.StandardVarcharIndex]
+    nonce:Mapped[DbColumnConstants.StandardNullableVarcharIndex]
     mpi_order:Mapped[DbColumnConstants.StandardNullableVarcharIndex]
     amount:Mapped[DbColumnConstants.StandardPrice]
     currency:Mapped[DbColumnConstants.StandardVarchar]

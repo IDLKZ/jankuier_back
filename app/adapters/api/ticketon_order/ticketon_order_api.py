@@ -7,6 +7,8 @@ from app.adapters.dto.ticketon_order.ticketon_order_dto import (
     TicketonOrderWithRelationsRDTO,
 )
 from app.adapters.dto.pagination_dto import PaginationTicketonOrderWithRelationsRDTO
+from app.adapters.dto.ticketon.ticketon_booking_dto import TicketonBookingRequestDTO
+from app.adapters.dto.ticketon.ticketon_response_for_sale_dto import TicketonResponseForSaleDTO
 from app.adapters.filters.ticketon_order.ticketon_order_filter import TicketonOrderFilter
 from app.adapters.filters.ticketon_order.ticketon_order_pagination_filter import TicketonOrderPaginationFilter
 from app.core.app_exception_response import AppExceptionResponse
@@ -16,17 +18,19 @@ from app.shared.route_constants import RoutePathConstants
 from app.use_case.ticketon_order.all_ticketon_order_case import AllTicketonOrderCase
 from app.use_case.ticketon_order.get_ticketon_order_by_id_case import GetTicketonOrderByIdCase
 from app.use_case.ticketon_order.paginate_ticketon_order_case import PaginateTicketonOrderCase
+from app.use_case.ticketon_order.client.create_sale_case import CreateSaleTicketonAndOrderCase
+from app.use_case.ticketon_order.client.recreate_payment_case import RecreatePaymentForTicketonOrderCase
 
 
 class TicketonOrderApi:
     """
     API класс для управления заказами Ticketon.
     
-    Предоставляет REST API эндпоинты для операций чтения заказов Ticketon.
-    Включает операции: получение всех, получение по ID, пагинация.
+    Предоставляет REST API эндпоинты для операций с заказами Ticketon.
+    Включает операции: получение всех, получение по ID, пагинация, создание продажи.
     
-    Примечание: Данный API предоставляет только операции чтения (All, Get, Paginate)
-    для административного доступа к заказам Ticketon.
+    Примечание: Данный API предоставляет операции чтения (All, Get, Paginate)
+    и создания продажи билетов через Ticketon API.
     """
 
     def __init__(self) -> None:
@@ -61,6 +65,20 @@ class TicketonOrderApi:
             summary="Получить заказ Ticketon по ID",
             description="Получение заказа Ticketon по уникальному идентификатору",
         )(self.get)
+        
+        self.router.post(
+            "/create-sale",
+            response_model=TicketonResponseForSaleDTO,
+            summary="Создать продажу билетов Ticketon",
+            description="Создание заказа и транзакции оплаты для покупки билетов через Ticketon API",
+        )(self.create_sale)
+        
+        self.router.post(
+            "/recreate-payment/{ticketon_order_id}",
+            response_model=TicketonResponseForSaleDTO,
+            summary="Пересоздать платеж для заказа Ticketon",
+            description="Находит активную транзакцию или создает новую для существующего заказа Ticketon",
+        )(self.recreate_payment)
 
     async def paginate(
         self,
@@ -131,6 +149,71 @@ class TicketonOrderApi:
         """
         try:
             return await GetTicketonOrderByIdCase(db).execute(id=id)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def create_sale(
+        self,
+        dto: TicketonBookingRequestDTO,
+        db: AsyncSession = Depends(get_db),
+    ) -> TicketonResponseForSaleDTO:
+        """
+        Создание продажи билетов через Ticketon API.
+        
+        Создаёт заказ в системе Ticketon, формирует транзакцию оплаты в Alatau
+        и связывает их между собой. Без авторизации пользователя.
+        
+        Args:
+            dto: Данные для создания заказа (показ, билеты, контактная информация)
+            db: Сессия базы данных
+            
+        Returns:
+            Ответ с данными заказа Ticketon, транзакции оплаты и ID платежа
+        """
+        try:
+            return await CreateSaleTicketonAndOrderCase(db).execute(dto=dto, user=None)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def recreate_payment(
+        self,
+        ticketon_order_id: RoutePathConstants.IDPath,
+        db: AsyncSession = Depends(get_db),
+    ) -> TicketonResponseForSaleDTO:
+        """
+        Пересоздание/восстановление платежа для существующего заказа Ticketon.
+        
+        Находит активную payment_transaction для заказа или создает новую.
+        Логика:
+        1. Проверяет существование и валидность заказа Ticketon
+        2. Ищет активную payment_transaction (is_active=True, is_paid=False, is_canceled=False, не истекшая)
+        3. Если активная найдена - возвращает её данные
+        4. Если не найдена - создает новую payment_transaction
+        5. Деактивирует старые транзакции
+        
+        Args:
+            ticketon_order_id: ID заказа Ticketon
+            db: Сессия базы данных
+            
+        Returns:
+            TicketonResponseForSaleDTO с данными для оплаты
+        """
+        try:
+            return await RecreatePaymentForTicketonOrderCase(db).execute(
+                ticketon_order_id=ticketon_order_id
+            )
         except HTTPException:
             raise
         except Exception as exc:

@@ -10,3 +10,8 @@ def assign_test_roles(app) -> None:
         path=f"{base_url}{RoutePathConstants.TestGetPathName}",
         roles=[RoleRouteConstant.AdministratorTagName],
     )
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}{RoutePathConstants.TestPostPathName}",
+        roles=[RoleRouteConstant.AdministratorTagName],
+    )

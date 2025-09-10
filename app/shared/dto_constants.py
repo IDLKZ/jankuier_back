@@ -1,12 +1,12 @@
 from datetime import date, datetime, time
 from decimal import Decimal
-from typing import Annotated, List
+from typing import Annotated, List,Literal
 
-from pydantic import EmailStr, Field, constr
+from pydantic import EmailStr, Field
 
 from app.infrastructure.app_config import app_config
 from app.shared.field_constants import FieldConstants
-from app.shared.validation_constants import app_validation
+from app.shared.validation_constants import app_validation, AppValidationConstants
 
 
 class DTOConstant:
@@ -542,43 +542,43 @@ class DTOConstant:
         ]
 
     @staticmethod
-    def StandardOrderStringField(description: str | None = None) -> Annotated:
+    def StandardAlatauOrderStringField(description: str | None = None) -> Annotated:
         msg = description or "Числовая строка длиной от 6 до 22 символов"
         return Annotated[
-            constr(regex=r"^\d{6,22}$"),  # только цифры, длина от 6 до 22
-            Field(description=msg),
+            str,
+            Field(description=msg,pattern=app_validation.ALATAY_ORDER_REGEX),
         ]
 
     @staticmethod
     def MerchantIdField(description: str | None = None) -> Annotated:
         msg = description or "Merchant ID, задан банком"
         return Annotated[
-            str,
-            Field(default=app_config.merchant_id, description=msg, const=True),
+            Literal[app_config.merchant_id],
+            Field(default=app_config.merchant_id, description=msg),
         ]
 
     @staticmethod
     def TerminalIdField(description: str | None = None) -> Annotated:
         msg = description or "Terminal ID, задан банком"
         return Annotated[
-            str,
-            Field(default=app_config.terminal_id, description=msg, const=True),
+            Literal[app_config.terminal_id],
+            Field(default=app_config.terminal_id, description=msg),
         ]
 
     @staticmethod
     def CurrencyField(description: str | None = None) -> Annotated:
         msg = description or "ISO 4217 код валюты KZT"
         return Annotated[
-            str,
-            Field(default="KZT", description=msg, const=True),
+            Literal["KZT"],
+            Field(default="KZT", description=msg),
         ]
 
     @staticmethod
     def WTypeField(description: str | None = None) -> Annotated:
         msg = description or "Окно для оплаты (2)"
         return Annotated[
-            str,
-            Field(default="2", description=msg, const=True),
+            Literal["2"],
+            Field(default="2", description=msg),
         ]
 
     @staticmethod

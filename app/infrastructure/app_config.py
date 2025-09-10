@@ -103,6 +103,9 @@ class AppConfiguration(BaseSettings):
     ticketon_get_show: str = Field(..., env="TICKETON_GET_SHOW")
     ticketon_show_level: str = Field(..., env="TICKETON_SHOW_LEVEL")
     ticketon_get_level: str = Field(..., env="TICKETON_GET_LEVEL")
+    ticketon_create_sale: str = Field(..., env="TICKETON_CREATE_SALE")
+    ticketon_sale_confirm: str = Field(..., env="TICKETON_SALE_CONFIRM")
+    ticketon_sale_cancel: str = Field(..., env="TICKETON_SALE_CANCEL")
     ticketon_update_redis_in_minutes: int = Field(60, env="TICKETON_UPDATE_REDIS_IN_MINUTES")
     ticketon_api_key:str = Field(...,env="TICKETON_API_KEY")
 

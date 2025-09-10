@@ -57,6 +57,8 @@ class DbValueConstants:
     PaymentTransactionStatusRefundedID = 6
     PaymentTransactionStatusRefundedValue = "refunded"
 
+    PaymentTicketonType ="TICKETON_BOOKING"
+
     @staticmethod
     def get_value(title: str):
         return slugify(

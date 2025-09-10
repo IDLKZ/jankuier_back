@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import List, Any
 
@@ -32,8 +32,8 @@ class TicketonOrderCDTO(BaseModel):
     expired_at: DTOConstant.StandardNullableDateTimeField(description="Дата истечения")
     sum: DTOConstant.StandardNullablePriceField(description="Сумма")
     currency: DTOConstant.StandardNullableVarcharField(description="Валюта")
-    pre_tickets: DTOConstant.StandardNullableJSONField(description="Предварительные билеты")
-    tickets: DTOConstant.StandardNullableJSONField(description="Билеты")
+    pre_tickets: List[dict] | None = Field(default=None, description="Предварительные билеты")
+    tickets: List[dict] | None = Field(default=None, description="Билеты")
     sale_secury_token: DTOConstant.StandardNullableVarcharField(
         description="Токен безопасности продажи"
     )
@@ -66,8 +66,8 @@ class TicketonOrderRDTO(TicketonOrderDTO):
     expired_at: DTOConstant.StandardNullableDateTimeField(description="Дата истечения")
     sum: DTOConstant.StandardNullablePriceField(description="Сумма")
     currency: DTOConstant.StandardNullableVarcharField(description="Валюта")
-    pre_tickets: DTOConstant.StandardNullableJSONField(description="Предварительные билеты")
-    tickets: DTOConstant.StandardNullableJSONField(description="Билеты")
+    pre_tickets: List[dict] | None = Field(default=None, description="Предварительные билеты")
+    tickets: List[dict] | None = Field(default=None, description="Билеты")
     sale_secury_token: DTOConstant.StandardNullableVarcharField(
         description="Токен безопасности продажи"
     )
