@@ -40,3 +40,17 @@ def assign_ticketon_order_roles(app) -> None:
         path=f"{base_url}/recreate-payment/{{ticketon_order_id}}",
         roles=[RoleRouteConstant.ClientTagName],
     )
+    
+    # Confirm sale GET endpoint - Public access (for payment system callbacks)
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/confirm-sale-get",
+        roles=[RoleRouteConstant.CommonTagName],
+    )
+    
+    # Confirm sale POST endpoint - Public access (for payment system callbacks)
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/confirm-sale-post",
+        roles=[RoleRouteConstant.CommonTagName],
+    )

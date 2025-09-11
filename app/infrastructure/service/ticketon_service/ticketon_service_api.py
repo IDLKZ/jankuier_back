@@ -8,6 +8,8 @@ from pydantic import TypeAdapter
 from app.adapters.dto.ticketon.ticketon_booking_dto import TicketonBookingErrorResponseDTO, \
     TicketonBookingShowBookingDTO, TicketonBookingRequestDTO
 from app.adapters.dto.ticketon.ticketon_city_dto import TicketonCityDTO
+from app.adapters.dto.ticketon.ticketon_confirm_sale_dto import TicketonConfirmSaleRequestDTO, \
+    TicketonConfirmSaleResponseDTO
 from app.adapters.dto.ticketon.ticketon_get_level_dto import TicketonGetLevelDTO
 from app.adapters.dto.ticketon.ticketon_show_level_dto import TicketonShowLevelDTO
 from app.adapters.dto.ticketon.ticketon_shows_dto import TicketonShowsDataDTO, TicketonGetShowsParameterDTO, \
@@ -221,6 +223,29 @@ class TicketonServiceAPI:
                 response = await client.get(url)
                 response.raise_for_status()
                 json_data = response.json()
+        except Exception as e:
+            raise AppExceptionResponse.internal_error(
+                message=f"Ticketon GET Shows ERROR: {str(e)}"
+            ) from e
+
+
+    async def sale_confirm(self,dto:TicketonConfirmSaleRequestDTO)->TicketonConfirmSaleResponseDTO:
+        try:
+            url = app_config.ticketon_sale_confirm
+            async with httpx.AsyncClient() as client:
+                # Строим параметры как список строк
+                params = []
+                params.append(f"token={app_config.ticketon_api_key}")
+                params.append(f"sale={dto.sale}")
+                params.append(f"email={dto.email}")
+                params.append(f"phone={dto.phone}")
+                # Собираем финальный URL
+                url = f"{url}?{'&'.join(params)}"
+                response = await client.get(url)
+                response.raise_for_status()
+                json_data = response.json()
+                data = TicketonConfirmSaleResponseDTO.model_validate(json_data)
+                return data
         except Exception as e:
             raise AppExceptionResponse.internal_error(
                 message=f"Ticketon GET Shows ERROR: {str(e)}"

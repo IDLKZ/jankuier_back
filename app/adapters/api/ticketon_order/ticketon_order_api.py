@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends
+import urllib.parse
+
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.exceptions import HTTPException
 
@@ -9,6 +11,7 @@ from app.adapters.dto.ticketon_order.ticketon_order_dto import (
 from app.adapters.dto.pagination_dto import PaginationTicketonOrderWithRelationsRDTO
 from app.adapters.dto.ticketon.ticketon_booking_dto import TicketonBookingRequestDTO
 from app.adapters.dto.ticketon.ticketon_response_for_sale_dto import TicketonResponseForSaleDTO
+from app.adapters.dto.alatau.alatau_after_payment_dto import AlatauBackrefResponseDTO, AlatauBackrefPostDTO, AlatauBackrefGetDTO
 from app.adapters.filters.ticketon_order.ticketon_order_filter import TicketonOrderFilter
 from app.adapters.filters.ticketon_order.ticketon_order_pagination_filter import TicketonOrderPaginationFilter
 from app.core.app_exception_response import AppExceptionResponse
@@ -20,6 +23,7 @@ from app.use_case.ticketon_order.get_ticketon_order_by_id_case import GetTicketo
 from app.use_case.ticketon_order.paginate_ticketon_order_case import PaginateTicketonOrderCase
 from app.use_case.ticketon_order.client.create_sale_case import CreateSaleTicketonAndOrderCase
 from app.use_case.ticketon_order.client.recreate_payment_case import RecreatePaymentForTicketonOrderCase
+from app.use_case.ticketon_order.client.ticketon_confirm_sale import TicketonConfirmCase
 
 
 class TicketonOrderApi:
@@ -79,6 +83,20 @@ class TicketonOrderApi:
             summary="Пересоздать платеж для заказа Ticketon",
             description="Находит активную транзакцию или создает новую для существующего заказа Ticketon",
         )(self.recreate_payment)
+        
+        self.router.get(
+            "/confirm-sale-get",
+            response_model=AlatauBackrefResponseDTO,
+            summary="Подтверждение оплаты Ticketon (GET)",
+            description="Обработка GET-запроса подтверждения оплаты от платежной системы Alatau",
+        )(self.confirm_sale_get)
+        
+        self.router.post(
+            "/confirm-sale-post",
+            response_model=AlatauBackrefResponseDTO,
+            summary="Подтверждение оплаты Ticketon (POST)",
+            description="Обработка POST-запроса подтверждения оплаты от платежной системы Alatau",
+        )(self.confirm_sale_post)
 
     async def paginate(
         self,
@@ -214,6 +232,89 @@ class TicketonOrderApi:
             return await RecreatePaymentForTicketonOrderCase(db).execute(
                 ticketon_order_id=ticketon_order_id
             )
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def confirm_sale_get(
+        self,
+        order: str = Query(..., description="Номер заказа"),
+        mpi_order: str = Query(..., description="Номер заказа в MPI"),
+        amount: str = Query(..., description="Сумма платежа"),
+        currency: str = Query(..., description="Валюта платежа"),
+        res_code: str = Query(..., description="Код результата"),
+        res_desc: str = Query(None, description="Описание результата"),
+        rrn: str = Query(None, description="RRN (возвращается в REF, тольков случаеуспешной операции)"),
+        sign: str = Query(..., description="Электронная подпись"),
+        db: AsyncSession = Depends(get_db),
+    ) -> AlatauBackrefResponseDTO:
+        """
+        Обработка GET-запроса подтверждения оплаты от платежной системы Alatau.
+        
+        Обрабатывает результат оплаты, полученный через GET-параметры от платежной системы.
+        Подтверждает заказ в Ticketon при успешной оплате.
+        
+        Args:
+            order: Номер заказа в платежной системе
+            mpi_order: Номер заказа в MPI
+            amount: Сумма платежа
+            currency: Валюта платежа (обычно KZT)
+            res_code: Код результата ("0" - успех, другие - ошибка)
+            res_desc: Описание результата (опционально)
+            rrn: Дополнительное описание (опционально)
+            sign: Электронная подпись для верификации
+            db: Сессия базы данных
+            
+        Returns:
+            Результат обработки платежа с информацией о заказе и транзакции
+        """
+        try:
+            decoded_res_desc = urllib.parse.unquote_plus(res_desc or "")
+            dto = AlatauBackrefGetDTO(
+                order=order,
+                mpi_order=mpi_order,
+                amount=amount,
+                currency=currency,
+                res_code=res_code,
+                res_desc=decoded_res_desc,
+                rrn=rrn,
+                sign=sign
+            )
+            return await TicketonConfirmCase(db).execute(dto=dto)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def confirm_sale_post(
+        self,
+        dto: AlatauBackrefPostDTO,
+        db: AsyncSession = Depends(get_db),
+    ) -> AlatauBackrefResponseDTO:
+        """
+        Обработка POST-запроса подтверждения оплаты от платежной системы Alatau.
+        
+        Обрабатывает результат оплаты, полученный через POST-данные от платежной системы.
+        Подтверждает заказ в Ticketon при успешной оплате.
+        
+        Args:
+            dto: Данные платежа от системы Alatau
+            db: Сессия базы данных
+            
+        Returns:
+            Результат обработки платежа с информацией о заказе и транзакции
+        """
+        try:
+            return await TicketonConfirmCase(db).execute(dto=dto)
         except HTTPException:
             raise
         except Exception as exc:

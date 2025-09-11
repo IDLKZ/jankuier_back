@@ -23,7 +23,7 @@ class AlatauCreateResponseOrderDTO:
         self.NAME: Optional[str] = None
         self.NONCE: Optional[str] = None
         self.CLIENT_ID: Optional[str] = None
-        self.BACKREF: Optional[str] = None
+        self.BACKREF: Optional[str] = app_config.ticketon_backref
         self.Ucaf_Flag: Optional[str] = None
         self.Ucaf_Authentication_Data: Optional[str] = None
 

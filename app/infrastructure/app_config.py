@@ -108,6 +108,7 @@ class AppConfiguration(BaseSettings):
     ticketon_sale_cancel: str = Field(..., env="TICKETON_SALE_CANCEL")
     ticketon_update_redis_in_minutes: int = Field(60, env="TICKETON_UPDATE_REDIS_IN_MINUTES")
     ticketon_api_key:str = Field(...,env="TICKETON_API_KEY")
+    ticketon_backref:str = Field(...,env="TICKETON_BACKREF")
 
     # ALATAU
     terminal_id: str = Field(..., env="TERMINAL_ID")
