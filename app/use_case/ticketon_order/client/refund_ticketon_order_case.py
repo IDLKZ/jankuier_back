@@ -312,8 +312,16 @@ class RefundTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
         if refund_response.code == 0:  # Успешный возврат
             # Обновляем транзакцию как возвращенную
             payment_update_dto.status_id = DbValueConstants.PaymentTransactionStatusRefundedID
-            payment_update_dto.rev_amount = refund_response.rev_amount
-            payment_update_dto.rev_desc = refund_response.rev_description
+            
+            # Извлекаем данные из operation, если она доступна
+            if refund_response.operation:
+                payment_update_dto.rev_amount = refund_response.operation.amount
+                payment_update_dto.rev_desc = refund_response.operation.rev_desc
+            else:
+                # Если operation недоступна, используем данные из основного запроса
+                payment_update_dto.rev_amount = self.active_payment_transaction.amount
+                payment_update_dto.rev_desc = refund_response.description or "Возврат выполнен"
+                
             payment_update_dto.is_canceled = True
             
             await self.payment_transaction_repository.update(
