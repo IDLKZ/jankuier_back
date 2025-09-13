@@ -116,8 +116,9 @@ class RefundTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
         )
         
         # Формирование финального ответа
-        self.common_response_dto.ticketon_order = TicketonOrderWithRelationsRDTO.from_orm(updated_order)
-        self.common_response_dto.payment_transaction = PaymentTransactionWithRelationsRDTO.from_orm(updated_transaction)
+        # Используем безопасное создание DTO - relationships уже загружены через default_relationships()
+        self.common_response_dto.ticketon_order = TicketonOrderWithRelationsRDTO.model_validate(updated_order)
+        self.common_response_dto.payment_transaction = PaymentTransactionWithRelationsRDTO.model_validate(updated_transaction)
         
         return self.common_response_dto
 
@@ -247,7 +248,7 @@ class RefundTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
         Returns:
             Tuple[int, bool, str]: (новый_статус_заказа, успех_операции, сообщение)
         """
-        payment_update_dto = PaymentTransactionCDTO.from_orm(self.active_payment_transaction)
+        payment_update_dto = self._create_safe_payment_transaction_update_dto()
         
         # Сначала всегда проверяем актуальный статус в банке
         bank_status_result: Optional[Tuple[int, bool, str]] = await self._check_bank_payment_status(payment_update_dto)
@@ -492,4 +493,37 @@ class RefundTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
             email=entity_dict.get('email'),
             phone=entity_dict.get('phone'),
             status=entity_dict.get('status')  # Получаем строковое поле напрямую из колонки БД
+        )
+    
+    def _create_safe_payment_transaction_update_dto(self) -> PaymentTransactionCDTO:
+        """
+        Безопасное создание DTO для обновления платежной транзакции.
+        
+        Избегает проблем с SQLAlchemy lazy loading при обращении к relationship полям.
+        
+        Returns:
+            PaymentTransactionCDTO: Готовый DTO для обновления
+        """
+        # Используем __dict__ для прямого доступа к колонкам без триггера relationships
+        entity_dict = self.active_payment_transaction.__dict__
+        
+        return PaymentTransactionCDTO(
+            status_id=entity_dict.get('status_id'),
+            user_id=entity_dict.get('user_id'),
+            order=entity_dict.get('order'),
+            amount=entity_dict.get('amount'),
+            currency=entity_dict.get('currency'),
+            description=entity_dict.get('description'),
+            return_url=entity_dict.get('return_url'),
+            failure_return_url=entity_dict.get('failure_return_url'),
+            language=entity_dict.get('language'),
+            terminal=entity_dict.get('terminal'),
+            invoice_id=entity_dict.get('invoice_id'),
+            invoice_expiry_date=entity_dict.get('invoice_expiry_date'),
+            invoice_url=entity_dict.get('invoice_url'),
+            card_token=entity_dict.get('card_token'),
+            is_active=entity_dict.get('is_active', True),
+            is_canceled=entity_dict.get('is_canceled', False),
+            rev_amount=entity_dict.get('rev_amount'),
+            rev_desc=entity_dict.get('rev_desc')
         )
