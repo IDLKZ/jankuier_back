@@ -106,6 +106,7 @@ class AppConfiguration(BaseSettings):
     ticketon_create_sale: str = Field(..., env="TICKETON_CREATE_SALE")
     ticketon_sale_confirm: str = Field(..., env="TICKETON_SALE_CONFIRM")
     ticketon_sale_cancel: str = Field(..., env="TICKETON_SALE_CANCEL")
+    ticketon_sale_refund: str = Field(..., env="TICKETON_SALE_REFUND")
     ticketon_update_redis_in_minutes: int = Field(60, env="TICKETON_UPDATE_REDIS_IN_MINUTES")
     ticketon_api_key:str = Field(...,env="TICKETON_API_KEY")
     ticketon_backref:str = Field(...,env="TICKETON_BACKREF")
@@ -114,6 +115,8 @@ class AppConfiguration(BaseSettings):
     terminal_id: str = Field(..., env="TERMINAL_ID")
     merchant_id: str = Field(..., env="MERCHANT_ID")
     shared_secret: str = Field(..., env="SHARED_SECRET")
+    alatau_payment_refund_post_url: str = Field(..., env="ALATAU_PAYMENT_REFUND_POST_URL")
+    alatau_payment_status_post_url: str = Field(..., env="ALATAU_PAYMENT_STATUS_POST_URL")
 
     @property
     def get_connection_url(self) -> str:

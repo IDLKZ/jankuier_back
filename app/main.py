@@ -15,6 +15,10 @@ from app.middleware.registry_middleware import registry_middleware
 from app.routes.registry_route import enable_routes
 from app.seeders.runner import run_seeders
 import app.adapters.dto  # Инициализация DTO моделей
+from app.adapters.dto.model_rebuilder import ensure_models_rebuilt
+
+# Rebuild Pydantic models with forward references after all DTOs are loaded
+ensure_models_rebuilt()
 
 
 @asynccontextmanager

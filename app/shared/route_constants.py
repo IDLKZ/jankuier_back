@@ -66,3 +66,7 @@ class RoutePathConstants:
     GetMePathName = "/me"
     TestGetPathName = "/test-get"
     TestPostPathName = "/test-post"
+    
+    # User Cart paths
+    UserCartPathName = "/user-cart"
+    UserCartTagName = "Корзина пользователя"

@@ -1,17 +1,21 @@
-from typing import Union
+from typing import Union, List
 
 from fastapi import APIRouter, Depends, HTTPException
 from packaging.utils import _
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.adapters.dto.alatau.alatau_cancel_payment_dto import AlatauCancelPaymentDTO
+from app.adapters.dto.alatau.alatau_status_request_dto import AlatauStatusRequestDTO
 from app.adapters.dto.ticketon.ticketon_booking_dto import TicketonBookingRequestDTO, TicketonBookingErrorResponseDTO, \
     TicketonBookingShowBookingDTO
 from app.core.app_exception_response import AppExceptionResponse
+from app.infrastructure.app_config import app_config
 from app.infrastructure.db import get_db
 from app.infrastructure.service.alatau_service.alatau_service_api import AlatauServiceAPI
 from app.infrastructure.service.sota_service.sota_service import SotaService
 from app.infrastructure.service.ticketon_service.ticketon_service_api import TicketonServiceAPI
 from app.shared.route_constants import RoutePathConstants
+from app.adapters.dto.alatau.alatau_cancel_payment_response_dto import AlatauRefundPaymentResultDTO
 
 
 class TestApi:
@@ -39,16 +43,12 @@ class TestApi:
 
     async def get_test(
         self,
-        dto:TicketonBookingRequestDTO,
+        dto:AlatauStatusRequestDTO,
         db: AsyncSession = Depends(get_db),
     ):
-        service = TicketonServiceAPI()
         try:
-            result:Union[TicketonBookingShowBookingDTO, TicketonBookingErrorResponseDTO] =  await service.sale_ticketon(dto)
-            if isinstance(result, TicketonBookingShowBookingDTO):
-                return result
-            if isinstance(result, TicketonBookingErrorResponseDTO):
-                return AppExceptionResponse.bad_request(message=result.error)
+            service = AlatauServiceAPI()
+            return await service.get_payment_status(dto)
         except HTTPException:
             raise
         except Exception as exc:

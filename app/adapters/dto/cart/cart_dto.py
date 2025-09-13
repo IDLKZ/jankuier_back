@@ -1,6 +1,11 @@
+from typing import TYPE_CHECKING, Any
 from pydantic import BaseModel
 from app.adapters.dto.base_pagination_dto import BasePageModel
 from app.shared.dto_constants import DTOConstant
+
+if TYPE_CHECKING:
+    from app.adapters.dto.user.user_dto import UserRDTO
+    from app.adapters.dto.cart_item.cart_item_dto import CartItemRDTO
 
 
 class CartDTO(BaseModel):
@@ -40,6 +45,16 @@ class CartRDTO(CartDTO):
         from_attributes = True
 
 
+class CartWithRelationsRDTO(CartRDTO):
+    user: "UserRDTO | None" = None
+    cart_items_list: "list[CartItemRDTO] | None" = None
+
+    class Config:
+        from_attributes = True
+
+
+
+
 class CartUpdateDTO(BaseModel):
     """DTO для обновления корзины"""
 
@@ -69,3 +84,14 @@ class CartCalculateTotalDTO(BaseModel):
 
 class PaginationCartRDTO(BasePageModel):
     items: list[CartRDTO]
+
+
+class PaginationCartWithRelationsRDTO(BasePageModel):
+    items: list[CartWithRelationsRDTO]
+
+
+# Import the model rebuilder for backward compatibility
+from app.adapters.dto.model_rebuilder import ensure_models_rebuilt
+
+# Keep the old function name for backward compatibility
+rebuild_cart_models = ensure_models_rebuilt

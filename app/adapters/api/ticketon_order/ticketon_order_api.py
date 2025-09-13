@@ -24,6 +24,7 @@ from app.use_case.ticketon_order.paginate_ticketon_order_case import PaginateTic
 from app.use_case.ticketon_order.client.create_sale_case import CreateSaleTicketonAndOrderCase
 from app.use_case.ticketon_order.client.recreate_payment_case import RecreatePaymentForTicketonOrderCase
 from app.use_case.ticketon_order.client.ticketon_confirm_sale import TicketonConfirmCase
+from app.use_case.ticketon_order.client.refund_ticketon_order_case import RefundTicketonOrderCase
 
 
 class TicketonOrderApi:
@@ -97,6 +98,13 @@ class TicketonOrderApi:
             summary="Подтверждение оплаты Ticketon (POST)",
             description="Обработка POST-запроса подтверждения оплаты от платежной системы Alatau",
         )(self.confirm_sale_post)
+        
+        self.router.post(
+            "/refund-sale/{sale}",
+            response_model=TicketonResponseForSaleDTO,
+            summary="Возврат билетов Ticketon",
+            description="Отмена заказа в Ticketon и возврат денежных средств через банк Алатау",
+        )(self.refund_sale)
 
     async def paginate(
         self,
@@ -315,6 +323,45 @@ class TicketonOrderApi:
         """
         try:
             return await TicketonConfirmCase(db).execute(dto=dto)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def refund_sale(
+        self,
+        sale: str,
+        db: AsyncSession = Depends(get_db),
+    ) -> TicketonResponseForSaleDTO:
+        """
+        Возврат билетов и денежных средств для заказа Ticketon.
+        
+        Выполняет полный цикл возврата:
+        1. Проверяет статус заказа и возможность возврата
+        2. Отменяет бронирование в системе Ticketon (если еще не отменено)
+        3. Инициирует возврат денежных средств через банк Алатау
+        4. Обновляет статусы заказа и платежной транзакции
+        
+        Поддерживаемые статусы заказа для возврата:
+        - PaidConfirmed: Заказ оплачен и подтвержден (выполняется отмена в Ticketon + возврат средств)
+        - CancelledAwaitingRefund: Заказ отменен, ожидает возврата средств (только возврат средств)
+        
+        Args:
+            sale: Номер продажи (sale) в системе Ticketon
+            db: Сессия базы данных
+            
+        Returns:
+            TicketonResponseForSaleDTO: Результат операции возврата с обновленными данными
+            
+        Raises:
+            AppExceptionResponse: При ошибках валидации или внешних API
+        """
+        try:
+            return await RefundTicketonOrderCase(db).execute(sale=sale, user=None)
         except HTTPException:
             raise
         except Exception as exc:

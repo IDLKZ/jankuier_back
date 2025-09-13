@@ -54,3 +54,10 @@ def assign_ticketon_order_roles(app) -> None:
         path=f"{base_url}/confirm-sale-post",
         roles=[RoleRouteConstant.CommonTagName],
     )
+    
+    # Refund sale endpoint - Client and Admin access (for ticket refunding)
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/refund-sale/{{sale}}",
+        roles=[RoleRouteConstant.ClientTagName, RoleRouteConstant.AdministratorTagName],
+    )

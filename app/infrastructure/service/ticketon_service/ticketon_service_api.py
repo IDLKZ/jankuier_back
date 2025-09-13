@@ -11,6 +11,7 @@ from app.adapters.dto.ticketon.ticketon_city_dto import TicketonCityDTO
 from app.adapters.dto.ticketon.ticketon_confirm_sale_dto import TicketonConfirmSaleRequestDTO, \
     TicketonConfirmSaleResponseDTO
 from app.adapters.dto.ticketon.ticketon_get_level_dto import TicketonGetLevelDTO
+from app.adapters.dto.ticketon.ticketon_refund_request_dto import TicketonSaleRefundResponseDTO
 from app.adapters.dto.ticketon.ticketon_show_level_dto import TicketonShowLevelDTO
 from app.adapters.dto.ticketon.ticketon_shows_dto import TicketonShowsDataDTO, TicketonGetShowsParameterDTO, \
     TicketonShowsRedisStore
@@ -228,6 +229,39 @@ class TicketonServiceAPI:
                 message=f"Ticketon GET Shows ERROR: {str(e)}"
             ) from e
 
+    async def sale_refund(self, sale_id: str) -> TicketonSaleRefundResponseDTO:
+        """
+        Отмена продажи билетов в системе Ticketon.
+        
+        Args:
+            sale_id: Идентификатор продажи для отмены
+            
+        Returns:
+            TicketonSaleRefundResponseDTO: Результат операции отмены
+        """
+        try:
+            url = app_config.ticketon_sale_refund
+            async with httpx.AsyncClient() as client:
+                # Строим параметры для запроса отмены
+                params = []
+                params.append(f"token={app_config.ticketon_api_key}")
+                params.append(f"sale={sale_id}")
+                # Собираем финальный URL
+                url = f"{url}?{'&'.join(params)}"
+                response = await client.get(url)
+                response.raise_for_status()
+                json_data = response.json()
+                
+                # Создаем правильный DTO для ответа на возврат
+                return TicketonSaleRefundResponseDTO(
+                    status=json_data.get('status', 0),
+                    error=json_data.get('error'),
+                    code=json_data.get('code')
+                )
+        except Exception as e:
+            raise AppExceptionResponse.internal_error(
+                message=f"Ticketon sale refund ERROR: {str(e)}"
+            ) from e
 
     async def sale_confirm(self,dto:TicketonConfirmSaleRequestDTO)->TicketonConfirmSaleResponseDTO:
         try:

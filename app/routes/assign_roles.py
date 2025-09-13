@@ -35,6 +35,7 @@ from app.routes.ticketon.ticketon_route import assign_ticketon_roles
 from app.routes.ticketon_order_status.ticketon_order_status_route import assign_ticketon_order_status_roles
 from app.routes.ticketon_order.ticketon_order_route import assign_ticketon_order_roles
 from app.routes.user.user_route import assign_user_roles
+from app.routes.user_cart.user_cart_route import assign_user_cart_roles
 
 
 def assign_roles_to_all_routes(app) -> None:
@@ -91,6 +92,7 @@ def assign_roles_to_all_routes(app) -> None:
     assign_role_roles(app)
     assign_permission_roles(app)
     assign_user_roles(app)
+    assign_user_cart_roles(app)
 
     #Test
     assign_test_roles(app)
