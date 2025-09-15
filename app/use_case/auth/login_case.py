@@ -53,7 +53,7 @@ class LoginCase(BaseUseCase[BearerTokenDTO]):
         )
         if not user:
             raise AppExceptionResponse.bad_request(
-                message=i18n.gettext("data_not_ready")
+                message=i18n.gettext("username_doesnt_exist")
             )
         if not user.is_active:
             raise AppExceptionResponse.bad_request(
@@ -62,7 +62,7 @@ class LoginCase(BaseUseCase[BearerTokenDTO]):
         result = verify_password(dto.password, user.password_hash)
         if not result:
             raise AppExceptionResponse.bad_request(
-                message=i18n.gettext("data_not_ready")
+                message=i18n.gettext("password_or_username_incorrect")
             )
         access_token = create_access_token(data=user.id)
         refresh_token = create_refresh_token(data=user.id)

@@ -71,6 +71,7 @@ class TicketonConfirmCase(BaseUseCase[AlatauBackrefResponseDTO]):
             filters=[
                 self.ticketon_order_repository.model.sale == self.payment_transaction_entity.order
             ],
+            options=self.ticketon_order_repository.default_relationships(),
             include_deleted_filter=True
         )
         if self.ticketon_order_entity is None:
@@ -152,6 +153,16 @@ class TicketonConfirmCase(BaseUseCase[AlatauBackrefResponseDTO]):
                 )
             except Exception as e:
                 error_message = str(e)
+
+        # Ensure relationships are loaded for final response
+        if not is_paid or self.ticketon_order_entity is None:
+            self.ticketon_order_entity = await self.ticketon_order_repository.get_first_with_filters(
+                filters=[
+                    self.ticketon_order_repository.model.sale == self.payment_transaction_entity.order
+                ],
+                options=self.ticketon_order_repository.default_relationships(),
+                include_deleted_filter=True,
+            )
 
         self.response.ticketon_order = TicketonOrderWithRelationsRDTO.from_orm(self.ticketon_order_entity)
         self.response.payment_transaction = PaymentTransactionWithRelationsRDTO.from_orm(self.payment_transaction_entity)

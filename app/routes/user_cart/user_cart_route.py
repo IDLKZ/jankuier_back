@@ -18,7 +18,7 @@ def assign_user_cart_roles(app) -> None:
     # GET /api/user-cart/get/{user_id} - Получить корзину пользователя
     assign_roles_to_route(
         app=app,
-        path=f"{base_url}/get/{{user_id}}",
+        path=f"{base_url}/get",
         roles=[
             RoleRouteConstant.AdministratorTagName,
             RoleRouteConstant.ClientTagName,
@@ -28,7 +28,7 @@ def assign_user_cart_roles(app) -> None:
     # POST /api/user-cart/add/{user_id} - Добавить товар в корзину
     assign_roles_to_route(
         app=app,
-        path=f"{base_url}/add/{{user_id}}",
+        path=f"{base_url}/add",
         roles=[
             RoleRouteConstant.AdministratorTagName,
             RoleRouteConstant.ClientTagName,
@@ -38,7 +38,7 @@ def assign_user_cart_roles(app) -> None:
     # POST /api/user-cart/remove/{user_id} - Удалить товар из корзины
     assign_roles_to_route(
         app=app,
-        path=f"{base_url}/remove/{{user_id}}",
+        path=f"{base_url}/remove",
         roles=[
             RoleRouteConstant.AdministratorTagName,
             RoleRouteConstant.ClientTagName,
@@ -48,7 +48,7 @@ def assign_user_cart_roles(app) -> None:
     # DELETE /api/user-cart/clear/{user_id} - Очистить корзину
     assign_roles_to_route(
         app=app,
-        path=f"{base_url}/clear/{{user_id}}",
+        path=f"{base_url}/clear",
         roles=[
             RoleRouteConstant.AdministratorTagName,
             RoleRouteConstant.ClientTagName,

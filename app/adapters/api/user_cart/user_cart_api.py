@@ -2,30 +2,18 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel, Field
 
+from app.adapters.dto.cart.cart_action_dto import AddToCartDTO, RemoveFromCartDTO
 from app.adapters.dto.cart.cart_dto import CartWithRelationsRDTO
+from app.adapters.dto.user.user_dto import UserWithRelationsRDTO
 from app.core.app_exception_response import AppExceptionResponse
 from app.i18n.i18n_wrapper import i18n
 from app.infrastructure.db import get_db
+from app.middleware.role_middleware import check_client
 from app.shared.route_constants import RoutePathConstants
 from app.use_case.cart.add_to_cart_case import AddToCartCase
 from app.use_case.cart.clear_cart_case import ClearCartCase
 from app.use_case.cart.get_user_cart_case import GetUserCartCase
 from app.use_case.cart.remove_from_cart_case import RemoveFromCartCase
-
-
-class AddToCartDTO(BaseModel):
-    """DTO для добавления товара в корзину"""
-    product_id: int = Field(..., gt=0, description="ID товара")
-    qty: int = Field(default=1, gt=0, description="Количество товара")
-    variant_id: int | None = Field(default=None, gt=0, description="ID варианта товара (опционально)")
-
-
-class RemoveFromCartDTO(BaseModel):
-    """DTO для удаления товара из корзины"""
-    product_id: int = Field(..., gt=0, description="ID товара")
-    qty_to_remove: int | None = Field(default=None, gt=0, description="Количество для удаления (если не указано - удаляет полностью)")
-    variant_id: int | None = Field(default=None, gt=0, description="ID варианта товара (опционально)")
-    remove_completely: bool = Field(default=False, description="Флаг полного удаления товара")
 
 
 class UserCartApi:
@@ -42,28 +30,28 @@ class UserCartApi:
         """Добавляет маршруты для работы с корзиной пользователя"""
         
         self.router.get(
-            "/get/{user_id}",
+            "/get",
             response_model=CartWithRelationsRDTO | None,
             summary="Получить корзину пользователя",
             description="Получает корзину пользователя с автоматическим созданием, если её нет"
         )(self.get_user_cart)
         
         self.router.post(
-            "/add/{user_id}",
+            "/add",
             response_model=CartWithRelationsRDTO,
             summary="Добавить товар в корзину",
             description="Добавляет товар в корзину пользователя"
         )(self.add_to_cart)
         
         self.router.post(
-            "/remove/{user_id}",
+            "/remove",
             response_model=CartWithRelationsRDTO,
             summary="Удалить товар из корзины",
             description="Удаляет товар из корзины пользователя"
         )(self.remove_from_cart)
         
         self.router.delete(
-            "/clear/{user_id}",
+            "/clear",
             response_model=CartWithRelationsRDTO,
             summary="Очистить корзину",
             description="Удаляет все товары из корзины пользователя"
@@ -71,9 +59,9 @@ class UserCartApi:
 
     async def get_user_cart(
         self,
-        user_id: RoutePathConstants.IDPath,
         create_if_not_exists: bool = Query(default=True, description="Создать корзину, если её нет"),
         db: AsyncSession = Depends(get_db),
+        user: UserWithRelationsRDTO = Depends(check_client),
     ) -> CartWithRelationsRDTO | None:
         """
         Получает корзину пользователя.
@@ -88,7 +76,7 @@ class UserCartApi:
         """
         try:
             return await GetUserCartCase(db).execute(
-                user_id=user_id,
+                user_id=user.id,
                 create_if_not_exists=create_if_not_exists
             )
         except HTTPException:
@@ -102,9 +90,9 @@ class UserCartApi:
 
     async def add_to_cart(
         self,
-        user_id: RoutePathConstants.IDPath,
         dto: AddToCartDTO,
         db: AsyncSession = Depends(get_db),
+        user: UserWithRelationsRDTO = Depends(check_client),
     ) -> CartWithRelationsRDTO:
         """
         Добавляет товар в корзину пользователя.
@@ -119,7 +107,7 @@ class UserCartApi:
         """
         try:
             return await AddToCartCase(db).execute(
-                user_id=user_id,
+                user_id=user.id,
                 product_id=dto.product_id,
                 qty=dto.qty,
                 variant_id=dto.variant_id
@@ -135,9 +123,9 @@ class UserCartApi:
 
     async def remove_from_cart(
         self,
-        user_id: RoutePathConstants.IDPath,
         dto: RemoveFromCartDTO,
         db: AsyncSession = Depends(get_db),
+        user: UserWithRelationsRDTO = Depends(check_client),
     ) -> CartWithRelationsRDTO:
         """
         Удаляет товар из корзины пользователя.
@@ -152,7 +140,7 @@ class UserCartApi:
         """
         try:
             return await RemoveFromCartCase(db).execute(
-                user_id=user_id,
+                user_id=user.id,
                 product_id=dto.product_id,
                 qty_to_remove=dto.qty_to_remove,
                 variant_id=dto.variant_id,
@@ -169,8 +157,8 @@ class UserCartApi:
 
     async def clear_cart(
         self,
-        user_id: RoutePathConstants.IDPath,
         db: AsyncSession = Depends(get_db),
+        user: UserWithRelationsRDTO = Depends(check_client),
     ) -> CartWithRelationsRDTO:
         """
         Очищает корзину пользователя от всех товаров.
@@ -183,7 +171,7 @@ class UserCartApi:
             CartWithRelationsRDTO: Пустая корзина
         """
         try:
-            return await ClearCartCase(db).execute(user_id=user_id)
+            return await ClearCartCase(db).execute(user_id=user.id)
         except HTTPException:
             raise
         except Exception as exc:

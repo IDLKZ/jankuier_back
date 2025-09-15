@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import Callable
+from typing import Callable, Sequence
 
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
@@ -59,13 +59,21 @@ async def get_current_user(
     return user
 
 
-def role_checker(required_roles: list[str]) -> Callable:
+def role_checker(required_roles: Sequence[str], is_admin: bool = False) -> Callable:
+    required = set(required_roles)
+
     def checker(current_user: UserWithRelationsRDTO = Depends(get_current_user)):
-        if current_user.role.value not in required_roles:
-            raise AppExceptionResponse.forbidden(
-                message=_("forbidden"),
-            )
-        return current_user
+        role = current_user.role
+        # Разрешаем, если роль явно в списке
+        if role.value in required:
+            return current_user
+
+        # Иначе fallback по флагу is_admin (сохраняю исходную семантику)
+        is_role_admin = bool(getattr(role, "is_administrative", False))
+        if is_admin == is_role_admin:
+            return current_user
+
+        raise AppExceptionResponse.forbidden(message=_("forbidden"))
 
     return checker
 

@@ -48,7 +48,7 @@ class UserSeeder(BaseSeeder):
                 first_name="Иван",
                 last_name="Иванов",
                 patronomic="Иванович",
-                password_hash=get_password_hash("client123"),
+                password_hash=get_password_hash("admin123"),
                 is_active=True,
                 is_verified=True,
                 created_at=datetime.now(),
