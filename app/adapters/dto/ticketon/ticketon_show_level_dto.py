@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 from pydantic import BaseModel, Field
 from app.shared.dto_constants import DTOConstant
 
@@ -35,7 +35,7 @@ class TicketonShowLevelObjectDTO(BaseModel):
     svg: DTOConstant.StandardNullableStringField("SVG данные")
     svg_text: DTOConstant.StandardNullableStringField("SVG текст")
     svg_text_attrs: DTOConstant.StandardNullableStringField("SVG атрибуты текста")
-    type: DTOConstant.StandardNullableVarcharField("Тип объекта")
+    type: Optional[Union[str, bool]] = Field(default=None, description="Тип объекта (может быть строкой или boolean)")
 
 
 class TicketonShowLevelTypeDTO(BaseModel):
