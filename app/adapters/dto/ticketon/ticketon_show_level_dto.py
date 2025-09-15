@@ -81,9 +81,21 @@ class TicketonShowLevelDTO(BaseModel):
         # Обработка типов билетов
         types_data = data.get("level", {}).get("types", {})
         processed_types = {}
-        
-        for type_key, type_value in types_data.items():
-            processed_types[type_key] = TicketonShowLevelTypeDTO(**type_value)
+
+        # Поддерживаем как dict, так и list для types
+        if isinstance(types_data, dict):
+            for type_key, type_value in types_data.items():
+                processed_types[type_key] = TicketonShowLevelTypeDTO(**type_value)
+        elif isinstance(types_data, list):
+            # Если types приходит как список, используем тип как ключ
+            for type_item in types_data:
+                if isinstance(type_item, dict) and "type" in type_item:
+                    type_key = str(type_item["type"])
+                    processed_types[type_key] = TicketonShowLevelTypeDTO(**type_item)
+                else:
+                    # Используем индекс как ключ, если нет поля type
+                    type_key = str(len(processed_types))
+                    processed_types[type_key] = TicketonShowLevelTypeDTO(**type_item)
         
         # Создание данных уровня
         level_data = data.get("level", {}).copy()

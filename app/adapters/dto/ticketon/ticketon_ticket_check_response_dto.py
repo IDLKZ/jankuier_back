@@ -1,4 +1,3 @@
-from typing import List
 from pydantic import BaseModel, Field
 
 from app.adapters.dto.ticketon_order.ticketon_order_dto import TicketonOrderWithRelationsRDTO
@@ -14,8 +13,11 @@ class TicketonTicketCheckSeatDTO(BaseModel):
     num: DTOConstant.StandardNullableVarcharField("Номер места")
 
 
-class TicketonTicketCheckItemDTO(BaseModel):
-    """DTO для билета в ответе проверки билетов"""
+class TicketonTicketCheckResponseDTO(BaseModel):
+    """
+    DTO для ответа API проверки билета Ticketon
+    Представляет один билет с информацией о месте и кодами
+    """
     model_config = {"extra": "allow"}
 
     ticket: DTOConstant.StandardNullableVarcharField("Номер билета")
@@ -31,33 +33,23 @@ class TicketonTicketCheckItemDTO(BaseModel):
     barcode: DTOConstant.StandardNullableTextField("Штрих-код билета (Base64)")
     qr: DTOConstant.StandardNullableTextField("QR-код билета (Base64)")
 
-
-class TicketonTicketCheckResponseDTO(BaseModel):
-    """
-    DTO для ответа API проверки билетов Ticketon
-    Представляет список билетов с информацией о местах и кодами
-    """
-    model_config = {"extra": "allow"}
-
-    tickets: List[TicketonTicketCheckItemDTO] = Field(
-        description="Список билетов"
-    )
-
     @classmethod
-    def from_json(cls, data: List[dict]) -> "TicketonTicketCheckResponseDTO":
+    def from_json(cls, data: dict) -> "TicketonTicketCheckResponseDTO":
         """Создание DTO из JSON данных"""
-        processed_tickets = []
+        # Проверяем структуру данных
+        if not data or not isinstance(data, dict):
+            return cls(
+                ticket=None, seat=None, hall=None, cost=None,
+                commission=None, code=None, type=None, barcode=None, qr=None
+            )
 
-        for ticket_data in data:
-            processed_ticket = ticket_data.copy()
+        processed_data = data.copy()
 
-            # Обработка seat - преобразование в DTO объект
-            if "seat" in processed_ticket and processed_ticket["seat"]:
-                processed_ticket["seat"] = TicketonTicketCheckSeatDTO(**processed_ticket["seat"])
+        # Обработка seat - преобразование в DTO объект
+        if "seat" in processed_data and processed_data["seat"]:
+            processed_data["seat"] = TicketonTicketCheckSeatDTO(**processed_data["seat"])
 
-            processed_tickets.append(TicketonTicketCheckItemDTO(**processed_ticket))
-
-        return cls(tickets=processed_tickets)
+        return cls(**processed_data)
 
 
 class TicketonTicketCheckCommonResponseDTO(BaseModel):

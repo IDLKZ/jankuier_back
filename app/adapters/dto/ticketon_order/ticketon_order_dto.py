@@ -43,7 +43,6 @@ class TicketonOrderCDTO(BaseModel):
     cancel_reason: DTOConstant.StandardNullableVarcharField(description="Причина отмены")
     email: DTOConstant.StandardNullableVarcharField(description="Email")
     phone: DTOConstant.StandardNullableVarcharField(description="Телефон")
-    status: DTOConstant.StandardNullableVarcharField(description="Статус")
 
     class Config:
         from_attributes = True
@@ -77,7 +76,6 @@ class TicketonOrderRDTO(TicketonOrderDTO):
     cancel_reason: DTOConstant.StandardNullableVarcharField(description="Причина отмены")
     email: DTOConstant.StandardNullableVarcharField(description="Email")
     phone: DTOConstant.StandardNullableVarcharField(description="Телефон")
-    status: DTOConstant.StandardNullableVarcharField(description="Статус")
 
     created_at: DTOConstant.StandardCreatedAt
     updated_at: DTOConstant.StandardUpdatedAt
@@ -88,7 +86,7 @@ class TicketonOrderRDTO(TicketonOrderDTO):
 
 
 class TicketonOrderWithRelationsRDTO(TicketonOrderRDTO):
-    status_rel: TicketonOrderStatusRDTO | None = None
+    status: TicketonOrderStatusRDTO | None = None
     user: UserRDTO | None = None
     payment_transaction: PaymentTransactionRDTO | None = None
 

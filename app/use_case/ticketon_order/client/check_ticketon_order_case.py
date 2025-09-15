@@ -116,7 +116,7 @@ class CheckTicketonOrderCase(BaseUseCase[TicketonOrderCheckCommonResponseDTO]):
         # Получаем актуальную информацию из API Ticketon
         if self.ticket_order_entity.sale:
             self.order_check_dto = await self.ticketon_service_api.check_order(
-                self.ticket_order_entity.sale
+                sale=self.ticket_order_entity.sale
             )
             result.order_check = self.order_check_dto
 

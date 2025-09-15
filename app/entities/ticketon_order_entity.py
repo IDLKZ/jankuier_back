@@ -50,14 +50,13 @@ class TicketonOrderEntity(Base):
     cancel_reason:Mapped[DbColumnConstants.StandardNullableVarchar]
     email:Mapped[DbColumnConstants.StandardNullableVarchar]
     phone:Mapped[DbColumnConstants.StandardNullableVarchar]
-    status:Mapped[DbColumnConstants.StandardNullableVarchar]
     created_at: Mapped[DbColumnConstants.CreatedAt]
     updated_at: Mapped[DbColumnConstants.UpdatedAt]
     deleted_at: Mapped[DbColumnConstants.DeletedAt]
 
     # Relationships (using DbRelationshipConstants)
     # Relationship to TicketonOrderStatusEntity (many-to-one)
-    status_rel: Mapped["TicketonOrderStatusEntity"] = (
+    status: Mapped["TicketonOrderStatusEntity"] = (
         DbRelationshipConstants.many_to_one(
             target="TicketonOrderStatusEntity",
             back_populates="ticketon_orders",

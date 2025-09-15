@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 from pydantic import BaseModel, Field
 
 from app.adapters.dto.ticketon_order.ticketon_order_dto import TicketonOrderWithRelationsRDTO
@@ -62,8 +62,11 @@ class TicketonOrderCheckShowDTO(BaseModel):
     type: DTOConstant.StandardNullableVarcharField("Тип события")
 
 
-class TicketonOrderCheckItemDTO(BaseModel):
-    """DTO для одного элемента в ответе проверки заказа"""
+class TicketonOrderCheckResponseDTO(BaseModel):
+    """
+    DTO для ответа API проверки заказа Ticketon
+    Представляет один заказ с билетами, информацией о продаже и событии
+    """
     model_config = {"extra": "allow"}
 
     tickets: Optional[Dict[str, TicketonOrderCheckTicketDTO]] = Field(
@@ -79,44 +82,33 @@ class TicketonOrderCheckItemDTO(BaseModel):
         description="Информация о событии"
     )
 
-
-class TicketonOrderCheckResponseDTO(BaseModel):
-    """
-    DTO для ответа API проверки заказов Ticketon
-    Представляет список заказов с билетами, информацией о продажах и событиях
-    """
-    model_config = {"extra": "allow"}
-
-    orders: List[TicketonOrderCheckItemDTO] = Field(
-        description="Список заказов"
-    )
-
     @classmethod
-    def from_json(cls, data: List[Dict[str, Any]]) -> "TicketonOrderCheckResponseDTO":
+    def from_json(cls, data: Dict[str, Any]) -> "TicketonOrderCheckResponseDTO":
         """Создание DTO из JSON данных"""
-        processed_orders = []
+        # Проверяем структуру данных
+        if not data or not isinstance(data, dict):
+            return cls(tickets=None, sale=None, show=None)
 
-        for order_data in data:
-            processed_order = order_data.copy()
-
-            # Обработка tickets - преобразование в DTO объекты
-            if "tickets" in processed_order and processed_order["tickets"]:
-                tickets_dict = {}
-                for ticket_id, ticket_data in processed_order["tickets"].items():
+        # Обработка tickets - преобразование в DTO объекты
+        tickets = None
+        if "tickets" in data and data["tickets"]:
+            tickets_dict = {}
+            for ticket_id, ticket_data in data["tickets"].items():
+                if isinstance(ticket_data, dict):
                     tickets_dict[str(ticket_id)] = TicketonOrderCheckTicketDTO(**ticket_data)
-                processed_order["tickets"] = tickets_dict
+            tickets = tickets_dict if tickets_dict else None
 
-            # Обработка sale
-            if "sale" in processed_order and processed_order["sale"]:
-                processed_order["sale"] = TicketonOrderCheckSaleDTO(**processed_order["sale"])
+        # Обработка sale
+        sale = None
+        if "sale" in data and data["sale"]:
+            sale = TicketonOrderCheckSaleDTO(**data["sale"])
 
-            # Обработка show
-            if "show" in processed_order and processed_order["show"]:
-                processed_order["show"] = TicketonOrderCheckShowDTO(**processed_order["show"])
+        # Обработка show
+        show = None
+        if "show" in data and data["show"]:
+            show = TicketonOrderCheckShowDTO(**data["show"])
 
-            processed_orders.append(TicketonOrderCheckItemDTO(**processed_order))
-
-        return cls(orders=processed_orders)
+        return cls(tickets=tickets, sale=sale, show=show)
 
 
 # Статусы заказов для справки
