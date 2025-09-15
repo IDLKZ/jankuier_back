@@ -57,7 +57,7 @@ class TicketonOrderStatusEntity(Base):
     ticketon_orders: Mapped[list[AppEntityNames.TicketonOrderEntityName]] = (
         DbRelationshipConstants.one_to_many(
             target=AppEntityNames.TicketonOrderEntityName,
-            back_populates="status",
+            back_populates="status_rel",
             foreign_keys=f"{AppEntityNames.TicketonOrderEntityName}.status_id",
             cascade="all, delete-orphan"
         )

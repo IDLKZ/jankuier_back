@@ -38,7 +38,7 @@ class TicketonObjectDTO(BaseModel):
     id: DTOConstant.StandardNullableUnsignedIntegerField("ID объекта")
     level: DTOConstant.StandardNullableUnsignedIntegerField("ID уровня/сектора")
     name: DTOConstant.StandardNullableVarcharField("Имя объекта")
-    type: DTOConstant.StandardNullableVarcharField("Тип объекта")
+    type: Optional[Union[str, bool]] = Field(default=None, description="Тип объекта")
     x: DTOConstant.StandardNullableIntegerField("Координата X")
     y: DTOConstant.StandardNullableIntegerField("Координата Y")
     w: DTOConstant.StandardNullableIntegerField("Ширина")

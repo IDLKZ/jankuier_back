@@ -8,6 +8,8 @@ from app.adapters.dto.ticketon_order.ticketon_order_dto import (
     TicketonOrderRDTO,
     TicketonOrderWithRelationsRDTO,
 )
+from app.adapters.dto.ticketon.ticketon_order_check_response_dto import TicketonOrderCheckCommonResponseDTO
+from app.adapters.dto.ticketon.ticketon_ticket_check_response_dto import TicketonTicketCheckCommonResponseDTO
 from app.adapters.dto.pagination_dto import PaginationTicketonOrderWithRelationsRDTO
 from app.adapters.dto.ticketon.ticketon_booking_dto import TicketonBookingRequestDTO
 from app.adapters.dto.ticketon.ticketon_response_for_sale_dto import TicketonResponseForSaleDTO
@@ -25,6 +27,8 @@ from app.use_case.ticketon_order.client.create_sale_case import CreateSaleTicket
 from app.use_case.ticketon_order.client.recreate_payment_case import RecreatePaymentForTicketonOrderCase
 from app.use_case.ticketon_order.client.ticketon_confirm_sale import TicketonConfirmCase
 from app.use_case.ticketon_order.client.refund_ticketon_order_case import RefundTicketonOrderCase
+from app.use_case.ticketon_order.client.check_ticketon_order_case import CheckTicketonOrderCase
+from app.use_case.ticketon_order.client.check_ticketon_ticket_case import CheckTicketonTicketCase
 
 
 class TicketonOrderApi:
@@ -105,6 +109,20 @@ class TicketonOrderApi:
             summary="Возврат билетов Ticketon",
             description="Отмена заказа в Ticketon и возврат денежных средств через банк Алатау",
         )(self.refund_sale)
+
+        self.router.get(
+            "/check-order/{ticketon_order_id}",
+            response_model=TicketonOrderCheckCommonResponseDTO,
+            summary="Проверка заказа Ticketon",
+            description="Получение актуальной информации о заказе из API Ticketon",
+        )(self.check_order)
+
+        self.router.get(
+            "/check-ticket/{ticketon_order_id}/{ticket_id}",
+            response_model=TicketonTicketCheckCommonResponseDTO,
+            summary="Проверка билета Ticketon",
+            description="Получение актуальной информации о конкретном билете из API Ticketon",
+        )(self.check_ticket)
 
     async def paginate(
         self,
@@ -362,6 +380,77 @@ class TicketonOrderApi:
         """
         try:
             return await RefundTicketonOrderCase(db).execute(sale=sale, user=None)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def check_order(
+        self,
+        ticketon_order_id: RoutePathConstants.IDPath,
+        db: AsyncSession = Depends(get_db),
+    ) -> TicketonOrderCheckCommonResponseDTO:
+        """
+        Проверка заказа Ticketon через API.
+
+        Получает актуальную информацию о заказе из системы Ticketon
+        и объединяет её с локальными данными заказа.
+
+        Args:
+            ticketon_order_id: ID заказа для проверки
+            db: Сессия базы данных
+
+        Returns:
+            TicketonOrderCheckCommonResponseDTO: Объединенные данные заказа и проверки
+
+        Raises:
+            HTTPException: При ошибке валидации или получения данных
+        """
+        try:
+            return await CheckTicketonOrderCase(db).execute(
+                ticketon_order_id=ticketon_order_id
+            )
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def check_ticket(
+        self,
+        ticketon_order_id: RoutePathConstants.IDPath,
+        ticket_id: str,
+        db: AsyncSession = Depends(get_db),
+    ) -> TicketonTicketCheckCommonResponseDTO:
+        """
+        Проверка конкретного билета Ticketon через API.
+
+        Получает актуальную информацию о билете из системы Ticketon
+        и объединяет её с локальными данными заказа.
+
+        Args:
+            ticketon_order_id: ID заказа, содержащего билет
+            ticket_id: ID билета для проверки
+            db: Сессия базы данных
+
+        Returns:
+            TicketonTicketCheckCommonResponseDTO: Объединенные данные заказа и проверки билета
+
+        Raises:
+            HTTPException: При ошибке валидации или получения данных
+        """
+        try:
+            return await CheckTicketonTicketCase(db).execute(
+                ticketon_order_id=ticketon_order_id,
+                ticketon_ticket_id=ticket_id
+            )
         except HTTPException:
             raise
         except Exception as exc:

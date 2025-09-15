@@ -36,7 +36,7 @@ class GetTicketonOrderByIdCase(BaseUseCase[TicketonOrderRDTO]):
             TicketonOrderRDTO: Найденный заказ Ticketon.
         """
         await self.validate(id=id)
-        return TicketonOrderRDTO.from_orm(self.model)
+        return TicketonOrderRDTO.model_validate(self.model)
 
     async def validate(self, id: int) -> None:
         """

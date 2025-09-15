@@ -107,6 +107,8 @@ class AppConfiguration(BaseSettings):
     ticketon_sale_confirm: str = Field(..., env="TICKETON_SALE_CONFIRM")
     ticketon_sale_cancel: str = Field(..., env="TICKETON_SALE_CANCEL")
     ticketon_sale_refund: str = Field(..., env="TICKETON_SALE_REFUND")
+    ticketon_order_check: str = Field(..., env="TICKETON_ORDER_CHECK")
+    ticketon_ticket_check: str = Field(..., env="TICKETON_TICKET_CHECK")
     ticketon_update_redis_in_minutes: int = Field(60, env="TICKETON_UPDATE_REDIS_IN_MINUTES")
     ticketon_api_key:str = Field(...,env="TICKETON_API_KEY")
     ticketon_backref:str = Field(...,env="TICKETON_BACKREF")

@@ -13,7 +13,7 @@ class TicketonOrderRepository(BaseRepository[TicketonOrderEntity]):
 
     def default_relationships(self) -> list[Any]:
         return [
-            selectinload(self.model.status),
+            selectinload(self.model.status_rel),
             selectinload(self.model.user),
             selectinload(self.model.payment_transaction)
         ]

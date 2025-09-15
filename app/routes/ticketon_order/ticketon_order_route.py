@@ -61,3 +61,17 @@ def assign_ticketon_order_roles(app) -> None:
         path=f"{base_url}/refund-sale/{{sale}}",
         roles=[RoleRouteConstant.ClientTagName, RoleRouteConstant.AdministratorTagName],
     )
+
+    # Check order endpoint - Client and Admin access (for order status checking)
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/check-order/{{ticketon_order_id}}",
+        roles=[RoleRouteConstant.ClientTagName, RoleRouteConstant.AdministratorTagName],
+    )
+
+    # Check ticket endpoint - Client and Admin access (for ticket status checking)
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/check-ticket/{{ticketon_order_id}}/{{ticket_id}}",
+        roles=[RoleRouteConstant.ClientTagName, RoleRouteConstant.AdministratorTagName],
+    )

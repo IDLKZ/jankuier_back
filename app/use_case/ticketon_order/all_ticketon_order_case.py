@@ -46,7 +46,7 @@ class AllTicketonOrderCase(BaseUseCase[list[TicketonOrderRDTO]]):
             filters=filter.apply(),
             include_deleted_filter=filter.is_show_deleted,
         )
-        return [TicketonOrderRDTO.from_orm(model) for model in models]
+        return [TicketonOrderRDTO.model_validate(model) for model in models]
 
     async def validate(self) -> None:
         """

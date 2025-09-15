@@ -88,7 +88,7 @@ class TicketonOrderRDTO(TicketonOrderDTO):
 
 
 class TicketonOrderWithRelationsRDTO(TicketonOrderRDTO):
-    status: TicketonOrderStatusRDTO | None = None
+    status_rel: TicketonOrderStatusRDTO | None = None
     user: UserRDTO | None = None
     payment_transaction: PaymentTransactionRDTO | None = None
 

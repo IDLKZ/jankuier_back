@@ -57,7 +57,7 @@ class TicketonOrderEntity(Base):
 
     # Relationships (using DbRelationshipConstants)
     # Relationship to TicketonOrderStatusEntity (many-to-one)
-    status: Mapped["TicketonOrderStatusEntity"] = (
+    status_rel: Mapped["TicketonOrderStatusEntity"] = (
         DbRelationshipConstants.many_to_one(
             target="TicketonOrderStatusEntity",
             back_populates="ticketon_orders",
