@@ -113,7 +113,7 @@ class CreateSaleTicketonAndOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
     async def create_transaction(self) -> None:
         try:
             show: TicketonSingleShowResponseDTO | None = await TicketonServiceAPI().get_ticketon_single_show(
-                int(self.ticketon_booking_result.show), get_from_redis=True
+                int(self.ticketon_booking_result.show), use_cache=True
             )
             
             self.order_dto.ORDER = self.ticketon_booking_result.sale

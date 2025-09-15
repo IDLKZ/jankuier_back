@@ -22,7 +22,7 @@ class AlatauServiceAPI:
 
 
     async def create_for_ticketon_booking(self,dto: TicketonBookingShowBookingDTO,user:UserWithRelationsRDTO|None = None):
-        show:TicketonSingleShowResponseDTO|None = await TicketonServiceAPI().get_ticketon_single_show(int(dto.show),get_from_redis=True)
+        show:TicketonSingleShowResponseDTO|None = await TicketonServiceAPI().get_ticketon_single_show(int(dto.show), use_cache=True)
         order = AlatauCreateResponseOrderDTO()
         order.ORDER = dto.sale
         order.AMOUNT = dto.sum
