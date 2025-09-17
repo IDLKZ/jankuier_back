@@ -125,7 +125,7 @@ class CreateSaleTicketonAndOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
             self.order_dto.ORDER = self.ticketon_booking_result.sale
             self.order_dto.AMOUNT = self.ticketon_booking_result.sum
             self.order_dto.DESC = "Покупка билетов на мероприятие"
-            # self.order_dto.DESC_ORDER = AlatauHelper.make_desc(self.ticketon_booking_result, self.show)
+            self.order_dto.DESC_ORDER = AlatauHelper.make_desc(self.ticketon_booking_result, self.show)
             self.order_dto.EMAIL = self.ticketon_request_dto.email
             self.order_dto.PHONE = self.ticketon_request_dto.phone
             self.order_dto.NONCE = await self.payment_transaction_repository.generate_unique_noncense()
