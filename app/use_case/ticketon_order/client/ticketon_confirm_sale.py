@@ -183,8 +183,18 @@ class TicketonConfirmCase(BaseUseCase[AlatauBackrefResponseDTO]):
             self.response.status = is_paid
             self.response.message = error_message
 
+
         except Exception as e:
-            raise AppExceptionResponse.internal_error(message=i18n.gettext("internal_server_error"), extra={"details": str(traceback.print_exc())})
+
+            details = traceback.format_exc()
+
+            raise AppExceptionResponse.internal_error(
+
+                message=i18n.gettext("internal_server_error"),
+
+                extra={"details": details}
+
+            )
 
 
 
