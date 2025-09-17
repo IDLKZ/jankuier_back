@@ -175,8 +175,8 @@ class TicketonConfirmCase(BaseUseCase[AlatauBackrefResponseDTO]):
                 include_deleted_filter=True,
             )
 
-        self.response.ticketon_order = self.ticketon_order_entity
-        self.response.payment_transaction = PaymentTransactionWithRelationsRDTO.from_orm(self.payment_transaction_entity)
+        self.response.ticketon_order = TicketonOrderWithRelationsRDTO.model_validate(self.ticketon_order_entity)
+        self.response.payment_transaction = PaymentTransactionWithRelationsRDTO.model_validate(self.payment_transaction_entity)
         self.response.status = is_paid
         self.response.message = error_message
 
