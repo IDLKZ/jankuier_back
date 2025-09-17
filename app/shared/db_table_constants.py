@@ -41,3 +41,4 @@ class AppTableNames:
     PaymentTransactionsTableName = "payment_transactions"
     TicketonOrderStatusTableName = "ticketon_order_statuses"
     TicketonOrderTableName = "ticketon_orders"
+    TicketonOrderAndPaymentTransactionTableName = "ticketon_order_and_payment_transactions"

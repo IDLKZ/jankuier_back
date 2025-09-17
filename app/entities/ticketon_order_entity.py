@@ -86,4 +86,14 @@ class TicketonOrderEntity(Base):
         )
     )
 
+    # Relationship to TicketonOrderAndPaymentTransactionEntity (one-to-many)
+    payment_transaction_links: Mapped[list["TicketonOrderAndPaymentTransactionEntity"]] = (
+        DbRelationshipConstants.one_to_many(
+            target="TicketonOrderAndPaymentTransactionEntity",
+            back_populates="ticketon_order",
+            foreign_keys="TicketonOrderAndPaymentTransactionEntity.ticketon_order_id",
+            cascade="all, delete-orphan"
+        )
+    )
+
 

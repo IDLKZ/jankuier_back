@@ -13,8 +13,11 @@ from app.adapters.dto.ticketon_order.ticketon_order_dto import TicketonOrderRDTO
 from app.adapters.dto.user.user_dto import UserWithRelationsRDTO
 from app.adapters.repository.payment_transaction.payment_transaction_repository import PaymentTransactionRepository
 from app.adapters.repository.ticketon_order.ticketon_order_repository import TicketonOrderRepository
+from app.adapters.repository.ticketon_order_and_payment_transaction.ticketon_order_and_payment_transaction_repository import \
+    TicketonOrderAndPaymentTransactionRepository
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import TicketonOrderEntity, PaymentTransactionEntity
+from app.entities.ticketon_order_and_payment_transaction_entity import TicketonOrderAndPaymentTransactionEntity
 from app.helpers.alatau_helper import AlatauHelper
 from app.i18n.i18n_wrapper import i18n
 from app.infrastructure.app_config import app_config
@@ -30,6 +33,7 @@ class CreateSaleTicketonAndOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
     def __init__(self, db: AsyncSession) -> None:
         self.ticketon_repository = TicketonOrderRepository(db)
         self.payment_transaction_repository = PaymentTransactionRepository(db)
+        self.ticketon_order_and_payment_transaction_repository = TicketonOrderAndPaymentTransactionRepository(db)
         self.ticketon_service_api = TicketonServiceAPI()
         self.alatau_service_api = AlatauServiceAPI()
         self.ticketon_booking_result: TicketonBookingShowBookingDTO | None = None
@@ -41,10 +45,13 @@ class CreateSaleTicketonAndOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
         self.order_dto = AlatauCreateResponseOrderDTO()
         self.common_response_dto = TicketonResponseForSaleDTO()
         self.show: TicketonSingleShowResponseDTO| None = None
+        self.unique_order:str = "0000000000000000000000"
+
 
     async def execute(self, dto: TicketonBookingRequestDTO, user: UserWithRelationsRDTO | None = None) -> TicketonResponseForSaleDTO:
         self.user = user
         self.ticketon_request_dto = dto
+        self.unique_order = await self.payment_transaction_repository.generate_unique_order(min_len=6, max_len=22)
         await self.validate()
         await self.transform()
         await self.create_transaction()
@@ -122,8 +129,7 @@ class CreateSaleTicketonAndOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
 
     async def create_transaction(self) -> None:
         try:
-
-            self.order_dto.ORDER = self.ticketon_booking_result.sale
+            self.order_dto.ORDER = self.unique_order
             self.order_dto.AMOUNT = self.ticketon_booking_result.sum
             self.order_dto.DESC = "Покупка билетов на мероприятие"
             self.order_dto.DESC_ORDER = AlatauHelper.make_desc(self.ticketon_booking_result, self.show)
@@ -142,7 +148,7 @@ class CreateSaleTicketonAndOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
                 user_id=self.user.id if self.user else None,
                 status_id=DbValueConstants.PaymentTransactionStatusAwaitingPaymentID,
                 transaction_type=DbValueConstants.PaymentTicketonType,
-                order=self.ticketon_booking_result.sale,
+                order=self.unique_order,
                 nonce=self.order_dto.NONCE,
                 amount=self.ticketon_booking_result.sum,
                 currency=self.ticketon_booking_result.currency or "KZT",
@@ -171,7 +177,14 @@ class CreateSaleTicketonAndOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
             # Set response data
             self.common_response_dto.order = self.order_dto.dict()
             self.common_response_dto.payment_transaction_id = self.payment_transaction_entity.id
-            
+            await self.ticketon_order_and_payment_transaction_repository.create_link(
+                ticketon_order_id=self.ticketon_order_entity.id,
+                payment_transaction_id=self.payment_transaction_entity.id,
+                link_type="initial",
+                link_reason="Initial order creation",
+                is_primary=True,
+                is_active=True
+            )
         except Exception as e:
             # Полная очистка при ошибке эквайринга
             await self._cleanup_after_error(str(e))

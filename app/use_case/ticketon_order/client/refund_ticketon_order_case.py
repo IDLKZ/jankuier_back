@@ -19,6 +19,8 @@ from app.adapters.dto.ticketon_order.ticketon_order_dto import TicketonOrderWith
 from app.adapters.dto.user.user_dto import UserWithRelationsRDTO
 from app.adapters.repository.payment_transaction.payment_transaction_repository import PaymentTransactionRepository
 from app.adapters.repository.ticketon_order.ticketon_order_repository import TicketonOrderRepository
+from app.adapters.repository.ticketon_order_and_payment_transaction.ticketon_order_and_payment_transaction_repository import \
+    TicketonOrderAndPaymentTransactionRepository
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import PaymentTransactionEntity, TicketonOrderEntity
 from app.i18n.i18n_wrapper import i18n
@@ -57,7 +59,7 @@ class RefundTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
         # Репозитории для работы с данными
         self.ticketon_repository = TicketonOrderRepository(db)
         self.payment_transaction_repository = PaymentTransactionRepository(db)
-        
+        self.ticketon_order_and_payment_transaction_repository = TicketonOrderAndPaymentTransactionRepository(db)
         # Внешние API сервисы
         self.alatau_service_api = AlatauServiceAPI()
         self.ticketon_service_api = TicketonServiceAPI()
@@ -160,12 +162,22 @@ class RefundTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
         # Проверка, что возврат еще не был произведен
         if self.active_ticketon_order.status_id == DbValueConstants.TicketonOrderStatusCancelledRefundedID:
             raise AppExceptionResponse.bad_request(message=i18n.gettext("ticketon_order_is_already_refunded"))
-        
+
+        # Проверка связи
+        ticketon_order_and_payment_transaction = await self.ticketon_order_and_payment_transaction_repository.get_first_with_filters(
+            filters=[
+                self.ticketon_order_and_payment_transaction_repository.model.ticketon_order_id == self.active_ticketon_order.id,
+                self.ticketon_order_and_payment_transaction_repository.model.is_active.is_(True)
+            ],
+            include_deleted_filter=True
+        )
+        if not ticketon_order_and_payment_transaction:
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("payment_transaction_not_found"))
         # Загрузка платежной транзакции
         self.active_payment_transaction = await self.payment_transaction_repository.get_first_with_filters(
             filters=[
                 or_(
-                    self.payment_transaction_repository.model.order == self.sale,
+                    self.payment_transaction_repository.model.id == ticketon_order_and_payment_transaction.payment_transaction_id,
                     self.payment_transaction_repository.model.id == self.active_ticketon_order.payment_transaction_id,
                 )
             ],
@@ -473,6 +485,7 @@ class RefundTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
             user_id=entity_dict.get('user_id'),
             payment_transaction_id=entity_dict.get('payment_transaction_id'),
             show=entity_dict.get('show'),
+            show_info=entity_dict.get('show_info'),
             seats=entity_dict.get('seats'),
             lang=entity_dict.get('lang'),
             pre_sale=entity_dict.get('pre_sale'),
@@ -491,8 +504,7 @@ class RefundTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
             is_canceled=is_canceled,
             cancel_reason=cancel_reason or entity_dict.get('cancel_reason'),
             email=entity_dict.get('email'),
-            phone=entity_dict.get('phone'),
-            status=entity_dict.get('status')  # Получаем строковое поле напрямую из колонки БД
+            phone=entity_dict.get('phone')
         )
     
     def _create_safe_payment_transaction_update_dto(self) -> PaymentTransactionCDTO:
@@ -510,20 +522,31 @@ class RefundTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
         return PaymentTransactionCDTO(
             status_id=entity_dict.get('status_id'),
             user_id=entity_dict.get('user_id'),
+            transaction_type=entity_dict.get('transaction_type'),
             order=entity_dict.get('order'),
+            nonce=entity_dict.get('nonce'),
+            mpi_order=entity_dict.get('mpi_order'),
             amount=entity_dict.get('amount'),
             currency=entity_dict.get('currency'),
-            description=entity_dict.get('description'),
-            return_url=entity_dict.get('return_url'),
-            failure_return_url=entity_dict.get('failure_return_url'),
+            merchant=entity_dict.get('merchant'),
             language=entity_dict.get('language'),
-            terminal=entity_dict.get('terminal'),
-            invoice_id=entity_dict.get('invoice_id'),
-            invoice_expiry_date=entity_dict.get('invoice_expiry_date'),
-            invoice_url=entity_dict.get('invoice_url'),
-            card_token=entity_dict.get('card_token'),
+            client_id=entity_dict.get('client_id'),
+            desc=entity_dict.get('desc'),
+            desc_order=entity_dict.get('desc_order'),
+            email=entity_dict.get('email'),
+            backref=entity_dict.get('backref'),
+            wtype=entity_dict.get('wtype'),
+            name=entity_dict.get('name'),
+            pre_p_sign=entity_dict.get('pre_p_sign'),
             is_active=entity_dict.get('is_active', True),
+            is_paid=entity_dict.get('is_paid', False),
             is_canceled=entity_dict.get('is_canceled', False),
+            expired_at=entity_dict.get('expired_at'),
+            res_code=entity_dict.get('res_code'),
+            res_desc=entity_dict.get('res_desc'),
+            paid_p_sign=entity_dict.get('paid_p_sign'),
             rev_amount=entity_dict.get('rev_amount'),
-            rev_desc=entity_dict.get('rev_desc')
+            rev_desc=entity_dict.get('rev_desc'),
+            cancel_p_sign=entity_dict.get('cancel_p_sign'),
+            order_full_info=entity_dict.get('order_full_info')
         )

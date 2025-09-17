@@ -14,8 +14,11 @@ from app.adapters.dto.ticketon_order.ticketon_order_dto import TicketonOrderWith
 from app.adapters.dto.user.user_dto import UserWithRelationsRDTO
 from app.adapters.repository.payment_transaction.payment_transaction_repository import PaymentTransactionRepository
 from app.adapters.repository.ticketon_order.ticketon_order_repository import TicketonOrderRepository
+from app.adapters.repository.ticketon_order_and_payment_transaction.ticketon_order_and_payment_transaction_repository import \
+    TicketonOrderAndPaymentTransactionRepository
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import PaymentTransactionEntity
+from app.entities.ticketon_order_and_payment_transaction_entity import TicketonOrderAndPaymentTransactionEntity
 from app.helpers.alatau_helper import AlatauHelper
 from app.i18n.i18n_wrapper import i18n
 from app.infrastructure.app_config import app_config
@@ -39,6 +42,8 @@ class RecreatePaymentForTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO
     def __init__(self, db: AsyncSession) -> None:
         self.ticketon_repository = TicketonOrderRepository(db)
         self.payment_transaction_repository = PaymentTransactionRepository(db)
+        self.ticketon_order_and_payment_transaction_repository = TicketonOrderAndPaymentTransactionRepository(db)
+        self.unique_order: str = "0000000000000000000000"
         self.alatau_service_api = AlatauServiceAPI()
         self.ticketon_service_api = TicketonServiceAPI()
         self.ticketon_booking_result: TicketonBookingShowBookingDTO | None = None
@@ -61,6 +66,7 @@ class RecreatePaymentForTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO
         Returns:
             TicketonResponseForSaleDTO с данными для оплаты
         """
+        self.unique_order = await self.payment_transaction_repository.generate_unique_order(min_len=6, max_len=22)
         self.user = user
         await self.validate(ticketon_order_id)
         await self.transform()
@@ -86,11 +92,17 @@ class RecreatePaymentForTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO
             raise AppExceptionResponse.bad_request(message=i18n.gettext("ticketon_order_is_expired"))
         self.ticketon_booking_result = TicketonBookingShowBookingDTO.from_orm(self.ticketon_order)
         self.common_response_dto.ticketon = self.ticketon_booking_result
-
+        #Находим все связи
+        ticketon_order_relation_ids = await self.ticketon_order_and_payment_transaction_repository.get_with_filters(
+            filters=[
+                self.ticketon_order_and_payment_transaction_repository.model.ticketon_order_id == self.ticketon_order.id,
+            ],
+        )
+        payment_ids = [ticketon_order_relation.payment_transaction_id for ticketon_order_relation in ticketon_order_relation_ids]
         # Находим все старые активные payment_transaction для этого заказа
         self.old_payment_transactions = await self.payment_transaction_repository.get_with_filters(
             filters=[
-                self.payment_transaction_repository.model.order == self.ticketon_order.sale,
+                self.payment_transaction_repository.model.id.in_(payment_ids),
                 self.payment_transaction_repository.model.transaction_type == DbValueConstants.PaymentTicketonType,
                 self.payment_transaction_repository.model.is_active.is_(True),
                 self.payment_transaction_repository.model.is_canceled.is_(False),
@@ -98,10 +110,8 @@ class RecreatePaymentForTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO
             ],
             include_deleted_filter=True
         )
-
         # Удаляем все старые транзакции
-        await self._delete_old_transactions()
-
+        await self._disable_old_transactions()
         # Создаем новую свежую транзакцию
         await self.create_transaction()
 
@@ -113,26 +123,21 @@ class RecreatePaymentForTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO
         Обрабатывает данные и создает/находит payment_transaction.
         """
 
-    async def _delete_old_transactions(self) -> None:
+    async def _disable_old_transactions(self) -> None:
         """
         Удаляет все старые активные payment_transaction для заказа.
         """
-        deleted_count = 0
-        for old_transaction in self.old_payment_transactions:
-            try:
-                await self.payment_transaction_repository.delete(
-                    old_transaction.id,
-                    force_delete=True
-                )
-                deleted_count += 1
-                print(f"✅ Deleted old payment transaction {old_transaction.id}")
-            except Exception as e:
-                print(f"❌ Failed to delete old payment transaction {old_transaction.id}: {str(e)}")
+        if self.old_payment_transactions:
+            for payment_transaction in self.old_payment_transactions:
+                payment_transaction_dto = PaymentTransactionCDTO.from_orm(payment_transaction)
+                payment_transaction.is_active = False
+                payment_transaction.is_canceled = True
+                payment_transaction.is_paid = False
+                await self.payment_transaction_repository.update(obj=payment_transaction, dto=payment_transaction_dto)
+            await self.ticketon_order_and_payment_transaction_repository.deactivate_links_for_order(
+                ticketon_order_id=self.ticketon_order.id
+            )
 
-        if deleted_count > 0:
-            print(f"✅ Deleted {deleted_count} old payment transactions")
-        else:
-            print("ℹ️ No old payment transactions found to delete")
 
     async def create_transaction(self) -> None:
         try:
@@ -140,7 +145,7 @@ class RecreatePaymentForTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO
                 int(self.ticketon_booking_result.show), use_cache=True
             )
 
-            self.order_dto.ORDER = self.ticketon_booking_result.sale
+            self.order_dto.ORDER = self.unique_order
             self.order_dto.AMOUNT = self.ticketon_booking_result.sum
             self.order_dto.DESC = "Покупка билетов на мероприятие"
             self.order_dto.DESC_ORDER = AlatauHelper.make_desc(self.ticketon_booking_result, show)
@@ -159,7 +164,7 @@ class RecreatePaymentForTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO
                 user_id=self.user.id if self.user else None,
                 status_id=DbValueConstants.PaymentTransactionStatusAwaitingPaymentID,
                 transaction_type=DbValueConstants.PaymentTicketonType,
-                order=self.ticketon_booking_result.sale,
+                order=self.unique_order,
                 nonce=self.order_dto.NONCE,
                 amount=self.ticketon_booking_result.sum,
                 currency=self.ticketon_booking_result.currency or "KZT",
@@ -183,6 +188,14 @@ class RecreatePaymentForTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO
 
             self.new_payment_transaction = await self.payment_transaction_repository.create(
                 PaymentTransactionEntity(**payment_cdto.model_dump())
+            )
+            await self.ticketon_order_and_payment_transaction_repository.create_link(
+                ticketon_order_id=self.ticketon_order.id,
+                payment_transaction_id=self.new_payment_transaction.id,
+                link_type="recreated",
+                link_reason="Payment recreated by user request",
+                is_primary=True,
+                is_active=True
             )
 
         except Exception as e:
