@@ -31,6 +31,7 @@ class TicketonOrderEntity(Base):
         )
     ]
     show: Mapped[DbColumnConstants.StandardVarcharIndex]
+    show_info:Mapped[DbColumnConstants.StandardJSONB]
     seats: Mapped[DbColumnConstants.StandardArrayStringNullable]
     lang:Mapped[DbColumnConstants.StandardVarchar]
     pre_sale:Mapped[DbColumnConstants.StandardNullableVarcharIndex]

@@ -40,6 +40,7 @@ class CreateSaleTicketonAndOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
         self.payment_transaction_entity: PaymentTransactionEntity | None = None
         self.order_dto = AlatauCreateResponseOrderDTO()
         self.common_response_dto = TicketonResponseForSaleDTO()
+        self.show: TicketonSingleShowResponseDTO| None = None
 
     async def execute(self, dto: TicketonBookingRequestDTO, user: UserWithRelationsRDTO | None = None) -> TicketonResponseForSaleDTO:
         self.user = user
@@ -70,6 +71,12 @@ class CreateSaleTicketonAndOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
             
         self.current_time = datetime.now()
 
+        self.show: TicketonSingleShowResponseDTO | None = await TicketonServiceAPI().get_ticketon_single_show(
+            int(self.ticketon_booking_result.show), use_cache=True
+        )
+        if self.show is None:
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("show_not_found"))
+
     async def transform(self) -> None:
         try:
             cdto = TicketonOrderCDTO(
@@ -77,6 +84,7 @@ class CreateSaleTicketonAndOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
                 status_id=DbValueConstants.TicketonOrderStatusBookingCreatedID,
                 seats=self.ticketon_booking_result.seats,
                 show=self.ticketon_booking_result.show,
+                show_info=self.show.model_dump(),
                 sale=self.ticketon_booking_result.sale,
                 lang=self.ticketon_booking_result.lang,
                 pre_sale=self.ticketon_booking_result.sale,
@@ -86,8 +94,8 @@ class CreateSaleTicketonAndOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
                 expired_at=self.current_time + timedelta(seconds=self.ticketon_booking_result.expire),
                 sum=self.ticketon_booking_result.sum,
                 currency=self.ticketon_booking_result.currency,
-                pre_tickets=[ticket.dict() if hasattr(ticket, 'dict') else ticket for ticket in self.ticketon_booking_result.tickets] if self.ticketon_booking_result.tickets else None,
-                tickets=[ticket.dict() if hasattr(ticket, 'dict') else ticket for ticket in self.ticketon_booking_result.tickets] if self.ticketon_booking_result.tickets else None,
+                pre_tickets=[ticket.model_dump() if hasattr(ticket, 'model_dump') else ticket for ticket in self.ticketon_booking_result.tickets] if self.ticketon_booking_result.tickets else None,
+                tickets=[ticket.model_dump() if hasattr(ticket, 'model_dump') else ticket for ticket in self.ticketon_booking_result.tickets] if self.ticketon_booking_result.tickets else None,
                 sale_secury_token=self.ticketon_booking_result.sale_secury_token,
                 is_active=True,
                 is_paid=False,
@@ -96,9 +104,10 @@ class CreateSaleTicketonAndOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
                 email=self.ticketon_request_dto.email,
                 phone=self.ticketon_request_dto.phone,
             )
-            self.ticketon_order_entity = await self.ticketon_repository.create(TicketonOrderEntity(**cdto.dict()))
+            self.ticketon_order_entity = await self.ticketon_repository.create(TicketonOrderEntity(**cdto.model_dump()))
             self.common_response_dto.ticketon = self.ticketon_booking_result
         except Exception as e:
+            # If ticketon order creation fails, cancel the ticketon sale
             if self.ticketon_booking_result and self.ticketon_booking_result.sale:
                 try:
                     await self.ticketon_service_api.sale_cancel(self.ticketon_booking_result.sale)
@@ -112,14 +121,11 @@ class CreateSaleTicketonAndOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
 
     async def create_transaction(self) -> None:
         try:
-            show: TicketonSingleShowResponseDTO | None = await TicketonServiceAPI().get_ticketon_single_show(
-                int(self.ticketon_booking_result.show), use_cache=True
-            )
-            
+
             self.order_dto.ORDER = self.ticketon_booking_result.sale
             self.order_dto.AMOUNT = self.ticketon_booking_result.sum
             self.order_dto.DESC = "Покупка билетов на мероприятие"
-            self.order_dto.DESC_ORDER = AlatauHelper.make_desc(self.ticketon_booking_result, show)
+            # self.order_dto.DESC_ORDER = AlatauHelper.make_desc(self.ticketon_booking_result, self.show)
             self.order_dto.EMAIL = self.ticketon_request_dto.email
             self.order_dto.PHONE = self.ticketon_request_dto.phone
             self.order_dto.NONCE = await self.payment_transaction_repository.generate_unique_noncense()
@@ -152,13 +158,12 @@ class CreateSaleTicketonAndOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
                 is_canceled=False,
                 expired_at=self.current_time + timedelta(seconds=self.ticketon_booking_result.expire),
                 order_full_info={
-                    "ticketon_booking": self.ticketon_booking_result.dict(),
-                    "show_info": show.dict() if show else None,
+                    "ticketon_booking": self.ticketon_booking_result.model_dump(),
                 }
             )
             
             self.payment_transaction_entity = await self.payment_transaction_repository.create(
-                PaymentTransactionEntity(**payment_cdto.dict())
+                PaymentTransactionEntity(**payment_cdto.model_dump())
             )
             
             # Link ticketon order with payment transaction
@@ -222,5 +227,13 @@ class CreateSaleTicketonAndOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
         if self.ticketon_booking_result and self.ticketon_booking_result.sale:
             try:
                 await self.ticketon_service_api.sale_cancel(self.ticketon_booking_result.sale)
+                print(f"✅ Ticketon sale {self.ticketon_booking_result.sale} canceled after error")
             except Exception as e:
                 cleanup_errors.append(f"Failed to cancel Ticketon sale: {str(e)}")
+                print(f"❌ Failed to cancel Ticketon sale: {str(e)}")
+
+        # Log all cleanup errors if any occurred
+        if cleanup_errors:
+            print(f"⚠️ Cleanup completed with errors: {'; '.join(cleanup_errors)}")
+        else:
+            print("✅ Full cleanup completed successfully")

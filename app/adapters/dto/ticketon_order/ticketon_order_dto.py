@@ -22,6 +22,7 @@ class TicketonOrderCDTO(BaseModel):
         description="ID платежной транзакции"
     )
     show: DTOConstant.StandardVarcharField(description="Шоу")
+    show_info:DTOConstant.StandardNullableJSONField(description="Полная информация о мероприятиии")
     seats: DTOConstant.StandardNullableStringArrayField(description="Места")
     lang: DTOConstant.StandardVarcharField(description="Язык")
     pre_sale: DTOConstant.StandardNullableVarcharField(description="Предпродажа")
@@ -55,6 +56,7 @@ class TicketonOrderRDTO(TicketonOrderDTO):
         description="ID платежной транзакции"
     )
     show: DTOConstant.StandardVarcharField(description="Шоу")
+    show_info: DTOConstant.StandardNullableJSONField(description="Полная информация о мероприятиии")
     seats: DTOConstant.StandardNullableStringArrayField(description="Места")
     lang: DTOConstant.StandardVarcharField(description="Язык")
     pre_sale: DTOConstant.StandardNullableVarcharField(description="Предпродажа")

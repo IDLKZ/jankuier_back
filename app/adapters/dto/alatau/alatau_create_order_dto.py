@@ -58,9 +58,9 @@ class AlatauCreateResponseOrderDTO:
         ]
 
         signature_string = ';'.join(signature_parts)
-        self.SIGNATURE_STRING = signature_string
 
         raw = shared_key + signature_string
+        self.SIGNATURE_STRING = raw
         return hashlib.sha512(raw.encode("utf-8")).hexdigest()
 
     def set_signature(self, shared_key: str):
