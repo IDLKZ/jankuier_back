@@ -1,106 +1,15 @@
-[
-  {
-  "show": "5942094",
-  "seats": [
-    "594652-28-17-0-1",
-    "594652-28-14-0-1"
-  ],
-  "lang": "ru",
-  "freedom": false,
-  "sale": "53498566",
-  "reservation_id": "346937584329",
-  "price": 1000,
-  "sum": 1000,
-  "expire": 3600,
-  "currency": "KZT",
-  "hide_mfo": true,
-  "advertising_campaigns": [
-    {
-      "advertising_campaign_uid": 0,
-      "active": 1,
-      "name": "Выберите ...",
-      "page_text": "",
-      "image": null
-    }
-  ],
-  "special_bonus": [],
-  "seats_text": null,
-  "tickets": [
-    {
-      "id": "86294453",
-      "level": "594652",
-      "row": "28",
-      "num": "17",
-      "cost": "500",
-      "com": "0",
-      "code": null
+{
+    "ticket": "86371220",
+    "seat": {
+        "id": "749022494",
+        "row": "22",
+        "num": "17"
     },
-    {
-      "id": "86294454",
-      "level": "594652",
-      "row": "28",
-      "num": "14",
-      "cost": "500",
-      "com": "0",
-      "code": null
-    }
-  ],
-  "order": null,
-  "subscript": null,
-  "bonuses": null,
-  "order_types": null,
-  "sale_secury_token": "6c75436c-3665-4156-9235-667a74426e69"
-},
-  {
-  "show": "5942094",
-  "seats": [
-    "594652-28-17-0-1",
-    "594652-28-14-0-1"
-  ],
-  "lang": "ru",
-  "freedom": false,
-  "sale": "53498566",
-  "reservation_id": "346937584329",
-  "price": 1000,
-  "sum": 1000,
-  "expire": 3600,
-  "currency": "KZT",
-  "hide_mfo": true,
-  "advertising_campaigns": [
-    {
-      "advertising_campaign_uid": 0,
-      "active": 1,
-      "name": "Выберите ...",
-      "page_text": "",
-      "image": null
-    }
-  ],
-  "special_bonus": [],
-  "seats_text": null,
-  "tickets": [
-    {
-      "id": "86294453",
-      "level": "594652",
-      "row": "28",
-      "num": "17",
-      "cost": "500",
-      "com": "0",
-      "code": null
-    },
-    {
-      "id": "86294454",
-      "level": "594652",
-      "row": "28",
-      "num": "14",
-      "cost": "500",
-      "com": "0",
-      "code": null
-    }
-  ],
-  "order": null,
-  "subscript": null,
-  "bonuses": null,
-  "order_types": null,
-  "sale_secury_token": "6c75436c-3665-4156-9235-667a74426e69"
+    "hall": "ФК",
+    "cost": "500",
+    "commission": "0",
+    "code": "3684018644170680",
+    "type": "Обычные",
+    "barcode": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAAoAQMAAAD36JXUAAAABlBMVEX///8AAABVwtN+AAAAAXRSTlMAQObYZgAAADVJREFUOI1j+Mx/2IaHx/6Mjc2H/waHmc+fsec3+HDgjP1hG3t+5s82DKPyo/Kj8qPyw1QeAI/5KT+hkS5JAAAAAElFTkSuQmCC",
+    "qr": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAD8AAAA/AQMAAABtkYKcAAAABlBMVEUAAAD///+l2Z/dAAAAp0lEQVQokXXRsQ3DIBAF0EMULrMA0q3hLivhBRImMCulYw0kL+B0LizIR7YL2z9XveI4/oGIdDZ+pNUVWpP9pjoTOJPykMRzaPwLHKdok+NxxRnI44Y92AV1q8IQ0/pebCDIj0XRMBLo3Gl51kCwSr++ZCoEyDOFzgkBsijGjgToQU4tBNh9Cn3Lc0N7Zy/7F9xg0RM4ENV5AkzOZtGRAHmySduCZ/wAEXjzqXuRVlwAAAAASUVORK5CYII="
 }
-]
