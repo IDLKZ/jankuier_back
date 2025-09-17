@@ -64,6 +64,7 @@ class RecreatePaymentForTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO
         self.user = user
         await self.validate(ticketon_order_id)
         await self.transform()
+        self.common_response_dto.ticketon_order_id = ticketon_order_id
         return self.common_response_dto
 
     async def validate(self, ticketon_order_id: int) -> None:

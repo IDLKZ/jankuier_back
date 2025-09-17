@@ -8,7 +8,8 @@ class TicketonResponseForSaleDTO(BaseModel):
     order: Dict[str, Any] | None = None
     ticketon: TicketonBookingShowBookingDTO | None = None
     payment_transaction_id: int | None = None
-    
+    ticketon_order_id: int | None = None
+
     class Config:
         from_attributes = True
         arbitrary_types_allowed = True

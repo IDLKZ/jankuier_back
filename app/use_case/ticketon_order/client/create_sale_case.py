@@ -48,6 +48,7 @@ class CreateSaleTicketonAndOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
         await self.validate()
         await self.transform()
         await self.create_transaction()
+        self.common_response_dto.ticketon_order_id = self.ticketon_order_entity.id
         return self.common_response_dto
 
 
