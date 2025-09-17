@@ -91,7 +91,7 @@ class AlatauBackrefGetDTO(BaseModel):
 
 
 class AlatauBackrefResponseDTO(BaseModel):
-    ticketon_order:TicketonOrderRDTO|None = None
+    ticketon_order:TicketonOrderWithRelationsRDTO|None = None
     payment_transaction:PaymentTransactionWithRelationsRDTO|None = None
     status:DTOConstant.StandardBooleanFalseField(description="Код результата (0=успех)") = False
     message:DTOConstant.StandardNullableTextField(description="Доп. описание")

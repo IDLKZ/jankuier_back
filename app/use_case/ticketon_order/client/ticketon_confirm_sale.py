@@ -17,7 +17,7 @@ from app.adapters.repository.ticketon_order.ticketon_order_repository import Tic
 from app.adapters.repository.ticketon_order_and_payment_transaction.ticketon_order_and_payment_transaction_repository import \
     TicketonOrderAndPaymentTransactionRepository
 from app.core.app_exception_response import AppExceptionResponse
-from app.entities import TicketonOrderEntity, PaymentTransactionEntity
+from app.entities import TicketonOrderEntity, PaymentTransactionEntity, TicketonOrderAndPaymentTransactionEntity
 from app.helpers.alatau_helper import get_alatau_error_message
 from app.i18n.i18n_wrapper import i18n
 from app.infrastructure.app_config import app_config
@@ -40,6 +40,7 @@ class TicketonConfirmCase(BaseUseCase[AlatauBackrefResponseDTO]):
         self.ticketon_order_entity: TicketonOrderEntity | None = None
         self.payment_transaction_entity: PaymentTransactionEntity | None = None
         self.response = AlatauBackrefResponseDTO()
+        self.ticketon_order_and_payment_transaction_entity:TicketonOrderAndPaymentTransactionEntity|None = None
 
     async def execute(self, dto:Union[AlatauBackrefPostDTO|AlatauBackrefGetDTO]) -> AlatauBackrefResponseDTO:
         self.dto = dto
@@ -71,18 +72,18 @@ class TicketonConfirmCase(BaseUseCase[AlatauBackrefResponseDTO]):
         if self.payment_transaction_entity.is_active is False or self.payment_transaction_entity.is_canceled is True:
             raise AppExceptionResponse.bad_request(message=i18n.gettext("payment_transaction_is_not_active"))
 
-        ticketon_order_and_payment_transaction_entity = await self.ticketon_order_and_payment_transaction_repository.get_first_with_filters(
+        self.ticketon_order_and_payment_transaction_entity = await self.ticketon_order_and_payment_transaction_repository.get_first_with_filters(
             filters=[
                 self.ticketon_order_and_payment_transaction_repository.model.payment_transaction_id == self.payment_transaction_entity.id,
                 self.ticketon_order_and_payment_transaction_repository.model.is_active.is_(True)
             ]
         )
-        if not ticketon_order_and_payment_transaction_entity:
+        if not self.ticketon_order_and_payment_transaction_entity:
             raise AppExceptionResponse.bad_request(message=i18n.gettext("ticketon_order_and_payment_transaction_not_found"))
         #Проверяем заказ
         self.ticketon_order_entity = await self.ticketon_order_repository.get_first_with_filters(
             filters=[
-                self.ticketon_order_repository.model.id == ticketon_order_and_payment_transaction_entity.ticketon_order_id
+                self.ticketon_order_repository.model.id == self.ticketon_order_and_payment_transaction_entity.ticketon_order_id
             ],
             options=self.ticketon_order_repository.default_relationships(),
             include_deleted_filter=True
@@ -171,14 +172,14 @@ class TicketonConfirmCase(BaseUseCase[AlatauBackrefResponseDTO]):
         if not is_paid or self.ticketon_order_entity is None:
             self.ticketon_order_entity = await self.ticketon_order_repository.get_first_with_filters(
                 filters=[
-                    self.ticketon_order_repository.model.sale == self.payment_transaction_entity.order
+                    self.ticketon_order_repository.model.id == self.ticketon_order_and_payment_transaction_entity.ticketon_order_id
                 ],
                 options=self.ticketon_order_repository.default_relationships(),
                 include_deleted_filter=True,
             )
         try:
 
-            self.response.ticketon_order = TicketonOrderRDTO.model_validate(self.ticketon_order_entity)
+            self.response.ticketon_order = TicketonOrderWithRelationsRDTO.model_validate(self.ticketon_order_entity)
             self.response.payment_transaction = PaymentTransactionWithRelationsRDTO.model_validate(self.payment_transaction_entity)
             self.response.status = is_paid
             self.response.message = error_message
