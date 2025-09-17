@@ -37,7 +37,7 @@ class AllTicketonOrderCase(BaseUseCase[list[TicketonOrderRDTO]]):
         """
         self.repository = TicketonOrderRepository(db)
 
-    async def execute(self, filter: TicketonOrderFilter, user_id: int) -> list[TicketonOrderRDTO]:
+    async def execute(self, filter: TicketonOrderFilter, user_id: int|None = None) -> list[TicketonOrderRDTO]:
         """
         Выполняет операцию получения списка заказов Ticketon пользователя.
 
@@ -48,11 +48,11 @@ class AllTicketonOrderCase(BaseUseCase[list[TicketonOrderRDTO]]):
         Returns:
             list[TicketonOrderRDTO]: Список объектов заказов Ticketon пользователя.
         """
-        await self.validate(user_id=user_id)
+        #await self.validate(user_id=user_id)
         
         # Добавляем фильтр по пользователю к существующим фильтрам
         user_filters = filter.apply()
-        user_filters.append(self.repository.model.user_id == user_id)
+        #user_filters.append(self.repository.model.user_id == user_id)
         
         models = await self.repository.get_with_filters(
             order_by=filter.order_by,

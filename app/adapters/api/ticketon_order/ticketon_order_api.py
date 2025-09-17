@@ -29,6 +29,10 @@ from app.use_case.ticketon_order.client.ticketon_confirm_sale import TicketonCon
 from app.use_case.ticketon_order.client.refund_ticketon_order_case import RefundTicketonOrderCase
 from app.use_case.ticketon_order.client.check_ticketon_order_case import CheckTicketonOrderCase
 from app.use_case.ticketon_order.client.check_ticketon_ticket_case import CheckTicketonTicketCase
+from app.use_case.ticketon_order.client.paginate_ticketon_order_case import PaginateTicketonOrderCase as ClientPaginateTicketonOrderCase
+from app.use_case.ticketon_order.client.get_ticketon_order_by_id_case import GetTicketonOrderByIdCase as ClientGetTicketonOrderByIdCase
+from app.adapters.dto.user.user_dto import UserWithRelationsRDTO
+from app.middleware.role_middleware import check_client
 
 
 class TicketonOrderApi:
@@ -123,6 +127,21 @@ class TicketonOrderApi:
             summary="Проверка билета Ticketon",
             description="Получение актуальной информации о конкретном билете из API Ticketon",
         )(self.check_ticket)
+
+        # Client endpoints
+        self.router.get(
+            "/client/my-ticketon-orders",
+            response_model=PaginationTicketonOrderWithRelationsRDTO,
+            summary="Мои заказы Ticketon (клиент)",
+            description="Получение пагинированного списка заказов Ticketon текущего пользователя",
+        )(self.client_paginate)
+
+        self.router.get(
+            "/client/my-ticketon-order/{id}",
+            response_model=TicketonOrderWithRelationsRDTO,
+            summary="Получить мой заказ Ticketon по ID (клиент)",
+            description="Получение заказа Ticketon по ID для текущего пользователя с отношениями",
+        )(self.client_get)
 
     async def paginate(
         self,
@@ -451,6 +470,71 @@ class TicketonOrderApi:
                 ticketon_order_id=ticketon_order_id,
                 ticketon_ticket_id=ticket_id
             )
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    # Client endpoints
+    async def client_paginate(
+        self,
+        filter: TicketonOrderPaginationFilter = Depends(),
+        # user: UserWithRelationsRDTO = Depends(check_client),
+        db: AsyncSession = Depends(get_db),
+    ) -> PaginationTicketonOrderWithRelationsRDTO:
+        """
+        Получение пагинированного списка заказов Ticketon для текущего пользователя.
+
+        Args:
+            filter: Фильтр для пагинации с параметрами сортировки и поиска
+            user: Текущий авторизованный пользователь (закомментирован)
+            db: Сессия базы данных
+
+        Returns:
+            Пагинированный список заказов пользователя с отношениями
+        """
+        try:
+            # TODO: Раскомментировать когда будет готов check_client
+            # return await ClientPaginateTicketonOrderCase(db).execute(filter=filter, user_id=user.id)
+
+            # Временная заглушка для тестирования (не используем user_id)
+            return await ClientPaginateTicketonOrderCase(db).execute(filter=filter, user_id=None)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def client_get(
+        self,
+        id: RoutePathConstants.IDPath,
+        # user: UserWithRelationsRDTO = Depends(check_client),
+        db: AsyncSession = Depends(get_db),
+    ) -> TicketonOrderWithRelationsRDTO:
+        """
+        Получение заказа Ticketon по ID для текущего пользователя.
+
+        Args:
+            id: Уникальный идентификатор заказа
+            user: Текущий авторизованный пользователь (закомментирован)
+            db: Сессия базы данных
+
+        Returns:
+            Найденный заказ Ticketon пользователя с отношениями
+        """
+        try:
+            # TODO: Раскомментировать когда будет готов check_client
+            # return await ClientGetTicketonOrderByIdCase(db).execute(id=id, user_id=user.id)
+
+            # Временная заглушка для тестирования (не используем user_id)
+            return await ClientGetTicketonOrderByIdCase(db).execute(id=id, user_id=None)
         except HTTPException:
             raise
         except Exception as exc:

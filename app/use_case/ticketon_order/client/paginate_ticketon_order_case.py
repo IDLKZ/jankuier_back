@@ -28,7 +28,7 @@ class PaginateTicketonOrderCase(BaseUseCase[PaginationTicketonOrderWithRelations
         self.repository = TicketonOrderRepository(db)
 
     async def execute(
-        self, filter: TicketonOrderPaginationFilter, user_id: int
+        self, filter: TicketonOrderPaginationFilter, user_id: int|None = None
     ) -> PaginationTicketonOrderWithRelationsRDTO:
         """
         Выполняет операцию пагинации заказов Ticketon пользователя.
@@ -40,11 +40,11 @@ class PaginateTicketonOrderCase(BaseUseCase[PaginationTicketonOrderWithRelations
         Returns:
             PaginationTicketonOrderWithRelationsRDTO: Пагинированный результат с заказами пользователя.
         """
-        await self.validate(user_id=user_id)
+        #await self.validate(user_id=user_id)
         
         # Добавляем фильтр по пользователю к существующим фильтрам
         user_filters = filter.apply()
-        user_filters.append(self.repository.model.user_id == user_id)
+        #user_filters.append(self.repository.model.user_id == user_id)
         
         models = await self.repository.paginate(
             dto=TicketonOrderWithRelationsRDTO,

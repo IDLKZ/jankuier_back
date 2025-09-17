@@ -188,7 +188,7 @@ class TicketonShowsDataDTO(BaseModel):
 
 
 class TicketonGetShowsParameterDTO(BaseModel):
-    place: Optional[int] = Field(default=59, description="ID площадки (place[])")
+    place: Optional[int] = Field(default=None, description="ID площадки (place[])")
     withParam: Optional[str] = Field(default="future", alias="with", description="Состояние (with[])")
     i18n: Optional[str] = Field(default="ru", description="Язык локализации (i18n)")
     type: Optional[str] = Field(default="sport", description="Категория (type[])")

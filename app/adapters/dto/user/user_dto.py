@@ -51,10 +51,6 @@ class UserRDTO(UserDTO):
     image_id: DTOConstant.StandardNullableUnsignedIntegerField(
         description="ID изображения"
     )
-    # region_id: DTOConstant.StandardNullableUnsignedIntegerField(
-    #     description="ID региона"
-    # )
-
     first_name: DTOConstant.StandardVarcharField(description="Имя")
     last_name: DTOConstant.StandardVarcharField(description="Фамилия")
     patronomic: DTOConstant.StandardNullableVarcharField(description="Отчество")

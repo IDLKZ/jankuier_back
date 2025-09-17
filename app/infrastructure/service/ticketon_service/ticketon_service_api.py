@@ -166,7 +166,7 @@ class TicketonServiceAPI:
         parameter: TicketonGetShowsParameterDTO
     ) -> TicketonShowsDataDTO:
         """
-        Получает список событий с кэшированием в Redis.
+        Получает список событий с кэшированием в Redis только при наличии place.
 
         Args:
             parameter: Параметры поиска событий
@@ -177,27 +177,33 @@ class TicketonServiceAPI:
         Raises:
             AppExceptionResponse: При ошибке получения данных
         """
-        cache_key = self._get_cache_key(
-            "shows",
-            type=parameter.type,
-            place=parameter.place,
-            withParam=parameter.withParam,
-            i18n=parameter.i18n
-        )
+        # Используем Redis только если указан place
+        cached_data = None
+        cache_key = None
 
-        # Проверяем кэш
-        cached_data = await self._get_from_cache(cache_key, TicketonShowsRedisStore)
-        if cached_data and cached_data.data.shows:
-            if cached_data.last_updated + self._redis_ttl > datetime.now():
-                return cached_data.data
+        if parameter.place is not None:
+            cache_key = self._get_cache_key(
+                "shows",
+                type=parameter.type,
+                place=parameter.place,
+                withParam=parameter.withParam,
+                i18n=parameter.i18n
+            )
+            cached_data = await self._get_from_cache(cache_key, TicketonShowsRedisStore)
+            if cached_data and cached_data.data.shows:
+                if cached_data.last_updated + self._redis_ttl > datetime.now():
+                    return cached_data.data
 
         # Запрос к API
         params = {
             f"type[]": parameter.type,
-            f"place[]": parameter.place,
             f"with[]": parameter.withParam,
             "i18n": parameter.i18n
         }
+
+        # Добавляем place только если он указан
+        if parameter.place is not None:
+            params[f"place[]"] = parameter.place
 
         json_data = await self._make_request(
             url=app_config.ticketon_get_shows,
@@ -207,13 +213,14 @@ class TicketonServiceAPI:
 
         data = TicketonShowsDataDTO.from_json(json_data)
 
-        # Сохраняем в кэш
-        redis_store = TicketonShowsRedisStore(
-            query=parameter,
-            data=data,
-            last_updated=datetime.now()
-        )
-        self._set_cache(cache_key, redis_store)
+        # Сохраняем в кэш только если указан place
+        if parameter.place is not None and cache_key is not None:
+            redis_store = TicketonShowsRedisStore(
+                query=parameter,
+                data=data,
+                last_updated=datetime.now()
+            )
+            self._set_cache(cache_key, redis_store)
 
         return data
 

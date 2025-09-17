@@ -75,3 +75,18 @@ def assign_ticketon_order_roles(app) -> None:
         path=f"{base_url}/check-ticket/{{ticketon_order_id}}/{{ticket_id}}",
         roles=[RoleRouteConstant.ClientTagName, RoleRouteConstant.AdministratorTagName],
     )
+
+    # Client endpoints
+    # Client my orders pagination - Client access only (authenticated users can view their own orders)
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/client/my-ticketon-orders",
+        roles=[RoleRouteConstant.ClientTagName],
+    )
+
+    # Client get my order by ID - Client access only (authenticated users can view their own orders)
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/client/my-ticketon-order/{{id}}",
+        roles=[RoleRouteConstant.ClientTagName],
+    )

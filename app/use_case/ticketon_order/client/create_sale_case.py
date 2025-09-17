@@ -153,7 +153,6 @@ class CreateSaleTicketonAndOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
                 expired_at=self.current_time + timedelta(seconds=self.ticketon_booking_result.expire),
                 order_full_info={
                     "ticketon_booking": self.ticketon_booking_result.dict(),
-                    "alatau_order": self.order_dto.dict(),
                     "show_info": show.dict() if show else None,
                 }
             )

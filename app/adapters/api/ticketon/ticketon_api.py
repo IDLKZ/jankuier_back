@@ -61,7 +61,7 @@ class TicketonApi:
     async def get_shows(
         self,
         place: Optional[int] = Query(
-            default=59,
+            default=None,
             description="ID площадки (place[]) - идентификатор места проведения",
             example=59
         ),
@@ -77,8 +77,9 @@ class TicketonApi:
             description="Временной параметр (with[]) - показать будущие, прошедшие или все события",
             example="future"
         ),
-        i18n: Optional[str] = Query(
+        language: Optional[str] = Query(
             default="ru",
+            alias="i18n",
             description="Язык локализации (i18n[]) - язык для получения данных",
             example="ru"
         ),
@@ -93,7 +94,7 @@ class TicketonApi:
             place: ID площадки (место проведения)
             event_type: Тип события (sport, concert, theatre, cinema)
             with_param: Временной фильтр (future, past, all)
-            i18n: Язык локализации (ru, kk, en)
+            language: Язык локализации (ru, kk, en)
             
         Returns:
             TicketonShowsDataDTO: Данные о сеансах с полной информацией
@@ -107,7 +108,7 @@ class TicketonApi:
                 place=place,
                 type=event_type,
                 withParam=with_param,
-                i18n=i18n
+                i18n=language
             )
             
             # Выполняем use case

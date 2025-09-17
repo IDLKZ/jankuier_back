@@ -88,8 +88,6 @@ class GetTicketonShowsCase(BaseUseCase[TicketonShowsDataDTO]):
             parameter: Параметры для трансформации
         """
         # Устанавливаем значения по умолчанию если они не указаны
-        if not parameter.place:
-            parameter.place = 59  # Default place ID
         if not parameter.withParam:
             parameter.withParam = "future"
         if not parameter.i18n:
