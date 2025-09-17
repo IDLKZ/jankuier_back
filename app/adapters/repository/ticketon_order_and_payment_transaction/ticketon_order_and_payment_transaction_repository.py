@@ -4,6 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from sqlalchemy import select, and_
 
+from app.adapters.dto.ticketon_order_and_payment_transaction.ticketon_order_and_payment_transaction_dto import \
+    TicketonOrderAndPaymentTransactionCDTO
 from app.adapters.repository.base_repository import BaseRepository
 from app.entities.ticketon_order_and_payment_transaction_entity import TicketonOrderAndPaymentTransactionEntity
 
@@ -128,7 +130,7 @@ class TicketonOrderAndPaymentTransactionRepository(BaseRepository[TicketonOrderA
 
         for link in other_links:
             link.is_primary = False
-            await self.update_entity(link)
+            await self.update(link, TicketonOrderAndPaymentTransactionCDTO.from_orm(link))
 
         # Находим и устанавливаем как основную нужную связь
         target_link = await self.get_first_with_filters(
@@ -145,7 +147,7 @@ class TicketonOrderAndPaymentTransactionRepository(BaseRepository[TicketonOrderA
             )
 
         target_link.is_primary = True
-        return await self.update_entity(target_link)
+        return await self.update(target_link,  TicketonOrderAndPaymentTransactionCDTO.from_orm(target_link))
 
     async def create_link(
         self,
@@ -209,7 +211,7 @@ class TicketonOrderAndPaymentTransactionRepository(BaseRepository[TicketonOrderA
         count = 0
         for link in links:
             link.is_active = False
-            await self.update_entity(link)
+            await self.update(link, TicketonOrderAndPaymentTransactionCDTO.from_orm(link))
             count += 1
 
         return count
