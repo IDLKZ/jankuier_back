@@ -198,7 +198,8 @@ class TicketonServiceAPI:
         params = {
             f"type[]": parameter.type,
             f"with[]": parameter.withParam,
-            "i18n": parameter.i18n
+            "i18n": parameter.i18n,
+            "place[]": 52
         }
 
         # Добавляем place только если он указан
