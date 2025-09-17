@@ -9,7 +9,8 @@ from app.adapters.dto.payment_transaction.payment_transaction_dto import Payment
     PaymentTransactionWithRelationsRDTO
 from app.adapters.dto.ticketon.ticketon_confirm_sale_dto import TicketonConfirmSaleRequestDTO, \
     TicketonConfirmSaleResponseDTO
-from app.adapters.dto.ticketon_order.ticketon_order_dto import TicketonOrderCDTO, TicketonOrderWithRelationsRDTO
+from app.adapters.dto.ticketon_order.ticketon_order_dto import TicketonOrderCDTO, TicketonOrderWithRelationsRDTO, \
+    TicketonOrderRDTO
 from app.adapters.repository.payment_transaction.payment_transaction_repository import PaymentTransactionRepository
 from app.adapters.repository.ticketon_order.ticketon_order_repository import TicketonOrderRepository
 from app.adapters.repository.ticketon_order_and_payment_transaction.ticketon_order_and_payment_transaction_repository import \
@@ -175,7 +176,7 @@ class TicketonConfirmCase(BaseUseCase[AlatauBackrefResponseDTO]):
                 include_deleted_filter=True,
             )
 
-        self.response.ticketon_order = TicketonOrderWithRelationsRDTO.model_validate(self.ticketon_order_entity)
+        self.response.ticketon_order = TicketonOrderRDTO.model_validate(self.ticketon_order_entity)
         self.response.payment_transaction = PaymentTransactionWithRelationsRDTO.model_validate(self.payment_transaction_entity)
         self.response.status = is_paid
         self.response.message = error_message
