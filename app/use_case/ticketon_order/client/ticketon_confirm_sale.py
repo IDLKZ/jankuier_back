@@ -1,3 +1,4 @@
+import traceback
 from typing import Union, Any
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -175,11 +176,15 @@ class TicketonConfirmCase(BaseUseCase[AlatauBackrefResponseDTO]):
                 options=self.ticketon_order_repository.default_relationships(),
                 include_deleted_filter=True,
             )
+        try:
 
-        self.response.ticketon_order = TicketonOrderRDTO.model_validate(self.ticketon_order_entity)
-        self.response.payment_transaction = PaymentTransactionWithRelationsRDTO.model_validate(self.payment_transaction_entity)
-        self.response.status = is_paid
-        self.response.message = error_message
+            self.response.ticketon_order = TicketonOrderRDTO.model_validate(self.ticketon_order_entity)
+            self.response.payment_transaction = PaymentTransactionWithRelationsRDTO.model_validate(self.payment_transaction_entity)
+            self.response.status = is_paid
+            self.response.message = error_message
+
+        except Exception as e:
+            raise AppExceptionResponse.internal_error(message=i18n.gettext("internal_server_error"), extra={"details": str(traceback.print_exc())})
 
 
 
