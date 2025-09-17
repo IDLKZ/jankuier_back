@@ -35,6 +35,7 @@ from app.entities.role_entity import RoleEntity
 from app.entities.role_permission_entity import RolePermissionEntity
 from app.entities.sport_entity import SportEntity
 from app.entities.student_entity import StudentEntity
+from app.entities.ticketon_order_and_payment_transaction_entity import TicketonOrderAndPaymentTransactionEntity
 from app.entities.ticketon_order_entity import TicketonOrderEntity
 from app.entities.ticketon_order_status_entity import TicketonOrderStatusEntity
 from app.entities.user_entity import UserEntity
@@ -79,5 +80,6 @@ __all__ = [
     PaymentTransactionEntity.__name__,
     TicketonOrderStatusEntity.__name__,
     TicketonOrderEntity.__name__,
+    TicketonOrderAndPaymentTransactionEntity.__name__,
 ]
 
