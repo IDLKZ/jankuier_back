@@ -27,14 +27,13 @@ from app.use_case.base_case import BaseUseCase
 
 class RecreatePaymentForTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
     """
-    Use case для восстановления/пересоздания платежа для существующего заказа Ticketon.
-    
+    Use case для пересоздания платежа для существующего заказа Ticketon.
+
     Логика:
     1. Находит заказ Ticketon по ID
-    2. Ищет активную payment_transaction для этого заказа
-    3. Если активная найдена - возвращает её данные
-    4. Если не найдена - создает новую payment_transaction
-    5. Возвращает TicketonResponseForSaleDTO с данными для оплаты
+    2. Удаляет все старые активные payment_transaction для этого заказа
+    3. Создает новую свежую payment_transaction с новым NONCE
+    4. Возвращает TicketonResponseForSaleDTO с данными для оплаты
     """
 
     def __init__(self, db: AsyncSession) -> None:
@@ -44,8 +43,8 @@ class RecreatePaymentForTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO
         self.ticketon_service_api = TicketonServiceAPI()
         self.ticketon_booking_result: TicketonBookingShowBookingDTO | None = None
         self.ticketon_order: TicketonOrderWithRelationsRDTO | None = None
-        self.active_payment_transaction: PaymentTransactionEntity | None = None
-        self.payment_transaction_entity: PaymentTransactionEntity | None = None
+        self.old_payment_transactions: list[PaymentTransactionEntity] = []
+        self.new_payment_transaction: PaymentTransactionEntity | None = None
         self.order_dto = AlatauCreateResponseOrderDTO()
         self.common_response_dto = TicketonResponseForSaleDTO()
         self.current_time = datetime.now()
@@ -87,7 +86,8 @@ class RecreatePaymentForTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO
         self.ticketon_booking_result = TicketonBookingShowBookingDTO.from_orm(self.ticketon_order)
         self.common_response_dto.ticketon = self.ticketon_booking_result
 
-        self.active_payment_transaction = await self.payment_transaction_repository.get_first_with_filters(
+        # Находим все старые активные payment_transaction для этого заказа
+        self.old_payment_transactions = await self.payment_transaction_repository.get_with_filters(
             filters=[
                 self.payment_transaction_repository.model.order == self.ticketon_order.sale,
                 self.payment_transaction_repository.model.transaction_type == DbValueConstants.PaymentTicketonType,
@@ -97,27 +97,41 @@ class RecreatePaymentForTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO
             ],
             include_deleted_filter=True
         )
-        if not self.active_payment_transaction:
-            await self.create_transaction()
-        else:
-            self.order_dto.ORDER = self.active_payment_transaction.order
-            self.order_dto.AMOUNT = self.active_payment_transaction.amount
-            self.order_dto.DESC = self.active_payment_transaction.desc
-            self.order_dto.DESC_ORDER = self.active_payment_transaction.desc_order
-            self.order_dto.EMAIL = self.active_payment_transaction.email
-            # Note: PHONE не используется в AlatauCreateResponseOrderDTO для платежной системы
-            self.order_dto.NONCE = self.active_payment_transaction.nonce
-            self.order_dto.CLIENT_ID = self.active_payment_transaction.client_id
-            self.order_dto.NAME = self.active_payment_transaction.name
-            self.order_dto.P_SIGN = self.active_payment_transaction.pre_p_sign
+
+        # Удаляем все старые транзакции
+        await self._delete_old_transactions()
+
+        # Создаем новую свежую транзакцию
+        await self.create_transaction()
 
         self.common_response_dto.order = self.order_dto.dict()
-        self.common_response_dto.payment_transaction_id = self.active_payment_transaction.id
+        self.common_response_dto.payment_transaction_id = self.new_payment_transaction.id
 
     async def transform(self) -> None:
         """
         Обрабатывает данные и создает/находит payment_transaction.
         """
+
+    async def _delete_old_transactions(self) -> None:
+        """
+        Удаляет все старые активные payment_transaction для заказа.
+        """
+        deleted_count = 0
+        for old_transaction in self.old_payment_transactions:
+            try:
+                await self.payment_transaction_repository.delete(
+                    old_transaction.id,
+                    force_delete=True
+                )
+                deleted_count += 1
+                print(f"✅ Deleted old payment transaction {old_transaction.id}")
+            except Exception as e:
+                print(f"❌ Failed to delete old payment transaction {old_transaction.id}: {str(e)}")
+
+        if deleted_count > 0:
+            print(f"✅ Deleted {deleted_count} old payment transactions")
+        else:
+            print("ℹ️ No old payment transactions found to delete")
 
     async def create_transaction(self) -> None:
         try:
@@ -161,16 +175,14 @@ class RecreatePaymentForTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO
                 is_canceled=False,
                 expired_at=self.current_time + timedelta(seconds=self.ticketon_booking_result.expire),
                 order_full_info={
-                    "ticketon_booking": self.ticketon_booking_result.dict(),
-                    "show_info": show.dict() if show else None,
+                    "ticketon_booking": self.ticketon_booking_result.model_dump(),
+                    "show_info": show.model_dump() if show else None,
                 }
             )
 
-            self.active_payment_transaction = await self.payment_transaction_repository.create(
-                PaymentTransactionEntity(**payment_cdto.dict())
+            self.new_payment_transaction = await self.payment_transaction_repository.create(
+                PaymentTransactionEntity(**payment_cdto.model_dump())
             )
-            # Для корректной очистки при ошибках
-            self.payment_transaction_entity = self.active_payment_transaction
 
         except Exception as e:
             # Полная очистка при ошибке эквайринга
@@ -188,34 +200,38 @@ class RecreatePaymentForTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO
 
     async def _cleanup_after_error(self, error_message: str) -> None:
         """
-        Выполняет полную очистку созданных данных при ошибке в create_transaction.
+        Выполняет очистку при ошибке в create_transaction.
 
         Порядок очистки:
-        1. Удаляет payment_transaction (если была создана)
-        2. Удаляет ticketon_order (если был создан)
-        3. Отменяет sale в Ticketon API (если была создана)
+        1. Удаляет новую payment_transaction (если была создана)
 
         Args:
             error_message: Сообщение об ошибке для логирования
         """
         cleanup_errors = []
 
-        # 1. Удаляем payment_transaction если была создана
-        if self.payment_transaction_entity:
+        # 1. Удаляем новую payment_transaction если была создана
+        if self.new_payment_transaction:
             try:
                 await self.payment_transaction_repository.delete(
-                    self.payment_transaction_entity.id,
+                    self.new_payment_transaction.id,
                     force_delete=True
                 )
-                print(f"✅ Payment transaction {self.payment_transaction_entity.id} deleted after error")
+                print(f"✅ New payment transaction {self.new_payment_transaction.id} deleted after error")
             except Exception as e:
-                cleanup_errors.append(f"Failed to delete payment_transaction: {str(e)}")
-                print(f"❌ Failed to delete payment_transaction: {str(e)}")
+                cleanup_errors.append(f"Failed to delete new payment_transaction: {str(e)}")
+                print(f"❌ Failed to delete new payment_transaction: {str(e)}")
 
         # 2. В RecreatePaymentCase мы НЕ создаем ticketon_order, он уже существует
         # Поэтому не удаляем его при ошибке
         print("ℹ️ Ticketon order существовал до вызова, не удаляем при ошибке")
 
-        # 3. В RecreatePaymentCase мы НЕ создаем sale, он уже существует 
+        # 3. В RecreatePaymentCase мы НЕ создаем sale, он уже существует
         # Поэтому не отменяем его при ошибке создания payment_transaction
         print("ℹ️ Ticketon sale существовал до вызова, не отменяем при ошибке")
+
+        # Log all cleanup errors if any occurred
+        if cleanup_errors:
+            print(f"⚠️ Cleanup completed with errors: {'; '.join(cleanup_errors)}")
+        else:
+            print("✅ Cleanup completed successfully")
