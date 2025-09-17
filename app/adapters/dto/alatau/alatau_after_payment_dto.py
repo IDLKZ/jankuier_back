@@ -6,6 +6,7 @@ from typing import Optional
 
 from app.adapters.dto.payment_transaction.payment_transaction_dto import PaymentTransactionWithRelationsRDTO
 from app.adapters.dto.ticketon_order.ticketon_order_dto import TicketonOrderWithRelationsRDTO
+from app.entities import TicketonOrderEntity
 from app.shared.dto_constants import DTOConstant
 
 
@@ -90,7 +91,7 @@ class AlatauBackrefGetDTO(BaseModel):
 
 
 class AlatauBackrefResponseDTO(BaseModel):
-    ticketon_order:TicketonOrderWithRelationsRDTO|None = None
+    ticketon_order:TicketonOrderEntity|None = None
     payment_transaction:PaymentTransactionWithRelationsRDTO|None = None
     status:DTOConstant.StandardBooleanFalseField(description="Код результата (0=успех)") = False
     message:DTOConstant.StandardNullableTextField(description="Доп. описание")
