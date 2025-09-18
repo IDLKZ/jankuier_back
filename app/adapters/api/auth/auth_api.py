@@ -1,20 +1,25 @@
 import traceback
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, UploadFile, File
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.exceptions import HTTPException
 
 from app.adapters.dto.auth.login_dto import LoginDTO
-from app.adapters.dto.auth.register_dto import RegisterDTO
+from app.adapters.dto.auth.register_dto import RegisterDTO, UpdateProfileDTO, UpdatePasswordDTO
 from app.adapters.dto.auth.token_dto import BearerTokenDTO
 from app.adapters.dto.user.user_dto import UserWithRelationsRDTO
 from app.core.app_exception_response import AppExceptionResponse
 from app.core.auth_core import get_current_user
+from app.helpers.form_helper import FormParserHelper
+from app.i18n.i18n_wrapper import i18n
 from app.infrastructure.db import get_db
 from app.shared.route_constants import RoutePathConstants
 from app.use_case.auth.login_case import LoginCase
 from app.use_case.auth.register_case import RegisterCase
+from app.use_case.auth.update_profile_case import UpdateProfileCase
+from app.use_case.auth.update_password_case import UpdatePasswordCase
+from app.use_case.auth.update_profile_photo_case import UpdateProfilePhotoCase
 
 
 class AuthApi:
@@ -58,6 +63,30 @@ class AuthApi:
             summary="Получить авторизованного пользователя",
             description="Данные пользователя",
         )(self.me)
+        self.router.put(
+            f"{RoutePathConstants.UpdateProfilePathName}",
+            response_model=UserWithRelationsRDTO,
+            summary="Обновить профиль",
+            description="Обновление данных профиля пользователя",
+        )(self.update_profile)
+        self.router.put(
+            f"{RoutePathConstants.UpdatePasswordPathName}",
+            response_model=bool,
+            summary="Изменить пароль",
+            description="Изменение пароля пользователя",
+        )(self.update_password)
+        self.router.put(
+            f"{RoutePathConstants.UpdateProfilePhotoPathName}",
+            response_model=UserWithRelationsRDTO,
+            summary="Обновить фото профиля",
+            description="Загрузка или обновление фото профиля пользователя",
+        )(self.update_profile_photo)
+        self.router.delete(
+            f"{RoutePathConstants.DeleteProfilePhotoPathName}",
+            response_model=UserWithRelationsRDTO,
+            summary="Удалить фото профиля",
+            description="Удаление фото профиля пользователя",
+        )(self.delete_profile_photo)
 
     async def sign_in(
         self, dto: LoginDTO, db: AsyncSession = Depends(get_db)
@@ -166,3 +195,117 @@ class AuthApi:
 
         else:
             return {"access_token": result.access_token, "token_type": "bearer"}
+
+    async def update_profile(
+        self,
+        dto: UpdateProfileDTO = Depends(FormParserHelper.parse_update_profile_dto_from_form),
+        user: UserWithRelationsRDTO = Depends(get_current_user),
+        db: AsyncSession = Depends(get_db),
+    ) -> UserWithRelationsRDTO:
+        """
+        Обновляет профиль пользователя.
+        Args:
+            dto (UpdateProfileDTO): Данные для обновления профиля.
+            user (UserWithRelationsRDTO): Текущий авторизованный пользователь.
+            db (AsyncSession): Сессия базы данных.
+        Returns:
+            UserWithRelationsRDTO: Обновленные данные пользователя.
+        Raises:
+            HTTPException: При ошибках обновления профиля.
+            AppExceptionResponse: При внутренних ошибках.
+        """
+        try:
+            return await UpdateProfileCase(db).execute(user_id=user.id, dto=dto)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"user_id": user.id, "details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def update_password(
+        self,
+        dto: UpdatePasswordDTO,
+        user: UserWithRelationsRDTO = Depends(get_current_user),
+        db: AsyncSession = Depends(get_db),
+    ) -> bool:
+        """
+        Изменяет пароль пользователя.
+        Args:
+            dto (UpdatePasswordDTO): Данные для смены пароля.
+            user (UserWithRelationsRDTO): Текущий авторизованный пользователь.
+            db (AsyncSession): Сессия базы данных.
+        Returns:
+            bool: True если пароль успешно изменен.
+        Raises:
+            HTTPException: При ошибках смены пароля.
+            AppExceptionResponse: При внутренних ошибках.
+        """
+        try:
+            return await UpdatePasswordCase(db).execute(user_id=user.id, dto=dto)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"user_id": user.id, "details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def update_profile_photo(
+        self,
+        file: UploadFile = File(..., description="Фото профиля"),
+        user: UserWithRelationsRDTO = Depends(get_current_user),
+        db: AsyncSession = Depends(get_db),
+    ) -> UserWithRelationsRDTO:
+        """
+        Обновляет фото профиля пользователя.
+        Args:
+            file (UploadFile): Файл изображения.
+            user (UserWithRelationsRDTO): Текущий авторизованный пользователь.
+            db (AsyncSession): Сессия базы данных.
+        Returns:
+            UserWithRelationsRDTO: Обновленные данные пользователя.
+        Raises:
+            HTTPException: При ошибках загрузки фото.
+            AppExceptionResponse: При внутренних ошибках.
+        """
+        try:
+            return await UpdateProfilePhotoCase(db).execute(user_id=user.id, file=file)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"user_id": user.id, "details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def delete_profile_photo(
+        self,
+        user: UserWithRelationsRDTO = Depends(get_current_user),
+        db: AsyncSession = Depends(get_db),
+    ) -> UserWithRelationsRDTO:
+        """
+        Удаляет фото профиля пользователя.
+        Args:
+            user (UserWithRelationsRDTO): Текущий авторизованный пользователь.
+            db (AsyncSession): Сессия базы данных.
+        Returns:
+            UserWithRelationsRDTO: Обновленные данные пользователя.
+        Raises:
+            HTTPException: При ошибках удаления фото.
+            AppExceptionResponse: При внутренних ошибках.
+        """
+        try:
+            return await UpdateProfilePhotoCase(db).delete_photo(user_id=user.id)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"user_id": user.id, "details": str(exc)},
+                is_custom=True,
+            ) from exc

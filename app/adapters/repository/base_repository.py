@@ -136,10 +136,16 @@ class BaseRepository(Generic[T]):
             await self.db.rollback()
             raise ValueError(self._parse_integrity_error(e))
 
-    async def update(self, obj: T, dto: BaseModel) -> T:
+    async def update(self, obj: T, dto: BaseModel | dict) -> T:
         """Обновление объекта."""
         try:
-            for field, value in dto.dict(exclude_unset=True).items():
+            if isinstance(dto, dict):
+                data = dto
+            else:
+                # Поддержка как Pydantic v1 (.dict()), так и v2 (.model_dump())
+                data = dto.model_dump(exclude_unset=True) if hasattr(dto, 'model_dump') else dto.dict(exclude_unset=True)
+
+            for field, value in data.items():
                 if hasattr(obj, field):
                     setattr(obj, field, value)
             await self.db.commit()

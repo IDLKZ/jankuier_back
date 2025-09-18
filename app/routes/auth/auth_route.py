@@ -41,3 +41,35 @@ def assign_auth_roles(app) -> None:
             RoleRouteConstant.CommonTagName,
         ],
     )
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}{RoutePathConstants.UpdateProfilePathName}",
+        roles=[
+            RoleRouteConstant.AdministratorTagName,
+            RoleRouteConstant.ClientTagName,
+        ],
+    )
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}{RoutePathConstants.UpdatePasswordPathName}",
+        roles=[
+            RoleRouteConstant.AdministratorTagName,
+            RoleRouteConstant.ClientTagName,
+        ],
+    )
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}{RoutePathConstants.UpdateProfilePhotoPathName}",
+        roles=[
+            RoleRouteConstant.AdministratorTagName,
+            RoleRouteConstant.ClientTagName,
+        ],
+    )
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}{RoutePathConstants.DeleteProfilePhotoPathName}",
+        roles=[
+            RoleRouteConstant.AdministratorTagName,
+            RoleRouteConstant.ClientTagName,
+        ],
+    )

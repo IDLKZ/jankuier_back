@@ -8,6 +8,7 @@ from app.adapters.repository.user.user_repository import UserRepository
 from app.core.app_exception_response import AppExceptionResponse
 from app.core.auth_core import get_password_hash
 from app.i18n.i18n_wrapper import i18n
+from app.shared.db_value_constants import DbValueConstants
 from app.use_case.base_case import BaseUseCase
 
 
@@ -33,7 +34,7 @@ class RegisterCase(BaseUseCase[UserWithRelationsRDTO]):
         model = await self.repository.create(obj=self.repository.model(**obj))
         if model:
             model = await self.repository.get(
-                id=model.id, options=self.repository.default_relationships()
+                id=model.id, options=self.repository.default_relationships(),include_deleted_filter=True
             )
             return UserWithRelationsRDTO.from_orm(model)
         raise AppExceptionResponse.internal_error(
@@ -41,6 +42,8 @@ class RegisterCase(BaseUseCase[UserWithRelationsRDTO]):
         )
 
     async def validate(self, dto: RegisterDTO) -> None:
+        if not dto.role_id:
+            dto.role_id = DbValueConstants.ClientRoleConstantID
         role = await self.role_repository.get(dto.role_id)
         if not role:
             raise AppExceptionResponse.bad_request(

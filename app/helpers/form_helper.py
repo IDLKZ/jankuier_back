@@ -48,6 +48,7 @@ from app.adapters.dto.cart_item.cart_item_dto import (
     CartItemBulkCDTO,
     CartItemBulkUpdateQtyDTO,
 )
+from app.adapters.dto.auth.register_dto import UpdateProfileDTO
 
 
 class FormParserHelper:
@@ -866,4 +867,22 @@ class FormParserHelper:
         
         return CartItemBulkUpdateQtyDTO(
             cart_item_updates=parsed_updates,
+        )
+
+    @staticmethod
+    def parse_update_profile_dto_from_form(
+        email: str = Form(..., description="Email"),
+        phone: str = Form(..., description="Телефон"),
+        iin: Optional[str] = Form(None, description="ИИН"),
+        first_name: str = Form(..., description="Имя"),
+        last_name: str = Form(..., description="Фамилия"),
+        patronymic: Optional[str] = Form(None, description="Отчество"),
+    ) -> UpdateProfileDTO:
+        return UpdateProfileDTO(
+            email=email,
+            phone=phone,
+            iin=iin,
+            first_name=first_name,
+            last_name=last_name,
+            patronymic=patronymic,
         )
