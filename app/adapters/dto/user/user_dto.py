@@ -30,12 +30,12 @@ class UserCDTO(BaseModel):
     username: DTOConstant.StandardUniqueValueField(
         description="Уникальное имя пользователя"
     )
-    sex: DTOConstant.StandardIntegerField(
+    sex: DTOConstant.StandardNullableIntegerField(
         description="Пол (0 - не указан, 1 - мужской, 2 - женский)"
     )
 
     iin: DTOConstant.StandardNullableVarcharField(description="ИИН")
-    birthdate: DTOConstant.StandardDateField(description="Дата рождения")
+    birthdate: DTOConstant.StandardNullableDateTimeField(description="Дата рождения")
 
     is_active: DTOConstant.StandardBooleanFalseField(description="Активен")
     is_verified: DTOConstant.StandardBooleanFalseField(description="Подтвержден")
@@ -60,10 +60,10 @@ class UserRDTO(UserDTO):
     username: DTOConstant.StandardUniqueValueField(
         description="Уникальное имя пользователя"
     )
-    sex: DTOConstant.StandardIntegerField(description="Пол")
+    sex: DTOConstant.StandardNullableIntegerField(description="Пол")
 
     iin: DTOConstant.StandardNullableVarcharField(description="ИИН")
-    birthdate: DTOConstant.StandardDateField(description="Дата рождения")
+    birthdate: DTOConstant.StandardNullableDateTimeField(description="Дата рождения")
 
     is_active: DTOConstant.StandardBooleanFalseField(description="Активен")
     is_verified: DTOConstant.StandardBooleanFalseField(description="Подтвержден")

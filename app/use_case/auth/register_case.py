@@ -1,3 +1,5 @@
+import traceback
+
 from sqlalchemy import or_, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -26,20 +28,22 @@ class RegisterCase(BaseUseCase[UserWithRelationsRDTO]):
         self.role_repository = RoleRepository(db)
 
     async def execute(self, dto: RegisterDTO) -> UserWithRelationsRDTO:
-        await self.validate(dto)
-        obj = dto.dict()
-        obj["password"] = get_password_hash(obj["password"])
-        obj["is_active"] = True
-        obj["verified"] = False
-        model = await self.repository.create(obj=self.repository.model(**obj))
-        if model:
-            model = await self.repository.get(
-                id=model.id, options=self.repository.default_relationships(),include_deleted_filter=True
+            await self.validate(dto)
+            obj = dto.dict()
+            obj["password_hash"] = get_password_hash(obj["password"])
+            del obj["password"]
+            obj["is_active"] = True
+            obj["is_verified"] = False
+            obj["sex"] = 0
+            model = await self.repository.create(obj=self.repository.model(**obj))
+            if model:
+                model = await self.repository.get(
+                    id=model.id, options=self.repository.default_relationships(),include_deleted_filter=True
+                )
+                return UserWithRelationsRDTO.from_orm(model)
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("something_went_wrong")
             )
-            return UserWithRelationsRDTO.from_orm(model)
-        raise AppExceptionResponse.internal_error(
-            message=i18n.gettext("something_went_wrong")
-        )
 
     async def validate(self, dto: RegisterDTO) -> None:
         if not dto.role_id:
@@ -53,15 +57,17 @@ class RegisterCase(BaseUseCase[UserWithRelationsRDTO]):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("role_cant_register")
             )
+        filters = [
+            func.lower(self.repository.model.username) == dto.username.lower(),
+            func.lower(self.repository.model.email) == dto.email.lower(),
+            func.lower(self.repository.model.phone) == dto.phone.lower(),
+        ]
+
+        if dto.iin:
+            filters.append(func.lower(self.repository.model.iin) == dto.iin.lower())
+
         user = await self.repository.get_first_with_filters(
-            filters=[
-                or_(
-                    func.lower(self.repository.model.username) == dto.username.lower(),
-                    func.lower(self.repository.model.email) == dto.email.lower(),
-                    func.lower(self.repository.model.phone) == dto.phone.lower(),
-                    func.lower(self.repository.model.iin) == dto.iin.lower(),
-                )
-            ]
+            filters=[or_(*filters)]
         )
         if user:
             if user.email.lower() == dto.email.lower():
@@ -76,7 +82,8 @@ class RegisterCase(BaseUseCase[UserWithRelationsRDTO]):
                 raise AppExceptionResponse.bad_request(
                     message=i18n.gettext("phone_exists")
                 )
-            if user.iin.lower() == dto.iin.lower():
-                raise AppExceptionResponse.bad_request(
-                    message=i18n.gettext("iin_exists")
-                )
+            if dto.iin:
+                if user.iin and user.iin.lower() == dto.iin.lower():
+                    raise AppExceptionResponse.bad_request(
+                        message=i18n.gettext("iin_exists")
+                    )

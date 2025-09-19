@@ -12,7 +12,7 @@ class RegisterDTO(BaseModel):
     password: DTOConstant.StandardPasswordField()
     first_name: DTOConstant.StandardVarcharField(description="Имя")
     last_name: DTOConstant.StandardVarcharField(description="Фамилия")
-    patronymic: DTOConstant.StandardNullableVarcharField(description="Отчество")
+    patronomic: DTOConstant.StandardNullableVarcharField(description="Отчество")
 
     class Config:
         from_attributes = True
@@ -24,7 +24,7 @@ class UpdateProfileDTO(BaseModel):
     iin: DTOConstant.StandardNullableIINField(description="ИИН")
     first_name: DTOConstant.StandardVarcharField(description="Имя")
     last_name: DTOConstant.StandardVarcharField(description="Фамилия")
-    patronymic: DTOConstant.StandardNullableVarcharField(description="Отчество")
+    patronomic: DTOConstant.StandardNullableVarcharField(description="Отчество")
 
     class Config:
         from_attributes = True
