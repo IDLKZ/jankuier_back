@@ -63,13 +63,13 @@ class AuthApi:
             summary="Получить авторизованного пользователя",
             description="Данные пользователя",
         )(self.me)
-        self.router.put(
+        self.router.post(
             f"{RoutePathConstants.UpdateProfilePathName}",
             response_model=UserWithRelationsRDTO,
             summary="Обновить профиль",
             description="Обновление данных профиля пользователя",
         )(self.update_profile)
-        self.router.put(
+        self.router.post(
             f"{RoutePathConstants.UpdatePasswordPathName}",
             response_model=bool,
             summary="Изменить пароль",
@@ -198,7 +198,7 @@ class AuthApi:
 
     async def update_profile(
         self,
-        dto: UpdateProfileDTO = Depends(FormParserHelper.parse_update_profile_dto_from_form),
+        dto: UpdateProfileDTO,
         user: UserWithRelationsRDTO = Depends(get_current_user),
         db: AsyncSession = Depends(get_db),
     ) -> UserWithRelationsRDTO:
