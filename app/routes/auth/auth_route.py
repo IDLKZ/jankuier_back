@@ -27,6 +27,14 @@ def assign_auth_roles(app) -> None:
     )
     assign_roles_to_route(
         app=app,
+        path=f"{base_url}{RoutePathConstants.RefreshTokenPathName}",
+        roles=[
+            RoleRouteConstant.AdministratorTagName,
+            RoleRouteConstant.CommonTagName,
+        ],
+    )
+    assign_roles_to_route(
+        app=app,
         path=f"{base_url}{RoutePathConstants.GetMePathName}",
         roles=[
             RoleRouteConstant.AdministratorTagName,

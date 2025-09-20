@@ -2,7 +2,7 @@ from sqlalchemy import or_, inspect
 from sqlalchemy.orm import Query as SQLAlchemyQuery
 
 from app.adapters.filters.base_pagination_filter import BasePaginationFilter
-from app.entities import FieldPartyEntity
+from app.entities import FieldPartyEntity, FieldEntity
 from app.shared.query_constants import AppQueryConstants
 
 
@@ -55,6 +55,9 @@ class FieldPartyPaginationFilter(BasePaginationFilter[FieldPartyEntity]):
         is_default: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(
             "Фильтрация по площадке по умолчанию"
         ),
+        city_id: int | None = AppQueryConstants.StandardOptionalIntegerQuery(
+            "Фильтрация по городу поля"
+        ),
         is_show_deleted: bool = AppQueryConstants.StandardBooleanQuery(
             "Показывать удаленные данные?"
         ),
@@ -78,6 +81,7 @@ class FieldPartyPaginationFilter(BasePaginationFilter[FieldPartyEntity]):
         self.is_active = is_active
         self.is_covered = is_covered
         self.is_default = is_default
+        self.city_id = city_id
         self.is_show_deleted = is_show_deleted
 
     def get_search_filters(self) -> list[str] | None:
@@ -87,19 +91,31 @@ class FieldPartyPaginationFilter(BasePaginationFilter[FieldPartyEntity]):
         filters = []
 
         if self.search:
+            search_filters = []
+
+            # Search in FieldPartyEntity fields
             model_columns = {column.key for column in inspect(self.model).columns}
             valid_fields = [
                 field for field in self.get_search_filters() if field in model_columns
             ]
             if valid_fields:
-                filters.append(
-                    or_(
-                        *[
-                            getattr(self.model, field).ilike(f"%{self.search}%")
-                            for field in valid_fields
-                        ]
-                    )
-                )
+                search_filters.extend([
+                    getattr(self.model, field).ilike(f"%{self.search}%")
+                    for field in valid_fields
+                ])
+
+            # Search in related FieldEntity fields
+            search_filters.extend([
+                FieldPartyEntity.field.has(FieldEntity.title_ru.ilike(f"%{self.search}%")),
+                FieldPartyEntity.field.has(FieldEntity.title_kk.ilike(f"%{self.search}%")),
+                FieldPartyEntity.field.has(FieldEntity.title_en.ilike(f"%{self.search}%")),
+                FieldPartyEntity.field.has(FieldEntity.description_ru.ilike(f"%{self.search}%")),
+                FieldPartyEntity.field.has(FieldEntity.description_kk.ilike(f"%{self.search}%")),
+                FieldPartyEntity.field.has(FieldEntity.description_en.ilike(f"%{self.search}%"))
+            ])
+
+            if search_filters:
+                filters.append(or_(*search_filters))
 
         if self.field_ids:
             filters.append(FieldPartyEntity.field_id.in_(self.field_ids))
@@ -133,5 +149,8 @@ class FieldPartyPaginationFilter(BasePaginationFilter[FieldPartyEntity]):
 
         if self.is_default is not None:
             filters.append(self.model.is_default.is_(self.is_default))
+
+        if self.city_id is not None:
+            filters.append(FieldPartyEntity.field.has(FieldEntity.city_id == self.city_id))
 
         return filters

@@ -62,6 +62,7 @@ class RoutePathConstants:
     LoginPathName = "/login"
     RegisterPathName = "/register"
     LoginSwaggerPathName = "/login-swagger"
+    RefreshTokenPathName = "/refresh-token"
     ResetPasswordPathName = "/reset-password"
     GetMePathName = "/me"
     UpdateProfilePathName = "/update-profile"

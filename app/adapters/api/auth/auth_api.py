@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.exceptions import HTTPException
 
 from app.adapters.dto.auth.login_dto import LoginDTO
+from app.adapters.dto.auth.refresh_token_dto import RefreshTokenDTO
 from app.adapters.dto.auth.register_dto import RegisterDTO, UpdateProfileDTO, UpdatePasswordDTO
 from app.adapters.dto.auth.token_dto import BearerTokenDTO
 from app.adapters.dto.user.user_dto import UserWithRelationsRDTO
@@ -16,6 +17,7 @@ from app.i18n.i18n_wrapper import i18n
 from app.infrastructure.db import get_db
 from app.shared.route_constants import RoutePathConstants
 from app.use_case.auth.login_case import LoginCase
+from app.use_case.auth.refresh_token_case import RefreshTokenCase
 from app.use_case.auth.register_case import RegisterCase
 from app.use_case.auth.update_profile_case import UpdateProfileCase
 from app.use_case.auth.update_password_case import UpdatePasswordCase
@@ -51,6 +53,12 @@ class AuthApi:
             summary="Регистрация",
             description="Регистрация пользователя",
         )(self.sign_up)
+        self.router.post(
+            f"{RoutePathConstants.RefreshTokenPathName}",
+            response_model=BearerTokenDTO,
+            summary="Обновление токенов",
+            description="Обновление токенов доступа с помощью refresh token",
+        )(self.refresh_token)
         self.router.post(
             f"{RoutePathConstants.LoginSwaggerPathName}",
             response_model=BearerTokenDTO,
@@ -307,5 +315,30 @@ class AuthApi:
             raise AppExceptionResponse.internal_error(
                 message=i18n.gettext("internal_server_error"),
                 extra={"user_id": user.id, "details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def refresh_token(
+        self, dto: RefreshTokenDTO, db: AsyncSession = Depends(get_db)
+    ) -> BearerTokenDTO:
+        """
+        Обновляет токены доступа с помощью refresh token.
+        Args:
+            dto (RefreshTokenDTO): Данные с refresh token.
+            db (AsyncSession): Сессия базы данных.
+        Returns:
+            BearerTokenDTO: Новые токены доступа.
+        Raises:
+            HTTPException: При ошибках обновления токенов.
+            AppExceptionResponse: При внутренних ошибках.
+        """
+        try:
+            return await RefreshTokenCase(db).execute(refresh_token=dto.refresh_token)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
                 is_custom=True,
             ) from exc
