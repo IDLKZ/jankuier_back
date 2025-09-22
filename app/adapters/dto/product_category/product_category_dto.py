@@ -85,3 +85,55 @@ class ProductCategoryWithRelationsRDTO(ProductCategoryRDTO):
 
     class Config:
         from_attributes = True
+
+
+class ProductCategoryUpdateDTO(BaseModel):
+    """DTO для обновления категории товара - все поля опциональные"""
+
+    image_id: (
+        DTOConstant.StandardNullableUnsignedIntegerField(
+            description="ID изображения категории"
+        )
+        | None
+    ) = None
+    title_ru: (
+        DTOConstant.StandardVarcharField(description="Название категории на русском")
+        | None
+    ) = None
+    title_kk: (
+        DTOConstant.StandardNullableVarcharField(
+            description="Название категории на казахском"
+        )
+        | None
+    ) = None
+    title_en: (
+        DTOConstant.StandardNullableVarcharField(
+            description="Название категории на английском"
+        )
+        | None
+    ) = None
+    description_ru: (
+        DTOConstant.StandardNullableTextField(
+            description="Описание категории на русском"
+        )
+        | None
+    ) = None
+    description_kk: (
+        DTOConstant.StandardNullableTextField(
+            description="Описание категории на казахском"
+        )
+        | None
+    ) = None
+    description_en: (
+        DTOConstant.StandardNullableTextField(
+            description="Описание категории на английском"
+        )
+        | None
+    ) = None
+    is_active: (
+        DTOConstant.StandardBooleanTrueField(description="Флаг активности категории")
+        | None
+    ) = None
+
+    class Config:
+        from_attributes = True

@@ -21,6 +21,7 @@ from app.use_case.academy.get_academy_by_value_case import GetAcademyByValueCase
 from app.use_case.academy.paginate_academies_case import PaginateAcademiesCase
 from app.use_case.academy.update_academy_case import UpdateAcademyCase
 from app.use_case.academy.get_full_academy_by_id_case import GetFullAcademyByIdCase
+from app.use_case.academy.update_academy_main_photo_case import UpdateAcademyMainPhotoCase
 
 
 class AcademyApi:
@@ -81,6 +82,13 @@ class AcademyApi:
             summary="Получить полную информацию об академии",
             description="Получение полной информации об академии с галереями и группами",
         )(self.get_full_by_id)
+
+        self.router.put(
+            "/update-main-photo/{id}",
+            response_model=AcademyWithRelationsRDTO,
+            summary="Обновить главное изображение академии",
+            description="Обновление главного изображения академии по её ID",
+        )(self.update_main_photo)
 
         self.router.delete(
             RoutePathConstants.DeleteByIdPathName,
@@ -213,6 +221,23 @@ class AcademyApi:
     ) -> GetFullAcademyDTO:
         try:
             return await GetFullAcademyByIdCase(db).execute(id=id)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def update_main_photo(
+        self,
+        id: RoutePathConstants.IDPath,
+        file: UploadFile = File(..., description="Файл изображения академии"),
+        db: AsyncSession = Depends(get_db),
+    ) -> AcademyWithRelationsRDTO:
+        try:
+            return await UpdateAcademyMainPhotoCase(db).execute(id=id, file=file)
         except HTTPException:
             raise
         except Exception as exc:

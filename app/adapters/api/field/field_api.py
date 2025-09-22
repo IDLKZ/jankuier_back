@@ -20,6 +20,7 @@ from app.use_case.field.get_field_by_id_case import GetFieldByIdCase
 from app.use_case.field.get_field_by_value_case import GetFieldByValueCase
 from app.use_case.field.paginate_field_case import PaginateFieldCase
 from app.use_case.field.update_field_case import UpdateFieldCase
+from app.use_case.field.update_field_main_photo_case import UpdateFieldMainPhotoCase
 
 
 class FieldApi:
@@ -73,6 +74,13 @@ class FieldApi:
             summary="Получить поле по значению",
             description="Получение информации о поле по уникальному значению (value)",
         )(self.get_by_value)
+
+        self.router.put(
+            "/update-main-photo/{id}",
+            response_model=FieldWithRelationsRDTO,
+            summary="Обновить главное изображение поля",
+            description="Обновление главного изображения поля по его ID",
+        )(self.update_main_photo)
 
         self.router.delete(
             RoutePathConstants.DeleteByIdPathName,
@@ -188,6 +196,23 @@ class FieldApi:
     ) -> bool:
         try:
             return await DeleteFieldByIdCase(db).execute(id=id, force_delete=force_delete)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def update_main_photo(
+        self,
+        id: RoutePathConstants.IDPath,
+        file: UploadFile = File(..., description="Файл изображения поля"),
+        db: AsyncSession = Depends(get_db),
+    ) -> FieldWithRelationsRDTO:
+        try:
+            return await UpdateFieldMainPhotoCase(db).execute(id=id, file=file)
         except HTTPException:
             raise
         except Exception as exc:

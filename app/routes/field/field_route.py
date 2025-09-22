@@ -37,6 +37,11 @@ def assign_field_roles(app) -> None:
     )
     assign_roles_to_route(
         app=app,
+        path=f"{base_url}/update-main-photo/{{id}}",
+        roles=[RoleRouteConstant.AdministratorTagName],
+    )
+    assign_roles_to_route(
+        app=app,
         path=f"{base_url}{RoutePathConstants.DeleteByIdPathName}",
         roles=[RoleRouteConstant.AdministratorTagName],
     )

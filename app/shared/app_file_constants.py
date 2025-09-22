@@ -13,6 +13,7 @@ class AppFileExtensionConstants:
     FieldFolderName = "fields"
     FieldPartyFolderName = "field_parties"
     ProductFolderName = "products"
+    ProductCategoryFolderName = "products"
     RequestMaterialFolderName = "request_materials"
 
     # Расширения для изображений

@@ -39,6 +39,9 @@ from app.use_case.product_category.paginate_product_category_case import (
 from app.use_case.product_category.update_product_category_case import (
     UpdateProductCategoryCase,
 )
+from app.use_case.product_category.update_product_category_main_photo_case import (
+    UpdateProductCategoryMainPhotoCase,
+)
 
 
 class ProductCategoryApi:
@@ -92,6 +95,13 @@ class ProductCategoryApi:
             summary="Получить категорию товара по значению",
             description="Получение информации о категории товара по уникальному значению (value)",
         )(self.get_by_value)
+
+        self.router.put(
+            "/update-main-photo/{id}",
+            response_model=ProductCategoryWithRelationsRDTO,
+            summary="Обновить главное изображение категории товара",
+            description="Обновление главного изображения категории товара по её ID",
+        )(self.update_main_photo)
 
         self.router.delete(
             RoutePathConstants.DeleteByIdPathName,
@@ -211,6 +221,23 @@ class ProductCategoryApi:
             return await DeleteProductCategoryCase(db).execute(
                 id=id, force_delete=force_delete
             )
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def update_main_photo(
+        self,
+        id: RoutePathConstants.IDPath,
+        file: UploadFile = File(..., description="Файл изображения категории товара"),
+        db: AsyncSession = Depends(get_db),
+    ) -> ProductCategoryWithRelationsRDTO:
+        try:
+            return await UpdateProductCategoryMainPhotoCase(db).execute(id=id, file=file)
         except HTTPException:
             raise
         except Exception as exc:

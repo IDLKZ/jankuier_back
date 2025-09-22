@@ -54,6 +54,11 @@ def assign_academy_roles(app) -> None:
     )
     assign_roles_to_route(
         app=app,
+        path=f"{base_url}/update-main-photo/{{id}}",
+        roles=[RoleRouteConstant.AdministratorTagName],
+    )
+    assign_roles_to_route(
+        app=app,
         path=f"{base_url}/get-full/{{id}}",
         roles=[
             RoleRouteConstant.AdministratorTagName,

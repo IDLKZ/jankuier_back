@@ -22,6 +22,7 @@ from app.use_case.product.get_product_by_value_case import GetProductByValueCase
 from app.use_case.product.paginate_product_case import PaginateProductCase
 from app.use_case.product.update_product_case import UpdateProductCase
 from app.use_case.product.get_full_product_by_id_case import GetFullProductByIdCase
+from app.use_case.product.update_product_main_photo_case import UpdateProductMainPhotoCase
 
 
 class ProductApi:
@@ -82,6 +83,13 @@ class ProductApi:
             summary="Получить полную информацию о товаре по ID",
             description="Получение полной информации о товаре включая галерею, варианты и модификации",
         )(self.get_full_product_by_id)
+
+        self.router.put(
+            "/update-main-photo/{id}",
+            response_model=ProductWithRelationsRDTO,
+            summary="Обновить главное изображение товара",
+            description="Обновление главного изображения товара по его ID",
+        )(self.update_main_photo)
 
         self.router.delete(
             RoutePathConstants.DeleteByIdPathName,
@@ -213,6 +221,23 @@ class ProductApi:
     ) -> FullProductRDTO:
         try:
             return await GetFullProductByIdCase(db).execute(id=id)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def update_main_photo(
+        self,
+        id: RoutePathConstants.IDPath,
+        file: UploadFile = File(..., description="Файл изображения товара"),
+        db: AsyncSession = Depends(get_db),
+    ) -> ProductWithRelationsRDTO:
+        try:
+            return await UpdateProductMainPhotoCase(db).execute(id=id, file=file)
         except HTTPException:
             raise
         except Exception as exc:
