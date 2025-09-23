@@ -67,6 +67,14 @@ class UserEntity(Base):
         )
     )
 
+    user_code_verifications: Mapped[list[AppEntityNames.UserCodeVerificationEntityName]] = (
+        DbRelationshipConstants.one_to_many(
+            target=AppEntityNames.UserCodeVerificationEntityName,
+            back_populates="user",
+            foreign_keys=f"{AppEntityNames.UserCodeVerificationEntityName}.user_id",
+        )
+    )
+
     created_students: Mapped[list[AppEntityNames.StudentEntityName]] = (
         DbRelationshipConstants.one_to_many(
             target=AppEntityNames.StudentEntityName,

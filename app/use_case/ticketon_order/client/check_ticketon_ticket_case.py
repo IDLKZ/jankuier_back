@@ -50,7 +50,7 @@ class CheckTicketonTicketCase(BaseUseCase[TicketonTicketCheckCommonResponseDTO])
         self,
         ticketon_order_id: int,
         ticketon_ticket_id: str,
-        user: UserWithRelationsRDTO | None = None
+        user: UserWithRelationsRDTO
     ) -> TicketonTicketCheckCommonResponseDTO:
         """
         Выполняет проверку билета Ticketon.
@@ -91,8 +91,7 @@ class CheckTicketonTicketCase(BaseUseCase[TicketonTicketCheckCommonResponseDTO])
         self.ticket_order_entity = await self.ticketon_repository.get_first_with_filters(
             filters=[
                 self.ticketon_repository.model.id == self.ticket_order_id,
-                # TODO: Добавить проверку прав пользователя при необходимости
-                # self.ticketon_repository.model.user_id == self.user.id
+                self.ticketon_repository.model.user_id == self.user.id
             ],
             include_deleted_filter=True,
             options=self.ticketon_repository.default_relationships()

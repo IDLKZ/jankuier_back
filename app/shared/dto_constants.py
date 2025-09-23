@@ -143,8 +143,8 @@ class DTOConstant:
         return Annotated[
             str,
             Field(
-                # pattern=app_validation.KZ_MOBILE_REGEX,
-                # max_length=FieldConstants.STANDARD_LENGTH,
+                pattern=app_validation.KZ_MOBILE_REGEX,
+                max_length=FieldConstants.STANDARD_LENGTH,
                 description=description
                 or msg,
             ),

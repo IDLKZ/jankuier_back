@@ -48,7 +48,7 @@ class CreateSaleTicketonAndOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
         self.unique_order:str = "0000000000000000000000"
 
 
-    async def execute(self, dto: TicketonBookingRequestDTO, user: UserWithRelationsRDTO | None = None) -> TicketonResponseForSaleDTO:
+    async def execute(self, dto: TicketonBookingRequestDTO, user: UserWithRelationsRDTO) -> TicketonResponseForSaleDTO:
         self.user = user
         self.ticketon_request_dto = dto
         self.unique_order = await self.payment_transaction_repository.generate_unique_order(min_len=6, max_len=22)

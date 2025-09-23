@@ -74,7 +74,7 @@ class RefundTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
         self.common_response_dto: TicketonRefundDTO | None = None
         self.current_time = datetime.now()
 
-    async def execute(self, sale: str, user: UserWithRelationsRDTO | None = None) -> TicketonResponseForSaleDTO:
+    async def execute(self, sale: str, user: UserWithRelationsRDTO) -> TicketonResponseForSaleDTO:
         """
         Основной метод выполнения возврата билета.
         

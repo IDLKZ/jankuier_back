@@ -10,7 +10,7 @@ class AppValidationConstants:
     TWELVE_DIGITS_REGEX_STR = r"^\d{12}$"
     BIN_REGEX_STR = r"^\d{12}$"
     IIN_REGEX_STR = r"^\d{12}$"
-    KZ_MOBILE_REGEX_STR = r"^\+77\d{9}$"
+    KZ_MOBILE_REGEX_STR = r"^77\d{9}$"
     ONLY_RUSSIAN_KAZAKH_STR = r"^[\u0400-\u04FF0-9.,!? \-]+$"
     LOGIN_REGEX_STR = r"^[a-zA-Z0-9._@-]{3,255}$"
     PASSWORD_STR = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=]).{8,}$"

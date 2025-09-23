@@ -120,6 +120,25 @@ class AppConfiguration(BaseSettings):
     alatau_payment_refund_post_url: str = Field(..., env="ALATAU_PAYMENT_REFUND_POST_URL")
     alatau_payment_status_post_url: str = Field(..., env="ALATAU_PAYMENT_STATUS_POST_URL")
 
+    # SMS Service Configuration
+    use_sms_service: bool = Field(default=True, env="USE_SMS_SERVICE")
+    fake_sms_code: str = Field(default="5544", env="FAKE_SMS_CODE")
+    sms_code_expire_minutes: int = Field(default=2, env="SMS_CODE_EXPIRE_MINUTES")
+
+    # SMSC SMS Service Configuration
+    smsc_login: str = Field(default="", env="SMSC_LOGIN")
+    smsc_password: str = Field(default="", env="SMSC_PASSWORD")
+    smsc_post: bool = Field(default=False, env="SMSC_POST")
+    smsc_https: bool = Field(default=False, env="SMSC_HTTPS")
+    smsc_charset: str = Field(default="utf-8", env="SMSC_CHARSET")
+    smsc_debug: bool = Field(default=False, env="SMSC_DEBUG")
+
+    # SMTP Configuration for SMS
+    smtp_from: str = Field(default="api@smsc.kz", env="SMTP_FROM")
+    smtp_server: str = Field(default="send.smsc.kz", env="SMTP_SERVER")
+    smtp_login: str = Field(default="", env="SMTP_LOGIN")
+    smtp_password: str = Field(default="", env="SMTP_PASSWORD")
+
     @property
     def get_connection_url(self) -> str:
         """Get the connection URL for the chosen database."""

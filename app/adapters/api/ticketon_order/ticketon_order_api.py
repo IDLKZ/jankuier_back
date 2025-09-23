@@ -225,6 +225,7 @@ class TicketonOrderApi:
         self,
         dto: TicketonBookingRequestDTO,
         db: AsyncSession = Depends(get_db),
+        user: UserWithRelationsRDTO = Depends(check_client),
     ) -> TicketonResponseForSaleDTO:
         """
         Создание продажи билетов через Ticketon API.
@@ -240,7 +241,7 @@ class TicketonOrderApi:
             Ответ с данными заказа Ticketon, транзакции оплаты и ID платежа
         """
         try:
-            return await CreateSaleTicketonAndOrderCase(db).execute(dto=dto, user=None)
+            return await CreateSaleTicketonAndOrderCase(db).execute(dto=dto, user=user)
         except HTTPException:
             raise
         except Exception as exc:
@@ -254,6 +255,7 @@ class TicketonOrderApi:
         self,
         ticketon_order_id: RoutePathConstants.IDPath,
         db: AsyncSession = Depends(get_db),
+        user: UserWithRelationsRDTO = Depends(check_client),
     ) -> TicketonResponseForSaleDTO:
         """
         Пересоздание/восстановление платежа для существующего заказа Ticketon.
@@ -275,7 +277,8 @@ class TicketonOrderApi:
         """
         try:
             return await RecreatePaymentForTicketonOrderCase(db).execute(
-                ticketon_order_id=ticketon_order_id
+                ticketon_order_id=ticketon_order_id,
+                user=user
             )
         except HTTPException:
             raise
@@ -373,6 +376,7 @@ class TicketonOrderApi:
         self,
         sale: str,
         db: AsyncSession = Depends(get_db),
+        user: UserWithRelationsRDTO = Depends(check_client),
     ) -> TicketonResponseForSaleDTO:
         """
         Возврат билетов и денежных средств для заказа Ticketon.
@@ -398,7 +402,7 @@ class TicketonOrderApi:
             AppExceptionResponse: При ошибках валидации или внешних API
         """
         try:
-            return await RefundTicketonOrderCase(db).execute(sale=sale, user=None)
+            return await RefundTicketonOrderCase(db).execute(sale=sale, user=user)
         except HTTPException:
             raise
         except Exception as exc:
@@ -412,6 +416,7 @@ class TicketonOrderApi:
         self,
         ticketon_order_id: RoutePathConstants.IDPath,
         db: AsyncSession = Depends(get_db),
+        user: UserWithRelationsRDTO = Depends(check_client),
     ) -> TicketonOrderCheckCommonResponseDTO:
         """
         Проверка заказа Ticketon через API.
@@ -431,7 +436,8 @@ class TicketonOrderApi:
         """
         try:
             return await CheckTicketonOrderCase(db).execute(
-                ticketon_order_id=ticketon_order_id
+                ticketon_order_id=ticketon_order_id,
+                user=user
             )
         except HTTPException:
             raise
@@ -447,6 +453,7 @@ class TicketonOrderApi:
         ticketon_order_id: RoutePathConstants.IDPath,
         ticket_id: str,
         db: AsyncSession = Depends(get_db),
+        user: UserWithRelationsRDTO = Depends(check_client),
     ) -> TicketonTicketCheckCommonResponseDTO:
         """
         Проверка конкретного билета Ticketon через API.
@@ -468,7 +475,8 @@ class TicketonOrderApi:
         try:
             return await CheckTicketonTicketCase(db).execute(
                 ticketon_order_id=ticketon_order_id,
-                ticketon_ticket_id=ticket_id
+                ticketon_ticket_id=ticket_id,
+                user=user
             )
         except HTTPException:
             raise
@@ -483,7 +491,7 @@ class TicketonOrderApi:
     async def client_paginate(
         self,
         filter: TicketonOrderPaginationFilter = Depends(),
-        # user: UserWithRelationsRDTO = Depends(check_client),
+        user: UserWithRelationsRDTO = Depends(check_client),
         db: AsyncSession = Depends(get_db),
     ) -> PaginationTicketonOrderWithRelationsRDTO:
         """
@@ -502,7 +510,7 @@ class TicketonOrderApi:
             # return await ClientPaginateTicketonOrderCase(db).execute(filter=filter, user_id=user.id)
 
             # Временная заглушка для тестирования (не используем user_id)
-            return await ClientPaginateTicketonOrderCase(db).execute(filter=filter, user_id=None)
+            return await ClientPaginateTicketonOrderCase(db).execute(filter=filter, user_id=user.id)
         except HTTPException:
             raise
         except Exception as exc:
@@ -515,7 +523,7 @@ class TicketonOrderApi:
     async def client_get(
         self,
         id: RoutePathConstants.IDPath,
-        # user: UserWithRelationsRDTO = Depends(check_client),
+        user: UserWithRelationsRDTO = Depends(check_client),
         db: AsyncSession = Depends(get_db),
     ) -> TicketonOrderWithRelationsRDTO:
         """
@@ -534,7 +542,7 @@ class TicketonOrderApi:
             # return await ClientGetTicketonOrderByIdCase(db).execute(id=id, user_id=user.id)
 
             # Временная заглушка для тестирования (не используем user_id)
-            return await ClientGetTicketonOrderByIdCase(db).execute(id=id, user_id=None)
+            return await ClientGetTicketonOrderByIdCase(db).execute(id=id, user_id=user.id)
         except HTTPException:
             raise
         except Exception as exc:

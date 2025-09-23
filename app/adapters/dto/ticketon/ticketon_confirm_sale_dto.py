@@ -9,7 +9,7 @@ from app.shared.dto_constants import DTOConstant
 class TicketonConfirmSaleRequestDTO(BaseModel):
     sale:DTOConstant.StandardVarcharField(description="Номер продажи")
     email:DTOConstant.StandardEmailField(description="Почта")
-    phone:DTOConstant.StandardVarcharField(description="Номер телефона")
+    phone:DTOConstant.StandardPhoneField(description="Номер телефона")
 
 
 class TicketonConfirmSaleResponseDTO(BaseModel):

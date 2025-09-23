@@ -52,6 +52,7 @@ from app.adapters.api.test.test_api import TestApi
 from app.adapters.api.ticketon.ticketon_api import TicketonApi
 from app.adapters.api.user.user_api import UserApi
 from app.adapters.api.user_cart.user_cart_api import UserCartApi
+from app.adapters.api.user_code_verification.user_code_verification_api import UserCodeVerificationApi
 from app.shared.route_constants import RoutePathConstants
 
 
@@ -247,6 +248,11 @@ def include_routers(app) -> None:
         UserCartApi().router,
         prefix=f"{RoutePathConstants.BasePathName}{RoutePathConstants.UserCartPathName}",
         tags=[RoutePathConstants.UserCartTagName],
+    )
+    app.include_router(
+        UserCodeVerificationApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}/user-code-verification",
+        tags=["SMS Верификация"],
     )
     app.include_router(
         PaymentTransactionStatusApi().router,

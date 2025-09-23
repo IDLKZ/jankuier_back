@@ -38,6 +38,7 @@ from app.entities.student_entity import StudentEntity
 from app.entities.ticketon_order_and_payment_transaction_entity import TicketonOrderAndPaymentTransactionEntity
 from app.entities.ticketon_order_entity import TicketonOrderEntity
 from app.entities.ticketon_order_status_entity import TicketonOrderStatusEntity
+from app.entities.user_code_verification_entity import UserCodeVerificationEntity
 from app.entities.user_entity import UserEntity
 from app.entities.user_verification_entity import UserVerificationEntity
 
@@ -81,5 +82,6 @@ __all__ = [
     TicketonOrderStatusEntity.__name__,
     TicketonOrderEntity.__name__,
     TicketonOrderAndPaymentTransactionEntity.__name__,
+    UserCodeVerificationEntity.__name__,
 ]
 

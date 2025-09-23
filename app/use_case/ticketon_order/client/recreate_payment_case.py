@@ -56,7 +56,7 @@ class RecreatePaymentForTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO
         self.user: UserWithRelationsRDTO | None = None
 
 
-    async def execute(self, ticketon_order_id: int,user:UserWithRelationsRDTO|None = None) -> TicketonResponseForSaleDTO:
+    async def execute(self, ticketon_order_id: int,user:UserWithRelationsRDTO) -> TicketonResponseForSaleDTO:
         """
         Выполняет восстановление/пересоздание платежа для заказа Ticketon.
         
@@ -77,6 +77,7 @@ class RecreatePaymentForTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO
         self.ticketon_order = await self.ticketon_repository.get_first_with_filters(
             filters=[
                 self.ticketon_repository.model.id == ticketon_order_id,
+                self.ticketon_order.user_id == self.user.id
             ],
             include_deleted_filter=True
         )

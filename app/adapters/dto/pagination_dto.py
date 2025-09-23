@@ -83,6 +83,10 @@ if TYPE_CHECKING:
     from app.adapters.dto.ticketon_order.ticketon_order_dto import (
         TicketonOrderWithRelationsRDTO,
     )
+    from app.adapters.dto.user_code_verification.user_code_verification_dto import (
+        UserCodeVerificationRDTO,
+        UserCodeVerificationWithRelationsRDTO,
+    )
 
 
 class PaginationPermissionRDTO(BasePageModel):
@@ -270,4 +274,12 @@ class PaginationTicketonOrderStatusWithRelationsRDTO(BasePageModel):
 
 
 class PaginationTicketonOrderWithRelationsRDTO(BasePageModel):
+    items: list[Any]
+
+
+class PaginationUserCodeVerificationRDTO(BasePageModel):
+    items: list[Any]
+
+
+class PaginationUserCodeVerificationWithRelationsRDTO(BasePageModel):
     items: list[Any]

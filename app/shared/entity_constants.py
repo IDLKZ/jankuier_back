@@ -10,6 +10,7 @@ class AppEntityNames:
     RolePermissionEntityName = "RolePermissionEntity"
     UserEntityName = "UserEntity"
     UserVerificationEntityName = "UserVerificationEntity"
+    UserCodeVerificationEntityName = "UserCodeVerificationEntity"
 
     # Location entities
     CountryEntityName = "CountryEntity"

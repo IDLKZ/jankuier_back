@@ -1,0 +1,31 @@
+	Поле 	Формат	Описание	Пример
+	ticket	string	Номер билета	24036601
+	seat	object	Информация о месте
+	seat.id	string	Id места	6110690
+	seat.row	string	ряд	5
+	seat.num	string	Номер места	9
+	hall	string	Зал	3
+	cost	string	Стоимость билета	1100
+	commission	string	Комиссия	110
+	code	string	Код билета	188200026460
+	type	string	Тип билета	Обычные
+	barcode	string	штрих-код, сформированный по коду билета
+	qr	string	qr-код, сформированный по коду билета
+
+Ответ
+{
+    "ticket": "24036601",
+    "seat": {
+        "id": "6110690",
+        "row": "5",
+        "num": "9"
+    },
+    "hall": "3",
+    "cost": "1100",
+    "commission": "110",
+    "code": "188200026460",
+    "type": "Обычные",
+    "barcode": "data:image/png;base64,iVBORw0KGgoAAAA NSUhEUgAAAMoAAAAoAQMAAACFJ/diAAAA BlBMVEX///8AAABVwtN+AAAAAXRSTlMAQ ObYZgAAAC5JREFUOI1j+Mx/+PCHMwb/bT 4AwWcDfv7zn+3tbT7YGx9gGJUalRqVGpX CJgUAhbJkT/z7GxMAAAAASUVORK5CYII=",
+    "qr": "data:image/png;base64,iVBORw0KGgo AAAANSUhEUgAAAD8AAAA/AQMAAABtk YKcAAAABlBMVEUAAAD///+l2Z/dAAAApU lEQVQokXXSMQ7DIAwFUEcMbHABJF8jW 6/UXKCkFyBXyuZrVMoFmi1DVNeOmMBheg OC/w0A4M+4gq4WyPSJxF8DaaBzIHjeIN8Cdxty8sb1igaSJ001WANmxoX5Z0AqYPFoIh +64WVAWy9rCgbc++DZS54ekhMyoQXJ43b eLEgLCB6LAZ2zpAIDOszwqE/QIUWSqCZcGaVjj+ vkEWcD+hMmhtDjD2Ft8rNPg6MRAAAAAElFTkSuQmCC"
+}
+
