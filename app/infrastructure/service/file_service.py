@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import FileEntity
-
+from app.i18n.i18n_wrapper import i18n
 from app.infrastructure.app_config import app_config
 from app.shared.app_file_constants import AppFileExtensionConstants
 
@@ -133,7 +133,7 @@ class FileService:
         except Exception as exc:
             await self.db.rollback()
             raise AppExceptionResponse.internal_error(
-                message="Ошибка при удалении файла",
+                message=i18n.gettext("file_delete_error"),
                 extra={"file_id": file_id, "details": str(exc)},
                 is_custom=True,
             )
@@ -157,7 +157,7 @@ class FileService:
         try:
             existing_file = await self.db.get(FileEntity, file_id)
             if not existing_file:
-                raise AppExceptionResponse.not_found(message="Файл не найден")
+                raise AppExceptionResponse.not_found(message=i18n.gettext("file_not_found"))
 
             if os.path.exists(existing_file.file_path):
                 os.remove(existing_file.file_path)
@@ -184,7 +184,7 @@ class FileService:
         except Exception as exc:
             await self.db.rollback()
             raise AppExceptionResponse.internal_error(
-                message="Ошибка при обновлении файла",
+                message=i18n.gettext("file_update_error"),
                 extra={"file_id": file_id, "details": str(exc)},
                 is_custom=True,
             )
@@ -206,7 +206,7 @@ class FileService:
             return encoded_file
         except Exception as e:
             raise AppExceptionResponse.internal_error(
-                message=f"Ошибка при чтении файла: {str(e)}"
+                message=f"{i18n.gettext('file_read_error')}: {str(e)}"
             )
 
     async def get_full_file_path(self, file_id: int) -> str:

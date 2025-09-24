@@ -11,6 +11,7 @@ from app.adapters.repository.request_material.request_material_repository import
 )
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import RequestMaterialEntity
+from app.i18n.i18n_wrapper import i18n
 from app.infrastructure.service.file_service import FileService
 from app.shared.app_file_constants import AppFileExtensionConstants
 from app.use_case.base_case import BaseUseCase
@@ -44,16 +45,16 @@ class UpdateRequestMaterialCase(BaseUseCase[RequestMaterialWithRelationsRDTO]):
     ) -> None:
         if not id or id <= 0:
             raise AppExceptionResponse.bad_request(
-                message="ID должен быть положительным числом"
+                message=i18n.gettext("invalid_id")
             )
 
         self.model = await self.repository.get(id)
         if not self.model:
-            raise AppExceptionResponse.not_found(message="Материал заявки не найден")
+            raise AppExceptionResponse.not_found(message=i18n.gettext("request_material_not_found"))
 
         if dto.file_id:
             if not await self.file_repository.get(dto.file_id):
-                raise AppExceptionResponse.bad_request(message="Файл не найден")
+                raise AppExceptionResponse.bad_request(message=i18n.gettext("file_not_found"))
 
         if file:
             self.file_service.validate_file(file, self.extensions)

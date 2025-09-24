@@ -15,6 +15,7 @@ from app.adapters.repository.request_to_academy_group.request_to_academy_group_r
 from app.adapters.repository.student.student_repository import StudentRepository
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import RequestMaterialEntity
+from app.i18n.i18n_wrapper import i18n
 from app.infrastructure.service.file_service import FileService
 from app.shared.app_file_constants import AppFileExtensionConstants
 from app.use_case.base_case import BaseUseCase
@@ -50,15 +51,15 @@ class CreateRequestMaterialCase(BaseUseCase[RequestMaterialWithRelationsRDTO]):
     ) -> None:
         if not await self.request_repository.get(dto.request_id):
             raise AppExceptionResponse.bad_request(
-                message="Заявка в академическую группу не найдена"
+                message=i18n.gettext("academy_group_application_not_found")
             )
 
         if not await self.student_repository.get(dto.student_id):
-            raise AppExceptionResponse.bad_request(message="Студент не найден")
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("student_not_found"))
 
         if dto.file_id:
             if not await self.file_repository.get(dto.file_id):
-                raise AppExceptionResponse.bad_request(message="Файл не найден")
+                raise AppExceptionResponse.bad_request(message=i18n.gettext("file_not_found"))
 
         if file:
             self.file_service.validate_file(file, self.extensions)

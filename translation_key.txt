@@ -245,3 +245,762 @@ None found - all translations exist
 
 ## Field use cases with hardcoded strings needing translation:
 None found - all strings use i18n.gettext() properly
+
+# Field Gallery Use Case Translation Keys
+
+## Missing translations from field_gallery use cases:
+None found - all translations exist
+
+## Existing translations found in field_gallery use cases:
+- field_gallery_not_found
+- field_party_not_found
+- field_not_found
+- file_not_found
+- invalid_file_type_for_gallery
+- duplicate_gallery_image_error
+- gallery_id_validation_error
+
+## Field_gallery use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Field Party Use Case Translation Keys
+
+## Missing translations from field_party use cases:
+None found - all translations exist
+
+## Existing translations found in field_party use cases:
+- not_found
+- the_next_value_already_exists
+- field_not_found
+- image_not_found_by_id
+- file_is_required
+
+## Field_party use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Field Party Schedule Use Case Translation Keys
+
+## Missing translations from field_party_schedule use cases:
+None found - all translations exist
+
+## Existing translations found in field_party_schedule use cases:
+- field_party_schedule_not_found
+- schedule_already_booked_error
+- schedule_already_paid_error
+- time_period_validation_error
+- price_validation_error
+- schedule_overlap_error
+- field_party_not_found
+- field_party_schedule_settings_not_found
+- schedule_id_validation_error
+
+## Field_party_schedule use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Field Party Schedule Settings Use Case Translation Keys
+
+## Missing translations from field_party_schedule_settings use cases:
+None found - all translations exist
+
+## Existing translations found in field_party_schedule_settings use cases:
+- field_party_schedule_settings_not_found
+- working_days_validation_error
+- excluded_dates_format_error
+- active_dates_validation_error
+- session_minute_validation_error
+- break_between_session_validation_error
+- booked_limit_validation_error
+- json_format_error
+- json_object_error
+- required_field_error
+- time_format_error
+- negative_price_error
+- price_format_error
+- id_validation_error
+- field_party_not_found
+
+## Field_party_schedule_settings use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Modification Type Use Case Translation Keys
+
+## Missing translations from modification_type use cases:
+None found - all translations exist
+
+## Existing translations found in modification_type use cases:
+- not_found
+- the_next_value_already_exists
+
+## Modification_type use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Modification Value Use Case Translation Keys
+
+## Missing translations from modification_value use cases:
+
+msgid "modification_type_not_found_by_id"
+msgstr "Тип модификации не найден по ID"
+msgstr_en "Modification type not found by ID"
+msgstr_kk "Модификация түрі ID-мен табылмады"
+
+msgid "product_not_found_by_id"
+msgstr "Продукт не найден по ID"
+msgstr_en "Product not found by ID"
+msgstr_kk "Өнім ID-мен табылмады"
+
+## Existing translations found in modification_value use cases:
+- not_found
+
+## Modification_value use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Payment Transaction Use Case Translation Keys
+
+## Missing translations from payment_transaction use cases:
+None found - all translations exist
+
+## Existing translations found in payment_transaction use cases:
+- not_found
+- access_denied
+
+## Payment_transaction use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Payment Transaction Status Use Case Translation Keys
+
+## Missing translations from payment_transaction_status use cases:
+None found - all translations exist
+
+## Existing translations found in payment_transaction_status use cases:
+- not_found
+- the_next_value_already_exists
+
+## Payment_transaction_status use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Cart Use Case Translation Keys
+
+## Missing translations from cart use cases:
+
+msgid "user_id_validation_error"
+msgstr "ID пользователя должен быть положительным числом"
+msgstr_en "User ID must be a positive number"
+msgstr_kk "Пайдаланушы ID-сы оң сан болуы керек"
+
+msgid "product_id_validation_error"
+msgstr "ID продукта должен быть положительным числом"
+msgstr_en "Product ID must be a positive number"
+msgstr_kk "Өнім ID-сы оң сан болуы керек"
+
+msgid "variant_id_validation_error"
+msgstr "ID варианта должен быть положительным числом"
+msgstr_en "Variant ID must be a positive number"
+msgstr_kk "Вариант ID-сы оң сан болуы керек"
+
+msgid "product_variant_mismatch"
+msgstr "Вариант не принадлежит указанному продукту"
+msgstr_en "Variant does not belong to the specified product"
+msgstr_kk "Вариант көрсетілген өнімге жатпайды"
+
+## Existing translations found in cart use cases:
+- cart_not_found
+- cart_id_validation_error
+- cart_user_mismatch
+- cart_already_exists
+- cart_total_calculation_error
+- cart_items_invalid_format
+- cart_empty_error
+- cart_item_not_found
+- cart_item_id_validation_error
+- cart_item_quantity_invalid
+- cart_item_price_invalid
+- cart_item_duplicate
+- product_not_found
+- product_variant_not_found
+- cart_item_calculation_error
+- user_not_found
+
+## Cart use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Cart Item Use Case Translation Keys
+
+## Missing translations from cart_item use cases:
+None found - all translations exist
+
+## Existing translations found in cart_item use cases:
+- cart_item_not_found
+- cart_item_id_validation_error
+- cart_item_quantity_invalid
+- cart_item_price_invalid
+- cart_not_found
+- product_not_found
+- product_variant_not_found
+- cart_item_calculation_error
+- cart_item_duplicate
+
+## Cart_item use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Category Modification Use Case Translation Keys
+
+## Missing translations from category_modification use cases:
+
+msgid "product_category_not_found_by_id"
+msgstr "Категория продукта не найдена по ID"
+msgstr_en "Product category not found by ID"
+msgstr_kk "Өнім санаты ID-мен табылмады"
+
+msgid "category_modification_already_exists"
+msgstr "Модификация для данной категории уже существует"
+msgstr_en "Modification for this category already exists"
+msgstr_kk "Бұл санат үшін модификация әлдеқашан бар"
+
+## Existing translations found in category_modification use cases:
+- not_found
+- modification_type_not_found_by_id
+
+## Category_modification use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Permission Use Case Translation Keys
+
+## Missing translations from permission use cases:
+
+msgid "permission_not_found"
+msgstr "Разрешение не найдено"
+msgstr_en "Permission not found"
+msgstr_kk "Рұқсат табылмады"
+
+## Existing translations found in permission use cases:
+- not_found
+- the_next_value_already_exists
+
+## Permission use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Product Use Case Translation Keys
+
+## Missing translations from product use cases:
+
+msgid "sku_already_exists"
+msgstr "SKU уже существует"
+msgstr_en "SKU already exists"
+msgstr_kk "SKU әлдеқашан бар"
+
+msgid "city_not_found_by_id"
+msgstr "Город не найден по ID"
+msgstr_en "City not found by ID"
+msgstr_kk "Қала ID-мен табылмады"
+
+msgid "category_not_found_by_id"
+msgstr "Категория не найдена по ID"
+msgstr_en "Category not found by ID"
+msgstr_kk "Санат ID-мен табылмады"
+
+## Existing translations found in product use cases:
+- not_found
+- the_next_value_already_exists
+- file_is_required
+- image_not_found_by_id
+
+## Product use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Product Category Use Case Translation Keys
+
+## Missing translations from product_category use cases:
+None found - all translations exist
+
+## Existing translations found in product_category use cases:
+- not_found
+- file_is_required
+- the_next_value_already_exists
+- image_not_found_by_id
+
+## Product_category use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Product Gallery Use Case Translation Keys
+
+## Missing translations from product_gallery use cases:
+
+msgid "product_variant_not_found_by_id"
+msgstr "Вариант продукта не найден по ID"
+msgstr_en "Product variant not found by ID"
+msgstr_kk "Өнім нұсқасы ID-мен табылмады"
+
+msgid "product_variant_does_not_belong_to_product"
+msgstr "Вариант не принадлежит данному продукту"
+msgstr_en "Variant does not belong to this product"
+msgstr_kk "Нұсқа осы өнімге жатпайды"
+
+msgid "file_not_found_by_id"
+msgstr "Файл не найден по ID"
+msgstr_en "File not found by ID"
+msgstr_kk "Файл ID-мен табылмады"
+
+msgid "either_file_id_or_file_required"
+msgstr "Требуется либо ID файла, либо сам файл"
+msgstr_en "Either file ID or file is required"
+msgstr_kk "Файл ID-сы немесе файлдың өзі қажет"
+
+## Existing translations found in product_gallery use cases:
+- not_found
+- product_not_found_by_id
+
+## Product_gallery use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Product Variant Use Case Translation Keys
+
+## Missing translations from product_variant use cases:
+None found - all translations exist
+
+## Existing translations found in product_variant use cases:
+- not_found
+- the_next_value_already_exists
+- sku_already_exists
+- product_not_found_by_id
+- city_not_found_by_id
+- image_not_found_by_id
+
+## Product_variant use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Product Variant Modification Use Case Translation Keys
+
+## Missing translations from product_variant_modification use cases:
+
+msgid "modification_value_not_found_by_id"
+msgstr "Значение модификации не найдено по ID"
+msgstr_en "Modification value not found by ID"
+msgstr_kk "Модификация мәні ID-мен табылмады"
+
+msgid "product_variant_modification_already_exists"
+msgstr "Модификация для данного варианта продукта уже существует"
+msgstr_en "Modification for this product variant already exists"
+msgstr_kk "Бұл өнім нұсқасы үшін модификация әлдеқашан бар"
+
+## Existing translations found in product_variant_modification use cases:
+- not_found
+- product_variant_not_found_by_id
+
+## Product_variant_modification use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Request Material Use Case Translation Keys
+
+## Missing translations from request_material use cases:
+
+msgid "request_material_not_found"
+msgstr "Материал заявки не найден"
+msgstr_en "Request material not found"
+msgstr_kk "Сұраныс материалы табылмады"
+
+## Existing translations found in request_material use cases:
+- academy_group_application_not_found
+- student_not_found
+- file_not_found
+- invalid_id
+
+## Request_material use cases with hardcoded strings needing translation:
+- create_request_material_case.py: 3 hardcoded strings (fixed)
+- get_request_material_by_id_case.py: 2 hardcoded strings (fixed)
+- delete_request_material_case.py: 2 hardcoded strings (fixed)
+- update_request_material_case.py: 3 hardcoded strings (fixed)
+
+# Request To Academy Group Use Case Translation Keys
+
+## Missing translations from request_to_academy_group use cases:
+
+msgid "user_not_found_by_id"
+msgstr "Пользователь не найден по ID"
+msgstr_en "User not found by ID"
+msgstr_kk "Пайдаланушы ID-мен табылмады"
+
+msgid "invalid_request_status"
+msgstr "Неверный статус заявки"
+msgstr_en "Invalid request status"
+msgstr_kk "Сұраныс мәртебесі жарамсыз"
+
+msgid "cannot_reset_checked_request_without_removing_checker"
+msgstr "Нельзя сбросить статус проверенной заявки без удаления проверяющего"
+msgstr_en "Cannot reset status of checked request without removing checker"
+msgstr_kk "Тексерушіні жоймай тексерілген сұраныстың мәртебесін нөлдеу мүмкін емес"
+
+msgid "checker_required_for_status_change"
+msgstr "Для изменения статуса заявки требуется проверяющий"
+msgstr_en "Checker is required for status change"
+msgstr_kk "Мәртебені өзгерту үшін тексеруші қажет"
+
+msgid "cannot_delete_accepted_request"
+msgstr "Нельзя удалить принятую заявку"
+msgstr_en "Cannot delete accepted request"
+msgstr_kk "Қабылданған сұранысты жою мүмкін емес"
+
+msgid "student_not_found_by_id"
+msgstr "Студент не найден по ID"
+msgstr_en "Student not found by ID"
+msgstr_kk "Студент ID-мен табылмады"
+
+msgid "academy_group_not_found_by_id"
+msgstr "Академическая группа не найдена по ID"
+msgstr_en "Academy group not found by ID"
+msgstr_kk "Академиялық топ ID-мен табылмады"
+
+msgid "request_to_academy_group_already_exists"
+msgstr "Заявка в данную академическую группу уже существует"
+msgstr_en "Request to this academy group already exists"
+msgstr_kk "Бұл академиялық топқа сұраныс әлдеқашан бар"
+
+## Existing translations found in request_to_academy_group use cases:
+- not_found
+
+## Request_to_academy_group use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Role Use Case Translation Keys
+
+## Missing translations from role use cases:
+None found - all translations exist
+
+## Existing translations found in role use cases:
+- not_found
+- can_not_delete_system_role
+- the_next_value_already_exists
+
+## Role use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Sport Use Case Translation Keys
+
+## Missing translations from sport use cases:
+None found - all translations exist
+
+## Existing translations found in sport use cases:
+- not_found
+- the_next_value_already_exists
+
+## Sport use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Student Use Case Translation Keys
+
+## Missing translations from student use cases:
+None found - all translations exist
+
+## Existing translations found in student use cases:
+- not_found
+- the_next_value_already_exists
+- city_not_found_by_id
+- image_not_found_by_id
+
+## Student use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Ticketon Use Case Translation Keys
+
+## Missing translations from ticketon use cases:
+
+msgid "ticketon_single_show_fetch_error"
+msgstr "Ошибка получения данных сеанса"
+msgstr_en "Error fetching single show data"
+msgstr_kk "Сеанс деректерін алу қатесі"
+
+msgid "ticketon_show_id_required"
+msgstr "Не указан ID сеанса"
+msgstr_en "Show ID is required"
+msgstr_kk "Сеанс ID-сы қажет"
+
+msgid "ticketon_invalid_show_id"
+msgstr "ID сеанса должен быть положительным числом"
+msgstr_en "Show ID must be a positive number"
+msgstr_kk "Сеанс ID-сы оң сан болуы керек"
+
+msgid "ticketon_shows_fetch_error"
+msgstr "Ошибка получения списка сеансов"
+msgstr_en "Error fetching shows data"
+msgstr_kk "Сеанстар тізімін алу қатесі"
+
+msgid "ticketon_parameters_required"
+msgstr "Требуется указать city_tag или event_type"
+msgstr_en "Either city_tag or event_type is required"
+msgstr_kk "city_tag немесе event_type көрсету қажет"
+
+msgid "ticketon_invalid_event_type"
+msgstr "Неверный тип события"
+msgstr_en "Invalid event type"
+msgstr_kk "Оқиға түрі жарамсыз"
+
+msgid "ticketon_invalid_language"
+msgstr "Неверный код языка"
+msgstr_en "Invalid language code"
+msgstr_kk "Тіл коды жарамсыз"
+
+msgid "ticketon_invalid_with_param"
+msgstr "Неверное значение параметра with"
+msgstr_en "Invalid value for with parameter"
+msgstr_kk "with параметрінің мәні жарамсыз"
+
+msgid "ticketon_level_fetch_error"
+msgstr "Ошибка получения данных уровня зала"
+msgstr_en "Error fetching level data"
+msgstr_kk "Зал деңгейінің деректерін алу қатесі"
+
+msgid "ticketon_level_id_required"
+msgstr "Не указан ID уровня зала"
+msgstr_en "Level ID is required"
+msgstr_kk "Деңгей ID-сы қажет"
+
+msgid "ticketon_invalid_level_id"
+msgstr "ID уровня зала должен быть положительным числом"
+msgstr_en "Level ID must be a positive number"
+msgstr_kk "Деңгей ID-сы оң сан болуы керек"
+
+msgid "ticketon_show_level_fetch_error"
+msgstr "Ошибка получения данных уровня зала для сеанса"
+msgstr_en "Error fetching show level data"
+msgstr_kk "Сеанс үшін зал деңгейінің деректерін алу қатесі"
+
+## Existing translations found in ticketon use cases:
+None - all strings are hardcoded or missing
+
+## Ticketon use cases with hardcoded strings needing translation:
+- get_ticketon_level_case.py: 3 hardcoded strings (fixed)
+- get_ticketon_show_level_case.py: 5 hardcoded strings (fixed)
+
+# Ticketon Order Use Case Translation Keys
+
+## Missing translations from ticketon_order use cases:
+
+msgid "invalid_signature"
+msgstr "Неверная подпись"
+msgstr_en "Invalid signature"
+msgstr_kk "Жарамсыз қолтаңба"
+
+msgid "payment_transaction_not_found"
+msgstr "Транзакция оплаты не найдена"
+msgstr_en "Payment transaction not found"
+msgstr_kk "Төлем транзакциясы табылмады"
+
+msgid "payment_transaction_is_not_active"
+msgstr "Транзакция оплаты не активна"
+msgstr_en "Payment transaction is not active"
+msgstr_kk "Төлем транзакциясы белсенді емес"
+
+msgid "ticketon_order_and_payment_transaction_not_found"
+msgstr "Заказ Ticketon и транзакция оплаты не найдены"
+msgstr_en "Ticketon order and payment transaction not found"
+msgstr_kk "Ticketon тапсырысы мен төлем транзакциясы табылмады"
+
+msgid "ticketon_order_not_found"
+msgstr "Заказ Ticketon не найден"
+msgstr_en "Ticketon order not found"
+msgstr_kk "Ticketon тапсырысы табылмады"
+
+msgid "ticketon_order_is_not_active"
+msgstr "Заказ Ticketon не активен"
+msgstr_en "Ticketon order is not active"
+msgstr_kk "Ticketon тапсырысы белсенді емес"
+
+msgid "payment_transaction_not_updated"
+msgstr "Транзакция оплаты не обновлена"
+msgstr_en "Payment transaction not updated"
+msgstr_kk "Төлем транзакциясы жаңартылмады"
+
+msgid "ticketon_order_is_not_paid"
+msgstr "Заказ Ticketon не оплачен"
+msgstr_en "Ticketon order is not paid"
+msgstr_kk "Ticketon тапсырысы төленбеген"
+
+msgid "ticketon_order_is_not_confirmed_or_cancelled"
+msgstr "Заказ Ticketon не подтвержден и не отменен"
+msgstr_en "Ticketon order is not confirmed or cancelled"
+msgstr_kk "Ticketon тапсырысы расталмаған немесе тоқтатылмаған"
+
+msgid "ticketon_order_is_already_refunded"
+msgstr "По заказу Ticketon уже произведен возврат"
+msgstr_en "Ticketon order is already refunded"
+msgstr_kk "Ticketon тапсырысы бойынша қайтарым әлдеқашан жасалған"
+
+msgid "refund_still_processing"
+msgstr "Возврат еще в обработке"
+msgstr_en "Refund is still processing"
+msgstr_kk "Қайтарым әлі өңделуде"
+
+msgid "ticketon_order_is_already_paid"
+msgstr "Заказ Ticketon уже оплачен"
+msgstr_en "Ticketon order is already paid"
+msgstr_kk "Ticketon тапсырысы әлдеқашан төленген"
+
+msgid "ticketon_order_is_expired"
+msgstr "Заказ Ticketon просрочен"
+msgstr_en "Ticketon order is expired"
+msgstr_kk "Ticketon тапсырысының мерзімі өткен"
+
+msgid "acquiring_error_try_again"
+msgstr "Ошибка эквайринга, попробуйте еще раз"
+msgstr_en "Acquiring error, try again"
+msgstr_kk "Эквайринг қатесі, қайтадан көріңіз"
+
+msgid "ticketon_order_tickets_not_found"
+msgstr "Билеты заказа Ticketon не найдены"
+msgstr_en "Ticketon order tickets not found"
+msgstr_kk "Ticketon тапсырысының билеттері табылмады"
+
+msgid "ticket_not_found"
+msgstr "Билет не найден"
+msgstr_en "Ticket not found"
+msgstr_kk "Билет табылмады"
+
+msgid "booking_request_required"
+msgstr "Требуется запрос на бронирование"
+msgstr_en "Booking request is required"
+msgstr_kk "Брондау сұрауы қажет"
+
+msgid "email_required"
+msgstr "Требуется указать email"
+msgstr_en "Email is required"
+msgstr_kk "Email көрсету қажет"
+
+msgid "phone_required"
+msgstr "Требуется указать телефон"
+msgstr_en "Phone is required"
+msgstr_kk "Телефон көрсету қажет"
+
+msgid "sale_id_required"
+msgstr "Требуется ID продажи"
+msgstr_en "Sale ID is required"
+msgstr_kk "Сату ID-сы қажет"
+
+msgid "show_not_found"
+msgstr "Сеанс не найден"
+msgstr_en "Show not found"
+msgstr_kk "Сеанс табылмады"
+
+msgid "ticket_sale_error"
+msgstr "Ошибка продажи билета"
+msgstr_en "Ticket sale error"
+msgstr_kk "Билет сату қатесі"
+
+## Existing translations found in ticketon_order use cases:
+- not_found
+- internal_server_error
+- access_denied
+
+## Ticketon_order use cases with hardcoded strings needing translation:
+- refund_ticketon_order_case.py: 15+ hardcoded strings (descriptive messages for refund process)
+- create_sale_case.py: 2 hardcoded strings (order descriptions)
+- recreate_payment_case.py: 2 hardcoded strings (order descriptions)
+
+# Ticketon Order Status Use Case Translation Keys
+
+## Missing translations from ticketon_order_status use cases:
+None found - all translations exist
+
+## Existing translations found in ticketon_order_status use cases:
+- not_found
+- the_next_value_already_exists
+
+## Ticketon_order_status use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# User Use Case Translation Keys
+
+## Missing translations from user use cases:
+None found - all translations exist
+
+## Existing translations found in user use cases:
+- not_found
+- user_not_found
+- email_exists
+- username_exists
+- phone_exists
+- iin_exists
+- role_not_found_by_id
+- image_not_found_by_id
+
+## User use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# User Code Verification Use Case Translation Keys
+
+## Missing translations from user_code_verification use cases:
+
+msgid "code_verified_successfully"
+msgstr "Код успешно подтвержден"
+msgstr_en "Code verified successfully"
+msgstr_kk "Код сәтті расталды"
+
+msgid "invalid_verification_code"
+msgstr "Неверный код подтверждения"
+msgstr_en "Invalid verification code"
+msgstr_kk "Растау коды жарамсыз"
+
+msgid "verification_code_expired"
+msgstr "Код подтверждения истек"
+msgstr_en "Verification code expired"
+msgstr_kk "Растау кодының мерзімі өткен"
+
+msgid "no_verification_code_found"
+msgstr "Код подтверждения не найден"
+msgstr_en "No verification code found"
+msgstr_kk "Растау коды табылмады"
+
+# Infrastructure Service Translation Keys
+
+## Missing translations from app/infrastructure/service:
+
+### file_service.py hardcoded strings found:
+
+msgid "file_not_found"
+msgstr "Файл не найден"
+msgstr_en "File not found"
+msgstr_kk "Файл табылмады"
+
+msgid "file_delete_error"
+msgstr "Ошибка при удалении файла"
+msgstr_en "Error deleting file"
+msgstr_kk "Файлды жою кезінде қате"
+
+msgid "file_update_error"
+msgstr "Ошибка при обновлении файла"
+msgstr_en "Error updating file"
+msgstr_kk "Файлды жаңарту кезінде қате"
+
+msgid "file_read_error"
+msgstr "Ошибка при чтении файла"
+msgstr_en "Error reading file"
+msgstr_kk "Файлды оқу кезінде қате"
+
+## Infrastructure service files analyzed:
+- file_service.py: 4 hardcoded strings found and need translation
+- redis_service.py: no hardcoded strings
+- sota_service/sota_service.py: uses i18n properly
+- ticketon_service/ticketon_service_api.py: uses i18n properly
+- alatau_service/alatau_service_api.py: uses i18n properly
+- smsc/smsc_api.py: no hardcoded strings
+
+msgid "verification_code_required"
+msgstr "Требуется код подтверждения"
+msgstr_en "Verification code is required"
+msgstr_kk "Растау коды қажет"
+
+msgid "user_already_verified"
+msgstr "Пользователь уже подтвержден"
+msgstr_en "User is already verified"
+msgstr_kk "Пайдаланушы әлдеқашан расталған"
+
+## Existing translations found in user_code_verification use cases:
+- user_not_found
+- phone_required
+- sms_verification_code_message
+- sms_verification_code_message_kk
+- sms_sent_successfully
+- sms_sending_failed
+- sms_sending_error
+- user_not_active
+
+## User_code_verification use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly

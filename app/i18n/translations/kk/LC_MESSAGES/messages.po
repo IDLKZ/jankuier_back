@@ -114,6 +114,12 @@ msgstr "Токен түрі жарамсыз"
 msgid "country_not_found"
 msgstr "Ел табылмады"
 
+msgid "modification_type_not_found_by_id"
+msgstr "Модификация түрі ID-мен табылмады"
+
+msgid "product_not_found_by_id"
+msgstr "Өнім ID-мен табылмады"
+
 msgid "you_already_have_application_for_this_licence"
 msgstr "Сізде осы лицензияға өтінім бар"
 
@@ -512,3 +518,210 @@ msgstr "Тауар нұсқасы табылмады"
 
 msgid "cart_item_calculation_error"
 msgstr "Себеттегі тауар бағаларын есептеу қатесі"
+
+msgid "user_id_validation_error"
+msgstr "Пайдаланушы ID-сы оң сан болуы керек"
+
+msgid "product_id_validation_error"
+msgstr "Өнім ID-сы оң сан болуы керек"
+
+msgid "variant_id_validation_error"
+msgstr "Вариант ID-сы оң сан болуы керек"
+
+msgid "product_variant_mismatch"
+msgstr "Вариант көрсетілген өнімге жатпайды"
+
+msgid "product_category_not_found_by_id"
+msgstr "Өнім санаты ID-мен табылмады"
+
+msgid "category_modification_already_exists"
+msgstr "Бұл санат үшін модификация әлдеқашан бар"
+
+msgid "permission_not_found"
+msgstr "Рұқсат табылмады"
+
+msgid "sku_already_exists"
+msgstr "SKU әлдеқашан бар"
+
+msgid "city_not_found_by_id"
+msgstr "Қала ID-мен табылмады"
+
+msgid "category_not_found_by_id"
+msgstr "Санат ID-мен табылмады"
+
+msgid "product_variant_not_found_by_id"
+msgstr "Өнім нұсқасы ID-мен табылмады"
+
+msgid "product_variant_does_not_belong_to_product"
+msgstr "Нұсқа осы өнімге жатпайды"
+
+msgid "file_not_found_by_id"
+msgstr "Файл ID-мен табылмады"
+
+msgid "either_file_id_or_file_required"
+msgstr "Файл ID-сы немесе файлдың өзі қажет"
+
+msgid "modification_value_not_found_by_id"
+msgstr "Модификация мәні ID-мен табылмады"
+
+msgid "product_variant_modification_already_exists"
+msgstr "Бұл өнім нұсқасы үшін модификация әлдеқашан бар"
+
+msgid "request_material_not_found"
+msgstr "Сұраныс материалы табылмады"
+
+msgid "user_not_found_by_id"
+msgstr "Пайдаланушы ID-мен табылмады"
+
+msgid "invalid_request_status"
+msgstr "Сұраныс мәртебесі жарамсыз"
+
+msgid "cannot_reset_checked_request_without_removing_checker"
+msgstr "Тексерушіні жоймай тексерілген сұраныстың мәртебесін нөлдеу мүмкін емес"
+
+msgid "checker_required_for_status_change"
+msgstr "Мәртебені өзгерту үшін тексеруші қажет"
+
+msgid "cannot_delete_accepted_request"
+msgstr "Қабылданған сұранысты жою мүмкін емес"
+
+msgid "student_not_found_by_id"
+msgstr "Студент ID-мен табылмады"
+
+msgid "academy_group_not_found_by_id"
+msgstr "Академиялық топ ID-мен табылмады"
+
+msgid "request_to_academy_group_already_exists"
+msgstr "Бұл академиялық топқа сұраныс әлдеқашан бар"
+
+msgid "ticketon_single_show_fetch_error"
+msgstr "Сеанс деректерін алу қатесі"
+
+msgid "ticketon_show_id_required"
+msgstr "Сеанс ID-сы қажет"
+
+msgid "ticketon_invalid_show_id"
+msgstr "Сеанс ID-сы оң сан болуы керек"
+
+msgid "ticketon_shows_fetch_error"
+msgstr "Сеанстар тізімін алу қатесі"
+
+msgid "ticketon_parameters_required"
+msgstr "city_tag немесе event_type көрсету қажет"
+
+msgid "ticketon_invalid_event_type"
+msgstr "Оқиға түрі жарамсыз"
+
+msgid "ticketon_invalid_language"
+msgstr "Тіл коды жарамсыз"
+
+msgid "ticketon_invalid_with_param"
+msgstr "with параметрінің мәні жарамсыз"
+
+msgid "ticketon_level_fetch_error"
+msgstr "Зал деңгейінің деректерін алу қатесі"
+
+msgid "ticketon_level_id_required"
+msgstr "Деңгей ID-сы қажет"
+
+msgid "ticketon_invalid_level_id"
+msgstr "Деңгей ID-сы оң сан болуы керек"
+
+msgid "ticketon_show_level_fetch_error"
+msgstr "Сеанс үшін зал деңгейінің деректерін алу қатесі"
+
+msgid "invalid_signature"
+msgstr "Жарамсыз қолтаңба"
+
+msgid "payment_transaction_not_found"
+msgstr "Төлем транзакциясы табылмады"
+
+msgid "payment_transaction_is_not_active"
+msgstr "Төлем транзакциясы белсенді емес"
+
+msgid "ticketon_order_and_payment_transaction_not_found"
+msgstr "Ticketon тапсырысы мен төлем транзакциясы табылмады"
+
+msgid "ticketon_order_not_found"
+msgstr "Ticketon тапсырысы табылмады"
+
+msgid "ticketon_order_is_not_active"
+msgstr "Ticketon тапсырысы белсенді емес"
+
+msgid "payment_transaction_not_updated"
+msgstr "Төлем транзакциясы жаңартылмады"
+
+msgid "ticketon_order_is_not_paid"
+msgstr "Ticketon тапсырысы төленбеген"
+
+msgid "ticketon_order_is_not_confirmed_or_cancelled"
+msgstr "Ticketon тапсырысы расталмаған немесе тоқтатылмаған"
+
+msgid "ticketon_order_is_already_refunded"
+msgstr "Ticketon тапсырысы бойынша қайтарым әлдеқашан жасалған"
+
+msgid "refund_still_processing"
+msgstr "Қайтарым әлі өңделуде"
+
+msgid "ticketon_order_is_already_paid"
+msgstr "Ticketon тапсырысы әлдеқашан төленген"
+
+msgid "ticketon_order_is_expired"
+msgstr "Ticketon тапсырысының мерзімі өткен"
+
+msgid "acquiring_error_try_again"
+msgstr "Эквайринг қатесі, қайтадан көріңіз"
+
+msgid "ticketon_order_tickets_not_found"
+msgstr "Ticketon тапсырысының билеттері табылмады"
+
+msgid "ticket_not_found"
+msgstr "Билет табылмады"
+
+msgid "booking_request_required"
+msgstr "Брондау сұрауы қажет"
+
+msgid "email_required"
+msgstr "Email көрсету қажет"
+
+msgid "phone_required"
+msgstr "Телефон көрсету қажет"
+
+msgid "sale_id_required"
+msgstr "Сату ID-сы қажет"
+
+msgid "show_not_found"
+msgstr "Сеанс табылмады"
+
+msgid "ticket_sale_error"
+msgstr "Билет сату қатесі"
+
+msgid "user_already_verified"
+msgstr "Пайдаланушы әлдеқашан расталған"
+
+msgid "verification_code_not_found"
+msgstr "Растау коды табылмады"
+
+msgid "verification_code_expired"
+msgstr "Растау кодының мерзімі өткен"
+
+msgid "invalid_verification_code"
+msgstr "Жарамсыз растау коды"
+
+msgid "verification_code_used"
+msgstr "Растау коды пайдаланылған"
+
+msgid "verification_limit_exceeded"
+msgstr "Растау шегі асты"
+
+msgid "file_not_found"
+msgstr "Файл табылмады"
+
+msgid "file_delete_error"
+msgstr "Файлды жою кезінде қате"
+
+msgid "file_update_error"
+msgstr "Файлды жаңарту кезінде қате"
+
+msgid "file_read_error"
+msgstr "Файлды оқу кезінде қате"

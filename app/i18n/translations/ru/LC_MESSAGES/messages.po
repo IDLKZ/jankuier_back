@@ -115,6 +115,12 @@ msgstr "Неверный тип токена"
 msgid "country_not_found"
 msgstr "Страна не найдена"
 
+msgid "modification_type_not_found_by_id"
+msgstr "Тип модификации не найден по ID"
+
+msgid "product_not_found_by_id"
+msgstr "Продукт не найден по ID"
+
 msgid "you_already_have_application_for_this_licence"
 msgstr "У вас уже есть заявка на эту лицензию"
 
@@ -513,4 +519,211 @@ msgstr "Вариант товара не найден"
 
 msgid "cart_item_calculation_error"
 msgstr "Ошибка расчета цен товара в корзине"
+
+msgid "user_id_validation_error"
+msgstr "ID пользователя должен быть положительным числом"
+
+msgid "product_id_validation_error"
+msgstr "ID продукта должен быть положительным числом"
+
+msgid "variant_id_validation_error"
+msgstr "ID варианта должен быть положительным числом"
+
+msgid "product_variant_mismatch"
+msgstr "Вариант не принадлежит указанному продукту"
+
+msgid "product_category_not_found_by_id"
+msgstr "Категория продукта не найдена по ID"
+
+msgid "category_modification_already_exists"
+msgstr "Модификация для данной категории уже существует"
+
+msgid "permission_not_found"
+msgstr "Разрешение не найдено"
+
+msgid "sku_already_exists"
+msgstr "SKU уже существует"
+
+msgid "city_not_found_by_id"
+msgstr "Город не найден по ID"
+
+msgid "category_not_found_by_id"
+msgstr "Категория не найдена по ID"
+
+msgid "product_variant_not_found_by_id"
+msgstr "Вариант продукта не найден по ID"
+
+msgid "product_variant_does_not_belong_to_product"
+msgstr "Вариант не принадлежит данному продукту"
+
+msgid "file_not_found_by_id"
+msgstr "Файл не найден по ID"
+
+msgid "either_file_id_or_file_required"
+msgstr "Требуется либо ID файла, либо сам файл"
+
+msgid "modification_value_not_found_by_id"
+msgstr "Значение модификации не найдено по ID"
+
+msgid "product_variant_modification_already_exists"
+msgstr "Модификация для данного варианта продукта уже существует"
+
+msgid "request_material_not_found"
+msgstr "Материал заявки не найден"
+
+msgid "user_not_found_by_id"
+msgstr "Пользователь не найден по ID"
+
+msgid "invalid_request_status"
+msgstr "Неверный статус заявки"
+
+msgid "cannot_reset_checked_request_without_removing_checker"
+msgstr "Нельзя сбросить статус проверенной заявки без удаления проверяющего"
+
+msgid "checker_required_for_status_change"
+msgstr "Для изменения статуса заявки требуется проверяющий"
+
+msgid "cannot_delete_accepted_request"
+msgstr "Нельзя удалить принятую заявку"
+
+msgid "student_not_found_by_id"
+msgstr "Студент не найден по ID"
+
+msgid "academy_group_not_found_by_id"
+msgstr "Академическая группа не найдена по ID"
+
+msgid "request_to_academy_group_already_exists"
+msgstr "Заявка в данную академическую группу уже существует"
+
+msgid "ticketon_single_show_fetch_error"
+msgstr "Ошибка получения данных сеанса"
+
+msgid "ticketon_show_id_required"
+msgstr "Не указан ID сеанса"
+
+msgid "ticketon_invalid_show_id"
+msgstr "ID сеанса должен быть положительным числом"
+
+msgid "ticketon_shows_fetch_error"
+msgstr "Ошибка получения списка сеансов"
+
+msgid "ticketon_parameters_required"
+msgstr "Требуется указать city_tag или event_type"
+
+msgid "ticketon_invalid_event_type"
+msgstr "Неверный тип события"
+
+msgid "ticketon_invalid_language"
+msgstr "Неверный код языка"
+
+msgid "ticketon_invalid_with_param"
+msgstr "Неверное значение параметра with"
+
+msgid "ticketon_level_fetch_error"
+msgstr "Ошибка получения данных уровня зала"
+
+msgid "ticketon_level_id_required"
+msgstr "Не указан ID уровня зала"
+
+msgid "ticketon_invalid_level_id"
+msgstr "ID уровня зала должен быть положительным числом"
+
+msgid "ticketon_show_level_fetch_error"
+msgstr "Ошибка получения данных уровня зала для сеанса"
+
+msgid "invalid_signature"
+msgstr "Неверная подпись"
+
+msgid "payment_transaction_not_found"
+msgstr "Транзакция оплаты не найдена"
+
+msgid "payment_transaction_is_not_active"
+msgstr "Транзакция оплаты не активна"
+
+msgid "ticketon_order_and_payment_transaction_not_found"
+msgstr "Заказ Ticketon и транзакция оплаты не найдены"
+
+msgid "ticketon_order_not_found"
+msgstr "Заказ Ticketon не найден"
+
+msgid "ticketon_order_is_not_active"
+msgstr "Заказ Ticketon не активен"
+
+msgid "payment_transaction_not_updated"
+msgstr "Транзакция оплаты не обновлена"
+
+msgid "ticketon_order_is_not_paid"
+msgstr "Заказ Ticketon не оплачен"
+
+msgid "ticketon_order_is_not_confirmed_or_cancelled"
+msgstr "Заказ Ticketon не подтвержден и не отменен"
+
+msgid "ticketon_order_is_already_refunded"
+msgstr "По заказу Ticketon уже произведен возврат"
+
+msgid "refund_still_processing"
+msgstr "Возврат еще в обработке"
+
+msgid "ticketon_order_is_already_paid"
+msgstr "Заказ Ticketon уже оплачен"
+
+msgid "ticketon_order_is_expired"
+msgstr "Заказ Ticketon просрочен"
+
+msgid "acquiring_error_try_again"
+msgstr "Ошибка эквайринга, попробуйте еще раз"
+
+msgid "ticketon_order_tickets_not_found"
+msgstr "Билеты заказа Ticketon не найдены"
+
+msgid "ticket_not_found"
+msgstr "Билет не найден"
+
+msgid "booking_request_required"
+msgstr "Требуется запрос на бронирование"
+
+msgid "email_required"
+msgstr "Требуется указать email"
+
+msgid "phone_required"
+msgstr "Требуется указать телефон"
+
+msgid "sale_id_required"
+msgstr "Требуется ID продажи"
+
+msgid "show_not_found"
+msgstr "Сеанс не найден"
+
+msgid "ticket_sale_error"
+msgstr "Ошибка продажи билета"
+
+msgid "code_verified_successfully"
+msgstr "Код успешно подтвержден"
+
+msgid "invalid_verification_code"
+msgstr "Неверный код подтверждения"
+
+msgid "verification_code_expired"
+msgstr "Код подтверждения истек"
+
+msgid "no_verification_code_found"
+msgstr "Код подтверждения не найден"
+
+msgid "verification_code_required"
+msgstr "Требуется код подтверждения"
+
+msgid "user_already_verified"
+msgstr "Пользователь уже подтвержден"
+
+msgid "file_not_found"
+msgstr "Файл не найден"
+
+msgid "file_delete_error"
+msgstr "Ошибка при удалении файла"
+
+msgid "file_update_error"
+msgstr "Ошибка при обновлении файла"
+
+msgid "file_read_error"
+msgstr "Ошибка при чтении файла"
 

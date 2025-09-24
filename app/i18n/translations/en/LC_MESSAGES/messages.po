@@ -114,6 +114,12 @@ msgstr "Invalid token type"
 msgid "country_not_found"
 msgstr "Country not found"
 
+msgid "modification_type_not_found_by_id"
+msgstr "Modification type not found by ID"
+
+msgid "product_not_found_by_id"
+msgstr "Product not found by ID"
+
 msgid "you_already_have_application_for_this_licence"
 msgstr "You already have an application for this license."
 
@@ -518,4 +524,211 @@ msgstr "Product variant not found."
 
 msgid "cart_item_calculation_error"
 msgstr "Error calculating cart item prices."
+
+msgid "user_id_validation_error"
+msgstr "User ID must be a positive number"
+
+msgid "product_id_validation_error"
+msgstr "Product ID must be a positive number"
+
+msgid "variant_id_validation_error"
+msgstr "Variant ID must be a positive number"
+
+msgid "product_variant_mismatch"
+msgstr "Variant does not belong to the specified product"
+
+msgid "product_category_not_found_by_id"
+msgstr "Product category not found by ID"
+
+msgid "category_modification_already_exists"
+msgstr "Modification for this category already exists"
+
+msgid "permission_not_found"
+msgstr "Permission not found"
+
+msgid "sku_already_exists"
+msgstr "SKU already exists"
+
+msgid "city_not_found_by_id"
+msgstr "City not found by ID"
+
+msgid "category_not_found_by_id"
+msgstr "Category not found by ID"
+
+msgid "product_variant_not_found_by_id"
+msgstr "Product variant not found by ID"
+
+msgid "product_variant_does_not_belong_to_product"
+msgstr "Variant does not belong to this product"
+
+msgid "file_not_found_by_id"
+msgstr "File not found by ID"
+
+msgid "either_file_id_or_file_required"
+msgstr "Either file ID or file is required"
+
+msgid "modification_value_not_found_by_id"
+msgstr "Modification value not found by ID"
+
+msgid "product_variant_modification_already_exists"
+msgstr "Modification for this product variant already exists"
+
+msgid "request_material_not_found"
+msgstr "Request material not found"
+
+msgid "user_not_found_by_id"
+msgstr "User not found by ID"
+
+msgid "invalid_request_status"
+msgstr "Invalid request status"
+
+msgid "cannot_reset_checked_request_without_removing_checker"
+msgstr "Cannot reset status of checked request without removing checker"
+
+msgid "checker_required_for_status_change"
+msgstr "Checker is required for status change"
+
+msgid "cannot_delete_accepted_request"
+msgstr "Cannot delete accepted request"
+
+msgid "student_not_found_by_id"
+msgstr "Student not found by ID"
+
+msgid "academy_group_not_found_by_id"
+msgstr "Academy group not found by ID"
+
+msgid "request_to_academy_group_already_exists"
+msgstr "Request to this academy group already exists"
+
+msgid "ticketon_single_show_fetch_error"
+msgstr "Error fetching single show data"
+
+msgid "ticketon_show_id_required"
+msgstr "Show ID is required"
+
+msgid "ticketon_invalid_show_id"
+msgstr "Show ID must be a positive number"
+
+msgid "ticketon_shows_fetch_error"
+msgstr "Error fetching shows data"
+
+msgid "ticketon_parameters_required"
+msgstr "Either city_tag or event_type is required"
+
+msgid "ticketon_invalid_event_type"
+msgstr "Invalid event type"
+
+msgid "ticketon_invalid_language"
+msgstr "Invalid language code"
+
+msgid "ticketon_invalid_with_param"
+msgstr "Invalid value for with parameter"
+
+msgid "ticketon_level_fetch_error"
+msgstr "Error fetching level data"
+
+msgid "ticketon_level_id_required"
+msgstr "Level ID is required"
+
+msgid "ticketon_invalid_level_id"
+msgstr "Level ID must be a positive number"
+
+msgid "ticketon_show_level_fetch_error"
+msgstr "Error fetching show level data"
+
+msgid "invalid_signature"
+msgstr "Invalid signature"
+
+msgid "payment_transaction_not_found"
+msgstr "Payment transaction not found"
+
+msgid "payment_transaction_is_not_active"
+msgstr "Payment transaction is not active"
+
+msgid "ticketon_order_and_payment_transaction_not_found"
+msgstr "Ticketon order and payment transaction not found"
+
+msgid "ticketon_order_not_found"
+msgstr "Ticketon order not found"
+
+msgid "ticketon_order_is_not_active"
+msgstr "Ticketon order is not active"
+
+msgid "payment_transaction_not_updated"
+msgstr "Payment transaction not updated"
+
+msgid "ticketon_order_is_not_paid"
+msgstr "Ticketon order is not paid"
+
+msgid "ticketon_order_is_not_confirmed_or_cancelled"
+msgstr "Ticketon order is not confirmed or cancelled"
+
+msgid "ticketon_order_is_already_refunded"
+msgstr "Ticketon order is already refunded"
+
+msgid "refund_still_processing"
+msgstr "Refund is still processing"
+
+msgid "ticketon_order_is_already_paid"
+msgstr "Ticketon order is already paid"
+
+msgid "ticketon_order_is_expired"
+msgstr "Ticketon order is expired"
+
+msgid "acquiring_error_try_again"
+msgstr "Acquiring error, try again"
+
+msgid "ticketon_order_tickets_not_found"
+msgstr "Ticketon order tickets not found"
+
+msgid "ticket_not_found"
+msgstr "Ticket not found"
+
+msgid "booking_request_required"
+msgstr "Booking request is required"
+
+msgid "email_required"
+msgstr "Email is required"
+
+msgid "phone_required"
+msgstr "Phone is required"
+
+msgid "sale_id_required"
+msgstr "Sale ID is required"
+
+msgid "show_not_found"
+msgstr "Show not found"
+
+msgid "ticket_sale_error"
+msgstr "Ticket sale error"
+
+msgid "code_verified_successfully"
+msgstr "Code verified successfully"
+
+msgid "invalid_verification_code"
+msgstr "Invalid verification code"
+
+msgid "verification_code_expired"
+msgstr "Verification code expired"
+
+msgid "no_verification_code_found"
+msgstr "No verification code found"
+
+msgid "verification_code_required"
+msgstr "Verification code is required"
+
+msgid "user_already_verified"
+msgstr "User is already verified"
+
+msgid "file_not_found"
+msgstr "File not found"
+
+msgid "file_delete_error"
+msgstr "Error deleting file"
+
+msgid "file_update_error"
+msgstr "Error updating file"
+
+msgid "file_read_error"
+msgstr "Error reading file"
 
