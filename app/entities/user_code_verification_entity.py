@@ -12,7 +12,7 @@ class UserCodeVerificationEntity(Base):
     id: Mapped[DbColumnConstants.ID]
     user_id:Mapped[
         DbColumnConstants.ForeignKeyInteger(
-            AppTableNames.UserTableName, onupdate="CASCADE", ondelete="SET NULL"
+            AppTableNames.UserTableName, onupdate="CASCADE", ondelete="CASCADE"
         )
     ]
     expired_at:Mapped[DbColumnConstants.StandardDateTime]

@@ -48,6 +48,21 @@ msgstr "License not found."
 msgid "licence_is_not_active"
 msgstr "License is not active."
 
+msgid "sms_sent_successfully"
+msgstr "SMS sent successfully"
+
+msgid "sms_sending_failed"
+msgstr "SMS sending failed"
+
+msgid "sms_sending_error"
+msgstr "SMS sending error"
+
+msgid "sms_verification_code_message"
+msgstr "Your verification code: {code}. Do not share this code with anyone."
+
+msgid "sms_verification_code_message_kk"
+msgstr "Тіркеуді аяқтау үшін сіздің кодыңыз: {code}. Кодты ешкімге айтпаңыз."
+
 msgid "you_already_have_application_for_this_licence"
 msgstr "You already have an application for this license."
 

@@ -61,8 +61,8 @@ class SendSmsCodeCase(BaseUseCase[UserCodeVerificationResultRDTO]):
                 # Use real SMS service
                 smsc = SMSC()
                 sms_message = (
-                    f"Ваш код для завершения регистрации: {code}. Никому не сообщайте код.\n"
-                    f"Тіркеуді аяқтау үшін сіздің кодыңыз: {code}. Кодты ешкімге айтпаңыз."
+                    f"{i18n.gettext('sms_verification_code_message').format(code=code)}\n"
+                    f"{i18n.gettext('sms_verification_code_message_kk').format(code=code)}"
                 )
 
                 sms_result = smsc.send_sms(
@@ -76,14 +76,14 @@ class SendSmsCodeCase(BaseUseCase[UserCodeVerificationResultRDTO]):
                     result = True
                     message = i18n.gettext("sms_sent_successfully")
                 else:
-                    message = f"SMS sending failed: {sms_result[1] if len(sms_result) > 1 else 'Unknown error'}"
+                    message = i18n.gettext("sms_sending_failed")
             else:
                 # Use fake SMS service
                 result = True
-                message = f"Fake SMS sent. Code: {app_config.fake_sms_code}"
+                message = i18n.gettext("sms_sent_successfully")
 
         except Exception as e:
-            message = f"SMS sending error: {str(e)}"
+            message = i18n.gettext("sms_sending_error")
 
         return UserCodeVerificationResultRDTO(
             user_id=user.id,

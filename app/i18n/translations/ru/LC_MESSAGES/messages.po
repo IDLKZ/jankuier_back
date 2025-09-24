@@ -49,6 +49,21 @@ msgstr "Лицензия не найдена"
 msgid "licence_is_not_active"
 msgstr "Лицензия неактивна"
 
+msgid "sms_sent_successfully"
+msgstr "SMS успешно отправлено"
+
+msgid "sms_sending_failed"
+msgstr "Ошибка отправки SMS"
+
+msgid "sms_sending_error"
+msgstr "Ошибка при отправке SMS"
+
+msgid "sms_verification_code_message"
+msgstr "Ваш код для завершения регистрации: {code}. Никому не сообщайте код."
+
+msgid "sms_verification_code_message_kk"
+msgstr "Тіркеуді аяқтау үшін сіздің кодыңыз: {code}. Кодты ешкімге айтпаңыз."
+
 msgid "you_already_have_application_for_this_licence"
 msgstr "У вас уже есть заявка на эту лицензию"
 

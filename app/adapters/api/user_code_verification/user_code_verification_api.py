@@ -5,8 +5,6 @@ from pydantic import BaseModel, Field
 from app.adapters.dto.user_code_verification.user_code_verification_dto import (
     UserCodeVerificationResultRDTO,
 )
-from app.core.app_exception_response import AppExceptionResponse
-from app.i18n.i18n_wrapper import i18n
 from app.infrastructure.db import get_db
 from app.shared.dto_constants import DTOConstant
 from app.shared.route_constants import RoutePathConstants
@@ -52,25 +50,11 @@ class UserCodeVerificationApi:
         dto: SendSmsCodeDTO,
         db: AsyncSession = Depends(get_db),
     ) -> UserCodeVerificationResultRDTO:
-        try:
-            return await SendSmsCodeCase(db).execute(phone=dto.phone)
-        except Exception as exc:
-            raise AppExceptionResponse.internal_error(
-                message=i18n.gettext("internal_server_error"),
-                extra={"details": str(exc)},
-                is_custom=True,
-            ) from exc
+        return await SendSmsCodeCase(db).execute(phone=dto.phone)
 
     async def verify_sms_code(
         self,
         dto: VerifySmsCodeDTO,
         db: AsyncSession = Depends(get_db),
     ) -> UserCodeVerificationResultRDTO:
-        try:
-            return await VerifySmsCodeCase(db).execute(phone=dto.phone, code=dto.code)
-        except Exception as exc:
-            raise AppExceptionResponse.internal_error(
-                message=i18n.gettext("internal_server_error"),
-                extra={"details": str(exc)},
-                is_custom=True,
-            ) from exc
+        return await VerifySmsCodeCase(db).execute(phone=dto.phone, code=dto.code)

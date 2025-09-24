@@ -59,6 +59,10 @@ class LoginCase(BaseUseCase[BearerTokenDTO]):
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("user_not_active")
             )
+        if not user.is_verified:
+            raise AppExceptionResponse.forbidden(
+                message=i18n.gettext("user_not_active")
+            )
         result = verify_password(dto.password, user.password_hash)
         if not result:
             raise AppExceptionResponse.bad_request(

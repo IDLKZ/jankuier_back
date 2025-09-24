@@ -124,6 +124,7 @@ class AppConfiguration(BaseSettings):
     use_sms_service: bool = Field(default=True, env="USE_SMS_SERVICE")
     fake_sms_code: str = Field(default="5544", env="FAKE_SMS_CODE")
     sms_code_expire_minutes: int = Field(default=2, env="SMS_CODE_EXPIRE_MINUTES")
+    sms_code_verify_minutes: int = Field(default=60, env="SMS_CODE_VERIFY_MINUTES")
 
     # SMSC SMS Service Configuration
     smsc_login: str = Field(default="", env="SMSC_LOGIN")

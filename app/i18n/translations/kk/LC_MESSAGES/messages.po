@@ -48,6 +48,21 @@ msgstr "Лицензия табылмады"
 msgid "licence_is_not_active"
 msgstr "Лицензия белсенді емес"
 
+msgid "sms_sent_successfully"
+msgstr "SMS сәтті жіберілді"
+
+msgid "sms_sending_failed"
+msgstr "SMS жіберу қатесі"
+
+msgid "sms_sending_error"
+msgstr "SMS жіберу кезіндегі қате"
+
+msgid "sms_verification_code_message"
+msgstr "Тіркеуді аяқтау үшін сіздің кодыңыз: {code}. Кодты ешкімге айтпаңыз."
+
+msgid "sms_verification_code_message_kk"
+msgstr "Тіркеуді аяқтау үшін сіздің кодыңыз: {code}. Кодты ешкімге айтпаңыз."
+
 msgid "you_already_have_application_for_this_licence"
 msgstr "Сізде осы лицензияға өтінім бар"
 

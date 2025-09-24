@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import and_
@@ -37,15 +37,12 @@ class VerifySmsCodeCase(BaseUseCase[UserCodeVerificationResultRDTO]):
                 message=i18n.gettext("user_not_found")
             )
 
-        # Get the most recent valid verification code
+        # Get the most recent verification code
         verification = await self.user_code_verification_repository.get_first_with_filters(
             filters=[
-                and_(
-                    self.user_code_verification_repository.model.user_id == user.id,
-                    self.user_code_verification_repository.model.expired_at > datetime.utcnow()
-                )
+                self.user_code_verification_repository.model.user_id == user.id
             ],
-            order_by="expired_at",
+            order_by="created_at",
             order_direction="desc"
         )
 
@@ -54,10 +51,12 @@ class VerifySmsCodeCase(BaseUseCase[UserCodeVerificationResultRDTO]):
         expires_in_seconds = 0
 
         if verification:
-            # Calculate remaining time
+            # Calculate expiration time based on created_at + sms_code_verify_minutes
             now = datetime.utcnow()
-            if verification.expired_at > now:
-                expires_in_seconds = int((verification.expired_at - now).total_seconds())
+            expiration_time = verification.created_at + timedelta(minutes=app_config.sms_code_verify_minutes)
+
+            if expiration_time > now:
+                expires_in_seconds = int((expiration_time - now).total_seconds())
 
                 # Check if code matches
                 expected_code = app_config.fake_sms_code if not app_config.use_sms_service else verification.code
