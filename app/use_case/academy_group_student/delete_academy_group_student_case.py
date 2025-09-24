@@ -5,6 +5,7 @@ from app.adapters.repository.academy_group_student.academy_group_student_reposit
 )
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import AcademyGroupStudentEntity
+from app.i18n.i18n_wrapper import i18n
 from app.shared.dto_constants import DTOConstant
 from app.use_case.base_case import BaseUseCase
 
@@ -23,9 +24,9 @@ class DeleteAcademyGroupStudentCase(BaseUseCase[bool]):
     async def validate(self, id: int) -> None:
         if not id or id <= 0:
             raise AppExceptionResponse.bad_request(
-                message="ID должен быть положительным числом"
+                message=i18n.gettext("academy_group_student_id_validation_error")
             )
 
         self.model = await self.repository.get(id, include_deleted_filter=True)
         if not self.model:
-            raise AppExceptionResponse.not_found(message="Студент в группе не найден")
+            raise AppExceptionResponse.not_found(message=i18n.gettext("academy_group_student_not_found"))

@@ -77,7 +77,7 @@ class RecreatePaymentForTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO
         self.ticketon_order = await self.ticketon_repository.get_first_with_filters(
             filters=[
                 self.ticketon_repository.model.id == ticketon_order_id,
-                self.ticketon_order.user_id == self.user.id
+                self.ticketon_order.model.user_id == self.user.id
             ],
             include_deleted_filter=True
         )

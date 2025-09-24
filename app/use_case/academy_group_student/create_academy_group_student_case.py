@@ -17,6 +17,7 @@ from app.adapters.repository.request_to_academy_group.request_to_academy_group_r
 from app.adapters.repository.student.student_repository import StudentRepository
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import AcademyGroupStudentEntity
+from app.i18n.i18n_wrapper import i18n
 from app.use_case.base_case import BaseUseCase
 
 
@@ -41,15 +42,15 @@ class CreateAcademyGroupStudentCase(BaseUseCase[AcademyGroupStudentWithRelations
 
     async def validate(self, dto: AcademyGroupStudentCDTO) -> None:
         if not await self.student_repository.get(dto.student_id):
-            raise AppExceptionResponse.bad_request(message="Студент не найден")
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("student_not_found"))
 
         if not await self.group_repository.get(dto.group_id):
-            raise AppExceptionResponse.bad_request(message="Группа академии не найдена")
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("academy_group_not_found"))
 
         if dto.request_id:
             if not await self.request_repository.get(dto.request_id):
                 raise AppExceptionResponse.bad_request(
-                    message="Заявка в академическую группу не найдена"
+                    message=i18n.gettext("academy_group_application_not_found")
                 )
 
         existing_student = await self.repository.get_first_with_filters(
@@ -62,7 +63,7 @@ class CreateAcademyGroupStudentCase(BaseUseCase[AcademyGroupStudentWithRelations
         )
         if existing_student:
             raise AppExceptionResponse.bad_request(
-                message="Студент уже находится в данной группе"
+                message=i18n.gettext("student_already_in_group")
             )
 
     async def transform(self, dto: AcademyGroupStudentCDTO):

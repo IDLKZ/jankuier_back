@@ -1,0 +1,247 @@
+# Academy Use Case Translation Keys
+
+## Missing translations from academy use cases:
+
+msgid "file_is_required"
+msgstr "Файл обязателен"
+msgstr_en "File is required"
+msgstr_kk "Файл міндетті"
+
+## Existing translations found in academy use cases:
+- not_found
+- the_next_value_already_exists
+- city_not_found
+- academy_not_found
+- academy_id_validation_error
+- age_range_validation_error
+- gender_validation_error
+- average_price_validation_error
+- training_time_validation_error
+- file_not_found
+- working_time_validation_error
+- invalid_email_format
+- invalid_phone_format (commented out in code)
+
+## Academy use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Academy Gallery Use Case Translation Keys
+
+## Missing translations from academy_gallery use cases:
+None found - all translations exist
+
+## Existing translations found in academy_gallery use cases:
+- academy_gallery_not_found
+- academy_gallery_id_validation_error
+- academy_gallery_file_required
+- academy_gallery_duplicate_file
+- academy_gallery_invalid_file_type
+- academy_not_found
+- academy_group_not_found
+- file_not_found
+
+## Academy_gallery use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Academy Group Use Case Translation Keys
+
+## Missing translations from academy_group use cases:
+None found - all translations exist
+
+## Existing translations found in academy_group use cases:
+- academy_group_not_found
+- academy_group_id_validation_error
+- academy_group_name_required
+- group_space_validation_error
+- price_per_validation_error
+- academy_not_found
+- the_next_value_already_exists
+- age_range_validation_error
+- gender_validation_error
+- average_price_validation_error
+- training_time_validation_error
+- file_not_found
+
+## Academy_group use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Academy Group Schedule Use Case Translation Keys
+
+## Missing translations from academy_group_schedule use cases:
+None found - all translations exist
+
+## Existing translations found in academy_group_schedule use cases:
+- academy_group_schedule_not_found
+- academy_group_schedule_id_validation_error
+- schedule_cannot_update_finished
+- schedule_already_started
+- schedule_time_validation_error
+- schedule_date_validation_error
+- reschedule_time_validation_error
+- schedule_cannot_cancel_finished
+- schedule_conflict_error
+- academy_group_not_found
+
+## Academy_group_schedule use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Academy Group Student Use Case Translation Keys
+
+## Missing translations from academy_group_student use cases:
+
+msgid "academy_group_student_id_validation_error"
+msgstr "ID должен быть положительным числом"
+msgstr_en "ID must be a positive number"
+msgstr_kk "ID оң сан болуы керек"
+
+msgid "academy_group_student_not_found"
+msgstr "Студент в группе не найден"
+msgstr_en "Student not found in group"
+msgstr_kk "Топтағы студент табылмады"
+
+msgid "student_not_found"
+msgstr "Студент не найден"
+msgstr_en "Student not found"
+msgstr_kk "Студент табылмады"
+
+msgid "academy_group_application_not_found"
+msgstr "Заявка в академическую группу не найдена"
+msgstr_en "Academy group application not found"
+msgstr_kk "Академиялық топқа өтінім табылмады"
+
+msgid "student_already_in_group"
+msgstr "Студент уже находится в данной группе"
+msgstr_en "Student is already in this group"
+msgstr_kk "Студент бұл топта бар"
+
+## Existing translations found in academy_group_student use cases:
+None - all strings are hardcoded
+
+## Academy_group_student use cases with hardcoded strings needing translation:
+- create_academy_group_student_case.py: 6 hardcoded strings
+- get_academy_group_student_by_id_case.py: 2 hardcoded strings
+- update_academy_group_student_case.py: 2 hardcoded strings
+- delete_academy_group_student_case.py: 2 hardcoded strings
+
+# Academy Material Use Case Translation Keys
+
+## Missing translations from academy_material use cases:
+
+msgid "academy_material_not_found"
+msgstr "Материал академии не найден"
+msgstr_en "Academy material not found"
+msgstr_kk "Академия материалы табылмады"
+
+msgid "academy_group_not_belongs_to_academy"
+msgstr "Группа не принадлежит академии"
+msgstr_en "Group does not belong to academy"
+msgstr_kk "Топ академияға жатпайды"
+
+msgid "academy_material_title_already_exists"
+msgstr "Материал с таким названием уже существует"
+msgstr_en "Material with this title already exists"
+msgstr_kk "Осы атаумен материал бұрыннан бар"
+
+msgid "invalid_id"
+msgstr "Неверный ID"
+msgstr_en "Invalid ID"
+msgstr_kk "Жарамсыз ID"
+
+msgid "academy_material_id_validation_error"
+msgstr "ID материала должен быть положительным числом"
+msgstr_en "Material ID must be a positive number"
+msgstr_kk "Материал ID-сы оң сан болуы керек"
+
+## Existing translations found in academy_material use cases:
+- academy_not_found
+- academy_group_not_found
+- file_not_found
+
+## Academy_material use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Auth Use Case Translation Keys
+
+## Missing translations from auth use cases:
+
+msgid "invalid_old_password"
+msgstr "Неверный старый пароль"
+msgstr_en "Invalid old password"
+msgstr_kk "Ескі пароль дұрыс емес"
+
+msgid "new_password_must_be_different"
+msgstr "Новый пароль должен отличаться от старого"
+msgstr_en "New password must be different from the old one"
+msgstr_kk "Жаңа пароль ескісінен өзгеше болуы керек"
+
+msgid "username_doesnt_exist"
+msgstr "Пользователь с таким именем не существует"
+msgstr_en "User with this username does not exist"
+msgstr_kk "Мұндай пайдаланушы аты жоқ"
+
+msgid "password_or_username_incorrect"
+msgstr "Неверное имя пользователя или пароль"
+msgstr_en "Incorrect username or password"
+msgstr_kk "Пайдаланушы аты немесе пароль дұрыс емес"
+
+msgid "invalid_token_type"
+msgstr "Неверный тип токена"
+msgstr_en "Invalid token type"
+msgstr_kk "Токен түрі жарамсыз"
+
+## Existing translations found in auth use cases:
+- something_went_wrong
+- user_not_found
+- user_not_active
+- role_not_found
+- role_cant_register
+- email_exists
+- username_exists
+- phone_exists
+- iin_exists
+- token_expired
+- forbidden
+
+## Auth use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# City Use Case Translation Keys
+
+## Missing translations from city use cases:
+
+msgid "country_not_found"
+msgstr "Страна не найдена"
+msgstr_en "Country not found"
+msgstr_kk "Ел табылмады"
+
+## Existing translations found in city use cases:
+- not_found
+
+## City use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Country Use Case Translation Keys
+
+## Missing translations from country use cases:
+None found - all translations exist
+
+## Existing translations found in country use cases:
+- not_found
+
+## Country use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly
+
+# Field Use Case Translation Keys
+
+## Missing translations from field use cases:
+None found - all translations exist
+
+## Existing translations found in field use cases:
+- not_found
+- the_next_value_already_exists
+- city_not_found
+- image_not_found_by_id
+- file_is_required
+
+## Field use cases with hardcoded strings needing translation:
+None found - all strings use i18n.gettext() properly

@@ -63,6 +63,57 @@ msgstr "Your verification code: {code}. Do not share this code with anyone."
 msgid "sms_verification_code_message_kk"
 msgstr "Тіркеуді аяқтау үшін сіздің кодыңыз: {code}. Кодты ешкімге айтпаңыз."
 
+msgid "file_is_required"
+msgstr "File is required"
+
+msgid "academy_group_student_id_validation_error"
+msgstr "ID must be a positive number"
+
+msgid "academy_group_student_not_found"
+msgstr "Student not found in group"
+
+msgid "student_not_found"
+msgstr "Student not found"
+
+msgid "academy_group_application_not_found"
+msgstr "Academy group application not found"
+
+msgid "student_already_in_group"
+msgstr "Student is already in this group"
+
+msgid "academy_material_not_found"
+msgstr "Academy material not found"
+
+msgid "academy_group_not_belongs_to_academy"
+msgstr "Group does not belong to academy"
+
+msgid "academy_material_title_already_exists"
+msgstr "Material with this title already exists"
+
+msgid "invalid_id"
+msgstr "Invalid ID"
+
+msgid "academy_material_id_validation_error"
+msgstr "Material ID must be a positive number"
+
+msgid "invalid_old_password"
+msgstr "Invalid old password"
+
+msgid "new_password_must_be_different"
+msgstr "New password must be different from the old one"
+
+msgid "username_doesnt_exist"
+msgstr "User with this username does not exist"
+
+msgid "password_or_username_incorrect"
+msgstr "Incorrect username or password"
+
+msgid "invalid_token_type"
+msgstr "Invalid token type"
+
+msgid "country_not_found"
+msgstr "Country not found"
+
 msgid "you_already_have_application_for_this_licence"
 msgstr "You already have an application for this license."
 

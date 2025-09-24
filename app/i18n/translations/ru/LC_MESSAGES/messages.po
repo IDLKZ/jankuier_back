@@ -64,6 +64,57 @@ msgstr "Ваш код для завершения регистрации: {code}
 msgid "sms_verification_code_message_kk"
 msgstr "Тіркеуді аяқтау үшін сіздің кодыңыз: {code}. Кодты ешкімге айтпаңыз."
 
+msgid "file_is_required"
+msgstr "Файл обязателен"
+
+msgid "academy_group_student_id_validation_error"
+msgstr "ID должен быть положительным числом"
+
+msgid "academy_group_student_not_found"
+msgstr "Студент в группе не найден"
+
+msgid "student_not_found"
+msgstr "Студент не найден"
+
+msgid "academy_group_application_not_found"
+msgstr "Заявка в академическую группу не найдена"
+
+msgid "student_already_in_group"
+msgstr "Студент уже находится в данной группе"
+
+msgid "academy_material_not_found"
+msgstr "Материал академии не найден"
+
+msgid "academy_group_not_belongs_to_academy"
+msgstr "Группа не принадлежит академии"
+
+msgid "academy_material_title_already_exists"
+msgstr "Материал с таким названием уже существует"
+
+msgid "invalid_id"
+msgstr "Неверный ID"
+
+msgid "academy_material_id_validation_error"
+msgstr "ID материала должен быть положительным числом"
+
+msgid "invalid_old_password"
+msgstr "Неверный старый пароль"
+
+msgid "new_password_must_be_different"
+msgstr "Новый пароль должен отличаться от старого"
+
+msgid "username_doesnt_exist"
+msgstr "Пользователь с таким именем не существует"
+
+msgid "password_or_username_incorrect"
+msgstr "Неверное имя пользователя или пароль"
+
+msgid "invalid_token_type"
+msgstr "Неверный тип токена"
+
+msgid "country_not_found"
+msgstr "Страна не найдена"
+
 msgid "you_already_have_application_for_this_licence"
 msgstr "У вас уже есть заявка на эту лицензию"
 

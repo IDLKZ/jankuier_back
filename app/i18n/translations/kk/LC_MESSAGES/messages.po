@@ -63,6 +63,57 @@ msgstr "Тіркеуді аяқтау үшін сіздің кодыңыз: {cod
 msgid "sms_verification_code_message_kk"
 msgstr "Тіркеуді аяқтау үшін сіздің кодыңыз: {code}. Кодты ешкімге айтпаңыз."
 
+msgid "file_is_required"
+msgstr "Файл міндетті"
+
+msgid "academy_group_student_id_validation_error"
+msgstr "ID оң сан болуы керек"
+
+msgid "academy_group_student_not_found"
+msgstr "Топтағы студент табылмады"
+
+msgid "student_not_found"
+msgstr "Студент табылмады"
+
+msgid "academy_group_application_not_found"
+msgstr "Академиялық топқа өтінім табылмады"
+
+msgid "student_already_in_group"
+msgstr "Студент бұл топта бар"
+
+msgid "academy_material_not_found"
+msgstr "Академия материалы табылмады"
+
+msgid "academy_group_not_belongs_to_academy"
+msgstr "Топ академияға жатпайды"
+
+msgid "academy_material_title_already_exists"
+msgstr "Осы атаумен материал бұрыннан бар"
+
+msgid "invalid_id"
+msgstr "Жарамсыз ID"
+
+msgid "academy_material_id_validation_error"
+msgstr "Материал ID-сы оң сан болуы керек"
+
+msgid "invalid_old_password"
+msgstr "Ескі пароль дұрыс емес"
+
+msgid "new_password_must_be_different"
+msgstr "Жаңа пароль ескісінен өзгеше болуы керек"
+
+msgid "username_doesnt_exist"
+msgstr "Мұндай пайдаланушы аты жоқ"
+
+msgid "password_or_username_incorrect"
+msgstr "Пайдаланушы аты немесе пароль дұрыс емес"
+
+msgid "invalid_token_type"
+msgstr "Токен түрі жарамсыз"
+
+msgid "country_not_found"
+msgstr "Ел табылмады"
+
 msgid "you_already_have_application_for_this_licence"
 msgstr "Сізде осы лицензияға өтінім бар"
 
