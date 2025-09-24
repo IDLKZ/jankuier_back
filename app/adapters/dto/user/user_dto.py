@@ -56,7 +56,7 @@ class UserRDTO(UserDTO):
     patronomic: DTOConstant.StandardNullableVarcharField(description="Отчество")
 
     email: DTOConstant.StandardEmailField(description="Электронная почта")
-    phone: DTOConstant.StandardPhoneField(description="Телефон")
+    phone: DTOConstant.StandardVarcharField(description="Телефон")
     username: DTOConstant.StandardUniqueValueField(
         description="Уникальное имя пользователя"
     )
