@@ -51,6 +51,12 @@ class TicketonConfirmCase(BaseUseCase[AlatauBackrefResponseDTO]):
 
 
     async def validate(self) -> None:
+        # Проверяем обязательные поля
+        if not self.dto.order:
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("order_is_required"))
+        if not self.dto.sign:
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("signature_is_required"))
+
         #Проверим подпись
         if isinstance(self.dto, AlatauBackrefPostDTO):
             if not self.dto.verify_signature(shared_key=app_config.shared_secret):
@@ -96,21 +102,19 @@ class TicketonConfirmCase(BaseUseCase[AlatauBackrefResponseDTO]):
 
     async def transform(self):
         is_paid = False
-        is_confirmed_from_ticketon = False
         payment_status_id = DbValueConstants.PaymentTransactionStatusFailedID
         error_message:str|None = None
-        ticket_updated = False
 
         if self.dto.res_code == "0":
             is_paid = True
             payment_status_id = DbValueConstants.PaymentTransactionStatusPaidID
 
         payment_transaction_cdto = PaymentTransactionCDTO.from_orm(self.payment_transaction_entity)
-        payment_transaction_cdto.mpi_order = getattr(self.dto, 'mpi_order', self.dto.order)
+        payment_transaction_cdto.mpi_order = getattr(self.dto, 'mpi_order', self.dto.order) or self.dto.order
         payment_transaction_cdto.status_id = payment_status_id
-        payment_transaction_cdto.amount = float(self.dto.amount)
-        payment_transaction_cdto.currency = self.dto.currency
-        payment_transaction_cdto.paid_p_sign = self.dto.sign
+        payment_transaction_cdto.amount = float(self.dto.amount) if self.dto.amount else 0.0
+        payment_transaction_cdto.currency = self.dto.currency or ""
+        payment_transaction_cdto.paid_p_sign = self.dto.sign or ""
         payment_transaction_cdto.is_paid = is_paid
         payment_transaction_cdto.is_active = False
         payment_transaction_cdto.is_canceled = False

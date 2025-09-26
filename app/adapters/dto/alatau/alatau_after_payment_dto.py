@@ -53,14 +53,14 @@ class AlatauBackrefPostDTO(BaseModel):
 class AlatauBackrefGetDTO(BaseModel):
     """DTO для результата платежа при GET-редиректе (BACKREF URL)"""
 
-    order: str                    # Номер заказа
-    mpi_order: str                # Номер заказа в MPI
-    res_code: str                 # Код результата (0=успех)
-    amount: str                 # Сумма
-    currency: str                 # Валюта
+    order: Optional[str] = None                    # Номер заказа
+    mpi_order: Optional[str] = None                # Номер заказа в MPI
+    res_code: Optional[str] = None                 # Код результата (0=успех)
+    amount: Optional[str] = None                 # Сумма
+    currency: Optional[str] = None                 # Валюта
     res_desc: Optional[str] = None  # Текстовое описание результата
     rrn: Optional[str] = None      # Доп. описание
-    sign: str                     # Подпись
+    sign: Optional[str] = None                     # Подпись
 
     def generate_signature(self, shared_key: str) -> str:
         """Формирует подпись по правилам Alatau GET BACKREF"""

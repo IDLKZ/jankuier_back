@@ -291,14 +291,14 @@ class TicketonOrderApi:
 
     async def confirm_sale_get(
         self,
-        order: str = Query(..., description="Номер заказа"),
-        mpi_order: str = Query(..., description="Номер заказа в MPI"),
-        amount: str = Query(..., description="Сумма платежа"),
-        currency: str = Query(..., description="Валюта платежа"),
-        res_code: str = Query(..., description="Код результата"),
+        order: str = Query(None, description="Номер заказа"),
+        mpi_order: str = Query(None, description="Номер заказа в MPI"),
+        amount: str = Query(None, description="Сумма платежа"),
+        currency: str = Query(None, description="Валюта платежа"),
+        res_code: str = Query(None, description="Код результата"),
         res_desc: str = Query(None, description="Описание результата"),
         rrn: str = Query(None, description="RRN (возвращается в REF, тольков случаеуспешной операции)"),
-        sign: str = Query(..., description="Электронная подпись"),
+        sign: str = Query(None, description="Электронная подпись"),
         db: AsyncSession = Depends(get_db),
     ) -> AlatauBackrefResponseDTO:
         """
