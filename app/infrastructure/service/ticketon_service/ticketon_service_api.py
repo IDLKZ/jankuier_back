@@ -193,12 +193,14 @@ class TicketonServiceAPI:
             if cached_data and cached_data.data.shows:
                 if cached_data.last_updated + self._redis_ttl > datetime.now():
                     return cached_data.data
-
+        locale = parameter.i18n
+        if(locale == "kk"):
+            locale = "kz"
         # Запрос к API
         params = {
             f"type[]": parameter.type,
             f"with[]": parameter.withParam,
-            "i18n": parameter.i18n,
+            "i18n": locale,
             "place[]": 52
         }
 
@@ -228,7 +230,8 @@ class TicketonServiceAPI:
     async def get_ticketon_single_show(
         self,
         show_id: int,
-        use_cache: bool = True
+        use_cache: bool = True,
+        i18n: str|None = "ru"
     ) -> TicketonSingleShowResponseDTO:
         """
         Получает детальную информацию о событии.
@@ -250,9 +253,10 @@ class TicketonServiceAPI:
             cached_data = await self._get_from_cache(cache_key, TicketonSingleShowResponseDTO)
             if cached_data:
                 return cached_data
-
+        if (i18n == "kk"):
+            locale = "kz"
         # Запрос к API
-        params = {"id": show_id}
+        params = {"id": show_id,"i18n": i18n}
         json_data = await self._make_request(
             url=app_config.ticketon_get_show,
             params=params,

@@ -17,7 +17,7 @@ class GetTicketonSingleShowCase(BaseUseCase[TicketonSingleShowResponseDTO]):
         """
         self.ticketon_service = TicketonServiceAPI()
 
-    async def execute(self, show_id: int) -> TicketonSingleShowResponseDTO:
+    async def execute(self, show_id: int,i18n:str|None = "ru") -> TicketonSingleShowResponseDTO:
         """
         Основная логика получения данных о конкретном сеансе Ticketon.
         
@@ -36,7 +36,7 @@ class GetTicketonSingleShowCase(BaseUseCase[TicketonSingleShowResponseDTO]):
         await self.transform(show_id)
         
         try:
-            return await self.ticketon_service.get_ticketon_single_show(show_id)
+            return await self.ticketon_service.get_ticketon_single_show(show_id=show_id,i18n=i18n)
         except Exception as e:
             raise AppExceptionResponse.internal_error(
                 message=i18n.gettext("ticketon_single_show_fetch_error"),

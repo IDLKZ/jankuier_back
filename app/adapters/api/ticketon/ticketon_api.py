@@ -131,6 +131,11 @@ class TicketonApi:
             example=12345,
             gt=0
         ),
+        i18n: Optional[str] = Query(
+            default="ru",
+            description="Язык локализации (i18n[]) - язык для получения данных",
+            example="ru"
+        ),
     ) -> TicketonSingleShowResponseDTO:
         """
         Получение подробной информации о конкретном сеансе из Ticketon API.
@@ -154,7 +159,7 @@ class TicketonApi:
         """
         try:
             # Выполняем use case
-            return await GetTicketonSingleShowCase().execute(show_id)
+            return await GetTicketonSingleShowCase().execute(show_id,i18n)
             
         except HTTPException:
             raise
