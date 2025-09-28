@@ -43,3 +43,11 @@ class AppTableNames:
     TicketonOrderTableName = "ticketon_orders"
     TicketonOrderAndPaymentTransactionTableName = "ticketon_order_and_payment_transactions"
     UserCodeVerificationTableName = "user_code_verifications"
+    ProductOrderStatusTableName = "product_order_statuses"
+    ProductOrderItemStatusTableName = "product_order_item_statuses"
+    ProductOrderTableName = "product_orders"
+    ProductOrderItemTableName = "product_order_items"
+    ProductOrderItemHistoryTableName = "product_order_item_histories"
+    ProductOrderAndPaymentTransactionTableName = "product_order_and_payment_transactions"
+    ProductOrderItemVerificationCodeTableName = "product_order_item_verification_codes"
+

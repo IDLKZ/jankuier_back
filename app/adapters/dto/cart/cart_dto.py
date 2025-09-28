@@ -47,8 +47,6 @@ class CartRDTO(CartDTO):
 
 class CartWithRelationsRDTO(CartRDTO):
     user: "UserRDTO | None" = None
-    cart_items_list: "list[CartItemRDTO] | None" = None
-
     class Config:
         from_attributes = True
 

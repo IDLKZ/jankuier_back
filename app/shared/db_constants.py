@@ -443,7 +443,7 @@ class DbRelationshipConstants:
     @staticmethod
     def many_to_one(  # noqa:ANN205
         target: str,
-        back_populates: str,
+        back_populates: str | None = None,
         foreign_keys: str | list | None = None,
         cascade: str = "none",
         lazy: str = "select",
@@ -454,7 +454,7 @@ class DbRelationshipConstants:
 
         Args:
             target (str): Целевая модель.
-            back_populates (str): Связанное поле в целевой модели.
+            back_populates (str | None): Связанное поле в целевой модели (опционально).
             cascade (str): Стратегия каскадного удаления.
             lazy (str): Стратегия загрузки.
 
@@ -613,11 +613,42 @@ class DbRelationshipConstants:
 
 class DbComputedConstants:
     @property
-    def trip_total_price(self) -> str:
-        """Вычисление Total Price."""
+    def count_unit_price(self) -> str:
+        """Вычисление Unit Price (product_price + delta_price)."""
         if app_config.app_database == "postgresql":
-            return "(price + accommodation_price)::DOUBLE PRECISION"
-        return "(price + accommodation_price)"
+            return "(product_price + delta_price)::DOUBLE PRECISION"
+        return "(product_price + delta_price)"
+
+    @property
+    def count_total_price(self) -> str:
+        """Вычисление Total Price (unit_price * qty)."""
+        if app_config.app_database == "postgresql":
+            return "((product_price + delta_price) * qty)::DOUBLE PRECISION"
+        return "((product_price + delta_price) * qty)"
+
+    @property
+    def count_price_with_qty(self) -> str:
+        """Вычисление Total Price * qty (алиас для count_total_price)."""
+        return self.count_total_price
+
+    @property
+    def count_unit_with_shipping_price(self) -> str:
+        """Вычисление Unit Price (product_price + delta_price)."""
+        if app_config.app_database == "postgresql":
+            return "(product_price + delta_price + shipping_price)::DOUBLE PRECISION"
+        return "(product_price + delta_price + shipping_price)"
+
+    @property
+    def count_total_price_with_shipping_price(self) -> str:
+        """Вычисление Total Price (unit_price * qty)."""
+        if app_config.app_database == "postgresql":
+            return "((product_price + delta_price + shipping_price) * qty)::DOUBLE PRECISION"
+        return "((product_price + delta_price + shipping_price) * qty)"
+
+    @property
+    def count_price_with_qty_with_shipping_price(self) -> str:
+        """Вычисление Total Price * qty (алиас для count_total_price)."""
+        return self.count_total_price_with_shipping_price
 
 
 app_db_computed = DbComputedConstants()

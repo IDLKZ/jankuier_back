@@ -39,6 +39,12 @@ class RoutePathConstants:
     TicketonOrderPathName = "/ticketon-order"
     TicketonOrderTagName = "Заказ Ticketon"
 
+    ProductOrderStatusPathName = "/product-order-status"
+    ProductOrderStatusTagName = "Статус заказа товара"
+
+    ProductOrderItemStatusPathName = "/product-order-item-status"
+    ProductOrderItemStatusTagName = "Статус элемента заказа товара"
+
     IDPath = Annotated[int, Path(gt=0, description="Уникальный идентификатор")]
     ValuePath = Annotated[
         str,

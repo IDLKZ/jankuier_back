@@ -25,6 +25,13 @@ from app.entities.permission_entity import PermissionEntity
 from app.entities.product_category_entity import ProductCategoryEntity
 from app.entities.product_entity import ProductEntity
 from app.entities.product_gallery_entity import ProductGalleryEntity
+from app.entities.product_order_and_payment_transaction_entity import ProductOrderAndPaymentTransactionEntity
+from app.entities.product_order_entity import ProductOrderEntity
+from app.entities.product_order_item_entity import ProductOrderItemEntity
+from app.entities.product_order_item_history_entity import ProductOrderItemHistoryEntity
+from app.entities.product_order_item_status_entity import ProductOrderItemStatusEntity
+from app.entities.product_order_item_verification_code_entity import ProductOrderItemVerificationCodeEntity
+from app.entities.product_order_status_entity import ProductOrderStatusEntity
 from app.entities.product_variant_entity import ProductVariantEntity
 from app.entities.product_variant_modification_entity import (
     ProductVariantModificationEntity,
@@ -83,5 +90,12 @@ __all__ = [
     TicketonOrderEntity.__name__,
     TicketonOrderAndPaymentTransactionEntity.__name__,
     UserCodeVerificationEntity.__name__,
+    ProductOrderStatusEntity.__name__,
+    ProductOrderItemStatusEntity.__name__,
+    ProductOrderEntity.__name__,
+    ProductOrderItemEntity.__name__,
+    ProductOrderAndPaymentTransactionEntity.__name__,
+    ProductOrderItemHistoryEntity.__name__,
+    ProductOrderItemVerificationCodeEntity.__name__,
 ]
 

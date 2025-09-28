@@ -25,13 +25,6 @@ class CartItemCDTO(BaseModel):
     delta_price: DTOConstant.StandardZeroDecimalField(
         description="Дельта цены (надбавка/скидка)"
     )
-    unit_price: DTOConstant.StandardDecimalField(
-        description="Цена за единицу (базовая цена + дельта)"
-    )
-    total_price: DTOConstant.StandardDecimalField(
-        description="Общая стоимость (цена за единицу * количество)"
-    )
-
     class Config:
         from_attributes = True
 
@@ -64,7 +57,6 @@ class CartItemRDTO(CartItemDTO):
 
 
 class CartItemWithRelationsRDTO(CartItemRDTO):
-    cart: CartRDTO | None = None
     product: ProductRDTO | None = None
     variant: ProductVariantRDTO | None = None
 

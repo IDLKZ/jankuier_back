@@ -58,6 +58,48 @@ class DbValueConstants:
     PaymentTransactionStatusRefundedValue = "refunded"
 
     PaymentTicketonType ="TICKETON_BOOKING"
+    ProductOrderType ="PRODUCT_ORDER"
+
+    # Статусы заказов продуктов
+    ProductOrderStatusCreatedAwaitingPaymentID = 1
+    ProductOrderStatusCreatedAwaitingPaymentValue = "created_awaiting_payment"
+
+    ProductOrderStatusPaidID = 2
+    ProductOrderStatusPaidValue = "paid"
+
+    ProductOrderStatusCancelledID = 3
+    ProductOrderStatusCancelledValue = "cancelled"
+
+    ProductOrderStatusCancelledAwaitingRefundID = 4
+    ProductOrderStatusCancelledAwaitingRefundValue = "cancelled_awaiting_refund"
+
+    ProductOrderStatusCancelledRefundedID = 5
+    ProductOrderStatusCancelledRefundedValue = "cancelled_refunded"
+
+    # Статусы элементов заказов продуктов
+    ProductOrderItemStatusCreatedAwaitingPaymentID = 1
+    ProductOrderItemStatusCreatedAwaitingPaymentValue = "created_awaiting_payment"
+
+    ProductOrderItemStatusPaidAwaitingConfirmationID = 2
+    ProductOrderItemStatusPaidAwaitingConfirmationValue = "paid_awaiting_confirmation"
+
+    ProductOrderItemStatusInDeliveryID = 3
+    ProductOrderItemStatusInDeliveryValue = "in_delivery"
+
+    ProductOrderItemStatusAwaitingDeliveryConfirmationID = 4
+    ProductOrderItemStatusAwaitingDeliveryConfirmationValue = "awaiting_delivery_confirmation"
+
+    ProductOrderItemStatusSuccessfullyReceivedID = 5
+    ProductOrderItemStatusSuccessfullyReceivedValue = "successfully_received"
+
+    ProductOrderItemStatusCancelledID = 6
+    ProductOrderItemStatusCancelledValue = "cancelled"
+
+    ProductOrderItemStatusCancelledAwaitingRefundID = 7
+    ProductOrderItemStatusCancelledAwaitingRefundValue = "cancelled_awaiting_refund"
+
+    ProductOrderItemStatusCancelledRefundedID = 8
+    ProductOrderItemStatusCancelledRefundedValue = "cancelled_refunded"
 
     @staticmethod
     def get_value(title: str):

@@ -41,6 +41,8 @@ from app.adapters.api.product_variant.product_variant_api import ProductVariantA
 from app.adapters.api.product_variant_modification.product_variant_modification_api import (
     ProductVariantModificationApi,
 )
+from app.adapters.api.product_order_status.product_order_status_api import ProductOrderStatusApi
+from app.adapters.api.product_order_item_status.product_order_item_status_api import ProductOrderItemStatusApi
 from app.adapters.api.request_to_academy_group.request_to_academy_group_api import (
     RequestToAcademyGroupApi,
 )
@@ -51,7 +53,6 @@ from app.adapters.api.student.student_api import StudentApi
 from app.adapters.api.test.test_api import TestApi
 from app.adapters.api.ticketon.ticketon_api import TicketonApi
 from app.adapters.api.user.user_api import UserApi
-from app.adapters.api.user_cart.user_cart_api import UserCartApi
 from app.adapters.api.user_code_verification.user_code_verification_api import UserCodeVerificationApi
 from app.shared.route_constants import RoutePathConstants
 
@@ -105,7 +106,7 @@ def include_routers(app) -> None:
     app.include_router(
         CartApi().router,
         prefix=f"{RoutePathConstants.BasePathName}/cart",
-        tags=["Корзины"],
+        tags=["Корзина"],
     )
     
     app.include_router(
@@ -201,6 +202,19 @@ def include_routers(app) -> None:
         prefix=f"{RoutePathConstants.BasePathName}/product-variant-modification",
         tags=["Модификации вариантов товаров"],
     )
+
+    # Product Order Status routes
+    app.include_router(
+        ProductOrderStatusApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}{RoutePathConstants.ProductOrderStatusPathName}",
+        tags=[RoutePathConstants.ProductOrderStatusTagName],
+    )
+
+    app.include_router(
+        ProductOrderItemStatusApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}{RoutePathConstants.ProductOrderItemStatusPathName}",
+        tags=[RoutePathConstants.ProductOrderItemStatusTagName],
+    )
     
     # Request routes
     app.include_router(
@@ -243,11 +257,6 @@ def include_routers(app) -> None:
         UserApi().router,
         prefix=f"{RoutePathConstants.BasePathName}{RoutePathConstants.UserPathName}",
         tags=[RoutePathConstants.UserTagName],
-    )
-    app.include_router(
-        UserCartApi().router,
-        prefix=f"{RoutePathConstants.BasePathName}{RoutePathConstants.UserCartPathName}",
-        tags=[RoutePathConstants.UserCartTagName],
     )
     app.include_router(
         UserCodeVerificationApi().router,

@@ -62,3 +62,12 @@ class AppEntityNames:
     # Ticketon entities
     TicketonOrderStatusEntityName = "TicketonOrderStatusEntity"
     TicketonOrderEntityName = "TicketonOrderEntity"
+
+    #Product Order
+    ProductOrderStatusEntityName = "ProductOrderStatusEntity"
+    ProductOrderItemStatusEntityName = "ProductOrderItemStatusEntity"
+    ProductOrderEntityName = "ProductOrderEntity"
+    ProductOrderItemEntityName = "ProductOrderItemEntity"
+    ProductOrderAndPaymentTransactionEntityName = "ProductOrderAndPaymentTransactionEntity"
+    ProductOrderItemHistoryEntityName = "ProductOrderItemHistoryEntity"
+    ProductOrderItemVerificationCodeEntityName = "ProductOrderItemVerificationCodeEntity"

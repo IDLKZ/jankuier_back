@@ -8,6 +8,7 @@ from starlette.staticfiles import StaticFiles
 from app.core.app_cors import set_up_cors
 from app.core.file_core import include_static_files
 from app.core.role_docs import setup_role_documentation
+from app.events import register_events
 from app.infrastructure.app_config import app_config
 from app.infrastructure.redis_client import check_redis_connection
 from app.middleware.auth_wrapper_core import AuthWrapper
@@ -27,6 +28,7 @@ async def lifespan(app: FastAPI):
     Контекстный менеджер жизненного цикла приложения.
     """
     await run_seeders()
+    register_events()
     check_redis_connection()
     yield
 

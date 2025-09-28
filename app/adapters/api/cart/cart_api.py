@@ -1,3 +1,5 @@
+import traceback
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -6,7 +8,10 @@ from app.adapters.dto.cart.cart_dto import (
     CartCDTO,
     PaginationCartRDTO,
     CartUpdateDTO,
+    CartWithRelationsRDTO,
 )
+from app.adapters.dto.cart.cart_action_dto import AddToCartDTO, UpdateOrRemoveFromCartDTO, CartActionResponseDTO
+from app.adapters.dto.user.user_dto import UserWithRelationsRDTO
 from app.helpers.form_helper import FormParserHelper
 from app.adapters.filters.cart.cart_filter import CartFilter
 from app.adapters.filters.cart.cart_pagination_filter import CartPaginationFilter
@@ -18,10 +23,13 @@ from app.shared.route_constants import RoutePathConstants
 from app.use_case.cart.all_carts_case import AllCartsCase
 from app.use_case.cart.create_cart_case import CreateCartCase
 from app.use_case.cart.delete_cart_case import DeleteCartCase
-from app.use_case.cart.get_cart_by_id_case import GetCartByIdCase
-from app.use_case.cart.get_cart_by_user_id_case import GetCartByUserIdCase
 from app.use_case.cart.paginate_carts_case import PaginateCartsCase
 from app.use_case.cart.update_cart_case import UpdateCartCase
+from app.use_case.cart.client.add_to_cart_case import AddToCartCase
+from app.use_case.cart.client.update_or_remove_cart_case import UpdateOrRemoveCartCase
+from app.use_case.cart.client.clear_cart_case import ClearCartCase
+from app.use_case.cart.client.get_user_cart_case import GetUserCartCase
+from app.middleware.role_middleware import check_client
 
 
 class CartApi:
@@ -61,27 +69,41 @@ class CartApi:
             summary="Обновить корзину по ID",
             description="Обновление информации о корзине по её ID",
         )(self.update)
-
-        self.router.get(
-            RoutePathConstants.GetByIdPathName,
-            response_model=CartRDTO,
-            summary="Получить корзину по ID",
-            description="Получение информации о корзине по ID",
-        )(self.get_by_id)
-
-        self.router.get(
-            "/get-by-user/{user_id}",
-            response_model=CartRDTO,
-            summary="Получить корзину пользователя",
-            description="Получение корзины конкретного пользователя",
-        )(self.get_by_user_id)
-
         self.router.delete(
             RoutePathConstants.DeleteByIdPathName,
             response_model=bool,
             summary="Удалить корзину по ID",
             description="Удаление корзины по ID",
         )(self.delete)
+
+        # Client cart operations
+        self.router.post(
+            "/add-to-cart",
+            response_model=CartActionResponseDTO,
+            summary="Добавить товар в корзину",
+            description="Добавление товара в корзину пользователя",
+        )(self.add_to_cart)
+
+        self.router.put(
+            "/update-cart-item",
+            response_model=CartActionResponseDTO,
+            summary="Обновить/удалить товар в корзине",
+            description="Обновление количества или удаление товара из корзины",
+        )(self.update_or_remove_cart_item)
+
+        self.router.delete(
+            "/clear-cart/{cart_id}",
+            response_model=CartActionResponseDTO,
+            summary="Очистить корзину",
+            description="Полная очистка корзины пользователя",
+        )(self.clear_cart)
+
+        self.router.get(
+            "/my-cart",
+            response_model=CartActionResponseDTO,
+            summary="Получить мою корзину",
+            description="Получение корзины текущего пользователя с валидацией товаров",
+        )(self.get_my_cart)
 
     async def paginate(
         self,
@@ -148,37 +170,6 @@ class CartApi:
                 is_custom=True,
             ) from exc
 
-    async def get_by_id(
-        self,
-        id: RoutePathConstants.IDPath,
-        db: AsyncSession = Depends(get_db),
-    ) -> CartRDTO:
-        try:
-            return await GetCartByIdCase(db).execute(id=id)
-        except HTTPException:
-            raise
-        except Exception as exc:
-            raise AppExceptionResponse.internal_error(
-                message=i18n.gettext("internal_server_error"),
-                extra={"details": str(exc)},
-                is_custom=True,
-            ) from exc
-
-    async def get_by_user_id(
-        self,
-        user_id: RoutePathConstants.IDPath,
-        db: AsyncSession = Depends(get_db),
-    ) -> CartRDTO:
-        try:
-            return await GetCartByUserIdCase(db).execute(user_id=user_id)
-        except HTTPException:
-            raise
-        except Exception as exc:
-            raise AppExceptionResponse.internal_error(
-                message=i18n.gettext("internal_server_error"),
-                extra={"details": str(exc)},
-                is_custom=True,
-            ) from exc
 
     async def delete(
         self,
@@ -191,6 +182,123 @@ class CartApi:
         except HTTPException:
             raise
         except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+
+    async def add_to_cart(
+        self,
+        dto: AddToCartDTO,
+        user: UserWithRelationsRDTO = Depends(check_client),
+        db: AsyncSession = Depends(get_db),
+    ) -> CartActionResponseDTO:
+        """
+        Добавляет товар в корзину пользователя.
+
+        Args:
+            dto: DTO с данными для добавления товара
+            user: Аутентифицированный пользователь (клиент)
+            db: Сессия базы данных
+
+        Returns:
+            CartActionResponseDTO: Ответ с обновленной корзиной
+        """
+        try:
+            return await AddToCartCase(db).execute(dto=dto, user=user)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            print(traceback.format_exc())  # полное дерево ошибки
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def update_or_remove_cart_item(
+        self,
+        dto: UpdateOrRemoveFromCartDTO,
+        user: UserWithRelationsRDTO = Depends(check_client),
+        db: AsyncSession = Depends(get_db),
+    ) -> CartActionResponseDTO:
+        """
+        Обновляет количество или удаляет товар из корзины.
+
+        Args:
+            dto: DTO с данными для обновления/удаления
+            user: Аутентифицированный пользователь (клиент)
+            db: Сессия базы данных
+
+        Returns:
+            CartActionResponseDTO: Ответ с обновленной корзиной
+        """
+        try:
+            return await UpdateOrRemoveCartCase(db).execute(dto=dto, user=user)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            print(traceback.format_exc())
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def clear_cart(
+        self,
+        cart_id: RoutePathConstants.IDPath,
+        user: UserWithRelationsRDTO = Depends(check_client),
+        db: AsyncSession = Depends(get_db),
+    ) -> CartActionResponseDTO:
+        """
+        Полностью очищает корзину пользователя.
+
+        Args:
+            cart_id: ID корзины для очистки
+            user: Аутентифицированный пользователь (клиент)
+            db: Сессия базы данных
+
+        Returns:
+            CartActionResponseDTO: Ответ с очищенной корзиной
+        """
+        try:
+            return await ClearCartCase(db).execute(cart_id=cart_id, user=user)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            print(traceback.format_exc())
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def get_my_cart(
+        self,
+        check_cart_items: bool = False,
+        user: UserWithRelationsRDTO = Depends(check_client),
+        db: AsyncSession = Depends(get_db),
+    ) -> CartActionResponseDTO:
+        """
+        Получает корзину текущего пользователя с валидацией товаров.
+
+        Args:
+            check_cart_items: Флаг принудительной валидации элементов корзины
+            user: Аутентифицированный пользователь (клиент)
+            db: Сессия базы данных
+
+        Returns:
+            CartActionResponseDTO: Ответ с корзиной пользователя
+        """
+        try:
+            return await GetUserCartCase(db).execute(user=user, check_cart_items=check_cart_items)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            print(traceback.format_exc())
             raise AppExceptionResponse.internal_error(
                 message=i18n.gettext("internal_server_error"),
                 extra={"details": str(exc)},

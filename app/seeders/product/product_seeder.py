@@ -1,5 +1,6 @@
 from datetime import datetime
 from decimal import Decimal
+import random
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -34,6 +35,7 @@ class ProductSeeder(BaseSeeder):
                 sku="NIKE-KIT-DRIFIT-001",
                 base_price=Decimal("8990.00"),
                 old_price=Decimal("10990.00"),
+                stock=random.randint(10, 1000),
                 gender=0,  # unisex
                 is_for_children=False,
                 is_recommended=True,
@@ -54,6 +56,7 @@ class ProductSeeder(BaseSeeder):
                 sku="ADIDAS-TRAIN-001",
                 base_price=Decimal("6990.00"),
                 old_price=None,
+                stock=random.randint(10, 1000),
                 gender=0,  # unisex
                 is_for_children=False,
                 is_recommended=True,
@@ -74,6 +77,7 @@ class ProductSeeder(BaseSeeder):
                 sku="KIDS-FOOTBALL-KIT-001",
                 base_price=Decimal("4990.00"),
                 old_price=None,
+                stock=random.randint(10, 1000),
                 gender=0,  # unisex
                 is_for_children=True,
                 is_recommended=True,
@@ -96,6 +100,7 @@ class ProductSeeder(BaseSeeder):
                 sku="NIKE-MERCURIAL-001",
                 base_price=Decimal("34990.00"),
                 old_price=Decimal("39990.00"),
+                stock=random.randint(10, 1000),
                 gender=0,  # unisex
                 is_for_children=False,
                 is_recommended=True,
@@ -116,6 +121,7 @@ class ProductSeeder(BaseSeeder):
                 sku="ADIDAS-COPA-TURF-001",
                 base_price=Decimal("18990.00"),
                 old_price=None,
+                stock=random.randint(10, 1000),
                 gender=0,  # unisex
                 is_for_children=False,
                 is_recommended=False,
@@ -136,6 +142,7 @@ class ProductSeeder(BaseSeeder):
                 sku="PUMA-FUTURE-FUTSAL-001",
                 base_price=Decimal("22990.00"),
                 old_price=None,
+                stock=random.randint(10, 1000),
                 gender=0,  # unisex
                 is_for_children=False,
                 is_recommended=True,
@@ -158,6 +165,7 @@ class ProductSeeder(BaseSeeder):
                 sku="FIFA-PRO-BALL-001",
                 base_price=Decimal("12990.00"),
                 old_price=None,
+                stock=random.randint(10, 1000),
                 gender=0,  # unisex
                 is_for_children=False,
                 is_recommended=True,
@@ -178,6 +186,7 @@ class ProductSeeder(BaseSeeder):
                 sku="SELECT-TRAIN-BALL-001",
                 base_price=Decimal("4990.00"),
                 old_price=Decimal("5990.00"),
+                stock=random.randint(10, 1000),
                 gender=0,  # unisex
                 is_for_children=False,
                 is_recommended=False,
@@ -198,6 +207,7 @@ class ProductSeeder(BaseSeeder):
                 sku="KIDS-BALL-SIZE3-001",
                 base_price=Decimal("2990.00"),
                 old_price=None,
+                stock=random.randint(10, 1000),
                 gender=0,  # unisex
                 is_for_children=True,
                 is_recommended=True,
@@ -220,6 +230,7 @@ class ProductSeeder(BaseSeeder):
                 sku="TRAIN-CONES-SET-20",
                 base_price=Decimal("3990.00"),
                 old_price=None,
+                stock=random.randint(10, 1000),
                 gender=0,  # unisex
                 is_for_children=False,
                 is_recommended=False,
@@ -240,6 +251,7 @@ class ProductSeeder(BaseSeeder):
                 sku="COORD-LADDER-6M",
                 base_price=Decimal("5990.00"),
                 old_price=Decimal("7990.00"),
+                stock=random.randint(10, 1000),
                 gender=0,  # unisex
                 is_for_children=False,
                 is_recommended=True,
@@ -262,6 +274,7 @@ class ProductSeeder(BaseSeeder):
                 sku="NIKE-SHIN-MERC-LITE",
                 base_price=Decimal("2990.00"),
                 old_price=None,
+                stock=random.randint(10, 1000),
                 gender=0,  # unisex
                 is_for_children=False,
                 is_recommended=True,
@@ -282,6 +295,7 @@ class ProductSeeder(BaseSeeder):
                 sku="ADIDAS-GK-PRED-001",
                 base_price=Decimal("8990.00"),
                 old_price=Decimal("11990.00"),
+                stock=random.randint(10, 1000),
                 gender=0,  # unisex
                 is_for_children=False,
                 is_recommended=True,
@@ -304,6 +318,7 @@ class ProductSeeder(BaseSeeder):
                 sku="NIKE-SPORTS-BAG-001",
                 base_price=Decimal("6990.00"),
                 old_price=None,
+                stock=random.randint(10, 1000),
                 gender=0,  # unisex
                 is_for_children=False,
                 is_recommended=False,
@@ -324,6 +339,7 @@ class ProductSeeder(BaseSeeder):
                 sku="CAPTAIN-ARMBAND-001",
                 base_price=Decimal("990.00"),
                 old_price=None,
+                stock=random.randint(10, 1000),
                 gender=0,  # unisex
                 is_for_children=False,
                 is_recommended=False,

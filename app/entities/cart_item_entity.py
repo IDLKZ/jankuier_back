@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Mapped
 
 from app.infrastructure.db import Base
-from app.shared.db_constants import DbColumnConstants, DbRelationshipConstants
+from app.shared.db_constants import DbColumnConstants, DbRelationshipConstants, app_db_computed
 from app.shared.db_table_constants import AppTableNames
 from app.shared.entity_constants import AppEntityNames
 
@@ -35,8 +35,16 @@ class CartItemEntity(Base):
     product_price: Mapped[DbColumnConstants.StandardPrice]
     delta_price: Mapped[DbColumnConstants.StandardZeroDecimal]
 
-    unit_price: Mapped[DbColumnConstants.StandardDecimal]  # product_price + delta
-    total_price: Mapped[DbColumnConstants.StandardDecimal]  # unit_price * qty
+    unit_price: Mapped[
+        DbColumnConstants.StandardComputedDecimal(
+            table_exp=app_db_computed.count_unit_price, is_persisted=True
+        )
+    ]  # product_price + delta
+    total_price: Mapped[
+        DbColumnConstants.StandardComputedDecimal(
+            table_exp=app_db_computed.count_total_price, is_persisted=True
+        )
+    ]   # unit_price * qty
 
     created_at: Mapped[DbColumnConstants.CreatedAt]
     updated_at: Mapped[DbColumnConstants.UpdatedAt]

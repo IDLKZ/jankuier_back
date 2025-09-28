@@ -354,7 +354,7 @@ class DTOConstant:
     def StandardNullableJSONField(description: str | None = None) -> Annotated:
         msg = "Опциональные JSON данные"
         return Annotated[
-            dict | None,
+            dict| list | None,
             Field(
                 default=None,
                 description=description or msg,

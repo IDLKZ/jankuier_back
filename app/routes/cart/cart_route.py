@@ -40,3 +40,25 @@ def assign_cart_roles(app) -> None:
         path=f"{base_url}{RoutePathConstants.DeleteByIdPathName}",
         roles=[RoleRouteConstant.AdministratorTagName],
     )
+
+    # Client routes
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/add-to-cart",
+        roles=[RoleRouteConstant.ClientTagName],
+    )
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/update-cart-item",
+        roles=[RoleRouteConstant.ClientTagName],
+    )
+    assign_roles_to_route(
+        app=app,
+        path=base_url+"/clear-cart/{cart_id}",  # Поддерживает параметр cart_id
+        roles=[RoleRouteConstant.ClientTagName],
+    )
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/my-cart",
+        roles=[RoleRouteConstant.ClientTagName],
+    )

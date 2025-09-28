@@ -17,11 +17,15 @@ from app.seeders.academy_group.academy_group_seeder import AcademyGroupSeeder
 from app.seeders.academy_group_schedule.academy_group_schedule_seeder import AcademyGroupScheduleSeeder
 from app.seeders.payment_transaction_status.payment_transaction_status_seeder import PaymentTransactionStatusSeeder
 from app.seeders.ticketon_order_status.ticketon_order_status_seeder import TicketonOrderStatusSeeder
+from app.seeders.product_order_status.product_order_status_seeder import ProductOrderStatusSeeder
+from app.seeders.product_order_item_status.product_order_item_status_seeder import ProductOrderItemStatusSeeder
 
 seeders = [
     RoleSeeder(),
     PaymentTransactionStatusSeeder(),
     TicketonOrderStatusSeeder(),
+    ProductOrderStatusSeeder(),
+    ProductOrderItemStatusSeeder(),
     UserSeeder(),
     CountrySeeder(),
     SportSeeder(),
