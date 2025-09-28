@@ -1,3 +1,4 @@
+from typing import Optional, List
 from pydantic import BaseModel
 from app.shared.dto_constants import DTOConstant
 
@@ -73,14 +74,14 @@ class ProductOrderItemRDTO(ProductOrderItemDTO):
 
 
 class ProductOrderItemWithRelationsRDTO(ProductOrderItemRDTO):
-    order: "ProductOrderRDTO" | None = None
-    status: "ProductOrderItemStatusRDTO" | None = None
-    canceled_by: "UserRDTO" | None = None
-    product: "ProductRDTO" | None = None
-    variant: "ProductVariantRDTO" | None = None
-    from_city: "CityRDTO" | None = None
-    to_city: "CityRDTO" | None = None
-    history_records: list["ProductOrderItemHistoryRDTO"] = []
+    order: Optional["ProductOrderRDTO"] = None
+    status: Optional["ProductOrderItemStatusRDTO"] = None
+    canceled_by: Optional["UserRDTO"] = None
+    product: Optional["ProductRDTO"] = None
+    variant: Optional["ProductVariantRDTO"] = None
+    from_city: Optional["CityRDTO"] = None
+    to_city: Optional["CityRDTO"] = None
+    history_records: List["ProductOrderItemHistoryRDTO"] = []
 
     class Config:
         from_attributes = True

@@ -41,6 +41,7 @@ from app.adapters.api.product_variant.product_variant_api import ProductVariantA
 from app.adapters.api.product_variant_modification.product_variant_modification_api import (
     ProductVariantModificationApi,
 )
+from app.adapters.api.product_order.product_order_api import ProductOrderApi
 from app.adapters.api.product_order_status.product_order_status_api import ProductOrderStatusApi
 from app.adapters.api.product_order_item_status.product_order_item_status_api import ProductOrderItemStatusApi
 from app.adapters.api.request_to_academy_group.request_to_academy_group_api import (
@@ -201,6 +202,13 @@ def include_routers(app) -> None:
         ProductVariantModificationApi().router,
         prefix=f"{RoutePathConstants.BasePathName}/product-variant-modification",
         tags=["Модификации вариантов товаров"],
+    )
+
+    # Product Order routes
+    app.include_router(
+        ProductOrderApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}/product-order",
+        tags=["Заказы товаров"],
     )
 
     # Product Order Status routes

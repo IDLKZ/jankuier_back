@@ -17,4 +17,6 @@ class ProductOrderRepository(BaseRepository[ProductOrderEntity]):
             selectinload(self.model.user),
             selectinload(self.model.canceled_by),
             selectinload(self.model.status),
+            selectinload(self.model.order_items),
+            selectinload(self.model.payment_transactions),
         ]

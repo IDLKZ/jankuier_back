@@ -58,7 +58,7 @@ class DbValueConstants:
     PaymentTransactionStatusRefundedValue = "refunded"
 
     PaymentTicketonType ="TICKETON_BOOKING"
-    ProductOrderType ="PRODUCT_ORDER"
+    PaymentMerchType ="PRODUCT_ORDER"
 
     # Статусы заказов продуктов
     ProductOrderStatusCreatedAwaitingPaymentID = 1

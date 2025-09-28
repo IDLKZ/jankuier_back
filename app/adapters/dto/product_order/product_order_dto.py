@@ -1,4 +1,9 @@
+from typing import Optional
 from pydantic import BaseModel
+
+from app.adapters.dto.payment_transaction.payment_transaction_dto import PaymentTransactionRDTO
+from app.adapters.dto.product_order_status.product_order_status_dto import ProductOrderStatusRDTO
+from app.adapters.dto.user.user_dto import UserRDTO
 from app.shared.dto_constants import DTOConstant
 
 class ProductOrderDTO(BaseModel):
@@ -73,10 +78,10 @@ class ProductOrderRDTO(ProductOrderDTO):
 
 
 class ProductOrderWithRelationsRDTO(ProductOrderRDTO):
-    user: "UserRDTO" | None = None
-    canceled_by: "UserRDTO" | None = None
-    status: "ProductOrderStatusRDTO" | None = None
-    payment_transaction: "PaymentTransactionRDTO" | None = None
+    user: Optional[UserRDTO] = None
+    canceled_by: Optional[UserRDTO] = None
+    status: Optional[ProductOrderStatusRDTO] = None
+    payment_transaction: Optional[PaymentTransactionRDTO] = None
 
     class Config:
         from_attributes = True

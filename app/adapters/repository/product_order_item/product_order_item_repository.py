@@ -20,4 +20,5 @@ class ProductOrderItemRepository(BaseRepository[ProductOrderItemEntity]):
             selectinload(self.model.to_city),
             selectinload(self.model.variant),
             selectinload(self.model.product),
+            selectinload(self.model.history_records),
         ]
