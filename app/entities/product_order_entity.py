@@ -36,7 +36,7 @@ class ProductOrderEntity(Base):
     taxes_price:Mapped[DbColumnConstants.StandardZeroDecimal]
     total_price: Mapped[DbColumnConstants.StandardPrice]
     refunded_total: Mapped[DbColumnConstants.StandardZeroDecimal]
-    order_items: Mapped[
+    order_items_snapshot: Mapped[
         DbColumnConstants.StandardJSONB
     ]  # хранение snapshot товаров
     is_active: Mapped[DbColumnConstants.StandardBooleanTrue]

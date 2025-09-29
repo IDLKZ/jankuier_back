@@ -1,35 +1,38 @@
 import hashlib
 import re
+from decimal import Decimal, ROUND_DOWN
 from typing import Optional
 
+from pydantic import BaseModel, field_validator, field_serializer
 from app.infrastructure.app_config import app_config
 
 
+class AlatauCreateResponseOrderDTO(BaseModel):
+    # Обязательные поля
+    ORDER: Optional[str] = None
+    AMOUNT: Optional[Decimal|str|int] = None
+    CURRENCY: Optional[str] = "KZT"
+    MERCHANT: Optional[str] = app_config.merchant_id
+    TERMINAL: Optional[str] = app_config.terminal_id
+    DESC: Optional[str] = None
 
-class AlatauCreateResponseOrderDTO:
-    def __init__(self):
-        # Обязательные поля
-        self.ORDER: Optional[str] = None
-        self.AMOUNT: Optional[int] = None
-        self.CURRENCY: Optional[str] = "KZT"
-        self.MERCHANT: Optional[str] = app_config.merchant_id
-        self.TERMINAL: Optional[str] = app_config.terminal_id
-        self.DESC: Optional[str] = None
+    # Необязательные поля
+    DESC_ORDER: Optional[str] = None
+    EMAIL: Optional[str] = None
+    WTYPE: Optional[str] = "2"
+    NAME: Optional[str] = None
+    NONCE: Optional[str] = None
+    CLIENT_ID: Optional[int|str] = None
+    BACKREF: Optional[str] = app_config.ticketon_backref
+    Ucaf_Flag: Optional[str] = None
+    Ucaf_Authentication_Data: Optional[str] = None
 
-        # Необязательные поля
-        self.DESC_ORDER: Optional[str] = None
-        self.EMAIL: Optional[str] = None
-        self.WTYPE: Optional[str] = "2"
-        self.NAME: Optional[str] = None
-        self.NONCE: Optional[str] = None
-        self.CLIENT_ID: Optional[str] = None
-        self.BACKREF: Optional[str] = app_config.ticketon_backref
-        self.Ucaf_Flag: Optional[str] = None
-        self.Ucaf_Authentication_Data: Optional[str] = None
+    # Служебные
+    P_SIGN: Optional[str] = None
+    SIGNATURE_STRING: Optional[str] = None
 
-        # Служебные
-        self.P_SIGN: Optional[str] = None
-        self.SIGNATURE_STRING: Optional[str] = None
+    class Config:
+        from_attributes = True
 
     def generate_signature(self, shared_key: str) -> str:
         """
@@ -42,7 +45,7 @@ class AlatauCreateResponseOrderDTO:
         # Только те поля, что реально участвуют в стенде
         signature_parts = [
             str(self.ORDER or ''),
-            str(self.AMOUNT or ''),
+            self._format_amount(),
             str(self.CURRENCY or ''),
             str(self.MERCHANT or ''),
             str(self.TERMINAL or ''),
@@ -59,38 +62,90 @@ class AlatauCreateResponseOrderDTO:
 
         signature_string = ';'.join(signature_parts)
 
+        # сохраняем "чистую" строку для отладки
+        self.SIGNATURE_STRING = signature_string
+
+        # подписываем только с ключом
         raw = shared_key + signature_string
-        self.SIGNATURE_STRING = raw
         return hashlib.sha512(raw.encode("utf-8")).hexdigest()
 
     def set_signature(self, shared_key: str):
         """Заполняет self.P_SIGN"""
         self.P_SIGN = self.generate_signature(shared_key)
-    
-    def dict(self) -> dict:
-        """Возвращает словарь всех атрибутов объекта"""
-        return {
-            'ORDER': self.ORDER,
-            'AMOUNT': self.AMOUNT,
-            'CURRENCY': self.CURRENCY,
-            'MERCHANT': self.MERCHANT,
-            'TERMINAL': self.TERMINAL,
-            'DESC': self.DESC,
-            'DESC_ORDER': self.DESC_ORDER,
-            'EMAIL': self.EMAIL,
-            'WTYPE': self.WTYPE,
-            'NAME': self.NAME,
-            'NONCE': self.NONCE,
-            'CLIENT_ID': self.CLIENT_ID,
-            'BACKREF': self.BACKREF,
-            'Ucaf_Flag': self.Ucaf_Flag,
-            'Ucaf_Authentication_Data': self.Ucaf_Authentication_Data,
-            'P_SIGN': self.P_SIGN,
-            'SIGNATURE_STRING': self.SIGNATURE_STRING,
-        }
 
-    class Config:
-        from_attributes = True
+    def _format_amount(self) -> str:
+        """
+        Форматирует amount согласно правилам:
+        - 100 -> 100.0
+        - 100.0 -> 100.0
+        - 100.05 -> 100.05
+        - 100.055 -> 100.05 (округление вниз до 2 знаков)
+        """
+        if self.AMOUNT is None:
+            return ''
 
+        # Приводим к Decimal для точности
+        amount = Decimal(str(self.AMOUNT))
+
+        # Округляем вниз до 2 знаков после запятой
+        rounded_amount = amount.quantize(Decimal("0.01"), rounding=ROUND_DOWN)
+
+        # Форматируем с всегда 1 знаком после запятой минимум
+        formatted = format(rounded_amount, '.2f')
+
+        # Если заканчивается на .00, меняем на .0
+        if formatted.endswith('.00'):
+            return formatted[:-1]  # убираем последний 0
+        # Если заканчивается на 0 (например 100.50), убираем последний 0
+        elif formatted.endswith('0') and '.' in formatted:
+            return formatted[:-1]
+
+        return formatted
+
+    def _format_amount_from_decimal(self, amount: Decimal) -> str:
+        """
+        Форматирует Decimal amount согласно правилам:
+        - 100 -> 100.0
+        - 100.0 -> 100.0
+        - 100.05 -> 100.05
+        - 100.055 -> 100.05 (округление вниз до 2 знаков)
+        """
+        if amount is None:
+            return ''
+
+        # Округляем вниз до 2 знаков после запятой
+        rounded_amount = amount.quantize(Decimal("0.01"), rounding=ROUND_DOWN)
+
+        # Форматируем с всегда 2 знаками после запятой
+        formatted = format(rounded_amount, '.2f')
+
+        # Если заканчивается на .00, меняем на .0
+        if formatted.endswith('.00'):
+            return formatted[:-1]  # убираем последний 0
+        # Если заканчивается на 0 (например 100.50), убираем последний 0
+        elif formatted.endswith('0') and '.' in formatted:
+            return formatted[:-1]
+
+        return formatted
+
+    # --- сеттер через валидатор Pydantic
+    @field_validator("AMOUNT", mode="before")
+    @classmethod
+    def _set_amount(cls, v):
+        """Валидатор для поля AMOUNT - округляет до 2 знаков вниз"""
+        if v is None:
+            return None
+        # приводим к Decimal
+        amount = Decimal(str(v))
+        # режем до двух знаков вниз
+        return amount.quantize(Decimal("0.01"), rounding=ROUND_DOWN)
+
+    # --- сериализация для JSON (тот же формат, что в подписи)
+    @field_serializer("AMOUNT")
+    def _serialize_amount(self, v: Optional[Decimal], _info):
+        """Сериализатор для поля AMOUNT - применяет правила форматирования"""
+        if v is None:
+            return None
+        return self._format_amount_from_decimal(v)
 
 

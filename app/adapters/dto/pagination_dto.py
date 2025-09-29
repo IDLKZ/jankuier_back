@@ -1,6 +1,8 @@
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, List
 
 from app.adapters.dto.base_pagination_dto import Pagination, BasePageModel
+from app.adapters.dto.product_order.product_order_dto import ProductOrderWithRelationsRDTO
+from app.adapters.dto.product_order_item.product_order_item_dto import ProductOrderItemWithRelationsRDTO
 
 if TYPE_CHECKING:
     from app.adapters.dto.permission.permission_dto import PermissionRDTO
@@ -283,3 +285,17 @@ class PaginationUserCodeVerificationRDTO(BasePageModel):
 
 class PaginationUserCodeVerificationWithRelationsRDTO(BasePageModel):
     items: list[Any]
+
+class PaginationProductOrderWithRelationsRDTO(BasePageModel):
+    """Пагинированный ответ для списка заказов с relationships"""
+    items: List[ProductOrderWithRelationsRDTO] = []
+
+    class Config:
+        from_attributes = True
+
+class PaginationProductOrderItemWithRelationsRDTO(BasePageModel):
+    """Пагинированный ответ для списка элементов заказа с relationships"""
+    items: List[ProductOrderItemWithRelationsRDTO] = []
+
+    class Config:
+        from_attributes = True

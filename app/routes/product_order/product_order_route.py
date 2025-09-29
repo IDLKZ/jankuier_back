@@ -16,41 +16,75 @@ def assign_product_order_roles(app) -> None:
     """
     base_url = f"{RoutePathConstants.BasePathName}/product-order"
 
-    # Administrator-only endpoints (full CRUD)
+    # # Administrator-only endpoints (full CRUD)
+    # assign_roles_to_route(
+    #     app=app,
+    #     path=f"{base_url}{RoutePathConstants.IndexPathName}",
+    #     roles=[RoleRouteConstant.AdministratorTagName],
+    # )
+    # assign_roles_to_route(
+    #     app=app,
+    #     path=f"{base_url}{RoutePathConstants.AllPathName}",
+    #     roles=[RoleRouteConstant.AdministratorTagName],
+    # )
+    # assign_roles_to_route(
+    #     app=app,
+    #     path=f"{base_url}{RoutePathConstants.UpdatePathName}",
+    #     roles=[RoleRouteConstant.AdministratorTagName],
+    # )
+    # assign_roles_to_route(
+    #     app=app,
+    #     path=f"{base_url}{RoutePathConstants.GetByIdPathName}",
+    #     roles=[RoleRouteConstant.AdministratorTagName],
+    # )
+    # assign_roles_to_route(
+    #     app=app,
+    #     path=f"{base_url}{RoutePathConstants.GetByValuePathName}",
+    #     roles=[RoleRouteConstant.AdministratorTagName],
+    # )
+    # assign_roles_to_route(
+    #     app=app,
+    #     path=f"{base_url}{RoutePathConstants.DeleteByIdPathName}",
+    #     roles=[RoleRouteConstant.AdministratorTagName],
+    # )
+
+    # Client endpoints - order creation and payment recreation for customers
     assign_roles_to_route(
         app=app,
-        path=f"{base_url}{RoutePathConstants.IndexPathName}",
-        roles=[RoleRouteConstant.AdministratorTagName],
+        path=f"{base_url}/create-order-from-cart",
+        roles=[RoleRouteConstant.ClientTagName],
     )
     assign_roles_to_route(
         app=app,
-        path=f"{base_url}{RoutePathConstants.AllPathName}",
-        roles=[RoleRouteConstant.AdministratorTagName],
-    )
-    assign_roles_to_route(
-        app=app,
-        path=f"{base_url}{RoutePathConstants.UpdatePathName}",
-        roles=[RoleRouteConstant.AdministratorTagName],
-    )
-    assign_roles_to_route(
-        app=app,
-        path=f"{base_url}{RoutePathConstants.GetByIdPathName}",
-        roles=[RoleRouteConstant.AdministratorTagName],
-    )
-    assign_roles_to_route(
-        app=app,
-        path=f"{base_url}{RoutePathConstants.GetByValuePathName}",
-        roles=[RoleRouteConstant.AdministratorTagName],
-    )
-    assign_roles_to_route(
-        app=app,
-        path=f"{base_url}{RoutePathConstants.DeleteByIdPathName}",
-        roles=[RoleRouteConstant.AdministratorTagName],
+        path=f"{base_url}/recreate-payment/{{id}}",
+        roles=[RoleRouteConstant.ClientTagName],
     )
 
-    # Client endpoints - order creation for customers
+    # Client endpoints - order viewing and management for customers
     assign_roles_to_route(
         app=app,
-        path=f"{base_url}{RoutePathConstants.CreatePathName}",
+        path=f"{base_url}/client-my-orders",
         roles=[RoleRouteConstant.ClientTagName],
+    )
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/client-my-order/{{id}}",
+        roles=[RoleRouteConstant.ClientTagName],
+    )
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/client-my-order-items/{{id}}",
+        roles=[RoleRouteConstant.ClientTagName],
+    )
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/client-cancel-or-delete-order/{{id}}",
+        roles=[RoleRouteConstant.ClientTagName],
+    )
+
+    # Common endpoint - payment callback from Alatau Pay (no authentication required)
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/accept-payment",
+        roles=[RoleRouteConstant.CommonTagName],
     )

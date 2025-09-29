@@ -21,6 +21,6 @@ class UpdateOrRemoveFromCartDTO(BaseModel):
 
 class CartActionResponseDTO(BaseModel):
     """DTO для действий в корзине"""
-    cart:CartWithRelationsRDTO|None = None
-    cart_items:list[CartItemWithRelationsRDTO]|None = []
-    total_price:float = Field(..., ge=0, description="Общая стоимость корзины")
+    cart: CartWithRelationsRDTO | None = None
+    cart_items: list[CartItemWithRelationsRDTO] | None = None
+    total_price: float = Field(default=0.0, ge=0, description="Общая стоимость корзины")

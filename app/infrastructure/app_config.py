@@ -117,6 +117,7 @@ class AppConfiguration(BaseSettings):
     terminal_id: str = Field(..., env="TERMINAL_ID")
     merchant_id: str = Field(..., env="MERCHANT_ID")
     shared_secret: str = Field(..., env="SHARED_SECRET")
+    merch_backref: str = Field(..., env="MERCH_BACKREF")
     alatau_payment_refund_post_url: str = Field(..., env="ALATAU_PAYMENT_REFUND_POST_URL")
     alatau_payment_status_post_url: str = Field(..., env="ALATAU_PAYMENT_STATUS_POST_URL")
 

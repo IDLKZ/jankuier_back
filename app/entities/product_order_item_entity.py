@@ -38,7 +38,7 @@ class ProductOrderItemEntity(Base):
         )
     ]
     from_city_id: Mapped[
-        DbColumnConstants.ForeignKeyInteger(
+        DbColumnConstants.ForeignKeyNullableInteger(
             AppTableNames.CityTableName, onupdate="CASCADE", ondelete="CASCADE"
         )
     ]

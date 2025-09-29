@@ -314,7 +314,7 @@ class DTOConstant:
     def StandardJSONField(description: str | None = None) -> Annotated:
         msg = "JSON данные"
         return Annotated[
-            dict,
+            dict|list,
             Field(
                 description=description or msg,
             ),

@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel
 from app.shared.dto_constants import DTOConstant
 
@@ -33,8 +34,8 @@ class ProductOrderItemVerificationCodeRDTO(ProductOrderItemVerificationCodeDTO):
 
 
 class ProductOrderItemVerificationCodeWithRelationsRDTO(ProductOrderItemVerificationCodeRDTO):
-    order_item: "ProductOrderItemRDTO" | None = None
-    responsible_user: "UserRDTO" | None = None
+    order_item: Optional["ProductOrderItemRDTO"] = None
+    responsible_user: Optional["UserRDTO"] = None
 
     class Config:
         from_attributes = True

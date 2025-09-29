@@ -1,5 +1,9 @@
+from typing import Optional
 from pydantic import BaseModel
 from datetime import datetime
+
+from app.adapters.dto.payment_transaction.payment_transaction_dto import PaymentTransactionRDTO
+from app.adapters.dto.product_order.product_order_dto import ProductOrderRDTO
 from app.shared.dto_constants import DTOConstant
 
 # Базовый DTO (только id)
@@ -46,8 +50,8 @@ class ProductOrderAndPaymentTransactionRDTO(ProductOrderAndPaymentTransactionDTO
 
 # DTO с отношениями
 class ProductOrderAndPaymentTransactionWithRelationsRDTO(ProductOrderAndPaymentTransactionRDTO):
-    product_order: "ProductOrderRDTO" | None = None
-    payment_transaction: "PaymentTransactionRDTO" | None = None
+    product_order: Optional[ProductOrderRDTO] = None
+    payment_transaction: Optional[PaymentTransactionRDTO] = None
 
     class Config:
         from_attributes = True

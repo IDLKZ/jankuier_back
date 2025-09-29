@@ -35,5 +35,6 @@ class CartEntity(Base):
             target=AppEntityNames.CartItemEntityName,
             back_populates="cart",
             foreign_keys=f"{AppEntityNames.CartItemEntityName}.cart_id",
+            cascade="all, delete",
         )
     )

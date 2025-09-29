@@ -10,6 +10,7 @@ from app.adapters.dto.alatau.alatau_create_order_dto import AlatauCreateResponse
 from app.adapters.dto.cart.cart_action_dto import  CartActionResponseDTO
 from app.adapters.dto.payment_transaction.payment_transaction_dto import PaymentTransactionCDTO, PaymentTransactionRDTO
 from app.adapters.dto.product_order.product_order_dto import ProductOrderWithRelationsRDTO
+from app.adapters.dto.product_order_item.product_order_item_dto import ProductOrderItemWithRelationsRDTO
 from app.adapters.dto.user.user_dto import UserWithRelationsRDTO
 from app.adapters.repository.cart.cart_repository import CartRepository
 from app.adapters.repository.payment_transaction.payment_transaction_repository import PaymentTransactionRepository
@@ -106,14 +107,20 @@ class CreateProductOrderCase(BaseUseCase[ProductOrderResponseDTO]):
         self.current_time = datetime.now()  # Текущее время создания заказа
 
         # Данные для платежной системы
-        self.order_dto = AlatauCreateResponseOrderDTO()  # DTO для платежной системы Alatau
+        self.order_dto: AlatauCreateResponseOrderDTO | None = None  # DTO для платежной системы Alatau
         self.unique_order: str = "0000000000000000000000"  # Уникальный номер заказа
         self.phone: str = ""  # Телефон для заказа
         self.email: str = ""  # Email для заказа
-
         # Результаты выполнения
         self.payment_transaction_entity: PaymentTransactionEntity | None = None  # Платежная транзакция
-        self.response: ProductOrderResponseDTO = ProductOrderResponseDTO()  # Ответ use case
+        self.response = ProductOrderResponseDTO(
+            product_order=None,
+            product_order_items=None,
+            order=None,
+            payment_transaction=None,
+            is_success=False,
+            message="OK"
+        )
 
     async def execute(self, user: UserWithRelationsRDTO, phone: str | None = None, email: str | None = None) -> ProductOrderResponseDTO:
         """
@@ -166,7 +173,7 @@ class CreateProductOrderCase(BaseUseCase[ProductOrderResponseDTO]):
 
         # Формирование ответа
         self.response.product_order = ProductOrderWithRelationsRDTO.from_orm(self.current_product_order)
-        self.response.product_order_items = [ProductOrderWithRelationsRDTO.from_orm(item) for item in self.current_product_order_item]
+        self.response.product_order_items = [ProductOrderItemWithRelationsRDTO.from_orm(item) for item in self.current_product_order_item]
 
         return self.response
 
@@ -257,12 +264,12 @@ class CreateProductOrderCase(BaseUseCase[ProductOrderResponseDTO]):
                     user_id=self.current_user.id,
                     status_id=DbValueConstants.ProductOrderStatusCreatedAwaitingPaymentID,
                     total_price=self.data.total_price,
-                    order_items=self.data.cart_items,  # Снапшот корзины для истории
+                    order_items_snapshot=self.data.cart.cart_items,
                     email=self.email,
                     phone=self.phone,
                     paid_until=self.current_time + timedelta(minutes=self.paid_at_minutes)
                 ))
-        except AppExceptionResponse as e:
+        except Exception as e:
             # Откат: удаляем созданный заказ при ошибке
             if self.current_product_order:
                 await self.product_order_repository.delete(self.current_product_order.id, force_delete=True)
@@ -283,7 +290,7 @@ class CreateProductOrderCase(BaseUseCase[ProductOrderResponseDTO]):
                         status_id=DbValueConstants.ProductOrderItemStatusCreatedAwaitingPaymentID,
                         product_id=item.product_id,
                         variant_id=item.variant_id,
-                        from_city_id=item.from_city_id,
+                        from_city_id=item.product.city_id if item.product else None,
                         # to_city_id=user.city_id,
                         qty=item.qty,
                         sku=item.sku,
@@ -292,7 +299,7 @@ class CreateProductOrderCase(BaseUseCase[ProductOrderResponseDTO]):
                     )
                 )
                 product_order_items.append(product_order_item)
-        except AppExceptionResponse as e:
+        except Exception as e:
             # Откат: удаляем заказ если не удалось создать элементы
             if self.current_product_order:
                 await self.product_order_repository.delete(self.current_product_order.id, force_delete=True)
@@ -306,16 +313,20 @@ class CreateProductOrderCase(BaseUseCase[ProductOrderResponseDTO]):
         try:
             # Генерируем уникальный номер заказа для платежной системы
             self.unique_order = await self.payment_transaction_repository.generate_unique_order(min_len=6, max_len=22)
+            nonce = await self.payment_transaction_repository.generate_unique_noncense()
+            user_name = f"{self.current_user.first_name or ''} {self.current_user.last_name or ''}".strip()
 
-            # Заполняем DTO для платежной системы Alatau
-            self.order_dto.ORDER = self.unique_order
-            self.order_dto.AMOUNT = self.data.total_price
-            self.order_dto.DESC = "Покупка мерча"
-            self.order_dto.EMAIL = self.email
-            self.order_dto.PHONE = self.phone
-            self.order_dto.NONCE = await self.payment_transaction_repository.generate_unique_noncense()
-            self.order_dto.CLIENT_ID = self.current_user.id
-            self.order_dto.NAME = f"{self.current_user.first_name or ''} {self.current_user.last_name or ''}".strip()
+            # Создаем DTO для платежной системы Alatau
+            self.order_dto = AlatauCreateResponseOrderDTO(
+                ORDER=self.unique_order,
+                AMOUNT=self.data.total_price,
+                DESC="Покупка мерча",
+                EMAIL=self.email,
+                NONCE=nonce,
+                CLIENT_ID=self.current_user.id,
+                NAME=user_name,
+                BACKREF=app_config.merch_backref
+            )
 
             # Формируем цифровую подпись для безопасности
             self.order_dto.set_signature(app_config.shared_secret)
@@ -333,6 +344,8 @@ class CreateProductOrderCase(BaseUseCase[ProductOrderResponseDTO]):
                 language="ru",
                 client_id=self.current_user.id,
                 desc="Покупка мерча",
+                wtype=self.order_dto.WTYPE,
+                backref=self.order_dto.BACKREF,
                 email=self.email,
                 name=self.order_dto.NAME if hasattr(self.order_dto, 'NAME') else None,
                 pre_p_sign=self.order_dto.P_SIGN,

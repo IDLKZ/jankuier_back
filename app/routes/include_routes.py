@@ -42,6 +42,8 @@ from app.adapters.api.product_variant_modification.product_variant_modification_
     ProductVariantModificationApi,
 )
 from app.adapters.api.product_order.product_order_api import ProductOrderApi
+from app.adapters.api.product_order_admin.product_order_admin_api import ProductOrderAdminApi
+from app.adapters.api.product_order_item_admin.product_order_item_admin_api import ProductOrderItemAdminApi
 from app.adapters.api.product_order_status.product_order_status_api import ProductOrderStatusApi
 from app.adapters.api.product_order_item_status.product_order_item_status_api import ProductOrderItemStatusApi
 from app.adapters.api.request_to_academy_group.request_to_academy_group_api import (
@@ -209,6 +211,20 @@ def include_routers(app) -> None:
         ProductOrderApi().router,
         prefix=f"{RoutePathConstants.BasePathName}/product-order",
         tags=["Заказы товаров"],
+    )
+
+    # Product Order Admin routes
+    app.include_router(
+        ProductOrderAdminApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}/product-order-admin",
+        tags=["Заказы товаров (Админ)"],
+    )
+
+    # Product Order Item Admin routes
+    app.include_router(
+        ProductOrderItemAdminApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}/product-order-item-admin",
+        tags=["Элементы заказов (Админ)"],
     )
 
     # Product Order Status routes

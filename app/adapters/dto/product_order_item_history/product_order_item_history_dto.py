@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel
 from app.shared.dto_constants import DTOConstant
 
@@ -51,9 +52,9 @@ class ProductOrderItemHistoryRDTO(ProductOrderItemHistoryDTO):
 
 
 class ProductOrderItemHistoryWithRelationsRDTO(ProductOrderItemHistoryRDTO):
-    order_item: "ProductOrderItemRDTO" | None = None
-    status: "ProductOrderItemStatusRDTO" | None = None
-    responsible_user: "UserRDTO" | None = None
+    order_item: Optional["ProductOrderItemRDTO"] = None
+    status: Optional["ProductOrderItemStatusRDTO"] = None
+    responsible_user: Optional["UserRDTO"] = None
 
     class Config:
         from_attributes = True

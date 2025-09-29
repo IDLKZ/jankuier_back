@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel
 
 from app.adapters.dto.payment_transaction.payment_transaction_dto import PaymentTransactionRDTO
@@ -24,7 +24,7 @@ class ProductOrderCDTO(BaseModel):
     total_price: DTOConstant.StandardPriceField("Общая стоимость")
     refunded_total: DTOConstant.StandardZeroDecimalField("Сумма возврата")
 
-    order_items: DTOConstant.StandardJSONField("Снапшот товаров")
+    order_items_snapshot: DTOConstant.StandardJSONField("Снапшот товаров")
 
     is_active: DTOConstant.StandardBooleanTrueField("Активен")
     is_canceled: DTOConstant.StandardBooleanFalseField("Отменён")
@@ -54,7 +54,7 @@ class ProductOrderRDTO(ProductOrderDTO):
     total_price: DTOConstant.StandardPriceField("Общая стоимость")
     refunded_total: DTOConstant.StandardZeroDecimalField("Сумма возврата")
 
-    order_items: DTOConstant.StandardJSONField("Снапшот товаров")
+    order_items_snapshot: DTOConstant.StandardJSONField("Снапшот товаров")
 
     is_active: DTOConstant.StandardBooleanTrueField("Активен")
     is_canceled: DTOConstant.StandardBooleanFalseField("Отменён")

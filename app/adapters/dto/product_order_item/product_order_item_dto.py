@@ -15,7 +15,7 @@ class ProductOrderItemCDTO(BaseModel):
     canceled_by_id: DTOConstant.StandardNullableUnsignedIntegerField("ID отменившего пользователя")
     product_id: DTOConstant.StandardUnsignedIntegerField("ID товара")
     variant_id: DTOConstant.StandardNullableUnsignedIntegerField("ID варианта")
-    from_city_id: DTOConstant.StandardUnsignedIntegerField("ID города отправления")
+    from_city_id: DTOConstant.StandardNullableUnsignedIntegerField("ID города отправления")
     to_city_id: DTOConstant.StandardNullableUnsignedIntegerField("ID города прибытия")
 
     qty: DTOConstant.StandardIntegerField("Количество")
@@ -44,7 +44,7 @@ class ProductOrderItemRDTO(ProductOrderItemDTO):
     canceled_by_id: DTOConstant.StandardNullableUnsignedIntegerField("ID отменившего пользователя")
     product_id: DTOConstant.StandardUnsignedIntegerField("ID товара")
     variant_id: DTOConstant.StandardNullableUnsignedIntegerField("ID варианта")
-    from_city_id: DTOConstant.StandardUnsignedIntegerField("ID города отправления")
+    from_city_id: DTOConstant.StandardNullableUnsignedIntegerField("ID города отправления")
     to_city_id: DTOConstant.StandardNullableUnsignedIntegerField("ID города прибытия")
 
     qty: DTOConstant.StandardIntegerField("Количество")

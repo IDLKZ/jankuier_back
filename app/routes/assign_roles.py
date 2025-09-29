@@ -26,6 +26,8 @@ from app.routes.product_gallery.product_gallery_route import assign_product_gall
 from app.routes.product_variant.product_variant_route import assign_product_variant_roles
 from app.routes.product_variant_modification.product_variant_modification_route import assign_product_variant_modification_roles
 from app.routes.product_order.product_order_route import assign_product_order_roles
+from app.routes.product_order_admin.product_order_admin_route import assign_product_order_admin_roles
+from app.routes.product_order_item_admin.product_order_item_admin_route import assign_product_order_item_admin_roles
 from app.routes.product_order_status.product_order_status_route import assign_product_order_status_roles
 from app.routes.product_order_item_status.product_order_item_status_route import assign_product_order_item_status_roles
 from app.routes.request_material.request_material_route import assign_request_material_roles
@@ -84,6 +86,8 @@ def assign_roles_to_all_routes(app) -> None:
     assign_product_variant_roles(app)
     assign_product_variant_modification_roles(app)
     assign_product_order_roles(app)
+    assign_product_order_admin_roles(app)
+    assign_product_order_item_admin_roles(app)
     assign_product_order_status_roles(app)
     assign_product_order_item_status_roles(app)
     

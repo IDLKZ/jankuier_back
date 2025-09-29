@@ -27,6 +27,72 @@ from app.use_case.base_case import BaseUseCase, T
 
 
 class TicketonConfirmCase(BaseUseCase[AlatauBackrefResponseDTO]):
+    """
+    Use Case для обработки подтверждения платежа заказов Ticketon через Alatau Pay.
+
+    Основная функциональность:
+    - Обрабатывает callback'и от платежной системы Alatau Pay после оплаты билетов Ticketon
+    - Валидирует цифровую подпись платежного запроса для обеспечения безопасности
+    - Обновляет статус платежной транзакции в зависимости от результата оплаты
+    - При успешной оплате подтверждает заказ билетов в системе Ticketon
+    - Синхронизирует данные между локальной БД и внешним API Ticketon
+    - Возвращает полную информацию о заказе и транзакции для дальнейшей обработки
+
+    Бизнес-логика:
+    1. **Валидация запроса**:
+       - Проверка обязательных полей (order, sign)
+       - Верификация цифровой подписи с использованием shared_secret
+       - Поиск и валидация связанной платежной транзакции
+       - Проверка активности заказа Ticketon
+
+    2. **Обработка платежа**:
+       - Определение статуса оплаты по res_code ("0" = успех)
+       - Обновление PaymentTransactionEntity с результатами платежа
+       - Сохранение данных о транзакции (amount, currency, mpi_order, etc.)
+       - Деактивация платежной транзакции после обработки
+
+    3. **Подтверждение в Ticketon** (только при успешной оплате):
+       - Вызов API Ticketon для подтверждения продажи билетов
+       - Обновление TicketonOrderEntity с данными подтвержденного заказа
+       - Сохранение информации о билетах и деталях заказа
+       - Установка соответствующего статуса заказа
+
+    Архитектура:
+    - **Repositories**: TicketonOrderRepository, PaymentTransactionRepository, TicketonOrderAndPaymentTransactionRepository
+    - **External Services**: TicketonServiceAPI для взаимодействия с внешним API
+    - **Security**: Валидация цифровых подписей для защиты от подделки запросов
+    - **Error Handling**: Обработка ошибок API Ticketon и внутренних сбоев
+
+    Поддерживаемые типы запросов:
+    - **AlatauBackrefPostDTO**: POST callback от Alatau Pay
+    - **AlatauBackrefGetDTO**: GET callback от Alatau Pay
+
+    Attributes:
+        ticketon_order_repository: Репозиторий для работы с заказами Ticketon
+        payment_transaction_repository: Репозиторий для работы с платежными транзакциями
+        ticketon_order_and_payment_transaction_repository: Репозиторий для связи заказов и транзакций
+        ticketon_service_api: Сервис для взаимодействия с API Ticketon
+        dto: DTO с данными callback'а от платежной системы
+        ticketon_order_entity: Экземпляр заказа Ticketon
+        payment_transaction_entity: Экземпляр платежной транзакции
+        response: Объект ответа с результатами обработки
+
+    Returns:
+        AlatauBackrefResponseDTO: Содержит информацию о заказе, транзакции, статусе и сообщениях
+
+    Raises:
+        AppExceptionResponse: При невалидной подписи, отсутствии транзакции, неактивном заказе
+
+    Security Notes:
+        - Все callback'и проверяются на валидность цифровой подписи
+        - Используется shared_secret для верификации подлинности запросов
+        - Транзакции проверяются на активность перед обработкой
+
+    Integration Points:
+        - **Alatau Pay**: Получение callback'ов о статусе платежа
+        - **Ticketon API**: Подтверждение заказов и получение билетов
+        - **Local Database**: Обновление статусов заказов и транзакций
+    """
 
     def __init__(self, db: AsyncSession) -> None:
         #Repositories
