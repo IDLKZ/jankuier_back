@@ -4,17 +4,24 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.pagination_dto import PaginationProductOrderItemWithRelationsRDTO
-from app.adapters.dto.product_order_item.product_order_item_dto import ProductOrderItemCDTO, ProductOrderItemWithRelationsRDTO
+from app.adapters.dto.product_order_item.product_order_item_dto import (
+    ProductOrderItemCDTO,
+    ProductOrderItemWithRelationsRDTO,
+    ChangeDeliveryProductOrderItemCDTO,
+)
+from app.adapters.dto.user.user_dto import UserWithRelationsRDTO
 from app.adapters.filters.product_order_item.product_order_item_pagination_filter import ProductOrderItemPaginationFilter
 from app.core.app_exception_response import AppExceptionResponse
 from app.infrastructure.db import get_db
 from app.i18n.i18n_wrapper import i18n
+from app.middleware.role_middleware import check_admin
 from app.shared.query_constants import AppQueryConstants
 from app.shared.route_constants import RoutePathConstants
 from app.use_case.product_order_item.admin.delete_product_order_item_case import DeleteProductOrderItemCase
 from app.use_case.product_order_item.admin.get_product_order_item_by_id_case import GetProductOrderItemByIdCase
 from app.use_case.product_order_item.admin.paginate_product_order_item_case import PaginateProductOrderItemCase
 from app.use_case.product_order_item.admin.update_product_order_item_case import UpdateProductOrderItemCase
+from app.use_case.product_order_item.change_delivery_product_order_item_case import ChangeDeliveryProductOrderItemCase
 
 
 class ProductOrderItemAdminApi:
@@ -64,6 +71,13 @@ class ProductOrderItemAdminApi:
             summary="Удалить элемент заказа (админ)",
             description="Удаление элемента заказа из системы (мягкое или жесткое удаление)",
         )(self.delete_order_item)
+
+        self.router.post(
+            "/change-delivery-status/{order_item_id}",
+            response_model=ProductOrderItemWithRelationsRDTO,
+            summary="Изменить статус доставки элемента заказа (админ)",
+            description="Управление процессом доставки: принятие в обработку и принятие решений по доставке элемента заказа",
+        )(self.change_delivery_status)
 
     async def paginate_order_items(
         self,
@@ -184,6 +198,63 @@ class ProductOrderItemAdminApi:
         try:
             return await DeleteProductOrderItemCase(db).execute(
                 item_id=id, force_delete=force_delete or False
+            )
+        except HTTPException:
+            raise
+        except Exception as exc:
+            traceback.print_exc()
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def change_delivery_status(
+        self,
+        order_item_id: RoutePathConstants.IDPath,
+        dto: ChangeDeliveryProductOrderItemCDTO,
+        user: UserWithRelationsRDTO = Depends(check_admin),
+        db: AsyncSession = Depends(get_db),
+    ) -> ProductOrderItemWithRelationsRDTO:
+        """
+        Изменение статуса доставки элемента заказа (администратор).
+
+        Поддерживает два типа действий:
+        1. "Принять в обработку" (is_passed=None):
+           - Ответственное лицо берет задачу в работу
+           - Заполняется responsible_user_id и taken_at
+
+        2. "Принять решение" (is_passed=True/False):
+           - is_passed=True: успешное прохождение этапа с переходом на следующий статус
+           - is_passed=False: отклонение с переходом в статус "Отменен, ожидает возврата"
+
+        Статусы обработки:
+        - 2 -> 3: Принято в доставку
+        - 3 -> 4: Доставлено, ожидает подтверждения получения
+        - 4 -> 5: Успешно получено (требуется verification_code)
+        - 2/3/4 -> 7: Отменено (при is_passed=False)
+
+        Автоматически:
+        - Создает записи в истории
+        - Пересчитывает total_price заказа
+
+        Args:
+            order_item_id: ID элемента заказа
+            dto: DTO с данными для изменения статуса доставки
+            user: Текущий администратор (ответственное лицо)
+            db: Сессия базы данных
+
+        Returns:
+            ProductOrderItemWithRelationsRDTO: Обновленный элемент заказа со всеми связями
+
+        Raises:
+            HTTPException: При ошибках валидации, неверном verification_code или некорректном переходе статусов
+        """
+        try:
+            return await ChangeDeliveryProductOrderItemCase(db).execute(
+                order_item_id=order_item_id,
+                user=user,
+                dto=dto
             )
         except HTTPException:
             raise

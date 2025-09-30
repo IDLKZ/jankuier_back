@@ -15,8 +15,11 @@ from app.adapters.repository.product_order.product_order_repository import Produ
 from app.adapters.repository.product_order_and_payment_transaction.product_order_and_payment_transaction_repository import \
     ProductOrderAndPaymentTransactionRepository
 from app.adapters.repository.product_order_item.product_order_item_repository import ProductOrderItemRepository
+from app.adapters.repository.product_order_item_history import product_order_item_history_repository
+from app.adapters.repository.product_order_item_history.product_order_item_history_repository import \
+    ProductOrderItemHistoryRepository
 from app.core.app_exception_response import AppExceptionResponse
-from app.entities import ProductOrderEntity, PaymentTransactionEntity
+from app.entities import ProductOrderEntity, PaymentTransactionEntity, ProductOrderItemHistoryEntity
 from app.i18n.i18n_wrapper import i18n
 from app.infrastructure.app_config import app_config
 from app.shared.db_value_constants import DbValueConstants
@@ -115,6 +118,7 @@ class AcceptPaymentProductOrderCase(BaseUseCase[ProductOrderWithPaymentTransacti
         # Инициализация репозиториев для работы с данными
         self.product_order_repository = ProductOrderRepository(db)
         self.product_order_item_repository = ProductOrderItemRepository(db)
+        self.product_order_item_history_repository = ProductOrderItemHistoryRepository(db)
         self.payment_transaction_repository = PaymentTransactionRepository(db)
         self.product_order_and_payment_transaction_repository = ProductOrderAndPaymentTransactionRepository(db)
 
@@ -226,10 +230,18 @@ class AcceptPaymentProductOrderCase(BaseUseCase[ProductOrderWithPaymentTransacti
                     for item in order_items:
                         item_cdto = ProductOrderItemCDTO.from_orm(item)
                         item_cdto.is_paid = True
-                        await self.product_order_item_repository.update(
+                        product_item_updated = await self.product_order_item_repository.update(
                             obj=item,
                             dto=item_cdto
                         )
+                        # if product_item_updated :
+                        #     await self.product_order_item_history_repository.create(
+                        #         obj=ProductOrderItemHistoryEntity(
+                        #             order_item_id=product_item_updated.id,
+                        #             status_id=DbValueConstants.ProductOrderItemStatusPaidAwaitingConfirmationID
+                        #     ))
+
+
 
                 self.response.message = "OK"
         except Exception as exc:

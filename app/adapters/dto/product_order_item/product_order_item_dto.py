@@ -1,5 +1,5 @@
 from typing import Optional, List
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from app.shared.dto_constants import DTOConstant
 
 class ProductOrderItemDTO(BaseModel):
@@ -82,6 +82,56 @@ class ProductOrderItemWithRelationsRDTO(ProductOrderItemRDTO):
     from_city: Optional["CityRDTO"] = None
     to_city: Optional["CityRDTO"] = None
     history_records: List["ProductOrderItemHistoryRDTO"] = []
+
+    class Config:
+        from_attributes = True
+
+
+class ChangeDeliveryProductOrderItemCDTO(BaseModel):
+    """
+    DTO для изменения статуса доставки ProductOrderItem.
+
+    Используется для двух действий:
+    1. "Принять в обработку" - заполняется только responsible_user_id
+    2. "Принять решение" - заполняются все поля с is_passed и новым статусом
+
+    Fields:
+        is_passed: True - успешное прохождение этапа, False - отмена/отклонение, None - только взятие в работу
+        new_status_id: Новый статус для ProductOrderItem (применяется только при is_passed=True)
+        message_ru: Сообщение на русском для записи в историю
+        message_kk: Сообщение на казахском для записи в историю
+        message_en: Сообщение на английском для истории
+        cancel_reason: Причина отмены (обязательно при is_passed=False)
+        verification_code: Код верификации (обязателен для статуса "Успешно получен")
+    """
+    is_passed: Optional[bool] = Field(
+        default=None,
+        description="Результат прохождения этапа: True - успех, False - отмена, None - только взятие в работу"
+    )
+    new_status_id: Optional[int] = Field(
+        default=None,
+        description="Новый статус для ProductOrderItem"
+    )
+    message_ru: Optional[str] = Field(
+        default=None,
+        description="Сообщение на русском для истории"
+    )
+    message_kk: Optional[str] = Field(
+        default=None,
+        description="Сообщение на казахском для истории"
+    )
+    message_en: Optional[str] = Field(
+        default=None,
+        description="Сообщение на английском для истории"
+    )
+    cancel_reason: Optional[str] = Field(
+        default=None,
+        description="Причина отмены (обязательно при is_passed=False)"
+    )
+    verification_code: Optional[str] = Field(
+        default=None,
+        description="Код верификации (обязателен для статуса 'Успешно получен')"
+    )
 
     class Config:
         from_attributes = True

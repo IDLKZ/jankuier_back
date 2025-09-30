@@ -88,3 +88,10 @@ def assign_product_order_roles(app) -> None:
         path=f"{base_url}/accept-payment",
         roles=[RoleRouteConstant.CommonTagName],
     )
+
+    # Client endpoint - cancel specific order item
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/client-cancel-order-item/{{order_item_id}}",
+        roles=[RoleRouteConstant.ClientTagName],
+    )

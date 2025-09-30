@@ -52,7 +52,6 @@ class ProductOrderEventHandler(EntityEventHandler):
         # Если статус заказа соответствует одному из отслеживаемых
         if order_status_id in item_status_mapping:
             new_item_status_id = item_status_mapping[order_status_id]
-
             # Обновляем статус всех элементов заказа
             connection.execute(
                 update(ProductOrderItemEntity)

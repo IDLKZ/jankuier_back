@@ -36,3 +36,10 @@ def assign_product_order_item_admin_roles(app) -> None:
         path=f"{base_url}{RoutePathConstants.DeleteByIdPathName}",
         roles=[RoleRouteConstant.AdministratorTagName],
     )
+
+    # Administrator endpoint - change delivery status (delivery management workflow)
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/change-delivery-status/{{order_item_id}}",
+        roles=[RoleRouteConstant.AdministratorTagName],
+    )

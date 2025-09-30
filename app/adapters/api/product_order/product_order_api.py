@@ -7,6 +7,7 @@ from typing import Optional
 from app.adapters.dto.alatau.alatau_after_payment_dto import AlatauBackrefGetDTO
 from app.adapters.dto.pagination_dto import PaginationProductOrderWithRelationsRDTO, PaginationProductOrderItemWithRelationsRDTO
 from app.adapters.dto.product_order.product_order_dto import ProductOrderWithRelationsRDTO
+from app.adapters.dto.product_order_item.product_order_item_dto import ProductOrderItemWithRelationsRDTO
 from app.adapters.dto.product_order_response.product_order_response_dto import ProductOrderWithPaymentTransactionResponseDTO
 from app.adapters.dto.user.user_dto import UserWithRelationsRDTO
 from app.adapters.filters.product_order.product_order_pagination_filter import ProductOrderPaginationFilter
@@ -25,6 +26,7 @@ from app.use_case.product_order.client.get_my_order_by_id_case import GetMyOrder
 from app.use_case.product_order.client.my_order_case import MyOrderCase
 from app.use_case.product_order.client.my_order_item_case import MyOrderItemCase
 from app.use_case.product_order.client.recreate_product_order_by_id_case import RecreateProductOrderByIdCase
+from app.use_case.product_order_item.client.cancel_order_item_case import CancelOrderItemCase
 
 
 class ProductOrderApi:
@@ -82,6 +84,13 @@ class ProductOrderApi:
             summary="Подтверждение платежа заказа",
             description="Обрабатывает GET callback от платежной системы Alatau Pay для подтверждения оплаты заказа товаров",
         )(self.accept_payment)
+
+        self.router.post(
+            "/client-cancel-order-item/{order_item_id}",
+            response_model=ProductOrderItemWithRelationsRDTO | None,
+            summary="Отмена элемента заказа клиентом",
+            description="Позволяет клиенту отменить конкретный элемент своего заказа. Если заказ не оплачен - удаляет элемент, если оплачен - меняет статус на 'Ожидает возврата'",
+        )(self.cancel_order_item)
 
     async def create_order(
         self,
@@ -313,6 +322,51 @@ class ProductOrderApi:
         """
         try:
             return await AcceptPaymentProductOrderCase(db).execute(dto=dto)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            traceback.print_exc()
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def cancel_order_item(
+        self,
+        order_item_id: RoutePathConstants.IDPath,
+        cancel_reason: Optional[str] = Form(None, description="Причина отмены элемента заказа (опционально)"),
+        user: UserWithRelationsRDTO = Depends(check_client),
+        db: AsyncSession = Depends(get_db),
+    ) -> ProductOrderItemWithRelationsRDTO | None:
+        """
+        Отмена элемента заказа клиентом.
+
+        Позволяет клиенту отменить конкретный элемент своего заказа:
+        - Если статус "Создан, ожидает оплаты" - удаляет элемент заказа
+        - Если статус "Оплачен, ожидает подтверждения" - меняет статус на "Отменен, ожидает возврата"
+
+        Автоматически пересчитывает total_price заказа через event handler.
+
+        Args:
+            order_item_id: ID элемента заказа для отмены
+            cancel_reason: Причина отмены (опционально)
+            user: Текущий пользователь (автоматически извлекается из токена)
+            db: Сессия базы данных
+
+        Returns:
+            ProductOrderItemWithRelationsRDTO если элемент был обновлен (статус изменен),
+            None если элемент был удален
+
+        Raises:
+            HTTPException: При ошибках валидации, отсутствии прав доступа или некорректном статусе
+        """
+        try:
+            return await CancelOrderItemCase(db).execute(
+                order_item_id=order_item_id,
+                user=user,
+                cancel_reason=cancel_reason
+            )
         except HTTPException:
             raise
         except Exception as exc:
