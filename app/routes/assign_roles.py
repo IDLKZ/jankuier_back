@@ -5,6 +5,9 @@ from app.routes.academy_group_schedule.academy_group_schedule_route import assig
 from app.routes.academy_group_student.academy_group_student_route import assign_academy_group_student_roles
 from app.routes.academy_material.academy_material_route import assign_academy_material_roles
 from app.routes.auth.auth_route import assign_auth_roles
+from app.routes.booking_field_party_status.booking_field_party_status_route import assign_booking_field_party_status_roles
+from app.routes.booking_field_party_request.booking_field_party_request_route import assign_booking_field_party_request_roles
+from app.routes.booking_field_party_and_payment_transaction.booking_field_party_and_payment_transaction_route import assign_booking_field_party_and_payment_transaction_roles
 from app.routes.cart.cart_route import assign_cart_roles
 from app.routes.cart_item.cart_item_route import assign_cart_item_roles
 from app.routes.category_modification.category_modification_route import assign_category_modification_roles
@@ -116,3 +119,8 @@ def assign_roles_to_all_routes(app) -> None:
     assign_ticketon_roles(app)
     assign_ticketon_order_status_roles(app)
     assign_ticketon_order_roles(app)
+
+    # Booking Field Party routes
+    assign_booking_field_party_status_roles(app)
+    assign_booking_field_party_request_roles(app)
+    assign_booking_field_party_and_payment_transaction_roles(app)

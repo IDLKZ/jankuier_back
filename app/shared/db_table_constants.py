@@ -50,4 +50,7 @@ class AppTableNames:
     ProductOrderItemHistoryTableName = "product_order_item_histories"
     ProductOrderAndPaymentTransactionTableName = "product_order_and_payment_transactions"
     ProductOrderItemVerificationCodeTableName = "product_order_item_verification_codes"
+    BookingFieldPartyStatusTableName = "booking_field_party_statuses"
+    BookingFieldPartyRequestTableName = "booking_field_party_requests"
+    BookingFieldPartyAndPaymentTransactionTableName = "booking_field_party_and_payment_transactions"
 

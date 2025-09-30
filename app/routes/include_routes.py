@@ -9,6 +9,9 @@ from app.adapters.api.academy_group_student.academy_group_student_api import (
     AcademyGroupStudentApi,
 )
 from app.adapters.api.auth.auth_api import AuthApi
+from app.adapters.api.booking_field_party_status.booking_field_party_status_api import BookingFieldPartyStatusApi
+from app.adapters.api.booking_field_party_request.booking_field_party_request_api import BookingFieldPartyRequestApi
+from app.adapters.api.booking_field_party_and_payment_transaction.booking_field_party_and_payment_transaction_api import BookingFieldPartyAndPaymentTransactionApi
 from app.adapters.api.category_modification.category_modification_api import (
     CategoryModificationApi,
 )
@@ -323,4 +326,23 @@ def include_routers(app) -> None:
         TicketonApi().router,
         prefix=f"{RoutePathConstants.BasePathName}/ticketon",
         tags=["Ticketon API"],
+    )
+
+    # Booking Field Party routes
+    app.include_router(
+        BookingFieldPartyStatusApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}/booking-field-party-status",
+        tags=["Статусы бронирования площадок"],
+    )
+
+    app.include_router(
+        BookingFieldPartyRequestApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}/booking-field-party-request",
+        tags=["Бронирования площадок"],
+    )
+
+    app.include_router(
+        BookingFieldPartyAndPaymentTransactionApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}/booking-field-party-and-payment-transaction",
+        tags=["Связи бронирований и транзакций"],
     )

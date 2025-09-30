@@ -71,3 +71,8 @@ class AppEntityNames:
     ProductOrderAndPaymentTransactionEntityName = "ProductOrderAndPaymentTransactionEntity"
     ProductOrderItemHistoryEntityName = "ProductOrderItemHistoryEntity"
     ProductOrderItemVerificationCodeEntityName = "ProductOrderItemVerificationCodeEntity"
+
+    # Booking Party
+    BookingFieldPartyStatusEntityName = "BookingFieldPartyStatusEntity"
+    BookingFieldPartyRequestEntityName = "BookingFieldPartyRequestEntity"
+    BookingFieldPartyAndPaymentTransactionEntityName = "BookingFieldPartyAndPaymentTransactionEntity"

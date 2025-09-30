@@ -3,6 +3,8 @@ from typing import TYPE_CHECKING, Any, List
 from app.adapters.dto.base_pagination_dto import Pagination, BasePageModel
 from app.adapters.dto.product_order.product_order_dto import ProductOrderWithRelationsRDTO
 from app.adapters.dto.product_order_item.product_order_item_dto import ProductOrderItemWithRelationsRDTO
+from app.adapters.dto.booking_field_party_request.booking_field_party_request_dto import BookingFieldPartyRequestWithRelationsRDTO
+from app.adapters.dto.booking_field_party_and_payment_transaction.booking_field_party_and_payment_transaction_dto import BookingFieldPartyAndPaymentTransactionWithRelationsRDTO
 
 if TYPE_CHECKING:
     from app.adapters.dto.permission.permission_dto import PermissionRDTO
@@ -296,6 +298,20 @@ class PaginationProductOrderWithRelationsRDTO(BasePageModel):
 class PaginationProductOrderItemWithRelationsRDTO(BasePageModel):
     """Пагинированный ответ для списка элементов заказа с relationships"""
     items: List[ProductOrderItemWithRelationsRDTO] = []
+
+    class Config:
+        from_attributes = True
+
+class PaginationBookingFieldPartyRequestWithRelationsRDTO(BasePageModel):
+    """Пагинированный ответ для списка бронирований площадок с relationships"""
+    items: List[BookingFieldPartyRequestWithRelationsRDTO] = []
+
+    class Config:
+        from_attributes = True
+
+class PaginationBookingFieldPartyAndPaymentTransactionWithRelationsRDTO(BasePageModel):
+    """Пагинированный ответ для списка связей бронирований и транзакций с relationships"""
+    items: List[BookingFieldPartyAndPaymentTransactionWithRelationsRDTO] = []
 
     class Config:
         from_attributes = True

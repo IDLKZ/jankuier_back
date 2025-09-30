@@ -4,6 +4,9 @@ from app.entities.academy_group_entity import AcademyGroupEntity
 from app.entities.academy_group_schedule_entity import AcademyGroupScheduleEntity
 from app.entities.academy_group_student_entity import AcademyGroupStudentEntity
 from app.entities.academy_material_entity import AcademyMaterialEntity
+from app.entities.booking_field_party_and_payment_transaction_entity import BookingFieldPartyAndPaymentTransactionEntity
+from app.entities.booking_field_party_request_entity import BookingFieldPartyRequestEntity
+from app.entities.booking_field_party_status_entity import BookingFieldPartyStatusEntity
 from app.entities.cart_entity import CartEntity
 from app.entities.cart_item_entity import CartItemEntity
 from app.entities.category_modification_entity import CategoryModificationEntity
@@ -97,5 +100,8 @@ __all__ = [
     ProductOrderAndPaymentTransactionEntity.__name__,
     ProductOrderItemHistoryEntity.__name__,
     ProductOrderItemVerificationCodeEntity.__name__,
+    BookingFieldPartyStatusEntity.__name__,
+    BookingFieldPartyRequestEntity.__name__,
+    BookingFieldPartyAndPaymentTransactionEntity.__name__,
 ]
 

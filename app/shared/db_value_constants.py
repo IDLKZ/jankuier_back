@@ -101,6 +101,22 @@ class DbValueConstants:
     ProductOrderItemStatusCancelledRefundedID = 8
     ProductOrderItemStatusCancelledRefundedValue = "cancelled_refunded"
 
+    # Статусы бронирования площадок
+    BookingFieldPartyStatusCreatedAwaitingPaymentID = 1
+    BookingFieldPartyStatusCreatedAwaitingPaymentValue = "created_awaiting_payment"
+
+    BookingFieldPartyStatusPaidID = 2
+    BookingFieldPartyStatusPaidValue = "paid"
+
+    BookingFieldPartyStatusCancelledID = 3
+    BookingFieldPartyStatusCancelledValue = "cancelled"
+
+    BookingFieldPartyStatusCancelledAwaitingRefundID = 4
+    BookingFieldPartyStatusCancelledAwaitingRefundValue = "cancelled_awaiting_refund"
+
+    BookingFieldPartyStatusCancelledRefundedID = 5
+    BookingFieldPartyStatusCancelledRefundedValue = "cancelled_refunded"
+
     @staticmethod
     def get_value(title: str):
         return slugify(

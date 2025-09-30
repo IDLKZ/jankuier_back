@@ -19,6 +19,7 @@ from app.seeders.payment_transaction_status.payment_transaction_status_seeder im
 from app.seeders.ticketon_order_status.ticketon_order_status_seeder import TicketonOrderStatusSeeder
 from app.seeders.product_order_status.product_order_status_seeder import ProductOrderStatusSeeder
 from app.seeders.product_order_item_status.product_order_item_status_seeder import ProductOrderItemStatusSeeder
+from app.seeders.booking_field_party_status.booking_field_party_status_seeder import BookingFieldPartyStatusSeeder
 
 seeders = [
     RoleSeeder(),
@@ -26,6 +27,7 @@ seeders = [
     TicketonOrderStatusSeeder(),
     ProductOrderStatusSeeder(),
     ProductOrderItemStatusSeeder(),
+    BookingFieldPartyStatusSeeder(),
     UserSeeder(),
     CountrySeeder(),
     SportSeeder(),
