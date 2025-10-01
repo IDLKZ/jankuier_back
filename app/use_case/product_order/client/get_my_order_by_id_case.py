@@ -1,14 +1,17 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.adapters.dto.product_order.full_product_order_dto import FullProductOrderRDTO
 from app.adapters.dto.product_order.product_order_dto import ProductOrderWithRelationsRDTO
+from app.adapters.dto.product_order_item.product_order_item_dto import ProductOrderItemWithRelationsRDTO
 from app.adapters.dto.user.user_dto import UserWithRelationsRDTO
 from app.adapters.repository.product_order.product_order_repository import ProductOrderRepository
+from app.adapters.repository.product_order_item.product_order_item_repository import ProductOrderItemRepository
 from app.core.app_exception_response import AppExceptionResponse
 from app.i18n.i18n_wrapper import i18n
 from app.use_case.base_case import BaseUseCase
 
 
-class GetMyOrderByIdCase(BaseUseCase[ProductOrderWithRelationsRDTO]):
+class GetMyOrderByIdCase(BaseUseCase[FullProductOrderRDTO]):
     """
     Use Case для получения конкретного заказа пользователя по ID.
 
@@ -39,6 +42,7 @@ class GetMyOrderByIdCase(BaseUseCase[ProductOrderWithRelationsRDTO]):
             db: Активная сессия базы данных для выполнения операций
         """
         self.product_order_repository = ProductOrderRepository(db)
+        self.product_order_item_repository = ProductOrderItemRepository(db)
         self.current_user: UserWithRelationsRDTO | None = None
         self.order_id: int | None = None
         self.include_deleted: bool = False
@@ -48,7 +52,7 @@ class GetMyOrderByIdCase(BaseUseCase[ProductOrderWithRelationsRDTO]):
         user: UserWithRelationsRDTO,
         order_id: int,
         include_deleted: bool = False
-    ) -> ProductOrderWithRelationsRDTO:
+    ) -> FullProductOrderRDTO:
         """
         Основной метод выполнения получения заказа по ID.
 
@@ -103,13 +107,14 @@ class GetMyOrderByIdCase(BaseUseCase[ProductOrderWithRelationsRDTO]):
                 message=i18n.gettext("product_order_not_found")
             )
 
-    async def transform(self) -> ProductOrderWithRelationsRDTO:
+    async def transform(self) -> FullProductOrderRDTO:
         """
         Получение и трансформация данных.
 
         Returns:
             ProductOrderWithRelationsRDTO: Заказ с relationships
         """
+        order_items = []
         order = await self.product_order_repository.get_first_with_filters(
             filters=[
                 self.product_order_repository.model.id == self.order_id,
@@ -118,5 +123,14 @@ class GetMyOrderByIdCase(BaseUseCase[ProductOrderWithRelationsRDTO]):
             options=self.product_order_repository.default_relationships(),
             include_deleted_filter=self.include_deleted
         )
-
-        return ProductOrderWithRelationsRDTO.model_validate(order)
+        if order:
+            order_items = await self.product_order_item_repository.get_with_filters(
+                filters=[
+                    self.product_order_item_repository.model.order_id == order.id
+                ],
+                options=self.product_order_item_repository.default_relationships(),
+            )
+        return FullProductOrderRDTO(
+            product_order=ProductOrderWithRelationsRDTO.model_validate(order),
+            product_order_items=[ProductOrderItemWithRelationsRDTO.model_validate(item) for item in order_items]
+        )
