@@ -1,19 +1,19 @@
 from datetime import datetime, date, time, timedelta
 from typing import List
-import json
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import and_
 
 from app.use_case.base_case import BaseUseCase
 from app.entities.field_party_schedule_settings_entity import FieldPartyScheduleSettingsEntity
 from app.entities.field_party_schedule_entity import FieldPartyScheduleEntity
+from app.entities.booking_field_party_request_entity import BookingFieldPartyRequestEntity
 from app.adapters.repository.base_repository import BaseRepository
 from app.adapters.dto.field_party_schedule_settings.schedule_generator_dto import (
     ScheduleGeneratorResponseDTO,
     ScheduleRecordDTO
 )
 from app.core.app_exception_response import AppExceptionResponse
-from app.infrastructure.redis_client import redis_client
+from app.shared.db_value_constants import DbValueConstants
 
 
 class PreviewFieldPartyScheduleCase(BaseUseCase[ScheduleGeneratorResponseDTO]):
@@ -23,20 +23,31 @@ class PreviewFieldPartyScheduleCase(BaseUseCase[ScheduleGeneratorResponseDTO]):
         self.db = db
         self.settings_repository = BaseRepository(FieldPartyScheduleSettingsEntity, db)
         self.schedule_repository = BaseRepository(FieldPartyScheduleEntity, db)
+        self.booking_request_repository = BaseRepository(BookingFieldPartyRequestEntity, db)
 
     async def execute(self, field_party_id: int, day: str) -> ScheduleGeneratorResponseDTO:
         """
         Генерирует виртуальное расписание для поля на указанную дату с Redis кэшированием.
-        
+
         Args:
             field_party_id: ID партии поля
             day: Дата для генерации в формате "YYYY-MM-DD"
         """
         await self.validate(field_party_id=field_party_id, day=day)
-        
+
         # Парсим дату
         target_date = datetime.strptime(day, "%Y-%m-%d").date()
-        
+        today = datetime.now().date()
+
+        # Проверяем, что дата не в прошлом
+        if target_date < today:
+            return ScheduleGeneratorResponseDTO(
+                success=False,
+                message=f"Дата {day} уже прошла. Расписание недоступно для прошедших дат",
+                generated_count=0,
+                schedule_records=[]
+            )
+
         # Получаем настройки расписания
         settings = await self._get_settings_for_party(field_party_id)
         if not settings:
@@ -46,7 +57,7 @@ class PreviewFieldPartyScheduleCase(BaseUseCase[ScheduleGeneratorResponseDTO]):
                 generated_count=0,
                 schedule_records=[]
             )
-        
+
         # Проверяем, что дата попадает в активный период
         if not (settings.active_start_at <= target_date <= settings.active_end_at):
             return ScheduleGeneratorResponseDTO(
@@ -55,7 +66,7 @@ class PreviewFieldPartyScheduleCase(BaseUseCase[ScheduleGeneratorResponseDTO]):
                 generated_count=0,
                 schedule_records=[]
             )
-        
+
         # Проверяем, что это рабочий день
         weekday = target_date.isoweekday()  # 1=понедельник, 7=воскресенье
         if weekday not in settings.working_days:
@@ -65,7 +76,7 @@ class PreviewFieldPartyScheduleCase(BaseUseCase[ScheduleGeneratorResponseDTO]):
                 generated_count=0,
                 schedule_records=[]
             )
-        
+
         # Проверяем, что дата не в исключенных
         if settings.excluded_dates and target_date in settings.excluded_dates:
             return ScheduleGeneratorResponseDTO(
@@ -75,25 +86,22 @@ class PreviewFieldPartyScheduleCase(BaseUseCase[ScheduleGeneratorResponseDTO]):
                 schedule_records=[]
             )
         
-        # Пытаемся получить данные из Redis кэша
-        cache_key = f"schedule:preview:{field_party_id}:{day}"
-        cached_data = await self._get_cached_schedule(cache_key, settings.updated_at)
-        
-        if cached_data:
-            # Даже если данные из кэша, нужно синхронизировать статус бронирования
-            # так как бронирования могут изменяться чаще настроек
-            updated_records = await self._sync_cached_booking_status(cached_data.schedule_records, target_date)
-            cached_data.schedule_records = updated_records
-            return cached_data
-        
         # Генерируем слоты для указанной даты
         generated_slots = await self._generate_schedule_slots_for_date(settings, target_date)
-        
-        # Синхронизируем статус бронирования с реальными записями из БД
-        synced_slots = await self._sync_booking_status(generated_slots, target_date)
-        
+
+        # Если это сегодняшняя дата, фильтруем только будущие слоты
+        if target_date == today:
+            current_time = datetime.now().time()
+            generated_slots = [
+                slot for slot in generated_slots
+                if slot['start_at'] > current_time
+            ]
+
+        # Фильтруем слоты по booked_limit (подсчитываем существующие бронирования)
+        available_slots = await self._filter_by_booked_limit(generated_slots, settings, target_date)
+
         # Конвертируем слоты в ScheduleRecordDTO
-        schedule_records = self._convert_slots_to_dto(synced_slots)
+        schedule_records = self._convert_slots_to_dto(available_slots, settings.booked_limit)
         
         # Создаем ответ
         response = ScheduleGeneratorResponseDTO(
@@ -102,10 +110,7 @@ class PreviewFieldPartyScheduleCase(BaseUseCase[ScheduleGeneratorResponseDTO]):
             generated_count=len(schedule_records),
             schedule_records=schedule_records
         )
-        
-        # Сохраняем в кэш
-        await self._cache_schedule(cache_key, response, settings.updated_at)
-        
+
         return response
 
     async def validate(self, field_party_id: int, day: str) -> None:
@@ -185,7 +190,6 @@ class PreviewFieldPartyScheduleCase(BaseUseCase[ScheduleGeneratorResponseDTO]):
             price for price in price_per_time 
             if price.get("day") == weekday
         ]
-        
         for work_period in day_working_time:
             # Получаем начало и конец рабочего времени
             start_time = datetime.strptime(work_period["start"], "%H:%M").time()
@@ -221,7 +225,7 @@ class PreviewFieldPartyScheduleCase(BaseUseCase[ScheduleGeneratorResponseDTO]):
     ) -> List[dict]:
         """Генерирует слоты для рабочего периода."""
         slots = []
-        
+
         # Преобразуем время перерывов
         breaks = []
         for break_period in break_time:
@@ -264,7 +268,6 @@ class PreviewFieldPartyScheduleCase(BaseUseCase[ScheduleGeneratorResponseDTO]):
                         "is_paid": False
                     }
                     slots.append(slot)
-                
                 # Переходим к следующему слоту
                 current_time = session_end + timedelta(minutes=break_between_sessions_minutes)
             else:
@@ -314,12 +317,15 @@ class PreviewFieldPartyScheduleCase(BaseUseCase[ScheduleGeneratorResponseDTO]):
         
         return None  # Подходящая цена не найдена
 
-    def _convert_slots_to_dto(self, slots: List[dict]) -> List[ScheduleRecordDTO]:
+    def _convert_slots_to_dto(self, slots: List[dict], booked_limit: int) -> List[ScheduleRecordDTO]:
         """Конвертирует слоты в ScheduleRecordDTO без сохранения в БД."""
         schedule_records = []
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        
+
         for slot_data in slots:
+            booked_count = slot_data.get("booked_count", 0)
+            available_slots = booked_limit - booked_count
+
             record_dto = ScheduleRecordDTO(
                 party_id=slot_data["party_id"],
                 setting_id=slot_data["setting_id"],
@@ -329,153 +335,90 @@ class PreviewFieldPartyScheduleCase(BaseUseCase[ScheduleGeneratorResponseDTO]):
                 price=slot_data["price"],
                 is_booked=slot_data["is_booked"],
                 is_paid=slot_data["is_paid"],
+                booked_count=booked_count,
+                booked_limit=booked_limit,
+                available_slots=available_slots,
                 created_at=current_time,
                 updated_at=current_time,
                 deleted_at=None
             )
             schedule_records.append(record_dto)
-        
+
         return schedule_records
 
-    async def _get_cached_schedule(self, cache_key: str, settings_updated_at: datetime) -> ScheduleGeneratorResponseDTO | None:
-        """Получает данные из Redis кэша с проверкой актуальности."""
-        try:
-            cached_raw = redis_client.get(cache_key)
-            if not cached_raw:
-                return None
-            
-            cached_data = json.loads(cached_raw)
-            
-            # Проверяем актуальность кэша по updated_at
-            cached_updated_at = datetime.fromisoformat(cached_data["settings_updated_at"])
-            if cached_updated_at != settings_updated_at:
-                # Кэш устарел, удаляем его
-                redis_client.delete(cache_key)
-                return None
-            
-            # Восстанавливаем объект ScheduleGeneratorResponseDTO
-            schedule_records = [
-                ScheduleRecordDTO(**record) for record in cached_data["schedule_records"]
-            ]
-            
-            return ScheduleGeneratorResponseDTO(
-                success=cached_data["success"],
-                message=cached_data["message"],
-                generated_count=cached_data["generated_count"],
-                schedule_records=schedule_records
-            )
-        except Exception:
-            # В случае ошибки парсинга удаляем неверный кэш
-            redis_client.delete(cache_key)
-            return None
+    async def _filter_by_booked_limit(
+        self,
+        slots: List[dict],
+        settings: FieldPartyScheduleSettingsEntity,
+        target_date: date
+    ) -> List[dict]:
+        """
+        Фильтрует слоты по booked_limit.
 
-    async def _cache_schedule(
-        self, 
-        cache_key: str, 
-        response: ScheduleGeneratorResponseDTO, 
-        settings_updated_at: datetime
-    ) -> None:
-        """Сохраняет расписание в Redis кэш."""
-        try:
-            # Конвертируем ScheduleRecordDTO в словари для JSON
-            records_data = []
-            for record in response.schedule_records:
-                records_data.append({
-                    "party_id": record.party_id,
-                    "setting_id": record.setting_id,
-                    "day": record.day,
-                    "start_at": record.start_at,
-                    "end_at": record.end_at,
-                    "price": record.price,
-                    "is_booked": record.is_booked,
-                    "is_paid": record.is_paid,
-                    "created_at": record.created_at,
-                    "updated_at": record.updated_at,
-                    "deleted_at": record.deleted_at
-                })
-            
-            cache_data = {
-                "success": response.success,
-                "message": response.message,
-                "generated_count": response.generated_count,
-                "schedule_records": records_data,
-                "settings_updated_at": settings_updated_at.isoformat()
-            }
-            
-            # Кэшируем на 24 часа (86400 секунд)
-            redis_client.setex(cache_key, 86400, json.dumps(cache_data, default=str))
-        except Exception:
-            # Если не удалось закэшировать, продолжаем работу без кэша
-            pass
+        Подсчитывает количество бронирований для каждого слота из двух источников:
+        1. FieldPartySchedule (is_booked = True)
+        2. BookingFieldPartyRequest (is_active = True, status_id in [1, 2])
 
-    async def _sync_booking_status(self, generated_slots: List[dict], target_date: date) -> List[dict]:
-        """Синхронизирует статус бронирования с реальными записями FieldSchedule."""
+        Если количество бронирований >= booked_limit, слот исключается.
+        """
         try:
-            # Получаем все забронированные слоты из базы на указанную дату
-            filters = [
+            # 1. Получаем забронированные слоты из FieldSchedule
+            schedule_filters = [
                 FieldPartyScheduleEntity.day == target_date,
                 FieldPartyScheduleEntity.is_booked == True,
                 FieldPartyScheduleEntity.deleted_at.is_(None)
             ]
-            
-            booked_schedules = await self.schedule_repository.get_all(filters=filters)
-            
-            # Создаем словарь для быстрого поиска забронированных слотов
-            booked_slots = {}
+            booked_schedules = await self.schedule_repository.get_all(filters=schedule_filters)
+
+            # 2. Получаем активные заявки на бронирование
+            booking_filters = [
+                BookingFieldPartyRequestEntity.is_active == True,
+                BookingFieldPartyRequestEntity.status_id.in_([
+                    DbValueConstants.BookingFieldPartyStatusCreatedAwaitingPaymentID,
+                    DbValueConstants.BookingFieldPartyStatusPaidID
+                ]),
+                BookingFieldPartyRequestEntity.deleted_at.is_(None)
+            ]
+            active_bookings = await self.booking_request_repository.get_all(filters=booking_filters)
+
+            # Подсчитываем количество бронирований для каждого временного интервала
+            booking_counts = {}
+
+            # Считаем бронирования из FieldSchedule
             for schedule in booked_schedules:
                 key = f"{schedule.party_id}:{schedule.start_at.strftime('%H:%M')}:{schedule.end_at.strftime('%H:%M')}"
-                booked_slots[key] = {
-                    'is_booked': schedule.is_booked,
-                    'is_paid': schedule.is_paid
-                }
-            
-            # Обновляем статус бронирования в сгенерированных слотах
-            for slot in generated_slots:
+                booking_counts[key] = booking_counts.get(key, 0) + 1
+
+            # Считаем бронирования из BookingFieldPartyRequest
+            for booking in active_bookings:
+                # Основное время бронирования
+                if booking.start_at.date() == target_date:
+                    start_time = booking.start_at.time()
+                    end_time = booking.end_at.time()
+                    key = f"{booking.field_party_id}:{start_time.strftime('%H:%M')}:{end_time.strftime('%H:%M')}"
+                    booking_counts[key] = booking_counts.get(key, 0) + 1
+
+                # Перенесенное время бронирования
+                if booking.reschedule_start_at and booking.reschedule_start_at.date() == target_date:
+                    start_time = booking.reschedule_start_at.time()
+                    end_time = booking.reschedule_end_at.time()
+                    key = f"{booking.field_party_id}:{start_time.strftime('%H:%M')}:{end_time.strftime('%H:%M')}"
+                    booking_counts[key] = booking_counts.get(key, 0) + 1
+
+            # Фильтруем слоты по booked_limit и добавляем информацию о бронированиях
+            available_slots = []
+            for slot in slots:
                 start_time_str = slot['start_at'].strftime('%H:%M') if hasattr(slot['start_at'], 'strftime') else str(slot['start_at'])
                 end_time_str = slot['end_at'].strftime('%H:%M') if hasattr(slot['end_at'], 'strftime') else str(slot['end_at'])
                 slot_key = f"{slot['party_id']}:{start_time_str}:{end_time_str}"
-                if slot_key in booked_slots:
-                    slot['is_booked'] = True
-                    slot['is_paid'] = booked_slots[slot_key].get('is_paid', False)
-            
-            return generated_slots
-        except Exception:
-            # В случае ошибки возвращаем исходные данные
-            return generated_slots
 
-    async def _sync_cached_booking_status(self, cached_records: List[ScheduleRecordDTO], target_date: date) -> List[ScheduleRecordDTO]:
-        """Синхронизирует статус бронирования для записей из кэша."""
-        try:
-            # Получаем все забронированные слоты из базы на указанную дату
-            filters = [
-                FieldPartyScheduleEntity.day == target_date,
-                FieldPartyScheduleEntity.is_booked == True,
-                FieldPartyScheduleEntity.deleted_at.is_(None)
-            ]
-            
-            booked_schedules = await self.schedule_repository.get_all(filters=filters)
-            
-            # Создаем словарь для быстрого поиска забронированных слотов
-            booked_slots = {}
-            for schedule in booked_schedules:
-                key = f"{schedule.party_id}:{schedule.start_at.strftime('%H:%M')}:{schedule.end_at.strftime('%H:%M')}"
-                booked_slots[key] = {
-                    'is_booked': schedule.is_booked,
-                    'is_paid': schedule.is_paid
-                }
-            
-            # Обновляем статус бронирования в кэшированных записях
-            for record in cached_records:
-                record_key = f"{record.party_id}:{record.start_at}:{record.end_at}"
-                if record_key in booked_slots:
-                    record.is_booked = booked_slots[record_key]['is_booked']
-                    record.is_paid = booked_slots[record_key]['is_paid']
-                else:
-                    # Если слот не найден в базе, он свободен
-                    record.is_booked = False
-                    record.is_paid = False
-            
-            return cached_records
+                current_bookings = booking_counts.get(slot_key, 0)
+                if current_bookings < settings.booked_limit:
+                    # Добавляем информацию о количестве бронирований
+                    slot['booked_count'] = current_bookings
+                    available_slots.append(slot)
+
+            return available_slots
         except Exception:
-            # В случае ошибки возвращаем исходные данные
-            return cached_records
+            # В случае ошибки возвращаем все слоты
+            return slots

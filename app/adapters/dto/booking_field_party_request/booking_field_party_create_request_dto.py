@@ -14,12 +14,21 @@ class CreateBookingFieldPartyRequestDTO(BaseModel):
     day: str
     start_at: str
     end_at: str
+    email: str | None = None
+    phone: str | None = None
 
 
-class CreateBookingFieldPartyResponseDTO:
-    field_booking_request:BookingFieldPartyRequestWithRelationsRDTO|None = None
-    payment_transaction:PaymentTransactionRDTO|None = None
-    order:AlatauCreateResponseOrderDTO|None = None
-    success:bool = False
-    message:str = "Бронирование поля"
+class CreateBookingFieldPartyResponseDTO(BaseModel):
+    field_booking_request: BookingFieldPartyRequestWithRelationsRDTO | None = None
+    payment_transaction: PaymentTransactionRDTO | None = None
+    order: AlatauCreateResponseOrderDTO | None = None
+    is_success: bool = False
+    message: str = "Бронирование поля"
 
+
+
+class AcceptPaymentForBookingFieldPartyResponseDTO(BaseModel):
+    field_booking_request: BookingFieldPartyRequestWithRelationsRDTO | None = None
+    payment_transaction: PaymentTransactionRDTO | None = None
+    is_success: bool = False
+    message: str = "Бронирование поля успешно оплачено"

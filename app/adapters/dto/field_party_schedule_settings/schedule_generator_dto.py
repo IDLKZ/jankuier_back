@@ -105,6 +105,9 @@ class ScheduleRecordDTO(BaseModel):
     price: float
     is_booked: bool
     is_paid: bool
+    booked_count: int = Field(default=0, description="Количество текущих бронирований для этого слота")
+    booked_limit: int = Field(default=1, description="Максимальное количество бронирований для этого слота")
+    available_slots: int = Field(default=1, description="Количество доступных мест (booked_limit - booked_count)")
     created_at: str
     updated_at: str
     deleted_at: Optional[str]

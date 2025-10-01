@@ -1,20 +1,16 @@
-Создадим seeders для ProductOrderStatusEntity
-1. Заказ создан, ожидает оплаты (prev_id = null, next_id = 2)
-2. Заказ оплачен (prev_id = 1, next_id = null)
-3. Заказ отменен (prev_id = 1, next_id = null)
-4. Заказ отменен, ожидает возврата средства (prev_id = 2, next_id = 5)
-5. Заказ отменен, средства возвращены (prev_id = 4, next_id = null)
-
-Создадим seeders для ProductOrderItemStatusEntity
-
-1. Заказ создан, ожидает оплаты (prev_id = null, next_id = 2)
-2. Заказ оплачен, ожидает подтверждения (prev_id = 1, next_id = 3)
-3. Заказ доставляется (prev_id = 2, next_id = 4)
-4. Заказ ожидает подтверждения доставки (prev_id = 3, next_id = 5)
-5. Заказ успешно получен (prev_id = 4, next_id = null)
-6. Заказ отменен (prev_id = 1, next_id = null)
-7. Заказ отменен, ожидает возврата средства (prev_id = 6, next_id = 8) но может поддерживать 2,3,4 -> previous_allowed_values
-8. Заказ отменен, средства возвращены (prev_id = 7, next_id = null)
-
-
-Для seeders обязательно создадим DbValueConstants двух видов с ID и Value
+AlatauBackrefGetDTO Проверить по документации:
+Алгоритм проверки подписи sign следующий: нужно собрать в одну строку значения всех полей заказа в
+указанном в таблице порядке через разделитель «;», затем добавить эту строку к значению секретного ключа
+SHARED_SECRET (этот ключ индивидуальный для каждого коммерсанта), и вычислить из полученной строки
+значение хэш SHA512. В строках desc, res_desc перед обработкой нужно убрать все переносы строк. Например,
+на PHP это будет выглядеть примерно так:
+vSign=hash("sha512",
+C_SHARED_KEY
+.$_POST["order"].";"
+.$_POST["mpi_order"].";"
+.$_POST["rrn"].";"
+.$_POST["res_code"].";"
+.$_POST["amount"].";"
+.$_POST["сurrency"].";"
+.preg_replace("/\n|\r/g","",$_POST["res_desc"]).";"
+);
