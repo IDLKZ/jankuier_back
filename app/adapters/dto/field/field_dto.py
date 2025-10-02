@@ -1,12 +1,10 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
-from pydantic import BaseModel
-from app.adapters.dto.file.file_dto import FileRDTO
-from app.adapters.dto.city.city_dto import CityRDTO
-from app.shared.dto_constants import DTOConstant
 
-if TYPE_CHECKING:
-    from app.adapters.dto.field_party.field_party_dto import FieldPartyWithRelationsRDTO
+from pydantic import BaseModel
+
+from app.adapters.dto.city.city_dto import CityRDTO
+from app.adapters.dto.file.file_dto import FileRDTO
+from app.shared.dto_constants import DTOConstant
 
 
 class FieldDTO(BaseModel):
@@ -126,7 +124,6 @@ class FieldWithBasicRelationsRDTO(FieldRDTO):
 class FieldWithRelationsRDTO(FieldRDTO):
     image: FileRDTO | None = None
     city: CityRDTO | None = None
-    field_parties: list[FieldPartyWithRelationsRDTO] = []
 
     class Config:
         from_attributes = True
@@ -136,78 +133,78 @@ class FieldUpdateDTO(BaseModel):
     """DTO для обновления поля - все поля опциональные"""
 
     image_id: (
-        DTOConstant.StandardNullableUnsignedIntegerField(
-            description="ID главного изображения поля"
-        )
-        | None
+            DTOConstant.StandardNullableUnsignedIntegerField(
+                description="ID главного изображения поля"
+            )
+            | None
     ) = None
     city_id: (
-        DTOConstant.StandardNullableUnsignedIntegerField(description="ID города") | None
+            DTOConstant.StandardNullableUnsignedIntegerField(description="ID города") | None
     ) = None
     title_ru: (
-        DTOConstant.StandardVarcharField(description="Название поля на русском") | None
+            DTOConstant.StandardVarcharField(description="Название поля на русском") | None
     ) = None
     title_kk: (
-        DTOConstant.StandardNullableVarcharField(
-            description="Название поля на казахском"
-        )
-        | None
+            DTOConstant.StandardNullableVarcharField(
+                description="Название поля на казахском"
+            )
+            | None
     ) = None
     title_en: (
-        DTOConstant.StandardNullableVarcharField(
-            description="Название поля на английском"
-        )
-        | None
+            DTOConstant.StandardNullableVarcharField(
+                description="Название поля на английском"
+            )
+            | None
     ) = None
     description_ru: (
-        DTOConstant.StandardNullableTextField(description="Описание поля на русском")
-        | None
+            DTOConstant.StandardNullableTextField(description="Описание поля на русском")
+            | None
     ) = None
     description_kk: (
-        DTOConstant.StandardNullableTextField(description="Описание поля на казахском")
-        | None
+            DTOConstant.StandardNullableTextField(description="Описание поля на казахском")
+            | None
     ) = None
     description_en: (
-        DTOConstant.StandardNullableTextField(description="Описание поля на английском")
-        | None
+            DTOConstant.StandardNullableTextField(description="Описание поля на английском")
+            | None
     ) = None
     address_ru: (
-        DTOConstant.StandardNullableVarcharField(description="Адрес на русском") | None
+            DTOConstant.StandardNullableVarcharField(description="Адрес на русском") | None
     ) = None
     address_en: (
-        DTOConstant.StandardNullableVarcharField(description="Адрес на английском")
-        | None
+            DTOConstant.StandardNullableVarcharField(description="Адрес на английском")
+            | None
     ) = None
     address_kk: (
-        DTOConstant.StandardNullableVarcharField(description="Адрес на казахском")
-        | None
+            DTOConstant.StandardNullableVarcharField(description="Адрес на казахском")
+            | None
     ) = None
     latitude: DTOConstant.StandardNullableVarcharField(description="Широта") | None = (
         None
     )
     longitude: (
-        DTOConstant.StandardNullableVarcharField(description="Долгота") | None
+            DTOConstant.StandardNullableVarcharField(description="Долгота") | None
     ) = None
     is_active: (
-        DTOConstant.StandardBooleanTrueField(description="Флаг активности поля") | None
+            DTOConstant.StandardBooleanTrueField(description="Флаг активности поля") | None
     ) = None
     has_cover: (
-        DTOConstant.StandardBooleanFalseField(description="Наличие крыши") | None
+            DTOConstant.StandardBooleanFalseField(description="Наличие крыши") | None
     ) = None
     phone: DTOConstant.StandardNullableVarcharField(description="Телефон") | None = None
     additional_phone: (
-        DTOConstant.StandardNullableVarcharField(description="Дополнительный телефон")
-        | None
+            DTOConstant.StandardNullableVarcharField(description="Дополнительный телефон")
+            | None
     ) = None
     email: DTOConstant.StandardNullableVarcharField(description="Email") | None = None
     whatsapp: (
-        DTOConstant.StandardNullableVarcharField(description="WhatsApp") | None
+            DTOConstant.StandardNullableVarcharField(description="WhatsApp") | None
     ) = None
     telegram: (
-        DTOConstant.StandardNullableVarcharField(description="Telegram") | None
+            DTOConstant.StandardNullableVarcharField(description="Telegram") | None
     ) = None
     instagram: (
-        DTOConstant.StandardNullableVarcharField(description="Instagram") | None
+            DTOConstant.StandardNullableVarcharField(description="Instagram") | None
     ) = None
     tiktok: DTOConstant.StandardNullableVarcharField(description="TikTok") | None = None
 

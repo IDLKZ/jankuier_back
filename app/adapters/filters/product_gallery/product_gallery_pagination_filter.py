@@ -1,3 +1,4 @@
+from sqlalchemy import and_
 from sqlalchemy.orm import Query as SQLAlchemyQuery
 
 from app.adapters.filters.base_pagination_filter import BasePaginationFilter
@@ -54,8 +55,10 @@ class ProductGalleryPaginationFilter(BasePaginationFilter[ProductGalleryEntity])
     def apply(self) -> list[SQLAlchemyQuery]:
         filters = []
 
-        if self.product_ids:
-            filters.append(ProductGalleryEntity.product_id.in_(self.product_ids))
+        if self.product_ids and not self.variant_ids:
+            filters.append(
+                and_(ProductGalleryEntity.product_id.in_(self.product_ids), ProductGalleryEntity.variant_id.is_(None))
+            )
 
         if self.variant_ids:
             filters.append(ProductGalleryEntity.variant_id.in_(self.variant_ids))
