@@ -59,6 +59,7 @@ class DbValueConstants:
 
     PaymentTicketonType ="TICKETON_BOOKING"
     PaymentMerchType ="PRODUCT_ORDER"
+    PaymentBookingFieldType ="BOOKING_FIELD"
 
     # Статусы заказов продуктов
     ProductOrderStatusCreatedAwaitingPaymentID = 1

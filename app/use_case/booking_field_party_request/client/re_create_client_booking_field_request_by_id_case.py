@@ -25,25 +25,29 @@ from app.i18n.i18n_wrapper import i18n
 from app.infrastructure.app_config import app_config
 from app.shared.db_value_constants import DbValueConstants
 from app.use_case.base_case import BaseUseCase
-from app.use_case.field_party_schedule.preview_field_party_schedule_case import PreviewFieldPartyScheduleCase
 
 
-class CreateClientBookingFieldRequestCase(BaseUseCase[CreateBookingFieldPartyResponseDTO]):
+class ReCreateClientBookingFieldRequestByIdCase(BaseUseCase[CreateBookingFieldPartyResponseDTO]):
     """
-    Use Case для создания клиентской заявки на бронирование поля.
+    Use Case для пересоздания платежной транзакции для существующей заявки на бронирование.
 
     Процесс включает:
-    1. Валидацию данных бронирования и проверку доступности временного слота
-    2. Создание заявки на бронирование со статусом "Ожидание оплаты"
-    3. Создание платежной транзакции через платежную систему Alatau
-    4. Связывание заявки с платежной транзакцией
+    1. Получение существующей заявки на бронирование по ID
+    2. Проверку прав доступа (заявка принадлежит текущему пользователю)
+    3. Деактивацию всех предыдущих платежных транзакций
+    4. Создание новой платежной транзакции через платежную систему Alatau
+    5. Связывание заявки с новой транзакцией
+
+    Используется когда:
+    - Предыдущий платеж не был завершен
+    - Истек срок оплаты
+    - Клиент хочет повторить попытку оплаты
 
     Attributes:
         booking_field_party_request_repository: Репозиторий для работы с заявками на бронирование
         field_party_repository: Репозиторий для работы с партиями полей
         payment_transaction_repository: Репозиторий для работы с платежными транзакциями
         booking_field_party_and_payment_transaction_repository: Репозиторий для связей между заявками и транзакциями
-        preview_field_party_schedule_case: Use Case для получения расписания поля
     """
 
     def __init__(self, db: AsyncSession) -> None:
@@ -58,35 +62,34 @@ class CreateClientBookingFieldRequestCase(BaseUseCase[CreateBookingFieldPartyRes
         self.payment_transaction_repository = PaymentTransactionRepository(db)
         self.booking_field_party_and_payment_transaction_repository = BookingFieldPartyAndPaymentTransactionRepository(
             db)
-        self.preview_field_party_schedule_case = PreviewFieldPartyScheduleCase(db)
 
         self.booking_field_entity: BookingFieldPartyRequestEntity | None = None
         self.field_party: FieldPartyEntity | None = None
+        self.id:int|None = None
         self.dto:CreateBookingFieldPartyRequestDTO|None = None
         self.current_user:UserWithRelationsRDTO|None = None
         self.start_at:datetime|None = None
         self.end_at:datetime|None = None
-        self.active_schedule:ScheduleRecordDTO|None = None
         self.response:CreateBookingFieldPartyResponseDTO = CreateBookingFieldPartyResponseDTO()
         self.unique_order = "00000000000000000000"
 
 
-    async def execute(self, dto: CreateBookingFieldPartyRequestDTO, user: UserWithRelationsRDTO) -> CreateBookingFieldPartyResponseDTO:
+    async def execute(self, id: int, user: UserWithRelationsRDTO) -> CreateBookingFieldPartyResponseDTO:
         """
-        Выполняет создание заявки на бронирование поля и инициализацию платежной транзакции.
+        Выполняет пересоздание платежной транзакции для существующей заявки на бронирование.
 
         Args:
-            dto: DTO с данными для создания заявки (field_party_id, день, время начала/окончания, контакты)
-            user: Текущий пользователь, создающий заявку
+            id: ID существующей заявки на бронирование
+            user: Текущий пользователь (должен быть владельцем заявки)
 
         Returns:
-            CreateBookingFieldPartyResponseDTO: Ответ с созданной заявкой, платежной транзакцией и данными для оплаты
+            CreateBookingFieldPartyResponseDTO: Ответ с существующей заявкой и новой платежной транзакцией
 
         Raises:
-            AppExceptionResponse.bad_request: Если данные невалидны или временной слот недоступен
-            AppExceptionResponse.not_found: Если партия поля не найдена
+            AppExceptionResponse.bad_request: Если срок бронирования истек
+            AppExceptionResponse.not_found: Если заявка не найдена или не принадлежит пользователю
         """
-        self.dto = dto
+        self.id = id
         self.current_user = user
         await self.validate()
         await self.transform()
@@ -96,33 +99,51 @@ class CreateClientBookingFieldRequestCase(BaseUseCase[CreateBookingFieldPartyRes
 
     async def validate(self) -> None:
         """
-        Валидирует входные данные и проверяет доступность временного слота.
+        Валидирует данные для пересоздания платежной транзакции.
 
         Проверяет:
-        - Наличие обязательных данных (dto, user)
-        - Корректность формата даты и времени
-        - Временной слот находится в будущем
+        - Наличие обязательных данных (id, user)
+        - Существование заявки на бронирование
+        - Заявка принадлежит текущему пользователю
+        - Заявка активна (is_active = True)
+        - Временной слот еще не истек (start_at >= now)
         - Существование и активность партии поля
-        - Доступность временного слота в расписании
-        - Слот не забронирован другим пользователем
 
         Raises:
-            AppExceptionResponse.bad_request: При невалидных данных или недоступном слоте
-            AppExceptionResponse.not_found: Если партия поля не найдена
+            AppExceptionResponse.bad_request: Если срок бронирования истек или данные невалидны
+            AppExceptionResponse.not_found: Если заявка не найдена или не принадлежит пользователю
         """
-        if self.dto == None or self.current_user == None:
+        if self.id == None or self.current_user == None:
             raise AppExceptionResponse.bad_request(i18n.gettext('data_is_not_ready'))
-        try:
-            self.start_at = datetime.strptime(f"{self.dto.day} {self.dto.start_at}", "%Y-%m-%d %H:%M")
-            self.end_at = datetime.strptime(f"{self.dto.day} {self.dto.end_at}", "%Y-%m-%d %H:%M")
-        except Exception as exc:
-            raise AppExceptionResponse.bad_request(i18n.gettext('data_not_is_right'))
 
-        if self.start_at > self.end_at or self.start_at < datetime.now() or self.end_at < datetime.now():
+        self.booking_field_entity = await self.booking_field_party_request_repository.get_first_with_filters(
+            filters=[
+                self.booking_field_party_request_repository.model.id == self.id,
+                self.booking_field_party_request_repository.model.is_active == True,
+                self.booking_field_party_request_repository.model.user_id == self.current_user.id,
+            ],
+            options=self.booking_field_party_request_repository.default_relationships()
+        )
+        if not self.booking_field_entity:
+            raise AppExceptionResponse.not_found(i18n.gettext('booking_field_party_request_not_found'))
+
+        # Создаем DTO из существующей заявки
+        self.dto = CreateBookingFieldPartyRequestDTO(
+            field_party_id=self.booking_field_entity.field_party_id,
+            day=self.booking_field_entity.start_at.strftime("%Y-%m-%d"),
+            start_at=self.booking_field_entity.start_at.strftime("%H:%M"),
+            end_at=self.booking_field_entity.end_at.strftime("%H:%M"),
+            email=self.booking_field_entity.email,
+            phone=self.booking_field_entity.phone
+        )
+
+        self.response.field_booking_request = BookingFieldPartyRequestWithRelationsRDTO.from_orm(self.booking_field_entity)
+
+        if self.booking_field_entity.start_at > self.booking_field_entity.end_at or self.booking_field_entity.start_at < datetime.now() or self.booking_field_entity.end_at < datetime.now():
             raise AppExceptionResponse.bad_request(i18n.gettext('data_is_passed'))
 
         self.field_party = await self.field_party_repository.get(
-            self.dto.field_party_id,
+            self.booking_field_entity.field_party_id,
             options=self.field_party_repository.default_relationships()
         )
         if not self.field_party:
@@ -130,61 +151,45 @@ class CreateClientBookingFieldRequestCase(BaseUseCase[CreateBookingFieldPartyRes
         if self.field_party.is_active is False:
             raise AppExceptionResponse.bad_request(i18n.gettext('field_party_is_not_active'))
 
-        try:
-            schedule_response = await self.preview_field_party_schedule_case.execute(self.dto.field_party_id, self.dto.day)
-            if schedule_response.schedule_records == None or len(schedule_response.schedule_records) == 0:
-                raise AppExceptionResponse.bad_request(i18n.gettext('field_party_schedule_is_not_active'))
-            for record in schedule_response.schedule_records:
-                if record.start_at == self.dto.start_at and record.end_at == self.dto.end_at:
-                    self.active_schedule = record
-                    break
-        except Exception as exc:
-            raise AppExceptionResponse.bad_request(i18n.gettext('there_is_no_schedule'))
-
-        if self.active_schedule == None:
-            raise AppExceptionResponse.bad_request(i18n.gettext('there_is_no_schedule'))
-
 
     async def transform(self) -> None:
         """
-        Трансформирует и сохраняет данные заявки и платежной транзакции.
+        Трансформирует данные и создает новую платежную транзакцию.
 
         Выполняет следующие шаги:
-        1. Создает заявку на бронирование со статусом "Ожидание оплаты"
-        2. Генерирует уникальный номер заказа и nonce для платежной системы
-        3. Формирует DTO для платежной системы Alatau с цифровой подписью
-        4. Создает запись платежной транзакции в базе данных
-        5. Связывает заявку с платежной транзакцией
+        1. Деактивирует все предыдущие платежные транзакции
+        2. Генерирует уникальный номер заказа и nonce
+        3. Создает DTO для платежной системы Alatau с цифровой подписью
+        4. Создает новую запись платежной транзакции в базе данных
+        5. Связывает заявку с новой транзакцией
 
-        В случае ошибки на этапе платежа, заявка остается в системе, но ответ содержит флаг is_success=False
+        В случае ошибки возвращает ответ с флагом is_success=False и сообщением об ошибке.
         """
-        # 1. Создадим заявку на бронирование
-        try:
-            dto = BookingFieldPartyRequestCDTO(
-                    status_id=DbValueConstants.BookingFieldPartyStatusCreatedAwaitingPaymentID,
-                    field_id=self.field_party.field_id,
-                    field_party_id=self.field_party.id,
-                    user_id=self.current_user.id,
-                    email=self.dto.email if self.dto.email else self.current_user.email,
-                    phone=self.dto.phone if self.dto.phone else self.current_user.phone,
-                    total_price=self.active_schedule.price,
-                    start_at=self.start_at,
-                    end_at=self.end_at,
-                    paid_until=datetime.now() + timedelta(hours=1)
-                )
-            self.booking_field_entity = await self.booking_field_party_request_repository.create(
-                self.booking_field_party_request_repository.model(**dto.dict())
+        # 1. Деактивируем старые платежки
+        # Деактивируем все платежки которые были инициированы ранее
+
+        old_payment_transactions = await self.booking_field_party_and_payment_transaction_repository.get_with_filters(
+            filters=[
+                self.booking_field_party_and_payment_transaction_repository.model.request_id == self.booking_field_entity.id
+            ],
+            options=self.booking_field_party_and_payment_transaction_repository.default_relationships()
+        )
+        # Находим и деактивируем платежки
+        if old_payment_transactions:
+            for payment_transaction_link in old_payment_transactions:
+                if payment_transaction_link.payment_transaction:
+                    # Деактивируем саму платежную транзакцию
+                    transaction = payment_transaction_link.payment_transaction
+                    transaction.is_active = False
+                    transaction.is_canceled = True
+                    transaction.is_paid = False
+                    payment_transaction_dto = PaymentTransactionCDTO.model_validate(transaction)
+                    await self.payment_transaction_repository.update(obj=transaction, dto=payment_transaction_dto)
+
+            # Деактивируем связи между заказом и транзакциями
+            await self.booking_field_party_and_payment_transaction_repository.deactivate_links_for_request(
+                request_id=self.booking_field_entity.id
             )
-            self.booking_field_entity = await self.booking_field_party_request_repository.get(
-                self.booking_field_entity.id,
-                options=self.booking_field_party_request_repository.default_relationships()
-            )
-
-            self.response.field_booking_request = BookingFieldPartyRequestWithRelationsRDTO.from_orm(self.booking_field_entity)
-        except Exception as exc:
-
-            raise AppExceptionResponse.bad_request(i18n.gettext('booking_field_not_created' + traceback.format_exc()))
-
         # 2. Создадим платежную транзакцию
         try:
             # Генерируем уникальный номер заказа для платежной системы
@@ -196,7 +201,7 @@ class CreateClientBookingFieldRequestCase(BaseUseCase[CreateBookingFieldPartyRes
             desc_text = f"Бронирование {self.field_party.title_ru} {self.dto.start_at}"[:50]
             self.order_dto = AlatauCreateResponseOrderDTO(
                 ORDER=self.unique_order,
-                AMOUNT=self.active_schedule.price,
+                AMOUNT=self.booking_field_entity.total_price,
                 DESC=desc_text,
                 EMAIL=self.booking_field_entity.email,
                 NONCE=nonce,
@@ -215,7 +220,7 @@ class CreateClientBookingFieldRequestCase(BaseUseCase[CreateBookingFieldPartyRes
                 transaction_type=DbValueConstants.PaymentBookingFieldType,
                 order=self.unique_order,
                 nonce=self.order_dto.NONCE,
-                amount=self.active_schedule.price,
+                amount=self.booking_field_entity.total_price,
                 currency="KZT",
                 merchant=app_config.merchant_id,
                 language="ru",
@@ -258,6 +263,7 @@ class CreateClientBookingFieldRequestCase(BaseUseCase[CreateBookingFieldPartyRes
             # Мягкая обработка ошибок платежной системы (не прерываем процесс)
             self.response.is_success = False
             self.response.message = traceback.format_exc()
+
 
 
 

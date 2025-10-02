@@ -6,6 +6,7 @@ from typing import Optional
 
 from app.adapters.dto.alatau.alatau_after_payment_dto import AlatauBackrefGetDTO
 from app.adapters.dto.pagination_dto import PaginationProductOrderWithRelationsRDTO, PaginationProductOrderItemWithRelationsRDTO
+from app.adapters.dto.product_order.full_product_order_dto import FullProductOrderRDTO
 from app.adapters.dto.product_order.product_order_dto import ProductOrderWithRelationsRDTO
 from app.adapters.dto.product_order_item.product_order_item_dto import ProductOrderItemWithRelationsRDTO
 from app.adapters.dto.product_order_response.product_order_response_dto import ProductOrderWithPaymentTransactionResponseDTO
@@ -59,7 +60,7 @@ class ProductOrderApi:
 
         self.router.get(
             "/client-my-order/{id}",
-            response_model=ProductOrderWithRelationsRDTO,
+            response_model=FullProductOrderRDTO,
             summary="Получить мой заказ по ID",
             description="Получение конкретного заказа пользователя по его идентификатору",
         )(self.get_my_order_by_id)
@@ -181,7 +182,7 @@ class ProductOrderApi:
         include_deleted: bool | None = AppQueryConstants.StandardOptionalBooleanQuery(),
         user: UserWithRelationsRDTO = Depends(check_client),
         db: AsyncSession = Depends(get_db),
-    ) -> ProductOrderWithRelationsRDTO:
+    ) -> FullProductOrderRDTO:
         """
         Получение конкретного заказа пользователя по ID.
 
