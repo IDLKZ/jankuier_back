@@ -203,10 +203,20 @@ class ProductOrderItemEventHandler(EntityEventHandler):
                     .where(
                         (ProductOrderItemEntity.order_id == target.order_id) &
                         (ProductOrderItemEntity.deleted_at.is_(None)) &
-                        (ProductOrderItemEntity.status_id != DbValueConstants.ProductOrderItemStatusCancelledAwaitingRefundID)
+                        (ProductOrderItemEntity.status_id != DbValueConstants.ProductOrderItemStatusCancelledRefundedID)
+                    )
+                    .scalar_subquery()
+                ),
+                refunded_total=(
+                    select(func.coalesce(func.sum(ProductOrderItemEntity.total_price), 0))
+                    .where(
+                        (ProductOrderItemEntity.order_id == target.order_id) &
+                        (ProductOrderItemEntity.deleted_at.is_(None)) &
+                        (ProductOrderItemEntity.status_id == DbValueConstants.ProductOrderItemStatusCancelledRefundedID)
                     )
                     .scalar_subquery()
                 )
+
             )
         )
 
