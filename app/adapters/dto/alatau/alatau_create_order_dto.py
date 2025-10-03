@@ -142,10 +142,13 @@ class AlatauCreateResponseOrderDTO(BaseModel):
 
     # --- сериализация для JSON (тот же формат, что в подписи)
     @field_serializer("AMOUNT")
-    def _serialize_amount(self, v: Optional[Decimal], _info):
+    def _serialize_amount(self, v: Optional[Decimal|int|str], _info):
         """Сериализатор для поля AMOUNT - применяет правила форматирования"""
         if v is None:
             return None
+        # Конвертируем в Decimal если еще не Decimal
+        if not isinstance(v, Decimal):
+            v = Decimal(str(v))
         return self._format_amount_from_decimal(v)
 
 
