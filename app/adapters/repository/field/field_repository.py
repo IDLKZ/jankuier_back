@@ -14,6 +14,5 @@ class FieldRepository(BaseRepository[FieldEntity]):
     def default_relationships(self) -> list[Any]:
         return [
             selectinload(self.model.image),
-            selectinload(self.model.city),
-            selectinload(self.model.field_parties),
+            selectinload(self.model.city)
         ]
