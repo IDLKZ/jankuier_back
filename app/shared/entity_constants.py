@@ -76,3 +76,9 @@ class AppEntityNames:
     BookingFieldPartyStatusEntityName = "BookingFieldPartyStatusEntity"
     BookingFieldPartyRequestEntityName = "BookingFieldPartyRequestEntity"
     BookingFieldPartyAndPaymentTransactionEntityName = "BookingFieldPartyAndPaymentTransactionEntity"
+
+    # Notification entities
+    TopicNotificationEntityName = "TopicNotificationEntity"
+    FirebaseNotificationEntityName = "FirebaseNotificationEntity"
+    NotificationEntityName = "NotificationEntity"
+    ReadNotificationEntityName = "ReadNotificationEntity"

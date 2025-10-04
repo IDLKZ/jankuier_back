@@ -108,3 +108,27 @@ class UserEntity(Base):
             cascade="all, delete-orphan"
         )
     )
+
+    firebase_notifications: Mapped[list[AppEntityNames.FirebaseNotificationEntityName]] = (
+        DbRelationshipConstants.one_to_many(
+            target=AppEntityNames.FirebaseNotificationEntityName,
+            back_populates="user",
+            foreign_keys=f"{AppEntityNames.FirebaseNotificationEntityName}.user_id",
+        )
+    )
+
+    notifications: Mapped[list[AppEntityNames.NotificationEntityName]] = (
+        DbRelationshipConstants.one_to_many(
+            target=AppEntityNames.NotificationEntityName,
+            back_populates="user",
+            foreign_keys=f"{AppEntityNames.NotificationEntityName}.user_id",
+        )
+    )
+
+    read_notifications: Mapped[list[AppEntityNames.ReadNotificationEntityName]] = (
+        DbRelationshipConstants.one_to_many(
+            target=AppEntityNames.ReadNotificationEntityName,
+            back_populates="user",
+            foreign_keys=f"{AppEntityNames.ReadNotificationEntityName}.user_id",
+        )
+    )

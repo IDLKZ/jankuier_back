@@ -118,6 +118,22 @@ class DbValueConstants:
     BookingFieldPartyStatusCancelledRefundedID = 5
     BookingFieldPartyStatusCancelledRefundedValue = "cancelled_refunded"
 
+    # Топики уведомлений
+    TopicNotificationAlertID = 1
+    TopicNotificationAlertValue = "alert"
+
+    TopicNotificationShopID = 2
+    TopicNotificationShopValue = "shop"
+
+    TopicNotificationTicketsID = 3
+    TopicNotificationTicketsValue = "tickets"
+
+    TopicNotificationFieldsID = 4
+    TopicNotificationFieldsValue = "fields"
+
+    TopicNotificationPaymentID = 5
+    TopicNotificationPaymentValue = "payment"
+
     @staticmethod
     def get_value(title: str):
         return slugify(

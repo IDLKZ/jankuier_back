@@ -140,3 +140,4 @@ Thumbs.db
 app/static/upload
 celerybeat-schedule*
 **/logs/
+firebase-admin.json

@@ -11,6 +11,7 @@ from app.core.role_docs import setup_role_documentation
 from app.events import register_events
 from app.infrastructure.app_config import app_config
 from app.infrastructure.redis_client import check_redis_connection
+from app.infrastructure.service.firebase_service.firebase_service import initialize_firebase
 from app.middleware.auth_wrapper_core import AuthWrapper
 from app.middleware.registry_middleware import registry_middleware
 from app.routes.registry_route import enable_routes
@@ -30,6 +31,7 @@ async def lifespan(app: FastAPI):
     await run_seeders()
     register_events()
     check_redis_connection()
+    await initialize_firebase()
     yield
 
 

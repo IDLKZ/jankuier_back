@@ -20,8 +20,10 @@ from app.entities.field_party_schedule_settings_entity import (
     FieldPartyScheduleSettingsEntity,
 )
 from app.entities.file_entity import FileEntity
+from app.entities.firebase_notification_entity import FirebaseNotificationEntity
 from app.entities.modification_type_entity import ModificationTypeEntity
 from app.entities.modification_value_entity import ModificationValueEntity
+from app.entities.notification_entity import NotificationEntity
 from app.entities.payment_transaction_entity import PaymentTransactionEntity
 from app.entities.payment_transaction_status_entity import PaymentTransactionStatusEntity
 from app.entities.permission_entity import PermissionEntity
@@ -39,6 +41,7 @@ from app.entities.product_variant_entity import ProductVariantEntity
 from app.entities.product_variant_modification_entity import (
     ProductVariantModificationEntity,
 )
+from app.entities.read_notification_entity import ReadNotificationEntity
 from app.entities.request_material_entity import RequestMaterialEntity
 from app.entities.request_to_academy_group_entity import RequestToAcademyGroupEntity
 from app.entities.role_entity import RoleEntity
@@ -48,6 +51,7 @@ from app.entities.student_entity import StudentEntity
 from app.entities.ticketon_order_and_payment_transaction_entity import TicketonOrderAndPaymentTransactionEntity
 from app.entities.ticketon_order_entity import TicketonOrderEntity
 from app.entities.ticketon_order_status_entity import TicketonOrderStatusEntity
+from app.entities.topic_notification_entity import TopicNotificationEntity
 from app.entities.user_code_verification_entity import UserCodeVerificationEntity
 from app.entities.user_entity import UserEntity
 from app.entities.user_verification_entity import UserVerificationEntity
@@ -103,5 +107,9 @@ __all__ = [
     BookingFieldPartyStatusEntity.__name__,
     BookingFieldPartyRequestEntity.__name__,
     BookingFieldPartyAndPaymentTransactionEntity.__name__,
+    TopicNotificationEntity.__name__,
+    FirebaseNotificationEntity.__name__,
+    NotificationEntity.__name__,
+    ReadNotificationEntity.__name__,
 ]
 

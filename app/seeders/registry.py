@@ -20,6 +20,7 @@ from app.seeders.ticketon_order_status.ticketon_order_status_seeder import Ticke
 from app.seeders.product_order_status.product_order_status_seeder import ProductOrderStatusSeeder
 from app.seeders.product_order_item_status.product_order_item_status_seeder import ProductOrderItemStatusSeeder
 from app.seeders.booking_field_party_status.booking_field_party_status_seeder import BookingFieldPartyStatusSeeder
+from app.seeders.topic_notification.topic_notification_seeder import TopicNotificationSeeder
 
 seeders = [
     RoleSeeder(),
@@ -28,6 +29,7 @@ seeders = [
     ProductOrderStatusSeeder(),
     ProductOrderItemStatusSeeder(),
     BookingFieldPartyStatusSeeder(),
+    TopicNotificationSeeder(),
     UserSeeder(),
     CountrySeeder(),
     SportSeeder(),

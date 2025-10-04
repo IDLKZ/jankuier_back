@@ -53,4 +53,9 @@ class AppTableNames:
     BookingFieldPartyStatusTableName = "booking_field_party_statuses"
     BookingFieldPartyRequestTableName = "booking_field_party_requests"
     BookingFieldPartyAndPaymentTransactionTableName = "booking_field_party_and_payment_transactions"
+    FirebaseNotificationTableName = "firebase_notifications"
+    TopicNotificationTableName = "topic_notifications"
+    NotificationTableName = "notifications"
+    UserNotificationTableName = "user_notifications"
+    ReadNotificationTableName = "read_notifications"
 

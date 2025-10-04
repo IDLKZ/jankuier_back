@@ -128,3 +128,11 @@ class FileEntity(Base):
             foreign_keys=f"{AppEntityNames.FieldPartyEntityName}.image_id",
         )
     )
+
+    topic_notifications: Mapped[list[AppEntityNames.TopicNotificationEntityName]] = (
+        DbRelationshipConstants.one_to_many(
+            target=AppEntityNames.TopicNotificationEntityName,
+            back_populates="image",
+            foreign_keys=f"{AppEntityNames.TopicNotificationEntityName}.image_id",
+        )
+    )

@@ -315,3 +315,27 @@ class PaginationBookingFieldPartyAndPaymentTransactionWithRelationsRDTO(BasePage
 
     class Config:
         from_attributes = True
+
+
+class PaginationFirebaseNotificationWithRelationsRDTO(BasePageModel):
+    """Пагинированный ответ для списка Firebase уведомлений с relationships"""
+    items: list[Any]
+
+    class Config:
+        from_attributes = True
+
+
+class PaginationNotificationWithRelationsRDTO(BasePageModel):
+    """Пагинированный ответ для списка уведомлений с relationships"""
+    items: list[Any]
+
+    class Config:
+        from_attributes = True
+
+
+class PaginationReadNotificationWithRelationsRDTO(BasePageModel):
+    """Пагинированный ответ для списка прочитанных уведомлений с relationships"""
+    items: list[Any]
+
+    class Config:
+        from_attributes = True

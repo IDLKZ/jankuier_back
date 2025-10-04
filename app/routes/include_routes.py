@@ -60,6 +60,10 @@ from app.adapters.api.test.test_api import TestApi
 from app.adapters.api.ticketon.ticketon_api import TicketonApi
 from app.adapters.api.user.user_api import UserApi
 from app.adapters.api.user_code_verification.user_code_verification_api import UserCodeVerificationApi
+from app.adapters.api.topic_notification.topic_notification_api import TopicNotificationApi
+from app.adapters.api.firebase_notification.firebase_notification_api import FirebaseNotificationApi
+from app.adapters.api.notification.notification_api import NotificationApi
+from app.adapters.api.read_notification.read_notification_api import ReadNotificationApi
 from app.shared.route_constants import RoutePathConstants
 
 
@@ -345,4 +349,29 @@ def include_routers(app) -> None:
         BookingFieldPartyAndPaymentTransactionApi().router,
         prefix=f"{RoutePathConstants.BasePathName}/booking-field-party-and-payment-transaction",
         tags=["Связи бронирований и транзакций"],
+    )
+
+    # Notification routes
+    app.include_router(
+        TopicNotificationApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}/topic-notification",
+        tags=["Топики уведомлений"],
+    )
+
+    app.include_router(
+        FirebaseNotificationApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}/firebase-notification",
+        tags=["Firebase уведомления"],
+    )
+
+    app.include_router(
+        NotificationApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}/notification",
+        tags=["Уведомления"],
+    )
+
+    app.include_router(
+        ReadNotificationApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}/read-notification",
+        tags=["Прочитанные уведомления"],
     )

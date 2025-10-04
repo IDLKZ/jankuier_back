@@ -45,6 +45,10 @@ from app.routes.ticketon_order.ticketon_order_route import assign_ticketon_order
 from app.routes.user.user_route import assign_user_roles
 from app.routes.user_cart.user_cart_route import assign_user_cart_roles
 from app.routes.user_code_verification.user_code_verification_route import assign_user_code_verification_roles
+from app.routes.notification.notification_route import assign_notification_roles
+from app.routes.read_notification.read_notification_route import assign_read_notification_roles
+from app.routes.topic_notification.topic_notification_route import assign_topic_notification_roles
+from app.routes.firebase_notification.firebase_notification_route import assign_firebase_notification_roles
 
 
 def assign_roles_to_all_routes(app) -> None:
@@ -124,3 +128,9 @@ def assign_roles_to_all_routes(app) -> None:
     assign_booking_field_party_status_roles(app)
     assign_booking_field_party_request_roles(app)
     assign_booking_field_party_and_payment_transaction_roles(app)
+
+    # Notification routes
+    assign_notification_roles(app)
+    assign_read_notification_roles(app)
+    assign_topic_notification_roles(app)
+    assign_firebase_notification_roles(app)
