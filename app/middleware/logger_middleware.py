@@ -16,20 +16,19 @@ from app.infrastructure.app_config import app_config
 """
 logger.remove()
 logger.add(
-    app_config.logger_filepath,
-    rotation="100 MB",
-    retention="30 days",
-    compression="zip",
-    level="INFO",
-    serialize=False,
-    enqueue=True,
+    "logs/{time:YYYY-MM-DD}.json",   # путь + имя файла по дате
+    rotation="1 day",                # каждый день новый файл
+    retention="30 days",             # хранить 30 дней
+    compression="zip",               # старые сжимать
+    level="INFO",                    # уровень логов
+    serialize=True,                  # JSON формат
+    enqueue=True,                    # для многопоточности
 )
 if app_config.logger_stdout:
-    # Лог в stdout (консоль)
     logger.add(
         sink=sys.stdout,
         level=app_config.logger_level,
-        serialize=app_config.logger_serializer,
+        serialize=False,             # в консоль обычный формат
         colorize=app_config.logger_colorize,
         enqueue=app_config.logger_enqueue,
         backtrace=app_config.logger_backtrace,
