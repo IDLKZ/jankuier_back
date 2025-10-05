@@ -54,7 +54,7 @@ class ProductOrderRDTO(ProductOrderDTO):
     total_price: DTOConstant.StandardPriceField("Общая стоимость")
     refunded_total: DTOConstant.StandardZeroDecimalField("Сумма возврата")
 
-    order_items_snapshot: DTOConstant.StandardJSONField("Снапшот товаров")
+    order_items_snapshot: DTOConstant.StandardNullableJSONField("Снапшот товаров")
 
     is_active: DTOConstant.StandardBooleanTrueField("Активен")
     is_canceled: DTOConstant.StandardBooleanFalseField("Отменён")

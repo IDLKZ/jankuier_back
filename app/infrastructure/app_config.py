@@ -142,6 +142,9 @@ class AppConfiguration(BaseSettings):
     smtp_login: str = Field(default="", env="SMTP_LOGIN")
     smtp_password: str = Field(default="", env="SMTP_PASSWORD")
 
+    #Scheduler
+    scheduler_use_local:bool = Field(default=False, env="SCHEDULER_USE_LOCAL")
+
     @property
     def get_connection_url(self) -> str:
         """Get the connection URL for the chosen database."""
