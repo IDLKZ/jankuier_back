@@ -19,6 +19,7 @@ from app.core.app_exception_response import AppExceptionResponse
 from app.entities import BookingFieldPartyRequestEntity, PaymentTransactionEntity
 from app.i18n.i18n_wrapper import i18n
 from app.infrastructure.app_config import app_config
+from app.infrastructure.service.firebase_service.firebase_service import FireBaseService
 from app.shared.db_value_constants import DbValueConstants
 from app.use_case.base_case import BaseUseCase, T
 
@@ -54,6 +55,7 @@ class AcceptPaymentForBookingFieldRequestCase(BaseUseCase[AcceptPaymentForBookin
         self.booking_field_party_request_repository = BookingFieldPartyRequestRepository(db)
         self.payment_transaction_repository = PaymentTransactionRepository(db)
         self.booking_field_party_and_payment_transaction_repository = BookingFieldPartyAndPaymentTransactionRepository(db)
+        self.firebase_service = FireBaseService(db)
 
         self.dto:AlatauBackrefGetDTO|None = None
         self.should_update:bool = False
@@ -189,6 +191,7 @@ class AcceptPaymentForBookingFieldRequestCase(BaseUseCase[AcceptPaymentForBookin
                     obj=self.current_booking_field_party_request,
                     dto=booking_field_party_request_cdto
                 )
+                await self.firebase_service.send_booking_field_notification(self.current_booking_field_party_request.user_id, self.current_booking_field_party_request)
                 self.current_booking_field_party_request = await self.booking_field_party_request_repository.get(
                     self.current_booking_field_party_request.id,
                     include_deleted_filter=True,

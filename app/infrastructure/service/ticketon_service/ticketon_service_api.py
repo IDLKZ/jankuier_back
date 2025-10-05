@@ -180,7 +180,6 @@ class TicketonServiceAPI:
         # Используем Redis только если указан place
         cached_data = None
         cache_key = None
-
         if parameter.place is not None:
             cache_key = self._get_cache_key(
                 "shows",
@@ -192,16 +191,20 @@ class TicketonServiceAPI:
             cached_data = await self._get_from_cache(cache_key, TicketonShowsRedisStore)
             if cached_data and cached_data.data.shows:
                 if cached_data.last_updated + self._redis_ttl > datetime.now():
+                    print("cached!")
                     return cached_data.data
         locale = parameter.i18n
         if(locale == "kk"):
             locale = "kz"
+        place = parameter.place
+        if not place:
+            place = 59
         # Запрос к API
         params = {
             f"type[]": parameter.type,
             f"with[]": parameter.withParam,
             "i18n": locale,
-            "place[]": 59
+            "place[]": place
         }
 
         # Добавляем place только если он указан
@@ -223,7 +226,7 @@ class TicketonServiceAPI:
                 data=data,
                 last_updated=datetime.now()
             )
-            self._set_cache(cache_key, redis_store)
+            self._set_cache(cache_key=cache_key,data=redis_store,ttl=timedelta(minutes=30))
 
         return data
 

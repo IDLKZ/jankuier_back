@@ -62,6 +62,7 @@ class TicketonApi:
         self,
         place: Optional[int] = Query(
             default=None,
+            alias="place",
             description="ID площадки (place[]) - идентификатор места проведения",
             example=59
         ),
@@ -104,6 +105,7 @@ class TicketonApi:
         """
         try:
             # Создаём объект параметров
+            print(place)
             parameter = TicketonGetShowsParameterDTO(
                 place=place,
                 type=event_type,

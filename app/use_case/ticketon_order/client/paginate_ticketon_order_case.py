@@ -3,6 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.adapters.dto.pagination_dto import PaginationTicketonOrderWithRelationsRDTO
 from app.adapters.filters.ticketon_order.ticketon_order_pagination_filter import TicketonOrderPaginationFilter
 from app.adapters.repository.ticketon_order.ticketon_order_repository import TicketonOrderRepository
+from app.core.app_exception_response import AppExceptionResponse
 from app.use_case.base_case import BaseUseCase
 from app.adapters.dto.ticketon_order.ticketon_order_dto import TicketonOrderWithRelationsRDTO
 
@@ -28,7 +29,7 @@ class PaginateTicketonOrderCase(BaseUseCase[PaginationTicketonOrderWithRelations
         self.repository = TicketonOrderRepository(db)
 
     async def execute(
-        self, filter: TicketonOrderPaginationFilter, user_id: int|None = None
+        self, filter: TicketonOrderPaginationFilter, user_id: int
     ) -> PaginationTicketonOrderWithRelationsRDTO:
         """
         Выполняет операцию пагинации заказов Ticketon пользователя.
@@ -40,12 +41,11 @@ class PaginateTicketonOrderCase(BaseUseCase[PaginationTicketonOrderWithRelations
         Returns:
             PaginationTicketonOrderWithRelationsRDTO: Пагинированный результат с заказами пользователя.
         """
-        #await self.validate(user_id=user_id)
+        await self.validate(user_id=user_id)
         
         # Добавляем фильтр по пользователю к существующим фильтрам
         user_filters = filter.apply()
-        #user_filters.append(self.repository.model.user_id == user_id)
-        
+        user_filters.append(self.repository.model.user_id == user_id)
         models = await self.repository.paginate(
             dto=TicketonOrderWithRelationsRDTO,
             page=filter.page,
@@ -68,4 +68,5 @@ class PaginateTicketonOrderCase(BaseUseCase[PaginationTicketonOrderWithRelations
         # Здесь можно добавить дополнительные проверки, например:
         # - Проверка существования пользователя
         # - Проверка прав доступа
-        pass
+        if user_id is None:
+            raise AppExceptionResponse.bad_request("User ID is required")

@@ -79,13 +79,12 @@ class GetClientNotificationByIdCase(BaseUseCase[NotificationWithRelationsRDTO]):
         # ВНИМАНИЕ: id НЕ используется в фильтре! Ищется ПЕРВОЕ доступное уведомление
         self.model = await self.repository.get_first_with_filters(
             filters=[
+                self.repository.model.id == id,
                 or_(
-                    # Личное уведомление для конкретного пользователя
                     self.repository.model.user_id == user.id,
-                    # ИЛИ общее уведомление по топикам (user_id = NULL, но есть топики)
                     and_(
                         self.repository.model.user_id.is_(None),
-                        self.repository.model.topics.isnot(None)
+                        self.repository.model.topics.isnot(None),
                     )
                 )
             ],

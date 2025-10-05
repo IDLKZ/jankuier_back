@@ -22,6 +22,7 @@ from app.core.app_exception_response import AppExceptionResponse
 from app.entities import ProductOrderEntity, PaymentTransactionEntity, ProductOrderItemHistoryEntity
 from app.i18n.i18n_wrapper import i18n
 from app.infrastructure.app_config import app_config
+from app.infrastructure.service.firebase_service.firebase_service import FireBaseService
 from app.shared.db_value_constants import DbValueConstants
 from app.use_case.base_case import BaseUseCase
 
@@ -121,6 +122,7 @@ class AcceptPaymentProductOrderCase(BaseUseCase[ProductOrderWithPaymentTransacti
         self.product_order_item_history_repository = ProductOrderItemHistoryRepository(db)
         self.payment_transaction_repository = PaymentTransactionRepository(db)
         self.product_order_and_payment_transaction_repository = ProductOrderAndPaymentTransactionRepository(db)
+        self.firebase_service = FireBaseService(db)
 
         self.current_product_order: ProductOrderEntity | None = None
         self.payment_transaction_entity: PaymentTransactionEntity | None = None  # Платежная транзакция
@@ -221,6 +223,7 @@ class AcceptPaymentProductOrderCase(BaseUseCase[ProductOrderWithPaymentTransacti
                         obj=self.current_product_order,
                         dto=product_order_cdto
                     )
+                    await self.firebase_service.send_payment_product_successfull_notification(self.current_product_order.user_id, self.current_product_order)
 
                     # Обновляем is_paid = True для всех элементов заказа при успешной оплате
                     order_items = await self.product_order_item_repository.get_with_filters(

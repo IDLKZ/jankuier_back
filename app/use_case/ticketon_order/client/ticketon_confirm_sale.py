@@ -21,6 +21,7 @@ from app.entities import TicketonOrderEntity, PaymentTransactionEntity, Ticketon
 from app.helpers.alatau_helper import get_alatau_error_message
 from app.i18n.i18n_wrapper import i18n
 from app.infrastructure.app_config import app_config
+from app.infrastructure.service.firebase_service.firebase_service import FireBaseService
 from app.infrastructure.service.ticketon_service.ticketon_service_api import TicketonServiceAPI
 from app.shared.db_value_constants import DbValueConstants
 from app.use_case.base_case import BaseUseCase, T
@@ -99,6 +100,7 @@ class TicketonConfirmCase(BaseUseCase[AlatauBackrefResponseDTO]):
         self.ticketon_order_repository = TicketonOrderRepository(db)
         self.payment_transaction_repository = PaymentTransactionRepository(db)
         self.ticketon_order_and_payment_transaction_repository = TicketonOrderAndPaymentTransactionRepository(db)
+        self.firebase_service = FireBaseService(db)
         #Services
         self.ticketon_service_api = TicketonServiceAPI()
         #DTO
@@ -235,6 +237,7 @@ class TicketonConfirmCase(BaseUseCase[AlatauBackrefResponseDTO]):
                     options=self.ticketon_order_repository.default_relationships(),
                     include_deleted_filter=True,
                 )
+                await self.firebase_service.send_ticketon_notification(user_id=self.ticketon_order_entity.user_id, ticketon=self.ticketon_order_entity)
             except Exception as e:
                 error_message = str(e)
 
