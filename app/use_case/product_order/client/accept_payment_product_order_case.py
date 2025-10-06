@@ -4,9 +4,11 @@ import traceback
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.dto.alatau.alatau_after_payment_dto import AlatauBackrefGetDTO
-from app.adapters.dto.payment_transaction.payment_transaction_dto import PaymentTransactionCDTO, PaymentTransactionWithRelationsRDTO
+from app.adapters.dto.payment_transaction.payment_transaction_dto import PaymentTransactionCDTO, \
+    PaymentTransactionWithRelationsRDTO
 from app.adapters.dto.product_order.product_order_dto import ProductOrderCDTO, ProductOrderWithRelationsRDTO
-from app.adapters.dto.product_order_item.product_order_item_dto import ProductOrderItemWithRelationsRDTO, ProductOrderItemCDTO
+from app.adapters.dto.product_order_item.product_order_item_dto import ProductOrderItemWithRelationsRDTO, \
+    ProductOrderItemCDTO
 from app.adapters.dto.product_order_response.product_order_response_dto import \
     ProductOrderWithPaymentTransactionResponseDTO
 from app.adapters.dto.user.user_dto import UserWithRelationsRDTO
@@ -128,7 +130,7 @@ class AcceptPaymentProductOrderCase(BaseUseCase[ProductOrderWithPaymentTransacti
         self.payment_transaction_entity: PaymentTransactionEntity | None = None  # Платежная транзакция
 
         self.response: ProductOrderWithPaymentTransactionResponseDTO = ProductOrderWithPaymentTransactionResponseDTO()
-        self.dto: AlatauBackrefGetDTO|None = None
+        self.dto: AlatauBackrefGetDTO | None = None
         self.paid: bool = False
         self.should_update: bool = False
 
@@ -152,12 +154,12 @@ class AcceptPaymentProductOrderCase(BaseUseCase[ProductOrderWithPaymentTransacti
             id=self.payment_transaction_entity.id,
             options=self.payment_transaction_repository.default_relationships())
         self.response.product_order = ProductOrderWithRelationsRDTO.from_orm(self.current_product_order)
-        self.response.product_order_items = [ProductOrderItemWithRelationsRDTO.from_orm(item) for item in self.current_product_order_items]
-        self.response.payment_transaction = PaymentTransactionWithRelationsRDTO.from_orm(self.payment_transaction_entity)
+        self.response.product_order_items = [ProductOrderItemWithRelationsRDTO.from_orm(item) for item in
+                                             self.current_product_order_items]
+        self.response.payment_transaction = PaymentTransactionWithRelationsRDTO.from_orm(
+            self.payment_transaction_entity)
         self.response.is_success = self.paid
         return self.response
-
-
 
     async def validate(self) -> None:
         if not self.dto:
@@ -189,7 +191,6 @@ class AcceptPaymentProductOrderCase(BaseUseCase[ProductOrderWithPaymentTransacti
 
         if self.current_product_order.status_id == DbValueConstants.ProductOrderStatusCreatedAwaitingPaymentID:
             self.should_update = True
-
 
     async def transform(self) -> None:
         try:
@@ -223,7 +224,8 @@ class AcceptPaymentProductOrderCase(BaseUseCase[ProductOrderWithPaymentTransacti
                         obj=self.current_product_order,
                         dto=product_order_cdto
                     )
-                    await self.firebase_service.send_payment_product_successfull_notification(self.current_product_order.user_id, self.current_product_order)
+                    await self.firebase_service.send_payment_product_successfull_notification(
+                        self.current_product_order.user_id, self.current_product_order)
 
                     # Обновляем is_paid = True для всех элементов заказа при успешной оплате
                     order_items = await self.product_order_item_repository.get_with_filters(
@@ -244,17 +246,6 @@ class AcceptPaymentProductOrderCase(BaseUseCase[ProductOrderWithPaymentTransacti
                         #             status_id=DbValueConstants.ProductOrderItemStatusPaidAwaitingConfirmationID
                         #     ))
 
-
-
-                self.response.message = "OK"
+                self.response.message = self.dto.res_desc
         except Exception as exc:
-            self.response.message = traceback.print_exc()
-
-
-
-
-
-
-
-
-
+            traceback.print_exc()
