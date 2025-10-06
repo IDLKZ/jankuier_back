@@ -40,7 +40,7 @@ class UpdatePasswordCase(BaseUseCase[bool]):
         # Проверяем, что пользователь существует
         self.model = await self.repository.get(id=self.user_id, include_deleted_filter=True)
         if not self.model:
-            raise AppExceptionResponse.not_found(
+            raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("user_not_found")
             )
 

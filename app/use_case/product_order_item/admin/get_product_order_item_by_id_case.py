@@ -86,7 +86,7 @@ class GetProductOrderItemByIdCase(BaseUseCase[ProductOrderItemWithRelationsRDTO]
         )
 
         if not item:
-            raise AppExceptionResponse.not_found(
+            raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("product_order_item_not_found")
             )
 

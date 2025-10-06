@@ -106,7 +106,7 @@ class UpdateProductGalleryCase(BaseUseCase[ProductGalleryWithRelationsRDTO]):
         # Проверка существования изображения галереи товара
         self.model = await self.repository.get(id)
         if not self.model:
-            raise AppExceptionResponse.not_found(message=i18n.gettext("not_found"))
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("not_found"))
 
         # Проверка существования варианта товара (если указан новый)
         if dto.variant_id is not None:

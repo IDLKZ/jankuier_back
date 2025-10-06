@@ -21,4 +21,4 @@ class GetUserByIdCase(BaseUseCase[UserWithRelationsRDTO]):
             id, options=self.repository.default_relationships()
         )
         if not self.model:
-            raise AppExceptionResponse.not_found(message=i18n.gettext("user_not_found"))
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("user_not_found"))

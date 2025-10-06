@@ -32,4 +32,4 @@ class GetFirebaseNotificationByIdCase(BaseUseCase[FirebaseNotificationWithRelati
             options=self.repository.default_relationships(),
         )
         if not self.model:
-            raise AppExceptionResponse.not_found(message=i18n.gettext("not_found"))
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("not_found"))

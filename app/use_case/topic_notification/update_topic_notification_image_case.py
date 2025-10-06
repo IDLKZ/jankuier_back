@@ -43,7 +43,7 @@ class UpdateTopicNotificationImageCase(BaseUseCase[TopicNotificationWithRelation
     async def validate(self, id: int, file: UploadFile) -> None:
         self.model = await self.repository.get(id)
         if not self.model:
-            raise AppExceptionResponse.not_found(message=i18n.gettext("not_found"))
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("not_found"))
 
         if not file:
             raise AppExceptionResponse.bad_request(

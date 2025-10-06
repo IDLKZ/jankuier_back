@@ -40,7 +40,7 @@ class UpdateUserCase(BaseUseCase[UserWithRelationsRDTO]):
     ) -> None:
         self.model = await self.repository.get(id)
         if not self.model:
-            raise AppExceptionResponse.not_found(message=f"{i18n.gettext('not_found')}")
+            raise AppExceptionResponse.bad_request(message=f"{i18n.gettext('not_found')}")
         user = await self.repository.get_first_with_filters(
             filters=[
                 or_(

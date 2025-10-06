@@ -159,7 +159,7 @@ class BaseRepository(Generic[T]):
         """Удаление объекта. Если есть поле deleted_at — мягкое удаление."""
         obj = await self.get(id, include_deleted_filter=True)
         if not obj:
-            raise AppExceptionResponse.not_found(message="Не найдено")
+            raise AppExceptionResponse.bad_request(message="Не найдено")
 
         if hasattr(obj, "deleted_at") and not force_delete:
             setattr(obj, "deleted_at", datetime.utcnow())

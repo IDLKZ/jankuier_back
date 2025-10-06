@@ -71,4 +71,4 @@ class GetFieldPartyByIdCase(BaseUseCase[FieldPartyWithRelationsRDTO]):
             include_deleted_filter=True,
         )
         if not self.model:
-            raise AppExceptionResponse.not_found(message=i18n.gettext("not_found"))
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("not_found"))

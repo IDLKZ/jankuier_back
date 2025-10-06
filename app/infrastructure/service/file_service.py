@@ -157,7 +157,7 @@ class FileService:
         try:
             existing_file = await self.db.get(FileEntity, file_id)
             if not existing_file:
-                raise AppExceptionResponse.not_found(message=i18n.gettext("file_not_found"))
+                raise AppExceptionResponse.bad_request(message=i18n.gettext("file_not_found"))
 
             if os.path.exists(existing_file.file_path):
                 os.remove(existing_file.file_path)
@@ -198,7 +198,7 @@ class FileService:
         """
         file_record = await self.db.get(FileEntity, file_id)
         if not file_record or not os.path.exists(file_record.file_path):
-            raise AppExceptionResponse.not_found(message="Файл не найден")
+            raise AppExceptionResponse.bad_request(message="Файл не найден")
 
         try:
             with open(file_record.file_path, "rb") as f:
@@ -218,7 +218,7 @@ class FileService:
         """
         file_record = await self.db.get(FileEntity, file_id)
         if not file_record:
-            raise AppExceptionResponse.not_found(message="Файл не найден")
+            raise AppExceptionResponse.bad_request(message="Файл не найден")
 
         return file_record.file_path
 

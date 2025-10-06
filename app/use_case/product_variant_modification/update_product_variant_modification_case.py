@@ -95,7 +95,7 @@ class UpdateProductVariantModificationCase(
         # Проверка существования модификации варианта товара
         self.model = await self.repository.get(id)
         if not self.model:
-            raise AppExceptionResponse.not_found(message=i18n.gettext("not_found"))
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("not_found"))
 
         # Проверка существования варианта товара
         if (await self.product_variant_repository.get(dto.variant_id)) is None:

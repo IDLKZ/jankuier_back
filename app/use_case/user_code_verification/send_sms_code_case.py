@@ -107,7 +107,7 @@ class SendSmsCodeCase(BaseUseCase[UserCodeVerificationResultRDTO]):
             ]
         )
         if not user:
-            raise AppExceptionResponse.not_found(
+            raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("user_not_found")
             )
 

@@ -126,7 +126,7 @@ class CreateClientBookingFieldRequestCase(BaseUseCase[CreateBookingFieldPartyRes
             options=self.field_party_repository.default_relationships()
         )
         if not self.field_party:
-            raise AppExceptionResponse.not_found(i18n.gettext('field_party_not_found'))
+            raise AppExceptionResponse.bad_request(i18n.gettext('field_party_not_found'))
         if self.field_party.is_active is False:
             raise AppExceptionResponse.bad_request(i18n.gettext('field_party_is_not_active'))
 

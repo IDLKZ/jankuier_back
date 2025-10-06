@@ -39,12 +39,12 @@ class UpdateFirebaseNotificationCase(BaseUseCase[FirebaseNotificationWithRelatio
         # Проверка существования записи
         self.model = await self.repository.get(id)
         if not self.model:
-            raise AppExceptionResponse.not_found(message=i18n.gettext("not_found"))
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("not_found"))
 
         # Проверка существования пользователя
         user = await self.user_repository.get(dto.user_id)
         if not user:
-            raise AppExceptionResponse.not_found(
+            raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("user_not_found")
             )
 
