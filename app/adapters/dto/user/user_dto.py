@@ -27,7 +27,7 @@ class UserCDTO(BaseModel):
 
     email: DTOConstant.StandardEmailField(description="Электронная почта")
     phone: DTOConstant.StandardPhoneField(description="Телефон")
-    username: DTOConstant.StandardUniqueValueField(
+    username: DTOConstant.StandardLoginField(
         description="Уникальное имя пользователя"
     )
     sex: DTOConstant.StandardNullableIntegerField(
