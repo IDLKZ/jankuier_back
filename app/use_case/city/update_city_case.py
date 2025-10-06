@@ -80,7 +80,7 @@ class UpdateCityCase(BaseUseCase[CityWithRelationsRDTO]):
         # Проверка существования города
         self.model = await self.repository.get(id)
         if not self.model:
-            raise AppExceptionResponse.not_found(message=i18n.gettext("not_found"))
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("not_found"))
 
         # Проверка существования страны
         country = await self.country_repository.get(dto.country_id)

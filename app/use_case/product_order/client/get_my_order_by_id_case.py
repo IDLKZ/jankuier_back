@@ -103,7 +103,7 @@ class GetMyOrderByIdCase(BaseUseCase[FullProductOrderRDTO]):
         )
 
         if not order:
-            raise AppExceptionResponse.not_found(
+            raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("product_order_not_found")
             )
 

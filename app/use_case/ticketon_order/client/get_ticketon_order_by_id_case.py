@@ -63,7 +63,7 @@ class GetTicketonOrderByIdCase(BaseUseCase[TicketonOrderWithRelationsRDTO]):
             options=self.repository.default_relationships()
         )
         if not self.model:
-            raise AppExceptionResponse.not_found(message=i18n.gettext("not_found"))
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("not_found"))
         
         # Проверяем, что заказ принадлежит запрашивающему пользователю
         # if self.model.user_id != user_id:

@@ -106,4 +106,4 @@ class GetFullAcademyByIdCase(BaseUseCase[GetFullAcademyDTO]):
             include_deleted_filter=True,
         )
         if not self.academy_model:
-            raise AppExceptionResponse.not_found(message=i18n.gettext("not_found"))
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("not_found"))

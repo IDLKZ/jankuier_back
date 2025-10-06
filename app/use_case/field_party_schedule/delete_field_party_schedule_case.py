@@ -70,7 +70,7 @@ class DeleteFieldPartyScheduleCase(BaseUseCase[bool]):
         # Проверка существования расписания
         model = await self.repository.get(id, include_deleted_filter=True)
         if not model:
-            raise AppExceptionResponse.not_found(
+            raise AppExceptionResponse.bad_request(
                 i18n.gettext("field_party_schedule_not_found")
             )
 

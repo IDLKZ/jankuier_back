@@ -22,4 +22,4 @@ class GetProductOrderItemStatusByIdCase(BaseUseCase[ProductOrderItemStatusWithRe
     async def validate(self, id: int) -> None:
         self.model = await self.repository.get(id, include_deleted_filter=True,options=self.repository.default_relationships())
         if not self.model:
-            raise AppExceptionResponse.not_found(message=i18n.gettext("not_found"))
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("not_found"))

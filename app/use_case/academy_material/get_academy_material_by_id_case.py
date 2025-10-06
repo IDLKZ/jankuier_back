@@ -62,7 +62,7 @@ class GetAcademyMaterialByIdCase(BaseUseCase[AcademyMaterialWithRelationsRDTO]):
         )
         
         if not model:
-            raise AppExceptionResponse.not_found(
+            raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("academy_material_not_found")
             )
 

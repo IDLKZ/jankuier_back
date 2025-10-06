@@ -62,7 +62,7 @@ class DeleteMyBookingFieldPartyRequestCase(BaseUseCase[bool]):
         )
 
         if not booking_request:
-            raise AppExceptionResponse.not_found(
+            raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("booking_field_party_request_not_found")
             )
 

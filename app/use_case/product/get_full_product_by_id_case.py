@@ -104,7 +104,7 @@ class GetFullProductByIdCase(BaseUseCase[FullProductRDTO]):
             include_deleted_filter=True,
         )
         if not self.product_model:
-            raise AppExceptionResponse.not_found(message=i18n.gettext("not_found"))
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("not_found"))
 
     async def transform(self, id: int) -> FullProductRDTO:
         """

@@ -125,7 +125,7 @@ class ReCreateClientBookingFieldRequestByIdCase(BaseUseCase[CreateBookingFieldPa
             options=self.booking_field_party_request_repository.default_relationships()
         )
         if not self.booking_field_entity:
-            raise AppExceptionResponse.not_found(i18n.gettext('booking_field_party_request_not_found'))
+            raise AppExceptionResponse.bad_request(i18n.gettext('booking_field_party_request_not_found'))
 
         # Создаем DTO из существующей заявки
         self.dto = CreateBookingFieldPartyRequestDTO(
@@ -147,7 +147,7 @@ class ReCreateClientBookingFieldRequestByIdCase(BaseUseCase[CreateBookingFieldPa
             options=self.field_party_repository.default_relationships()
         )
         if not self.field_party:
-            raise AppExceptionResponse.not_found(i18n.gettext('field_party_not_found'))
+            raise AppExceptionResponse.bad_request(i18n.gettext('field_party_not_found'))
         if self.field_party.is_active is False:
             raise AppExceptionResponse.bad_request(i18n.gettext('field_party_is_not_active'))
 

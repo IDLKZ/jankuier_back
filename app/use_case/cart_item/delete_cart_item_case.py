@@ -68,7 +68,7 @@ class DeleteCartItemCase(BaseUseCase[bool]):
         # Проверка существования товара в корзине
         model = await self.repository.get(id, include_deleted_filter=True)
         if not model:
-            raise AppExceptionResponse.not_found(i18n.gettext("cart_item_not_found"))
+            raise AppExceptionResponse.bad_request(i18n.gettext("cart_item_not_found"))
 
         # Бизнес-правила для удаления
         if not force_delete:

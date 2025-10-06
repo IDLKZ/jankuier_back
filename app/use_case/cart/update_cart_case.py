@@ -67,7 +67,7 @@ class UpdateCartCase(BaseUseCase[CartRDTO]):
         # Проверка существования корзины
         model = await self.repository.get(id, include_deleted_filter=True)
         if not model:
-            raise AppExceptionResponse.not_found(message=i18n.gettext("cart_not_found"))
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("cart_not_found"))
 
         # Валидация общей стоимости (если обновляется)
         if dto.total_price is not None and dto.total_price < Decimal("0"):

@@ -100,7 +100,7 @@ class UpdateStudentCase(BaseUseCase[StudentWithRelationsRDTO]):
         # Проверка существования студента
         self.model = await self.repository.get(id)
         if not self.model:
-            raise AppExceptionResponse.not_found(message=i18n.gettext("not_found"))
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("not_found"))
 
         # Автогенерация value из first_name если указан first_name но не указан value
         if dto.first_name is not None and dto.value is None:

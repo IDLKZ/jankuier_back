@@ -95,7 +95,7 @@ class UpdateCategoryModificationCase(
         # Проверка существования модификации категории
         self.model = await self.repository.get(id)
         if not self.model:
-            raise AppExceptionResponse.not_found(message=i18n.gettext("not_found"))
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("not_found"))
 
         # Проверка существования категории товара
         if (await self.product_category_repository.get(dto.category_id)) is None:

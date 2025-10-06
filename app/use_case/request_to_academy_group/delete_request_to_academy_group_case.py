@@ -69,7 +69,7 @@ class DeleteRequestToAcademyGroupCase(BaseUseCase[bool]):
         """
         self.model = await self.repository.get(id)
         if not self.model:
-            raise AppExceptionResponse.not_found(message=i18n.gettext("not_found"))
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("not_found"))
 
         # Бизнес-правило: нельзя удалить принятую заявку без принудительного удаления
         if self.model.status == 1 and not force_delete:

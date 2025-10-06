@@ -25,6 +25,6 @@ class DeleteUserByIdCase(BaseUseCase[bool]):
     async def validate(self, id: int) -> None:
         self.model = await self.repository.get(id)
         if not self.model:
-            raise AppExceptionResponse.not_found(message=i18n.gettext("user_not_found"))
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("user_not_found"))
         if self.model.image_id:
             self.file_id = self.model.image_id

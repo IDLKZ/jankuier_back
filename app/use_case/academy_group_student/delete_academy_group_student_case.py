@@ -29,4 +29,4 @@ class DeleteAcademyGroupStudentCase(BaseUseCase[bool]):
 
         self.model = await self.repository.get(id, include_deleted_filter=True)
         if not self.model:
-            raise AppExceptionResponse.not_found(message=i18n.gettext("academy_group_student_not_found"))
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("academy_group_student_not_found"))

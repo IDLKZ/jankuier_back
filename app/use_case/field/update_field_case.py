@@ -92,7 +92,7 @@ class UpdateFieldCase(BaseUseCase[FieldWithRelationsRDTO]):
         # Проверка существования поля
         self.model = await self.repository.get(id)
         if not self.model:
-            raise AppExceptionResponse.not_found(message=i18n.gettext("not_found"))
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("not_found"))
 
         # Проверка уникальности value (исключая текущую запись)
         if dto.value:

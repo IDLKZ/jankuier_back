@@ -78,7 +78,7 @@ class UpdateBookingFieldPartyRequestCase(BaseUseCase[BookingFieldPartyRequestWit
         # Проверяем существование бронирования
         self.model = await self.repository.get(id)
         if not self.model:
-            raise AppExceptionResponse.not_found(message=i18n.gettext("not_found"))
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("not_found"))
 
         # Проверка корректности дат бронирования
         if dto.start_at >= dto.end_at:

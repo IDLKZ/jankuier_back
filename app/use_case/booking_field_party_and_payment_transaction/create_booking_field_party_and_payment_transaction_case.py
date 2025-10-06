@@ -90,14 +90,14 @@ class CreateBookingFieldPartyAndPaymentTransactionCase(BaseUseCase[BookingFieldP
         # Проверяем существование бронирования
         request = await self.request_repository.get(dto.request_id)
         if not request:
-            raise AppExceptionResponse.not_found(
+            raise AppExceptionResponse.bad_request(
                 message=f"{i18n.gettext('booking_request_not_found')}: {dto.request_id}"
             )
 
         # Проверяем существование платежной транзакции
         transaction = await self.transaction_repository.get(dto.payment_transaction_id)
         if not transaction:
-            raise AppExceptionResponse.not_found(
+            raise AppExceptionResponse.bad_request(
                 message=f"{i18n.gettext('payment_transaction_not_found')}: {dto.payment_transaction_id}"
             )
 

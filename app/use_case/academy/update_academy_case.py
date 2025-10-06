@@ -97,7 +97,7 @@ class UpdateAcademyCase(BaseUseCase[AcademyWithRelationsRDTO]):
         # Проверка существования академии
         model = await self.repository.get(id, include_deleted_filter=True)
         if not model:
-            raise AppExceptionResponse.not_found(
+            raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("academy_not_found")
             )
 

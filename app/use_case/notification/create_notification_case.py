@@ -42,7 +42,7 @@ class CreateNotificationCase(BaseUseCase[NotificationWithRelationsRDTO]):
         # Проверка существования топика
         topic = await self.topic_repository.get(dto.topic_id)
         if not topic:
-            raise AppExceptionResponse.not_found(
+            raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("topic_not_found")
             )
 
@@ -50,7 +50,7 @@ class CreateNotificationCase(BaseUseCase[NotificationWithRelationsRDTO]):
         if dto.user_id is not None:
             user = await self.user_repository.get(dto.user_id)
             if not user:
-                raise AppExceptionResponse.not_found(
+                raise AppExceptionResponse.bad_request(
                     message=i18n.gettext("user_not_found")
                 )
 

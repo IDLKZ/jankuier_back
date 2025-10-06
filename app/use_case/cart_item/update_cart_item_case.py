@@ -74,7 +74,7 @@ class UpdateCartItemCase(BaseUseCase[CartItemWithRelationsRDTO]):
         # Проверка существования товара в корзине
         model = await self.repository.get(id, include_deleted_filter=True)
         if not model:
-            raise AppExceptionResponse.not_found(
+            raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("cart_item_not_found")
             )
 

@@ -19,7 +19,7 @@ class DeleteRoleByIdCase(BaseUseCase[bool]):
     async def validate(self, id: int) -> None:
         self.model = await self.repository.get(id, include_deleted_filter=True)
         if not self.model:
-            raise AppExceptionResponse.not_found(message=i18n.gettext("not_found"))
+            raise AppExceptionResponse.bad_request(message=i18n.gettext("not_found"))
         if self.model.is_system:
             raise AppExceptionResponse.bad_request(
                 message=i18n.gettext("can_not_delete_system_role")
