@@ -90,7 +90,7 @@ class SotaApi:
         accept_language: str = Header(default="ru", alias="Accept-Language")
     ) -> SotaPaginationResponseDTO[SotaRemoteCountryDTO]:
         try:
-            return await SotaRemoteService().get_countries(dto=dto, lang=accept_language)
+            return await SotaRemoteService().get_countries(dto=dto, lang=accept_language, use_redis=True)
         except HTTPException:
             raise
         except Exception as exc:
@@ -107,7 +107,7 @@ class SotaApi:
         accept_language: str = Header(default="ru", alias="Accept-Language")
     ) -> SotaPaginationResponseDTO[SotaTournamentDTO]:
         try:
-            return await SotaRemoteService().get_tournaments(dto=dto, lang=accept_language)
+            return await SotaRemoteService().get_tournaments(dto=dto, lang=accept_language, use_redis=True)
         except HTTPException:
             raise
         except Exception as exc:
@@ -124,7 +124,7 @@ class SotaApi:
         accept_language: str = Header(default="ru", alias="Accept-Language")
     ) -> List[SotaMatchDTO]:
         try:
-            return await SotaRemoteService().get_matches(dto=dto, lang=accept_language)
+            return await SotaRemoteService().get_matches(dto=dto, lang=accept_language, use_redis=True)
         except HTTPException:
             raise
         except Exception as exc:
@@ -140,7 +140,7 @@ class SotaApi:
         accept_language: str = Header(default="ru", alias="Accept-Language")
     ) -> ScoreTableResponseDTO:
         try:
-            return await SotaRemoteService().get_score_tables(season_id=seasonId, lang=accept_language)
+            return await SotaRemoteService().get_score_tables(season_id=seasonId, lang=accept_language, use_redis=True)
         except HTTPException:
             raise
         except Exception as exc:
@@ -156,7 +156,7 @@ class SotaApi:
         accept_language: str = Header(default="ru", alias="Accept-Language")
     ) -> SotaTeamsStatsResponseDTO:
         try:
-            return await SotaRemoteService().get_team_stat_by_game_id(game_id=gameId, lang=accept_language)
+            return await SotaRemoteService().get_team_stat_by_game_id(game_id=gameId, lang=accept_language, use_redis=True)
         except HTTPException:
             raise
         except Exception as exc:
@@ -172,7 +172,7 @@ class SotaApi:
         accept_language: str = Header(default="ru", alias="Accept-Language")
     ) -> SotaPlayersStatsResponseDTO:
         try:
-            return await SotaRemoteService().get_players_stat_by_game_id(game_id=gameId, lang=accept_language)
+            return await SotaRemoteService().get_players_stat_by_game_id(game_id=gameId, lang=accept_language, use_redis=True)
         except HTTPException:
             raise
         except Exception as exc:
@@ -188,7 +188,7 @@ class SotaApi:
         accept_language: str = Header(default="ru", alias="Accept-Language")
     ) -> SotaMatchLineupDTO:
         try:
-            return await SotaRemoteService().get_pre_game_lineup_stat_by_game_id(game_id=gameId, lang=accept_language)
+            return await SotaRemoteService().get_pre_game_lineup_stat_by_game_id(game_id=gameId, lang=accept_language, use_redis=True)
         except HTTPException:
             raise
         except Exception as exc:
