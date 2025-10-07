@@ -35,6 +35,7 @@ from app.adapters.api.modification_value.modification_value_api import (
 from app.adapters.api.permission.permission_api import PermissionApi
 from app.adapters.api.payment_transaction_status.payment_transaction_status_api import PaymentTransactionStatusApi
 from app.adapters.api.payment_transaction.payment_transaction_api import PaymentTransactionApi
+from app.adapters.api.sota.sota_api import SotaApi
 from app.adapters.api.ticketon_order_status.ticketon_order_status_api import TicketonOrderStatusApi
 from app.adapters.api.ticketon_order.ticketon_order_api import TicketonOrderApi
 from app.adapters.api.product.product_api import ProductApi
@@ -374,4 +375,10 @@ def include_routers(app) -> None:
         ReadNotificationApi().router,
         prefix=f"{RoutePathConstants.BasePathName}/read-notification",
         tags=["Прочитанные уведомления"],
+    )
+
+    app.include_router(
+        SotaApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}/sota",
+        tags=["Данные с Sota"],
     )

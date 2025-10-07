@@ -3,7 +3,9 @@ import logging
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
 
+from app.infrastructure.app_config import app_config
 from app.infrastructure.db import AsyncSessionLocal
+from app.infrastructure.service.sota_service.sota_remote_service import SotaRemoteService
 from app.use_case.booking_field_party_request.scheduler.check_booking_field_party_request_case import \
     CheckBookingFieldPartyRequestCase
 from app.use_case.product_order.scheduler.check_product_order_payment_case import CheckProductOrderPaymentCase
@@ -50,6 +52,19 @@ async def check_ticketon_order_time_process():
     )
 
 
+async def preload_data_from_sota():
+    """
+    Предзагрузка данных SOTA в Redis кеш.
+    Выполняется по расписанию для обновления кеша турниров, сезонов и матчей.
+    """
+    try:
+        logger.info("preload_data_from_sota: Начало предзагрузки данных SOTA")
+        await SotaRemoteService().preload_data()
+        logger.info("preload_data_from_sota: Предзагрузка данных SOTA завершена")
+    except Exception as exc:
+        logger.error(f"preload_data_from_sota: Ошибка при предзагрузке данных SOTA: {exc}")
+
+
 # Listener для всех задач
 def job_listener(event):
     if event.exception:
@@ -80,6 +95,12 @@ async def main():
         "interval",
         minutes=1,
         id="check_ticketon_order_time",
+    )
+    scheduler.add_job(
+        preload_data_from_sota,
+        "interval",
+        minutes=60,
+        id="preload_data",
     )
 
     scheduler.add_listener(job_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR)

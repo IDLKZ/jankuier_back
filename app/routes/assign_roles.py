@@ -36,6 +36,7 @@ from app.routes.product_order_item_status.product_order_item_status_route import
 from app.routes.request_material.request_material_route import assign_request_material_roles
 from app.routes.request_to_academy_group.request_to_academy_group_route import assign_request_to_academy_group_roles
 from app.routes.role.role_route import assign_role_roles
+from app.routes.sota.sota_route import assign_sota_roles
 from app.routes.sport.sport_route import assign_sport_roles
 from app.routes.student.student_route import assign_student_roles
 from app.routes.test.test_route import assign_test_roles
@@ -134,3 +135,5 @@ def assign_roles_to_all_routes(app) -> None:
     assign_read_notification_roles(app)
     assign_topic_notification_roles(app)
     assign_firebase_notification_roles(app)
+    #Sota
+    assign_sota_roles(app)

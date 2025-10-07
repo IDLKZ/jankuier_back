@@ -130,7 +130,7 @@ For entities with CRUD operations, implement these 4 standard read use cases:
 - **Parameters**: `id: int`
 - **Returns**: `EntityRDTO`
 - **Pattern**: Uses `repository.get(id, include_deleted_filter=True)`
-- **Validation**: Throws `AppExceptionResponse.not_found()` if not found
+- **Validation**: Throws `AppExceptionResponse.bad_request()` if not found
 
 #### 4. By Value - `get_{entity}_by_value_case.py`
 - **Purpose**: Retrieve single record by unique value field
@@ -138,7 +138,7 @@ For entities with CRUD operations, implement these 4 standard read use cases:
 - **Returns**: `EntityRDTO`
 - **Pattern**: Uses `repository.get_first_with_filters()` with `func.lower()` comparison
 - **Note**: Only implement if entity has a `value` field with unique constraint
-- **Validation**: Throws `AppExceptionResponse.not_found()` if not found
+- **Validation**: Throws `AppExceptionResponse.bad_request()` if not found
 
 ### CRUD Use Case Conventions
 

@@ -24,3 +24,13 @@ class SotaCountryListDTO(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class SotaRemoteCountryDTO(BaseModel):
+    id: DTOConstant.StandardID("Уникальный идентификатор страны")
+    name: DTOConstant.StandardNullableTextField("Название страны")
+    flag_image: DTOConstant.StandardNullableTextField("URL флага страны")
+    code: DTOConstant.StandardVarcharField("Код страны (ISO)")
+
+    class Config:
+        from_attributes = True

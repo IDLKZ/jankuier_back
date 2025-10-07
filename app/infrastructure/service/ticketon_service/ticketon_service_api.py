@@ -191,7 +191,6 @@ class TicketonServiceAPI:
             cached_data = await self._get_from_cache(cache_key, TicketonShowsRedisStore)
             if cached_data and cached_data.data.shows:
                 if cached_data.last_updated + self._redis_ttl > datetime.now():
-                    print("cached!")
                     return cached_data.data
         locale = parameter.i18n
         if(locale == "kk"):

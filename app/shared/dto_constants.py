@@ -593,3 +593,16 @@ class DTOConstant:
     def StandardPSignField(description: str | None = "Подпись заказа") -> Annotated:
         return Annotated[str, Field(description=description,min_length=80, max_length=250)]
 
+    @staticmethod
+    def StandardPassIntegerDefaultZeroField(description: str | None = None) -> Annotated:
+        msg = "Числовое поле со значением по умолчанию 0"
+        return Annotated[
+            int,
+            Field(
+                alias="pass",
+                default=0,
+                ge=0,
+                description=description or msg,
+            ),
+        ]
+

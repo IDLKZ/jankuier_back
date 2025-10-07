@@ -23,7 +23,9 @@ async def initialize_firebase() -> None:
     cred = credentials.Certificate(str(cred_path))
 
     if not firebase_admin._apps:
-        firebase_admin.initialize_app(cred)
+        firebase_admin.initialize_app(cred,{
+            "projectId": "kz-kff-jankuier-mobile"
+        })
 
 
 
