@@ -92,7 +92,7 @@ class CreateSaleTicketonAndOrderCase(BaseUseCase[TicketonResponseForSaleDTO]):
                 status_id=DbValueConstants.TicketonOrderStatusBookingCreatedID,
                 seats=self.ticketon_booking_result.seats,
                 show=self.ticketon_booking_result.show,
-                show_info=self.show.model_dump(),
+                show_info=self.show.model_dump(exclude={"hall"}),
                 sale=self.ticketon_booking_result.sale,
                 lang=self.ticketon_booking_result.lang,
                 pre_sale=self.ticketon_booking_result.sale,

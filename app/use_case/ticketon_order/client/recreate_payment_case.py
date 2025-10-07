@@ -183,7 +183,6 @@ class RecreatePaymentForTicketonOrderCase(BaseUseCase[TicketonResponseForSaleDTO
                 expired_at=self.current_time + timedelta(seconds=self.ticketon_booking_result.expire),
                 order_full_info={
                     "ticketon_booking": self.ticketon_booking_result.model_dump(),
-                    "show_info": show.model_dump() if show else None,
                 }
             )
 
