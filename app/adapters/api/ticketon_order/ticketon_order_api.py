@@ -507,10 +507,10 @@ class TicketonOrderApi:
         """
         try:
             # TODO: Раскомментировать когда будет готов check_client
-            # return await ClientPaginateTicketonOrderCase(db).execute(filter=filter, user_id=user.id)
+            return await ClientPaginateTicketonOrderCase(db).execute(filter=filter, user_id=user.id)
 
             # Временная заглушка для тестирования (не используем user_id)
-            return await ClientPaginateTicketonOrderCase(db).execute(filter=filter, user_id=user.id)
+            #return await ClientPaginateTicketonOrderCase(db).execute(filter=filter, user_id=user.id)
         except HTTPException:
             raise
         except Exception as exc:
