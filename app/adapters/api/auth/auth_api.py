@@ -118,7 +118,7 @@ class AuthApi:
         except Exception as exc:
             raise AppExceptionResponse.internal_error(
                 message="Ошибка при логинации",
-                extra={"id": id, "details": str(exc)},
+                extra={"details": str(exc)},
                 is_custom=True,
             ) from exc
 
@@ -144,7 +144,7 @@ class AuthApi:
         except Exception as exc:
             raise AppExceptionResponse.internal_error(
                 message="Ошибка при регистрации",
-                extra={"id": id, "details": str(exc)},
+                extra={"details": str(exc)},
                 is_custom=True,
             ) from exc
 
@@ -168,7 +168,7 @@ class AuthApi:
         except Exception as exc:
             raise AppExceptionResponse.internal_error(
                 message="Ошибка при логинации",
-                extra={"id": id, "details": str(exc)},
+                extra={"details": str(exc)},
                 is_custom=True,
             ) from exc
 
@@ -197,7 +197,7 @@ class AuthApi:
         except Exception as exc:
             raise AppExceptionResponse.internal_error(
                 message="Ошибка при логинации",
-                extra={"id": id, "details": str(exc)},
+                extra={"details": str(exc)},
                 is_custom=True,
             ) from exc
 
