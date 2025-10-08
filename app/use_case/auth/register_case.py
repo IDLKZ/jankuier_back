@@ -69,7 +69,8 @@ class RegisterCase(BaseUseCase[UserWithRelationsRDTO]):
             filters.append(or_(func.lower(self.repository.model.iin) == dto.iin.lower()))
 
         user = await self.repository.get_first_with_filters(
-            filters=[or_(*filters)]
+            filters=[or_(*filters)],
+            include_deleted_filter=True
         )
         if user:
             if user.email.lower() == dto.email.lower():
