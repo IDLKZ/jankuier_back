@@ -181,7 +181,7 @@ class DTOConstant:
         return Annotated[
             str,
             Field(
-                pattern=app_validation.LOGIN_REGEX,
+                pattern=app_validation.PASSWORD_REGEX,
                 max_length=FieldConstants.STANDARD_LENGTH,
                 description=description or msg,
             ),
