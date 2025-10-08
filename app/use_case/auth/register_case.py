@@ -58,13 +58,15 @@ class RegisterCase(BaseUseCase[UserWithRelationsRDTO]):
                 message=i18n.gettext("role_cant_register")
             )
         filters = [
-            func.lower(self.repository.model.username) == dto.username.lower(),
-            func.lower(self.repository.model.email) == dto.email.lower(),
-            func.lower(self.repository.model.phone) == dto.phone.lower(),
+            or_(
+                func.lower(self.repository.model.username) == dto.username.lower(),
+                func.lower(self.repository.model.email) == dto.email.lower(),
+                func.lower(self.repository.model.phone) == dto.phone.lower(),
+            )
         ]
 
         if dto.iin:
-            filters.append(func.lower(self.repository.model.iin) == dto.iin.lower())
+            filters.append(or_(func.lower(self.repository.model.iin) == dto.iin.lower()))
 
         user = await self.repository.get_first_with_filters(
             filters=[or_(*filters)]
