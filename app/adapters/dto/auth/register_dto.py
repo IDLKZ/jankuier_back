@@ -30,5 +30,5 @@ class UpdateProfileDTO(BaseModel):
         from_attributes = True
 
 class UpdatePasswordDTO(BaseModel):
-    old_password: DTOConstant.StandardPasswordField(description="Старый пароль")
+    old_password: DTOConstant.StandardVarcharField(description="Старый пароль")
     new_password: DTOConstant.StandardPasswordField(description="Новый пароль")
