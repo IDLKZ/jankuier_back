@@ -1,6 +1,6 @@
 from app.adapters.dto.auth.login_dto import LoginDTO
 from app.adapters.dto.auth.token_dto import BearerTokenDTO
-from sqlalchemy import and_, func
+from sqlalchemy import and_, func, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.repository.user.user_repository import UserRepository
@@ -46,8 +46,10 @@ class LoginCase(BaseUseCase[BearerTokenDTO]):
         """
         user = await self.repository.get_first_with_filters(
             filters=[
-                and_(
+                or_(
                     func.lower(self.repository.model.username) == dto.username.lower(),
+                    func.lower(self.repository.model.phone) == dto.username.lower(),
+                    func.lower(self.repository.model.email) == dto.username.lower(),
                 )
             ]
         )

@@ -58,4 +58,5 @@ class AppTableNames:
     NotificationTableName = "notifications"
     UserNotificationTableName = "user_notifications"
     ReadNotificationTableName = "read_notifications"
+    UserCodeResetPasswordTableName = "user_code_reset_passwords"
 

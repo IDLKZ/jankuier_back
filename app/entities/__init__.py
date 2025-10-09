@@ -54,6 +54,7 @@ from app.entities.ticketon_order_status_entity import TicketonOrderStatusEntity
 from app.entities.topic_notification_entity import TopicNotificationEntity
 from app.entities.user_code_verification_entity import UserCodeVerificationEntity
 from app.entities.user_entity import UserEntity
+from app.entities.user_reset_password_code_entity import UserCodeResetPasswordEntity
 from app.entities.user_verification_entity import UserVerificationEntity
 
 
@@ -111,5 +112,6 @@ __all__ = [
     FirebaseNotificationEntity.__name__,
     NotificationEntity.__name__,
     ReadNotificationEntity.__name__,
+    UserCodeResetPasswordEntity.__name__,
 ]
 

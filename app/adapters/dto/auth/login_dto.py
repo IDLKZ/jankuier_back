@@ -12,5 +12,5 @@ class LoginDTO(BaseModel):
         password (str): Пароль пользователя.
     """
 
-    username: DTOConstant.StandardLoginField(description="Логин для аутентификации")
+    username: DTOConstant.StandardVarcharField(description="Логин для аутентификации")
     password: DTOConstant.StandardTextField(description="Пароль пользователя")

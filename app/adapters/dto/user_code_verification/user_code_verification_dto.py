@@ -44,3 +44,11 @@ class UserCodeVerificationResultRDTO(BaseModel):
     result: DTOConstant.StandardBooleanFalseField(description="Результат")
     expires_in_seconds: DTOConstant.StandardUnsignedIntegerField(description="Время истечения кода")
     message: DTOConstant.StandardNullableTextField(description="Сообщение")
+
+
+class UserCodeResetPasswordResultRDTO(BaseModel):
+    user_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID пользователя")
+    phone: DTOConstant.StandardVarcharField(description="Номер пользователя")
+    result: DTOConstant.StandardBooleanFalseField(description="Результат")
+    expires_in_seconds: DTOConstant.StandardUnsignedIntegerField(description="Время истечения кода")
+    message: DTOConstant.StandardNullableTextField(description="Сообщение")

@@ -75,6 +75,14 @@ class UserEntity(Base):
         )
     )
 
+    user_code_reset_passwords: Mapped[list[AppEntityNames.UserCodeResetPasswordEntityName]] = (
+        DbRelationshipConstants.one_to_many(
+            target=AppEntityNames.UserCodeResetPasswordEntityName,
+            back_populates="user",
+            foreign_keys=f"{AppEntityNames.UserCodeResetPasswordEntityName}.user_id",
+        )
+    )
+
     created_students: Mapped[list[AppEntityNames.StudentEntityName]] = (
         DbRelationshipConstants.one_to_many(
             target=AppEntityNames.StudentEntityName,

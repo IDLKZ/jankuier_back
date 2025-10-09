@@ -82,3 +82,4 @@ class AppEntityNames:
     FirebaseNotificationEntityName = "FirebaseNotificationEntity"
     NotificationEntityName = "NotificationEntity"
     ReadNotificationEntityName = "ReadNotificationEntity"
+    UserCodeResetPasswordEntityName = "UserCodeResetPasswordEntity"

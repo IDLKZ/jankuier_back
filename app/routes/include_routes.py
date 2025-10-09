@@ -61,6 +61,7 @@ from app.adapters.api.test.test_api import TestApi
 from app.adapters.api.ticketon.ticketon_api import TicketonApi
 from app.adapters.api.user.user_api import UserApi
 from app.adapters.api.user_code_verification.user_code_verification_api import UserCodeVerificationApi
+from app.adapters.api.user_code_reset_password.user_code_reset_password_api import UserCodeResetPasswordApi
 from app.adapters.api.topic_notification.topic_notification_api import TopicNotificationApi
 from app.adapters.api.firebase_notification.firebase_notification_api import FirebaseNotificationApi
 from app.adapters.api.notification.notification_api import NotificationApi
@@ -294,6 +295,11 @@ def include_routers(app) -> None:
         UserCodeVerificationApi().router,
         prefix=f"{RoutePathConstants.BasePathName}/user-code-verification",
         tags=["SMS Верификация"],
+    )
+    app.include_router(
+        UserCodeResetPasswordApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}/user-code-reset-password",
+        tags=["Коды сброса пароля"],
     )
     app.include_router(
         PaymentTransactionStatusApi().router,
