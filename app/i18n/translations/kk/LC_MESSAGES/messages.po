@@ -696,6 +696,21 @@ msgstr "Сеанс табылмады"
 msgid "ticket_sale_error"
 msgstr "Билет сату қатесі"
 
+msgid "code_verified_successfully"
+msgstr "Код сәтті расталды"
+
+msgid "invalid_verification_code"
+msgstr "Растау коды жарамсыз"
+
+msgid "verification_code_expired"
+msgstr "Растау кодының мерзімі өткен"
+
+msgid "no_verification_code_found"
+msgstr "Растау коды табылмады"
+
+msgid "verification_code_required"
+msgstr "Растау коды қажет"
+
 msgid "user_already_verified"
 msgstr "Пайдаланушы әлдеқашан расталған"
 
