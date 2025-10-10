@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.adapters.repository.cart.cart_repository import CartRepository
 from app.adapters.repository.user.user_repository import UserRepository
 from app.core.app_exception_response import AppExceptionResponse
 from app.entities import UserEntity
@@ -11,12 +12,17 @@ from app.use_case.base_case import BaseUseCase
 class DeactivateMyAccount(BaseUseCase[bool]):
     def __init__(self, db: AsyncSession) -> None:
         self.repository = UserRepository(db)
+        self.cart_repository = CartRepository(db)
         self.file_service = FileService(db)
         self.model: UserEntity | None = None
         self.file_id: int | None = None
 
     async def execute(self, id: int) -> bool:
         await self.validate(id=id)
+        carts = await self.cart_repository.get_with_filters(filters=[self.cart_repository.model.user_id == id])
+        if carts is not None:
+            for cart in carts:
+                await self.cart_repository.delete(id=cart.id, force_delete=True)
         result = await self.repository.delete(id=id, force_delete=True)
         if self.file_id and result:
             await self.file_service.delete_file(file_id=self.file_id)
