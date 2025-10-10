@@ -35,6 +35,7 @@ class RegisterCase(BaseUseCase[UserWithRelationsRDTO]):
             obj["is_active"] = True
             obj["is_verified"] = False
             obj["sex"] = 0
+            obj["role_id"] = DbValueConstants.ClientRoleConstantID
             model = await self.repository.create(obj=self.repository.model(**obj))
             if model:
                 model = await self.repository.get(

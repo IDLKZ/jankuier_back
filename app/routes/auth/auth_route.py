@@ -19,6 +19,14 @@ def assign_auth_roles(app) -> None:
     )
     assign_roles_to_route(
         app=app,
+        path=f"{base_url}{RoutePathConstants.LoginPathName}-client",
+        roles=[
+            RoleRouteConstant.AdministratorTagName,
+            RoleRouteConstant.CommonTagName,
+        ],
+    )
+    assign_roles_to_route(
+        app=app,
         path=f"{base_url}{RoutePathConstants.RegisterPathName}",
         roles=[
             RoleRouteConstant.AdministratorTagName,
@@ -76,6 +84,23 @@ def assign_auth_roles(app) -> None:
     assign_roles_to_route(
         app=app,
         path=f"{base_url}{RoutePathConstants.DeleteProfilePhotoPathName}",
+        roles=[
+            RoleRouteConstant.AdministratorTagName,
+            RoleRouteConstant.ClientTagName,
+        ],
+    )
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}{RoutePathConstants.DeleteProfilePhotoPathName}",
+        roles=[
+            RoleRouteConstant.AdministratorTagName,
+            RoleRouteConstant.ClientTagName,
+        ],
+    )
+
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}/deactivate-my-account",
         roles=[
             RoleRouteConstant.AdministratorTagName,
             RoleRouteConstant.ClientTagName,

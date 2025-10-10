@@ -15,8 +15,11 @@ from app.core.auth_core import get_current_user
 from app.helpers.form_helper import FormParserHelper
 from app.i18n.i18n_wrapper import i18n
 from app.infrastructure.db import get_db
+from app.middleware.role_middleware import check_client
 from app.shared.route_constants import RoutePathConstants
+from app.use_case.auth.deactivate_my_account import DeactivateMyAccount
 from app.use_case.auth.login_case import LoginCase
+from app.use_case.auth.login_client_case import LoginClientCase
 from app.use_case.auth.refresh_token_case import RefreshTokenCase
 from app.use_case.auth.register_case import RegisterCase
 from app.use_case.auth.update_profile_case import UpdateProfileCase
@@ -47,6 +50,12 @@ class AuthApi:
             summary="Авторизация",
             description="Авторизуйтесь с помощью username и password",
         )(self.sign_in)
+        self.router.post(
+            f"{RoutePathConstants.LoginPathName}-client",
+            response_model=BearerTokenDTO,
+            summary="Авторизация",
+            description="Авторизуйтесь с помощью username и password",
+        )(self.sign_in_client)
         self.router.post(
             f"{RoutePathConstants.RegisterPathName}",
             response_model=UserWithRelationsRDTO,
@@ -95,6 +104,12 @@ class AuthApi:
             summary="Удалить фото профиля",
             description="Удаление фото профиля пользователя",
         )(self.delete_profile_photo)
+        self.router.delete(
+            f"/deactivate-my-account",
+            response_model=bool,
+            summary="Деактивировать аккаунт",
+            description="Деактивировать аккаунт",
+        )(self.deactivate)
 
     async def sign_in(
         self, dto: LoginDTO, db: AsyncSession = Depends(get_db)
@@ -111,6 +126,32 @@ class AuthApi:
             AppExceptionResponse: При внутренних ошибках.
         """
         use_case = LoginCase(db)
+        try:
+            return await use_case.execute(dto=dto)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message="Ошибка при логинации",
+                extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def sign_in_client(
+        self, dto: LoginDTO, db: AsyncSession = Depends(get_db)
+    ) -> BearerTokenDTO:
+        """
+        Выполняет авторизацию пользователя.
+        Args:
+            dto (LoginDTO): Данные для авторизации, включая username и password.
+            db (AsyncSession): Сессия базы данных.
+        Returns:
+            BearerTokenDTO: Токен доступа.
+        Raises:
+            HTTPException: При ошибках аутентификации.
+            AppExceptionResponse: При внутренних ошибках.
+        """
+        use_case = LoginClientCase(db)
         try:
             return await use_case.execute(dto=dto)
         except HTTPException:
@@ -340,5 +381,22 @@ class AuthApi:
             raise AppExceptionResponse.internal_error(
                 message=i18n.gettext("internal_server_error"),
                 extra={"details": str(exc)},
+                is_custom=True,
+            ) from exc
+
+    async def deactivate(
+        self,
+        user:UserWithRelationsRDTO = Depends(check_client),
+        db: AsyncSession = Depends(get_db),
+    ) -> bool:
+        use_case = DeactivateMyAccount(db)
+        try:
+            return await use_case.execute(id=user.id)
+        except HTTPException:
+            raise
+        except Exception as exc:
+            raise AppExceptionResponse.internal_error(
+                message=i18n.gettext("internal_server_error"),
+                extra={"details": f"{exc!s}"},
                 is_custom=True,
             ) from exc

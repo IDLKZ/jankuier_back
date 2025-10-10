@@ -7,9 +7,11 @@ from app.core.app_exception_response import AppExceptionResponse
 from app.helpers.form_helper import FormParserHelper
 from app.i18n.i18n_wrapper import i18n
 from app.infrastructure.db import get_db
+from app.middleware.role_middleware import check_client
 from app.shared.route_constants import RoutePathConstants
 from app.adapters.filters.user.user_pagination_filter import UserPaginationFilter
 from app.adapters.filters.user.user_filter import UserFilter
+from app.use_case.auth.deactivate_my_account import DeactivateMyAccount
 from app.use_case.user.all_user_case import AllUserCase
 from app.use_case.user.create_user_case import CreateUserCase
 from app.use_case.user.delete_user_case import DeleteUserByIdCase
@@ -72,6 +74,7 @@ class UserApi:
             summary="Удалите пользователя по ID",
             description="Удаление пользователя по ID",
         )(self.delete)
+
 
     async def paginate(
         self,

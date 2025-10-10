@@ -8,7 +8,7 @@ from app.infrastructure.service.file_service import FileService
 from app.use_case.base_case import BaseUseCase
 
 
-class DeleteUserByIdCase(BaseUseCase[bool]):
+class DeactivateMyAccount(BaseUseCase[bool]):
     def __init__(self, db: AsyncSession) -> None:
         self.repository = UserRepository(db)
         self.file_service = FileService(db)
