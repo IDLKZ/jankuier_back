@@ -5,6 +5,10 @@ from app.adapters.dto.product_order.product_order_dto import ProductOrderWithRel
 from app.adapters.dto.product_order_item.product_order_item_dto import ProductOrderItemWithRelationsRDTO
 from app.adapters.dto.booking_field_party_request.booking_field_party_request_dto import BookingFieldPartyRequestWithRelationsRDTO
 from app.adapters.dto.booking_field_party_and_payment_transaction.booking_field_party_and_payment_transaction_dto import BookingFieldPartyAndPaymentTransactionWithRelationsRDTO
+from app.adapters.dto.user_code_reset_password.user_code_reset_password_dto import \
+    UserCodeResetPasswordWithRelationsRDTO
+from app.adapters.dto.user_code_verification.user_code_verification_dto import \
+    UserCodeVerificationWithRelationsRDTO
 
 if TYPE_CHECKING:
     from app.adapters.dto.permission.permission_dto import PermissionRDTO
@@ -89,7 +93,6 @@ if TYPE_CHECKING:
     )
     from app.adapters.dto.user_code_verification.user_code_verification_dto import (
         UserCodeVerificationRDTO,
-        UserCodeVerificationWithRelationsRDTO,
     )
 
 
@@ -286,7 +289,11 @@ class PaginationUserCodeVerificationRDTO(BasePageModel):
 
 
 class PaginationUserCodeVerificationWithRelationsRDTO(BasePageModel):
-    items: list[Any]
+    items: list[UserCodeVerificationWithRelationsRDTO] = []
+
+    class Config:
+        from_attributes = True
+
 
 class PaginationProductOrderWithRelationsRDTO(BasePageModel):
     """Пагинированный ответ для списка заказов с relationships"""
@@ -336,6 +343,13 @@ class PaginationNotificationWithRelationsRDTO(BasePageModel):
 class PaginationReadNotificationWithRelationsRDTO(BasePageModel):
     """Пагинированный ответ для списка прочитанных уведомлений с relationships"""
     items: list[Any]
+
+    class Config:
+        from_attributes = True
+
+
+class PaginationUserCodeResetPasswordRDTO(BasePageModel):
+    items: list[UserCodeResetPasswordWithRelationsRDTO] = []
 
     class Config:
         from_attributes = True

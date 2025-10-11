@@ -4,18 +4,55 @@ from app.shared.route_constants import RoutePathConstants
 
 
 def assign_user_code_verification_roles(app) -> None:
+    """Назначение ролей для эндпоинтов UserCodeVerification"""
     base_url = f"{RoutePathConstants.BasePathName}/user-code-verification"
 
-    # Send SMS code - Common access (can be used by anyone for verification)
+    # Admin-only endpoints (CRUD operations)
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}{RoutePathConstants.IndexPathName}",
+        roles=[RoleRouteConstant.AdministratorTagName],
+    )
+
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}{RoutePathConstants.AllPathName}",
+        roles=[RoleRouteConstant.AdministratorTagName],
+    )
+
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}{RoutePathConstants.CreatePathName}",
+        roles=[RoleRouteConstant.AdministratorTagName],
+    )
+
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}{RoutePathConstants.UpdatePathName}",
+        roles=[RoleRouteConstant.AdministratorTagName],
+    )
+
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}{RoutePathConstants.GetByIdPathName}",
+        roles=[RoleRouteConstant.AdministratorTagName],
+    )
+
+    assign_roles_to_route(
+        app=app,
+        path=f"{base_url}{RoutePathConstants.DeleteByIdPathName}",
+        roles=[RoleRouteConstant.AdministratorTagName],
+    )
+
+    # Public endpoints (SMS verification)
     assign_roles_to_route(
         app=app,
         path=f"{base_url}/send-code",
-        roles=[RoleRouteConstant.CommonTagName]
+        roles=[RoleRouteConstant.CommonTagName],
     )
 
-    # Verify SMS code - Common access (can be used by anyone for verification)
     assign_roles_to_route(
         app=app,
         path=f"{base_url}/verify-code",
-        roles=[RoleRouteConstant.CommonTagName]
+        roles=[RoleRouteConstant.CommonTagName],
     )

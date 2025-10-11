@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.adapters.dto.pagination_dto import PaginationUserCodeResetPasswordRDTO
 from app.adapters.dto.user_code_reset_password.user_code_reset_password_dto import (
     UserCodeResetPasswordCDTO,
     UserCodeResetPasswordWithRelationsRDTO,
-    PaginationUserCodeResetPasswordRDTO, UserCodeResetPasswordConfirm,
+    UserCodeResetPasswordConfirm,
 )
 from app.adapters.dto.user_code_verification.user_code_verification_dto import (
     UserCodeResetPasswordResultRDTO,

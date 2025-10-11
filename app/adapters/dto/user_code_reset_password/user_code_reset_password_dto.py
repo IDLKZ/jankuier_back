@@ -39,16 +39,6 @@ class UserCodeResetPasswordWithRelationsRDTO(UserCodeResetPasswordRDTO):
         from_attributes = True
 
 
-class PaginationUserCodeResetPasswordRDTO(BaseModel):
-    total: DTOConstant.StandardUnsignedIntegerField(description="Всего записей")
-    page: DTOConstant.StandardUnsignedIntegerField(description="Текущая страница")
-    per_page: DTOConstant.StandardUnsignedIntegerField(description="Записей на странице")
-    pages: DTOConstant.StandardUnsignedIntegerField(description="Всего страниц")
-    items: list[UserCodeResetPasswordWithRelationsRDTO] = []
-
-    class Config:
-        from_attributes = True
-
 class UserCodeResetPasswordConfirm(BaseModel):
     code: DTOConstant.StandardVarcharField(description="Код сброса пароля")
     phone: DTOConstant.StandardPhoneField(description="Код сброса пароля")

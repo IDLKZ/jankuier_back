@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.adapters.dto.pagination_dto import PaginationUserCodeResetPasswordRDTO
 from app.adapters.dto.user_code_reset_password.user_code_reset_password_dto import (
-    PaginationUserCodeResetPasswordRDTO,
     UserCodeResetPasswordWithRelationsRDTO,
 )
 from app.adapters.filters.user_code_reset_password.user_code_reset_password_pagination_filter import (

@@ -38,6 +38,20 @@ class UserCodeVerificationWithRelationsRDTO(UserCodeVerificationRDTO):
     class Config:
         from_attributes = True
 
+
+class UserCodeVerificationUDTO(BaseModel):
+    """DTO для обновления кода верификации"""
+    user_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID пользователя")
+    expired_at: DTOConstant.StandardNullableDateTimeField(description="Время истечения кода")
+    code: DTOConstant.StandardNullableVarcharField(description="Код подтверждения")
+
+    class Config:
+        from_attributes = True
+
+
+
+
+
 class UserCodeVerificationResultRDTO(BaseModel):
     user_id: DTOConstant.StandardNullableUnsignedIntegerField(description="ID пользователя")
     phone: DTOConstant.StandardVarcharField(description="Номер пользователя")
