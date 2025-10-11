@@ -56,6 +56,7 @@ class UserEntity(Base):
             target=AppEntityNames.CartEntityName,
             back_populates="user",
             foreign_keys=f"{AppEntityNames.CartEntityName}.user_id",
+            cascade="all, delete-orphan",  # Корзина удаляется вместе с user
         )
     )
 
@@ -64,6 +65,7 @@ class UserEntity(Base):
             target=AppEntityNames.UserVerificationEntityName,
             back_populates="user",
             foreign_keys=f"{AppEntityNames.UserVerificationEntityName}.user_id",
+            cascade="all, delete-orphan",  # Верификации удаляются вместе с user
         )
     )
 
@@ -72,6 +74,7 @@ class UserEntity(Base):
             target=AppEntityNames.UserCodeVerificationEntityName,
             back_populates="user",
             foreign_keys=f"{AppEntityNames.UserCodeVerificationEntityName}.user_id",
+            cascade="all, delete-orphan",  # Удаляет вместе с user
         )
     )
 
@@ -80,6 +83,7 @@ class UserEntity(Base):
             target=AppEntityNames.UserCodeResetPasswordEntityName,
             back_populates="user",
             foreign_keys=f"{AppEntityNames.UserCodeResetPasswordEntityName}.user_id",
+            cascade="all, delete-orphan",  # Удаляет вместе с user
         )
     )
 
@@ -122,6 +126,7 @@ class UserEntity(Base):
             target=AppEntityNames.FirebaseNotificationEntityName,
             back_populates="user",
             foreign_keys=f"{AppEntityNames.FirebaseNotificationEntityName}.user_id",
+            cascade="all, delete-orphan",  # Уведомления удаляются вместе с user
         )
     )
 
@@ -130,6 +135,7 @@ class UserEntity(Base):
             target=AppEntityNames.NotificationEntityName,
             back_populates="user",
             foreign_keys=f"{AppEntityNames.NotificationEntityName}.user_id",
+            cascade="all, delete-orphan",  # Уведомления удаляются вместе с user
         )
     )
 
@@ -138,5 +144,6 @@ class UserEntity(Base):
             target=AppEntityNames.ReadNotificationEntityName,
             back_populates="user",
             foreign_keys=f"{AppEntityNames.ReadNotificationEntityName}.user_id",
+            cascade="all, delete-orphan",  # Прочитанные уведомления удаляются вместе с user
         )
     )

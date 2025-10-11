@@ -97,8 +97,87 @@ The project follows a clean architecture approach with clear separation of conce
 ### Migration Workflow
 1. Make entity changes
 2. Generate migration: `alembic revision --autogenerate -m "description"`
-3. Review and edit migration file if needed
+3. **ВАЖНО**: Review and edit migration file, especially Foreign Key constraints
 4. Apply migration: `alembic upgrade head`
+5. **ОБЯЗАТЕЛЬНО**: Verify foreign keys: `python check_foreign_keys.py`
+
+### Foreign Key CASCADE Constraints
+
+**КРИТИЧЕСКАЯ ПРОБЛЕМА**: Alembic может создавать `SET NULL` вместо `CASCADE` даже если в модели указан `ondelete="CASCADE"`.
+
+#### Быстрая справка по CASCADE типам
+
+| Тип | Когда использовать | Пример |
+|-----|-------------------|--------|
+| **CASCADE** | Зависимые данные без смысла без родителя | `gallery_id`, `item_id`, `material_id` |
+| **SET NULL** | Nullable опциональные ссылки | `image_id`, `city_id`, `created_by` |
+| **RESTRICT** | Критичные справочники | `status_id`, `role_id` |
+
+#### Правила выбора
+
+```python
+# ❌ НЕПРАВИЛЬНО - nullable=False с SET NULL вызовет NotNullViolationError
+user_id: Mapped[DbColumnConstants.ForeignKeyInteger(..., ondelete="SET NULL")]
+
+# ✅ ПРАВИЛЬНО - CASCADE для зависимых данных
+gallery_id: Mapped[DbColumnConstants.ForeignKeyInteger(..., ondelete="CASCADE")]
+
+# ✅ ПРАВИЛЬНО - SET NULL только для nullable полей
+image_id: Mapped[DbColumnConstants.ForeignKeyNullableInteger(..., ondelete="SET NULL")]
+
+# ✅ ПРАВИЛЬНО - RESTRICT для справочников
+status_id: Mapped[DbColumnConstants.ForeignKeyInteger(..., ondelete="RESTRICT")]
+```
+
+#### Workflow создания FK
+
+1. **В Entity** - выбрать правильный `ForeignKeyInteger` / `ForeignKeyNullableInteger` и `ondelete`
+2. **Создать миграцию** - `alembic revision --autogenerate`
+3. **⚠️ ПРОВЕРИТЬ миграцию** - убедиться что `sa.ForeignKeyConstraint` содержит `onupdate='CASCADE', ondelete='...'`
+4. **Применить** - `alembic upgrade head`
+5. **Проверить** - `python check_foreign_keys.py`
+
+#### ORM Cascade Requirements
+
+**КРИТИЧНО**: `ondelete` в Entity **НЕ ДОСТАТОЧНО**! SQLAlchemy требует `cascade` в relationship:
+
+```python
+# ❌ НЕПРАВИЛЬНО - вызовет NotNullViolationError
+class UserEntity:
+    # Entity FK правильный:
+    user_id: Mapped[DbColumnConstants.ForeignKeyInteger(..., ondelete="CASCADE")]
+
+# Parent relationship БЕЗ cascade:
+user_code_verifications: Mapped[...] = (
+    DbRelationshipConstants.one_to_many(
+        target="UserCodeVerificationEntity",
+        back_populates="user",
+        # ❌ НЕТ cascade! SQLAlchemy попытается установить user_id=NULL
+    )
+)
+
+# ✅ ПРАВИЛЬНО - оба уровня настроены
+class UserEntity:
+    # Database CASCADE:
+    user_id: Mapped[DbColumnConstants.ForeignKeyInteger(..., ondelete="CASCADE")]
+
+# ORM CASCADE:
+user_code_verifications: Mapped[...] = (
+    DbRelationshipConstants.one_to_many(
+        target="UserCodeVerificationEntity",
+        back_populates="user",
+        cascade="all, delete-orphan"  # ✅ Обязательно для зависимых данных!
+    )
+)
+```
+
+**Правило**: Для зависимых данных (carts, verifications, notifications) всегда добавляйте:
+1. `ondelete="CASCADE"` в ForeignKey
+2. `cascade="all, delete-orphan"` в relationship
+
+**Исключение**: Audit поля (created_by, checked_by) - НЕ добавляйте cascade в relationship
+
+**Подробная документация**: См. `docs/foreign_key_cascade_guide.md` и `README_CASCADE_FIX_COMPLETE.md`
 
 ## Use Case CRUD Patterns
 
