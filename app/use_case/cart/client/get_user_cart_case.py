@@ -80,7 +80,9 @@ class GetUserCartCase(BaseUseCase[CartActionResponseDTO]):
         if self.cart_entity:
             self.cart_items_entity = await self.cart_items_repository.get_with_filters(
                 filters=[self.cart_items_repository.model.cart_id == self.cart_entity.id],
-                options=self.cart_items_repository.default_relationships()
+                options=self.cart_items_repository.default_relationships(),
+                order_by="id",
+                order_direction="desc"
             )
 
         # Вычисляем общую стоимость корзины вручную
