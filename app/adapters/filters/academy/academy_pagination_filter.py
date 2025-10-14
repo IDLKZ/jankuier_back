@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Query as SQLAlchemyQuery
-
+from sqlalchemy import or_, inspect
 from app.adapters.filters.base_pagination_filter import BasePaginationFilter
 from app.entities import AcademyEntity
 from app.shared.query_constants import AppQueryConstants
@@ -91,7 +91,20 @@ class AcademyPaginationFilter(BasePaginationFilter[AcademyEntity]):
 
     def apply(self) -> list[SQLAlchemyQuery]:
         filters = []
-
+        if self.search:
+            model_columns = {column.key for column in inspect(self.model).columns}
+            valid_fields = [
+                field for field in self.get_search_filters() if field in model_columns
+            ]
+            if valid_fields:
+                filters.append(
+                    or_(
+                        *[
+                            getattr(self.model, field).ilike(f"%{self.search}%")
+                            for field in valid_fields
+                        ]
+                    )
+                )
         if self.city_ids:
             filters.append(AcademyEntity.city_id.in_(self.city_ids))
 
