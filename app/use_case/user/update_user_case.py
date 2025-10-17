@@ -1,7 +1,7 @@
 from fastapi import UploadFile
 from sqlalchemy import func, or_
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.adapters.dto.user.user_dto import UserCDTO, UserWithRelationsRDTO, UserCDTO
+from app.adapters.dto.user.user_dto import UserCDTO, UserWithRelationsRDTO, UserCDTO, UserUDTO
 from app.adapters.repository.file.file_repository import FileRepository
 from app.adapters.repository.role.role_repository import RoleRepository
 from app.adapters.repository.user.user_repository import UserRepository
@@ -25,7 +25,7 @@ class UpdateUserCase(BaseUseCase[UserWithRelationsRDTO]):
         self.extensions = AppFileExtensionConstants.IMAGE_EXTENSIONS
 
     async def execute(
-        self, id: int, dto: UserCDTO, file: UploadFile | None = None
+        self, id: int, dto: UserUDTO, file: UploadFile | None = None
     ) -> UserWithRelationsRDTO:
         await self.validate(id=id, dto=dto, file=file)
         dto = await self.transform(id=id, dto=dto, file=file)
@@ -36,7 +36,7 @@ class UpdateUserCase(BaseUseCase[UserWithRelationsRDTO]):
         return UserWithRelationsRDTO.from_orm(self.model)
 
     async def validate(
-        self, id: int, dto: UserCDTO, file: UploadFile | None = None
+        self, id: int, dto: UserUDTO, file: UploadFile | None = None
     ) -> None:
         self.model = await self.repository.get(id)
         if not self.model:
@@ -64,7 +64,7 @@ class UpdateUserCase(BaseUseCase[UserWithRelationsRDTO]):
                 raise AppExceptionResponse.bad_request(
                     message=i18n.gettext("phone_exists")
                 )
-            if user.iin.lower() == dto.iin.lower() and user.id != id:
+            if user.iin and user.iin.lower() == dto.iin.lower() and user.id != id:
                 raise AppExceptionResponse.bad_request(
                     message=i18n.gettext("iin_exists")
                 )
@@ -86,8 +86,8 @@ class UpdateUserCase(BaseUseCase[UserWithRelationsRDTO]):
                 )
 
     async def transform(
-        self, id: int, dto: UserCDTO, file: UploadFile | None = None
-    ) -> UserCDTO:
+        self, id: int, dto: UserUDTO, file: UploadFile | None = None
+    ) -> UserUDTO:
         self.upload_folder = AppFileExtensionConstants.user_profile_photo_directory(
             dto.username
         )

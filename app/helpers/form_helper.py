@@ -5,7 +5,7 @@ from fastapi import Form, HTTPException
 from typing import Optional
 
 from pydantic import ValidationError
-from app.adapters.dto.user.user_dto import UserCDTO
+from app.adapters.dto.user.user_dto import UserCDTO, UserUDTO
 from app.adapters.dto.product.product_dto import ProductCDTO
 from app.adapters.dto.product_variant.product_variant_dto import ProductVariantCDTO
 from app.adapters.dto.product_category.product_category_dto import ProductCategoryCDTO
@@ -78,6 +78,48 @@ class FormParserHelper:
         :return: Экземпляр `UserCDTO`
         """
         return UserCDTO(
+            role_id=role_id,
+            image_id=image_id,
+            # region_id=region_id,
+            first_name=first_name,
+            last_name=last_name,
+            patronomic=patronomic,
+            email=email,
+            phone=phone,
+            username=username,
+            sex=sex,
+            iin=iin,
+            birthdate=birthdate,
+            is_active=is_active,
+            is_verified=is_verified,
+            password_hash=password_hash,
+        )
+    @staticmethod
+    def parse_update_user_dto_from_form(
+        role_id: Optional[int] = Form(None, description="ID роли"),
+        image_id: Optional[int] = Form(None, description="ID изображения"),
+        # region_id: Optional[int] = Form(None, description="ID региона"),
+        first_name: str = Form(..., description="Имя"),
+        last_name: str = Form(..., description="Фамилия"),
+        patronomic: Optional[str] = Form(None, description="Отчество"),
+        email: str = Form(..., description="Электронная почта"),
+        phone: str = Form(..., description="Телефон"),
+        username: str = Form(..., description="Уникальное имя пользователя"),
+        sex: int = Form(
+            ..., description="Пол (0 - не указан, 1 - мужской, 2 - женский)"
+        ),
+        iin: Optional[str] = Form(None, description="ИИН"),
+        birthdate: date = Form(..., description="Дата рождения"),
+        is_active: bool = Form(False, description="Активен"),
+        is_verified: bool = Form(False, description="Подтвержден"),
+        password_hash: str | None = Form(None, description="Подтвержден"),
+    ) -> UserUDTO:
+        """
+        Парсит `FormData` и возвращает `UserCDTO`.
+
+        :return: Экземпляр `UserCDTO`
+        """
+        return UserUDTO(
             role_id=role_id,
             image_id=image_id,
             # region_id=region_id,

@@ -1,7 +1,9 @@
+import traceback
+
 from fastapi import APIRouter, Depends, UploadFile, File
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.exceptions import HTTPException
-from app.adapters.dto.user.user_dto import UserCDTO, UserWithRelationsRDTO, UserCDTO
+from app.adapters.dto.user.user_dto import UserCDTO, UserWithRelationsRDTO, UserCDTO, UserUDTO
 from app.adapters.dto.pagination_dto import PaginationUserWithRelationsRDTO
 from app.core.app_exception_response import AppExceptionResponse
 from app.helpers.form_helper import FormParserHelper
@@ -131,7 +133,7 @@ class UserApi:
     async def update(
         self,
         id: RoutePathConstants.IDPath,
-        dto: UserCDTO = Depends(FormParserHelper.parse_user_dto_from_form),
+        dto: UserUDTO = Depends(FormParserHelper.parse_update_user_dto_from_form),
         file: UploadFile | None = File(default=None),
         db: AsyncSession = Depends(get_db),
     ) -> UserWithRelationsRDTO:
@@ -141,6 +143,7 @@ class UserApi:
         except HTTPException:
             raise
         except Exception as exc:
+            traceback.print_exc()
             raise AppExceptionResponse.internal_error(
                 message=i18n.gettext("internal_server_error"),
                 extra={"details": f"{exc!s}"},
