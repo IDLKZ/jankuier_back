@@ -24,7 +24,8 @@ class SotaService:
                 "email": app_config.sota_auth_email,
                 "password": app_config.sota_auth_password
             }
-            async with httpx.AsyncClient() as client:
+            timeout = httpx.Timeout(None)
+            async with httpx.AsyncClient(timeout=timeout) as client:
                 try:
                     response = await client.post(app_config.sota_auth_api, data=params)
                     data:SotaTokenDTO = SotaTokenDTO.parse_obj(response.json())
@@ -67,7 +68,8 @@ class SotaService:
                 ) from e
 
         try:
-            async with httpx.AsyncClient() as client:
+            timeout = httpx.Timeout(None)
+            async with httpx.AsyncClient(timeout=timeout) as client:
                 ru_names, ru_flags, ru_codes = await fetch_lang("ru", client)
                 kk_names, _, _ = await fetch_lang("kk", client)
                 en_names, _, _ = await fetch_lang("en", client)
@@ -130,7 +132,8 @@ class SotaService:
                 ) from e
 
         try:
-            async with httpx.AsyncClient() as client:
+            timeout = httpx.Timeout(None)
+            async with httpx.AsyncClient(timeout=timeout) as client:
                 ru_names, ru_created, ru_updated, ru_timer = await fetch_lang("ru", client)
                 kk_names, _, _, _ = await fetch_lang("kk", client)
                 en_names, _, _, _ = await fetch_lang("en", client)

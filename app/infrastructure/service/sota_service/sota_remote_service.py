@@ -22,13 +22,13 @@ from app.infrastructure.app_config import app_config
 from app.infrastructure.redis_client import redis_client
 from app.infrastructure.service.redis_service import RedisService
 
+
 class SotaRemoteService:
 
     def __init__(self):
         self.sota_access_token = "sota_access_token"
         self.ttl = app_config.sota_redis_save_minutes
         self.redis_service = RedisService()
-
 
     async def get_sota_token(self) -> str:
         token = self.redis_service.get_sota_token(self.sota_access_token)
@@ -51,7 +51,8 @@ class SotaRemoteService:
         else:
             return token
 
-    async def get_countries(self,dto:CountryQueryDTO,lang:str="ru",use_redis:bool = True)->SotaPaginationResponseDTO[SotaRemoteCountryDTO]:
+    async def get_countries(self, dto: CountryQueryDTO, lang: str = "ru", use_redis: bool = True) -> \
+    SotaPaginationResponseDTO[SotaRemoteCountryDTO]:
         token = await self.get_sota_token()
         url = app_config.sota_r_countries_api
         headers = {
@@ -60,7 +61,7 @@ class SotaRemoteService:
         }
         try:
             if use_redis:
-                data_cached = await self.get(dto.redis_key(lang),SotaPaginationResponseDTO[SotaRemoteCountryDTO])
+                data_cached = await self.get(dto.redis_key(lang), SotaPaginationResponseDTO[SotaRemoteCountryDTO])
                 if data_cached:
                     return data_cached
             async with httpx.AsyncClient() as client:
@@ -78,7 +79,8 @@ class SotaRemoteService:
                 message=f"SOTA GET COUNTRIES [{lang.upper()}] ERROR: {str(e)}"
             )
 
-    async def get_tournaments(self,dto:TournamentQueryDTO, lang:str="ru",use_redis:bool = True)->SotaPaginationResponseDTO[SotaTournamentDTO]:
+    async def get_tournaments(self, dto: TournamentQueryDTO, lang: str = "ru", use_redis: bool = True) -> \
+    SotaPaginationResponseDTO[SotaTournamentDTO]:
         token = await self.get_sota_token()
         url = app_config.sota_r_tournaments_api
         headers = {
@@ -116,7 +118,8 @@ class SotaRemoteService:
             raise AppExceptionResponse.internal_error(
                 message=f"SOTA GET TOURNAMENTS [{lang.upper()}] ERROR: {str(e)}"
             )
-    async def get_matches(self,dto:MatchQueryDTO, lang:str="ru",use_redis:bool = True)->List[SotaMatchDTO]:
+
+    async def get_matches(self, dto: MatchQueryDTO, lang: str = "ru", use_redis: bool = True) -> List[SotaMatchDTO]:
         token = await self.get_sota_token()
         url = app_config.sota_p_games_api
         headers = {
@@ -127,11 +130,12 @@ class SotaRemoteService:
             if use_redis:
                 cached_data = await self.get(dto.redis_key(lang))
                 if cached_data:
-                    # Валидация закешированных данных
+                    # Валидация за кешированных данных
                     if isinstance(cached_data, list):
                         return [SotaMatchDTO.model_validate(item) for item in cached_data]
                     return cached_data
-            async with httpx.AsyncClient() as client:
+            timeout = httpx.Timeout(None)
+            async with httpx.AsyncClient(timeout=timeout) as client:
                 response = await client.get(url, headers=headers, params=dto.dict())
                 response.raise_for_status()
                 json_data = response.json()
@@ -148,7 +152,7 @@ class SotaRemoteService:
                 message=f"SOTA GET MATCHES [{lang.upper()}] ERROR: {str(e)}"
             )
 
-    async def get_score_tables(self,season_id:int, lang:str="ru",use_redis:bool = True)->ScoreTableResponseDTO:
+    async def get_score_tables(self, season_id: int, lang: str = "ru", use_redis: bool = True) -> ScoreTableResponseDTO:
         token = await self.get_sota_token()
         url = f"{app_config.sota_p_base_season_api}{season_id}/score_table/"
         redis_key = f"{lang}_score_table_{season_id}"
@@ -161,7 +165,8 @@ class SotaRemoteService:
                 data_cached = await self.get(redis_key, ScoreTableResponseDTO)
                 if data_cached:
                     return data_cached
-            async with httpx.AsyncClient() as client:
+            timeout = httpx.Timeout(None)
+            async with httpx.AsyncClient(timeout=timeout) as client:
                 response = await client.get(url, headers=headers)
                 response.raise_for_status()
                 json_data = response.json()
@@ -176,7 +181,8 @@ class SotaRemoteService:
                 message=f"SOTA GET SCORE TABLE [{lang.upper()}] ERROR: {str(e)}"
             )
 
-    async def get_team_stat_by_game_id(self,game_id:str, lang:str="ru",use_redis:bool = True)->SotaTeamsStatsResponseDTO:
+    async def get_team_stat_by_game_id(self, game_id: str, lang: str = "ru",
+                                       use_redis: bool = True) -> SotaTeamsStatsResponseDTO:
         token = await self.get_sota_token()
         url = f"{app_config.sota_p_games_api}{game_id}/teams/"
         redis_key = f"{lang}_game_team_stat_{game_id}"
@@ -189,7 +195,8 @@ class SotaRemoteService:
                 data_cached = await self.get(redis_key, SotaTeamsStatsResponseDTO)
                 if data_cached:
                     return data_cached
-            async with httpx.AsyncClient() as client:
+            timeout = httpx.Timeout(None)
+            async with httpx.AsyncClient(timeout=timeout) as client:
                 response = await client.get(url, headers=headers)
                 response.raise_for_status()
                 json_data = response.json()
@@ -204,7 +211,8 @@ class SotaRemoteService:
                 message=f"SOTA GET TEAM STATS BY GAME ID [{lang.upper()}] ERROR: {str(e)}"
             )
 
-    async def get_players_stat_by_game_id(self,game_id:str, lang:str="ru",use_redis:bool = True)->SotaPlayersStatsResponseDTO:
+    async def get_players_stat_by_game_id(self, game_id: str, lang: str = "ru",
+                                          use_redis: bool = True) -> SotaPlayersStatsResponseDTO:
         token = await self.get_sota_token()
         url = f"{app_config.sota_p_games_api}{game_id}/players/"
         redis_key = f"{lang}_game_players_stat_{game_id}"
@@ -217,7 +225,8 @@ class SotaRemoteService:
                 data_cached = await self.get(redis_key, SotaPlayersStatsResponseDTO)
                 if data_cached:
                     return data_cached
-            async with httpx.AsyncClient() as client:
+            timeout = httpx.Timeout(None)
+            async with httpx.AsyncClient(timeout=timeout) as client:
                 response = await client.get(url, headers=headers)
                 response.raise_for_status()
                 json_data = response.json()
@@ -231,7 +240,9 @@ class SotaRemoteService:
             raise AppExceptionResponse.internal_error(
                 message=f"SOTA GET PLAYERS STATS BY GAME ID [{lang.upper()}] ERROR: {str(e)}"
             )
-    async def get_pre_game_lineup_stat_by_game_id(self,game_id:str, lang:str="ru",use_redis:bool = True)->SotaMatchLineupDTO:
+
+    async def get_pre_game_lineup_stat_by_game_id(self, game_id: str, lang: str = "ru",
+                                                  use_redis: bool = True) -> SotaMatchLineupDTO:
         token = await self.get_sota_token()
         url = f"{app_config.sota_p_games_api}{game_id}/pre_game_lineup/"
         redis_key = f"{lang}_game_pre_game_lineup_stat_{game_id}"
@@ -244,7 +255,8 @@ class SotaRemoteService:
                 data_cached = await self.get(redis_key, SotaMatchLineupDTO)
                 if data_cached:
                     return data_cached
-            async with httpx.AsyncClient() as client:
+            timeout = httpx.Timeout(None)
+            async with httpx.AsyncClient(timeout=timeout) as client:
                 response = await client.get(url, headers=headers)
                 response.raise_for_status()
                 json_data = response.json()
@@ -258,7 +270,6 @@ class SotaRemoteService:
             raise AppExceptionResponse.internal_error(
                 message=f"SOTA GET PRE MATCH LINEUPS STATS BY GAME ID [{lang.upper()}] ERROR: {str(e)}"
             )
-
 
     async def preload_data(self):
         """
@@ -316,14 +327,16 @@ class SotaRemoteService:
                     logger.info(f"Filtered to {len(filtered_tournaments)} tournaments for language: {lang}")
 
                     for tournament in filtered_tournaments:
-                        logger.info(f"Processing tournament {tournament.id} ({tournament.name}) with {len(tournament.seasons)} seasons")
+                        logger.info(
+                            f"Processing tournament {tournament.id} ({tournament.name}) with {len(tournament.seasons)} seasons")
 
                         for season in tournament.seasons:
                             try:
                                 logger.debug(f"Loading score table for season {season.id} ({season.name})")
                                 await self.get_score_tables(season_id=season.id, lang=lang)
                             except Exception as exc:
-                                logger.error(f"Error loading data for tournament {tournament.id}, season {season.id}: {str(exc)}")
+                                logger.error(
+                                    f"Error loading data for tournament {tournament.id}, season {season.id}: {str(exc)}")
                                 traceback.print_exc()
                                 continue
                             try:
@@ -346,9 +359,6 @@ class SotaRemoteService:
         except Exception as exc:
             logger.error(f"Critical error in preload_data: {str(exc)}")
             traceback.print_exc()
-
-
-
 
     async def get(self, cache_key: str, dto_class: Optional[Type[Any]] = None) -> Optional[Any]:
         """
@@ -406,6 +416,3 @@ class SotaRemoteService:
             redis_client.setex(cache_key, ttl_seconds, payload)
         except Exception as e:
             logger.warning(f"Redis cache set error for key {cache_key}: {e}")
-
-
-

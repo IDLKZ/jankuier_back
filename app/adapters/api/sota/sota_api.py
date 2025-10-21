@@ -1,3 +1,4 @@
+import traceback
 from http.client import HTTPException
 from typing import List
 
@@ -128,6 +129,7 @@ class SotaApi:
         except HTTPException:
             raise
         except Exception as exc:
+            traceback.print_exc()
             raise AppExceptionResponse.internal_error(
                 message=i18n.gettext("internal_server_error"),
                 extra={"details": str(exc)},
