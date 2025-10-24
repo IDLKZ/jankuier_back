@@ -1,6 +1,6 @@
 import json
 from datetime import timedelta, datetime
-from typing import Union, List, Optional, Dict, Any
+from typing import Union, List, Optional, Dict, Any, Tuple
 
 import httpx
 from pydantic import TypeAdapter
@@ -52,7 +52,7 @@ class TicketonServiceAPI:
     async def _make_request(
         self,
         url: str,
-        params: Dict[str, Any],
+        params: Union[Dict[str, Any], List[Tuple[str, Any]]],
         operation_name: str
     ) -> Dict[str, Any]:
         """
@@ -60,7 +60,7 @@ class TicketonServiceAPI:
 
         Args:
             url: URL для запроса
-            params: Параметры запроса
+            params: Параметры запроса (словарь или список кортежей для массивов)
             operation_name: Название операции для логирования ошибок
 
         Returns:
@@ -71,7 +71,11 @@ class TicketonServiceAPI:
         """
         try:
             # Добавляем токен авторизации
-            params["token"] = app_config.ticketon_api_key
+            if isinstance(params, dict):
+                params["token"] = app_config.ticketon_api_key
+            else:
+                # Если params - список кортежей, добавляем токен как кортеж
+                params.append(("token", app_config.ticketon_api_key))
 
             async with httpx.AsyncClient(timeout=self._client_timeout) as client:
                 response = await client.get(url, params=params)
@@ -177,14 +181,21 @@ class TicketonServiceAPI:
         Raises:
             AppExceptionResponse: При ошибке получения данных
         """
-        # Используем Redis только если указан place
-        cached_data = None
-        cache_key = None
+        # Определяем список мест для запроса
         if parameter.place is not None:
+            places = [parameter.place]
+            use_cache = True  # Кэшируем только когда указан конкретный place
+        else:
+            places = app_config.ticketon_stadium_ids
+            use_cache = False  # Не кэшируем для дефолтного списка стадионов
+
+        # Проверяем кэш только если используется кэширование
+        cache_key = None
+        if use_cache and places:
             cache_key = self._get_cache_key(
                 "shows",
                 type=parameter.type,
-                place=parameter.place,
+                place="_".join(map(str, places)),
                 withParam=parameter.withParam,
                 i18n=parameter.i18n
             )
@@ -192,23 +203,19 @@ class TicketonServiceAPI:
             if cached_data and cached_data.data.shows:
                 if cached_data.last_updated + self._redis_ttl > datetime.now():
                     return cached_data.data
-        locale = parameter.i18n
-        if(locale == "kk"):
-            locale = "kz"
-        place = parameter.place
-        if not place:
-            place = 59
-        # Запрос к API
-        params = {
-            f"type[]": parameter.type,
-            f"with[]": parameter.withParam,
-            "i18n": locale,
-            "place[]": place
-        }
 
-        # Добавляем place только если он указан
-        if parameter.place is not None:
-            params[f"place[]"] = parameter.place
+        # Корректируем локаль для API Ticketon (kk -> kz)
+        locale = parameter.i18n if parameter.i18n != "kk" else "kz"
+
+        # Запрос к API
+        params = [
+            ("type[]", parameter.type),
+            ("with[]", parameter.withParam),
+            ("i18n", locale),
+        ]
+
+        for p in places:
+            params.append(("place[]", p))
 
         json_data = await self._make_request(
             url=app_config.ticketon_get_shows,
@@ -218,14 +225,14 @@ class TicketonServiceAPI:
 
         data = TicketonShowsDataDTO.from_json(json_data)
 
-        # Сохраняем в кэш только если указан place
-        if parameter.place is not None and cache_key is not None:
+        # Сохраняем в кэш только если кэширование включено и есть места
+        if use_cache and places and cache_key is not None:
             redis_store = TicketonShowsRedisStore(
                 query=parameter,
                 data=data,
                 last_updated=datetime.now()
             )
-            self._set_cache(cache_key=cache_key,data=redis_store,ttl=timedelta(minutes=30))
+            self._set_cache(cache_key=cache_key, data=redis_store, ttl=timedelta(minutes=30))
 
         return data
 
@@ -241,6 +248,7 @@ class TicketonServiceAPI:
         Args:
             show_id: ID события
             use_cache: Использовать кэширование
+            i18n: Язык локализации (ru, kk, en)
 
         Returns:
             TicketonSingleShowResponseDTO: Детальная информация о событии
@@ -248,17 +256,19 @@ class TicketonServiceAPI:
         Raises:
             AppExceptionResponse: При ошибке получения данных
         """
-        cache_key = f"single_show_{show_id}"
+        cache_key = f"single_show_{show_id}_{i18n}"
 
         # Проверяем кэш
         if use_cache:
             cached_data = await self._get_from_cache(cache_key, TicketonSingleShowResponseDTO)
             if cached_data:
                 return cached_data
-        if (i18n == "kk"):
-            locale = "kz"
+
+        # Корректируем локаль для API Ticketon (kk -> kz)
+        locale = i18n if i18n != "kk" else "kz"
+
         # Запрос к API
-        params = {"id": show_id,"i18n": i18n}
+        params = {"id": show_id, "i18n": locale}
         json_data = await self._make_request(
             url=app_config.ticketon_get_show,
             params=params,

@@ -21,18 +21,20 @@ from app.core.app_exception_response import AppExceptionResponse
 from app.infrastructure.app_config import app_config
 from app.infrastructure.redis_client import redis_client
 from app.infrastructure.service.redis_service import RedisService
+from app.shared.app_redis_keys import AppRedisKeys
 
 
 class SotaRemoteService:
 
     def __init__(self):
-        self.sota_access_token = "sota_access_token"
+        # Конвертируем минуты в секунды для Redis TTL
         self.ttl = app_config.sota_redis_save_minutes
         self.redis_service = RedisService()
 
     async def get_sota_token(self) -> str:
-        token = self.redis_service.get_sota_token(self.sota_access_token)
+        token = self.redis_service.get_sota_token(AppRedisKeys.SOTA_ACCESS_TOKEN)
         if token is None:
+            logger.info("[SOTA] Getting auth token from remote API")
             params = {
                 "email": app_config.sota_auth_email,
                 "password": app_config.sota_auth_password
@@ -41,14 +43,16 @@ class SotaRemoteService:
                 try:
                     response = await client.post(app_config.sota_auth_api, data=params)
                     data: SotaTokenDTO = SotaTokenDTO.parse_obj(response.json())
-                    self.redis_service.set_sota_token(self.sota_access_token, data.access)
+                    self.redis_service.set_sota_token(AppRedisKeys.SOTA_ACCESS_TOKEN, data.access)
                     response.raise_for_status()
+                    logger.info("[SOTA] Auth token obtained and cached successfully")
                     return data.access
                 except Exception as e:
                     raise AppExceptionResponse.internal_error(
                         message=f"SOTA GET AUTH TOKEN ERROR: {str(e)}"  # noqa:RUF010,RUF100,
                     ) from e
         else:
+            logger.debug("[SOTA] Using cached auth token")
             return token
 
     async def get_countries(self, dto: CountryQueryDTO, lang: str = "ru", use_redis: bool = True) -> \
@@ -72,7 +76,7 @@ class SotaRemoteService:
                 result = SotaPaginationResponseDTO[SotaRemoteCountryDTO].model_validate(json_data)
                 # 5. Сохраняем в кеш
                 if use_redis:
-                    await self.set(dto.redis_key(lang), result, ttl=self.ttl)
+                    await self.set(dto.redis_key(lang), result, ttl=timedelta(minutes=self.ttl))
                 return result
         except Exception as e:
             raise AppExceptionResponse.internal_error(
@@ -112,7 +116,7 @@ class SotaRemoteService:
 
                 # 6. Сохраняем в кеш
                 if use_redis:
-                    await self.set(dto.redis_key(lang), result, ttl=self.ttl)
+                    await self.set(dto.redis_key(lang), result, ttl=timedelta(minutes=self.ttl))
                 return result
         except Exception as e:
             raise AppExceptionResponse.internal_error(
@@ -130,7 +134,7 @@ class SotaRemoteService:
             if use_redis:
                 cached_data = await self.get(dto.redis_key(lang))
                 if cached_data:
-                    # Валидация за кешированных данных
+                    # Валидация кешированных данных
                     if isinstance(cached_data, list):
                         return [SotaMatchDTO.model_validate(item) for item in cached_data]
                     return cached_data
@@ -145,7 +149,7 @@ class SotaRemoteService:
                 result = [SotaMatchDTO.model_validate(item) for item in json_data]
                 # 5. Сохраняем в кеш
                 if use_redis:
-                    await self.set(dto.redis_key(lang), json_data, ttl=self.ttl)
+                    await self.set(dto.redis_key(lang), json_data, ttl=timedelta(minutes=self.ttl))
                 return result
         except Exception as e:
             raise AppExceptionResponse.internal_error(
@@ -155,7 +159,7 @@ class SotaRemoteService:
     async def get_score_tables(self, season_id: int, lang: str = "ru", use_redis: bool = True) -> ScoreTableResponseDTO:
         token = await self.get_sota_token()
         url = f"{app_config.sota_p_base_season_api}{season_id}/score_table/"
-        redis_key = f"{lang}_score_table_{season_id}"
+        redis_key = AppRedisKeys.sota_score_table_key(lang=lang, season_id=season_id)
         headers = {
             "Authorization": f"Bearer {token}",
             "Accept-Language": lang
@@ -164,17 +168,21 @@ class SotaRemoteService:
             if use_redis:
                 data_cached = await self.get(redis_key, ScoreTableResponseDTO)
                 if data_cached:
+                    logger.info(f"[SOTA] ✓ get_from_cache: score_table (season_id={season_id}, lang={lang}, key={redis_key})")
                     return data_cached
+
+            logger.info(f"[SOTA] → get_from_remote: score_table (season_id={season_id}, lang={lang})")
             timeout = httpx.Timeout(None)
             async with httpx.AsyncClient(timeout=timeout) as client:
                 response = await client.get(url, headers=headers)
                 response.raise_for_status()
                 json_data = response.json()
-                # 4. Валидация в DTO
+                # Валидация в DTO
                 result = ScoreTableResponseDTO.model_validate(json_data)
-                # 5. Сохраняем в кеш
+                # Сохраняем в кеш
                 if use_redis:
-                    await self.set(redis_key, result, ttl=self.ttl)
+                    await self.set(redis_key, result, ttl=timedelta(minutes=self.ttl))
+                    logger.info(f"[SOTA] ✓ saved_to_cache: score_table (key={redis_key}, ttl={self.ttl}s)")
                 return result
         except Exception as e:
             raise AppExceptionResponse.internal_error(
@@ -185,7 +193,7 @@ class SotaRemoteService:
                                        use_redis: bool = True) -> SotaTeamsStatsResponseDTO:
         token = await self.get_sota_token()
         url = f"{app_config.sota_p_games_api}{game_id}/teams/"
-        redis_key = f"{lang}_game_team_stat_{game_id}"
+        redis_key = AppRedisKeys.sota_team_stat_key(lang=lang, game_id=game_id)
         headers = {
             "Authorization": f"Bearer {token}",
             "Accept-Language": lang
@@ -194,17 +202,21 @@ class SotaRemoteService:
             if use_redis:
                 data_cached = await self.get(redis_key, SotaTeamsStatsResponseDTO)
                 if data_cached:
+                    logger.info(f"[SOTA] ✓ get_from_cache: team_stats (game_id={game_id}, lang={lang}, key={redis_key})")
                     return data_cached
+
+            logger.info(f"[SOTA] → get_from_remote: team_stats (game_id={game_id}, lang={lang})")
             timeout = httpx.Timeout(None)
             async with httpx.AsyncClient(timeout=timeout) as client:
                 response = await client.get(url, headers=headers)
                 response.raise_for_status()
                 json_data = response.json()
-                # 4. Валидация в DTO
+                # Валидация в DTO
                 result = SotaTeamsStatsResponseDTO.model_validate(json_data)
-                # 5. Сохраняем в кеш
+                # Сохраняем в кеш
                 if use_redis:
-                    await self.set(redis_key, result, ttl=self.ttl)
+                    await self.set(redis_key, result, ttl=timedelta(minutes=self.ttl))
+                    logger.info(f"[SOTA] ✓ saved_to_cache: team_stats (key={redis_key}, ttl={self.ttl}s)")
                 return result
         except Exception as e:
             raise AppExceptionResponse.internal_error(
@@ -215,7 +227,7 @@ class SotaRemoteService:
                                           use_redis: bool = True) -> SotaPlayersStatsResponseDTO:
         token = await self.get_sota_token()
         url = f"{app_config.sota_p_games_api}{game_id}/players/"
-        redis_key = f"{lang}_game_players_stat_{game_id}"
+        redis_key = AppRedisKeys.sota_players_stat_key(lang=lang, game_id=game_id)
         headers = {
             "Authorization": f"Bearer {token}",
             "Accept-Language": lang
@@ -224,17 +236,21 @@ class SotaRemoteService:
             if use_redis:
                 data_cached = await self.get(redis_key, SotaPlayersStatsResponseDTO)
                 if data_cached:
+                    logger.info(f"[SOTA] ✓ get_from_cache: players_stats (game_id={game_id}, lang={lang}, key={redis_key})")
                     return data_cached
+
+            logger.info(f"[SOTA] → get_from_remote: players_stats (game_id={game_id}, lang={lang})")
             timeout = httpx.Timeout(None)
             async with httpx.AsyncClient(timeout=timeout) as client:
                 response = await client.get(url, headers=headers)
                 response.raise_for_status()
                 json_data = response.json()
-                # 4. Валидация в DTO
+                # Валидация в DTO
                 result = SotaPlayersStatsResponseDTO.model_validate(json_data)
-                # 5. Сохраняем в кеш
+                # Сохраняем в кеш
                 if use_redis:
-                    await self.set(redis_key, result, ttl=self.ttl)
+                    await self.set(redis_key, result, ttl=timedelta(minutes=self.ttl))
+                    logger.info(f"[SOTA] ✓ saved_to_cache: players_stats (key={redis_key}, ttl={self.ttl}s)")
                 return result
         except Exception as e:
             raise AppExceptionResponse.internal_error(
@@ -245,7 +261,7 @@ class SotaRemoteService:
                                                   use_redis: bool = True) -> SotaMatchLineupDTO:
         token = await self.get_sota_token()
         url = f"{app_config.sota_p_games_api}{game_id}/pre_game_lineup/"
-        redis_key = f"{lang}_game_pre_game_lineup_stat_{game_id}"
+        redis_key = AppRedisKeys.sota_lineup_key(lang=lang, game_id=game_id)
         headers = {
             "Authorization": f"Bearer {token}",
             "Accept-Language": lang
@@ -254,17 +270,21 @@ class SotaRemoteService:
             if use_redis:
                 data_cached = await self.get(redis_key, SotaMatchLineupDTO)
                 if data_cached:
+                    logger.info(f"[SOTA] ✓ get_from_cache: lineup (game_id={game_id}, lang={lang}, key={redis_key})")
                     return data_cached
+
+            logger.info(f"[SOTA] → get_from_remote: lineup (game_id={game_id}, lang={lang})")
             timeout = httpx.Timeout(None)
             async with httpx.AsyncClient(timeout=timeout) as client:
                 response = await client.get(url, headers=headers)
                 response.raise_for_status()
                 json_data = response.json()
-                # 4. Валидация в DTO
+                # Валидация в DTO
                 result = SotaMatchLineupDTO.model_validate(json_data)
-                # 5. Сохраняем в кеш
+                # Сохраняем в кеш
                 if use_redis:
-                    await self.set(redis_key, result, ttl=self.ttl)
+                    await self.set(redis_key, result, ttl=timedelta(minutes=self.ttl))
+                    logger.info(f"[SOTA] ✓ saved_to_cache: lineup (key={redis_key}, ttl={self.ttl}s)")
                 return result
         except Exception as e:
             raise AppExceptionResponse.internal_error(
@@ -393,7 +413,7 @@ class SotaRemoteService:
         Args:
             cache_key: Ключ кэша
             data: Данные для сохранения (BaseModel, dict, list, str)
-            ttl: Время жизни (timedelta или int секунд). По умолчанию self.ttl минут
+            ttl: Время жизни (timedelta или int секунд). По умолчанию self.ttl секунд
         """
         try:
             if isinstance(ttl, timedelta):
@@ -401,8 +421,8 @@ class SotaRemoteService:
             elif ttl is not None:
                 ttl_seconds = ttl
             else:
-                # self.ttl в минутах, конвертируем в секунды
-                ttl_seconds = self.ttl * 60
+                # self.ttl уже в секундах (конвертировано в __init__)
+                ttl_seconds = self.ttl
 
             if isinstance(data, BaseModel):
                 payload = data.model_dump_json()

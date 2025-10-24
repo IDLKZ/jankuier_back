@@ -1,4 +1,6 @@
 from datetime import date, timedelta
+from typing import List
+
 from dotenv import load_dotenv
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings
@@ -147,6 +149,7 @@ class AppConfiguration(BaseSettings):
     ticketon_update_redis_in_minutes: int = Field(60, env="TICKETON_UPDATE_REDIS_IN_MINUTES")
     ticketon_api_key:str = Field(...,env="TICKETON_API_KEY")
     ticketon_backref:str = Field(...,env="TICKETON_BACKREF")
+    ticketon_stadium_ids:List[int] = Field(default=[59,1415,10592,12059,9688,9931,52,1133,986,10601],env="TICKETON_STADIUM_IDS")
 
     # ALATAU
     terminal_id: str = Field(..., env="TERMINAL_ID")
