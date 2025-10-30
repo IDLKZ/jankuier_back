@@ -202,6 +202,13 @@ class TicketonServiceAPI:
             cached_data = await self._get_from_cache(cache_key, TicketonShowsRedisStore)
             if cached_data and cached_data.data.shows:
                 if cached_data.last_updated + self._redis_ttl > datetime.now():
+                    # Фильтруем события с access_restrict == 1 из кэша
+                    if cached_data.data.events:
+                        cached_data.data.events = {
+                            event_id: event
+                            for event_id, event in cached_data.data.events.items()
+                            if event.access_restrict != 1
+                        }
                     return cached_data.data
 
         # Корректируем локаль для API Ticketon (kk -> kz)
@@ -224,6 +231,14 @@ class TicketonServiceAPI:
         )
 
         data = TicketonShowsDataDTO.from_json(json_data)
+
+        # Фильтруем события с access_restrict == 1
+        if data.events:
+            data.events = {
+                event_id: event
+                for event_id, event in data.events.items()
+                if event.access_restrict != 1
+            }
 
         # Сохраняем в кэш только если кэширование включено и есть места
         if use_cache and places and cache_key is not None:
