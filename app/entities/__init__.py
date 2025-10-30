@@ -56,7 +56,7 @@ from app.entities.user_code_verification_entity import UserCodeVerificationEntit
 from app.entities.user_entity import UserEntity
 from app.entities.user_reset_password_code_entity import UserCodeResetPasswordEntity
 from app.entities.user_verification_entity import UserVerificationEntity
-
+from app.entities.yandex_afisha_widget_ticket_entity import YandexAfishaWidgetTicketEntity
 
 __all__ = [
     FileEntity.__name__,
@@ -113,5 +113,8 @@ __all__ = [
     NotificationEntity.__name__,
     ReadNotificationEntity.__name__,
     UserCodeResetPasswordEntity.__name__,
+    YandexAfishaWidgetTicketEntity.__name__,
 ]
+
+
 

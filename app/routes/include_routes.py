@@ -66,6 +66,7 @@ from app.adapters.api.topic_notification.topic_notification_api import TopicNoti
 from app.adapters.api.firebase_notification.firebase_notification_api import FirebaseNotificationApi
 from app.adapters.api.notification.notification_api import NotificationApi
 from app.adapters.api.read_notification.read_notification_api import ReadNotificationApi
+from app.adapters.api.yandex_afisha_widget_ticket.yandex_afisha_widget_ticket_api import YandexAfishaWidgetTicketApi
 from app.shared.route_constants import RoutePathConstants
 
 
@@ -387,4 +388,11 @@ def include_routers(app) -> None:
         SotaApi().router,
         prefix=f"{RoutePathConstants.BasePathName}/sota",
         tags=["Данные с Sota"],
+    )
+
+    # Yandex Afisha Widget Ticket routes
+    app.include_router(
+        YandexAfishaWidgetTicketApi().router,
+        prefix=f"{RoutePathConstants.BasePathName}/yandex-afisha-widget-ticket",
+        tags=["Билеты Яндекс.Афиша"],
     )

@@ -49,6 +49,7 @@ from app.adapters.dto.cart_item.cart_item_dto import (
     CartItemBulkUpdateQtyDTO,
 )
 from app.adapters.dto.auth.register_dto import UpdateProfileDTO
+from app.adapters.dto.yandex_afisha_widget_ticket.yandex_afisha_widget_ticket_dto import YandexAfishaWidgetTicketCDTO
 
 
 class FormParserHelper:
@@ -929,4 +930,49 @@ class FormParserHelper:
             first_name=first_name,
             last_name=last_name,
             patronymic=patronymic,
+        )
+
+    @staticmethod
+    def parse_yandex_afisha_widget_ticket_dto_from_form(
+        image_id: Optional[int] = Form(None, description="ID изображения билета"),
+        title_ru: str = Form(..., description="Название мероприятия на русском"),
+        title_kk: Optional[str] = Form(None, description="Название мероприятия на казахском"),
+        title_en: Optional[str] = Form(None, description="Название мероприятия на английском"),
+        description_ru: Optional[str] = Form(None, description="Описание мероприятия на русском"),
+        description_kk: Optional[str] = Form(None, description="Описание мероприятия на казахском"),
+        description_en: Optional[str] = Form(None, description="Описание мероприятия на английском"),
+        address_ru: Optional[str] = Form(None, description="Адрес мероприятия на русском"),
+        address_kk: Optional[str] = Form(None, description="Адрес мероприятия на казахском"),
+        address_en: Optional[str] = Form(None, description="Адрес мероприятия на английском"),
+        stadium_ru: Optional[str] = Form(None, description="Название стадиона на русском"),
+        stadium_kk: Optional[str] = Form(None, description="Название стадиона на казахском"),
+        stadium_en: Optional[str] = Form(None, description="Название стадиона на английском"),
+        start_at: Optional[datetime] = Form(None, description="Дата и время начала мероприятия"),
+        yandex_session_id: str = Form(..., description="ID сессии в Яндекс.Афиша"),
+        yandex_widget_url: Optional[str] = Form(None, description="URL виджета Яндекс.Афиша"),
+        is_active: bool = Form(False, description="Флаг активности билета"),
+    ) -> YandexAfishaWidgetTicketCDTO:
+        """
+        Парсит `FormData` и возвращает `YandexAfishaWidgetTicketCDTO`.
+
+        :return: Экземпляр `YandexAfishaWidgetTicketCDTO`
+        """
+        return YandexAfishaWidgetTicketCDTO(
+            image_id=image_id,
+            title_ru=title_ru,
+            title_kk=title_kk,
+            title_en=title_en,
+            description_ru=description_ru,
+            description_kk=description_kk,
+            description_en=description_en,
+            address_ru=address_ru,
+            address_kk=address_kk,
+            address_en=address_en,
+            stadium_ru=stadium_ru,
+            stadium_kk=stadium_kk,
+            stadium_en=stadium_en,
+            start_at=start_at,
+            yandex_session_id=yandex_session_id,
+            yandex_widget_url=yandex_widget_url,
+            is_active=is_active,
         )

@@ -9,6 +9,8 @@ from app.adapters.dto.user_code_reset_password.user_code_reset_password_dto impo
     UserCodeResetPasswordWithRelationsRDTO
 from app.adapters.dto.user_code_verification.user_code_verification_dto import \
     UserCodeVerificationWithRelationsRDTO
+from app.adapters.dto.yandex_afisha_widget_ticket.yandex_afisha_widget_ticket_dto import \
+    YandexAfishaWidgetTicketWithRelationsRDTO
 
 if TYPE_CHECKING:
     from app.adapters.dto.permission.permission_dto import PermissionRDTO
@@ -350,6 +352,12 @@ class PaginationReadNotificationWithRelationsRDTO(BasePageModel):
 
 class PaginationUserCodeResetPasswordRDTO(BasePageModel):
     items: list[UserCodeResetPasswordWithRelationsRDTO] = []
+
+    class Config:
+        from_attributes = True
+
+class PaginationYandexAfishaWidgetTicketWithRelationsRDTO(BasePageModel):
+    items: list[YandexAfishaWidgetTicketWithRelationsRDTO]
 
     class Config:
         from_attributes = True

@@ -15,6 +15,7 @@ class AppFileExtensionConstants:
     ProductFolderName = "products"
     ProductCategoryFolderName = "products"
     RequestMaterialFolderName = "request_materials"
+    YandexAfishaWidgetTicketFolderName = "yandex_afisha_widget_tickets"
 
     # Расширения для изображений
     IMAGE_EXTENSIONS: typing.ClassVar = {
@@ -161,3 +162,7 @@ class AppFileExtensionConstants:
     @staticmethod
     def request_material_directory(request_id: int, student_id: int) -> str:
         return f"request_materials/{request_id}/{student_id}"
+
+    @staticmethod
+    def yandex_afisha_widget_ticket_image_directory(yandex_session_id: str) -> str:
+        return f"yandex_afisha_widget_tickets/images/{yandex_session_id}"

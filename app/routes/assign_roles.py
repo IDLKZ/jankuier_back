@@ -51,6 +51,7 @@ from app.routes.notification.notification_route import assign_notification_roles
 from app.routes.read_notification.read_notification_route import assign_read_notification_roles
 from app.routes.topic_notification.topic_notification_route import assign_topic_notification_roles
 from app.routes.firebase_notification.firebase_notification_route import assign_firebase_notification_roles
+from app.routes.yandex_afisha_widget_ticket.yandex_afisha_widget_ticket_route import assign_yandex_afisha_widget_ticket_roles
 
 
 def assign_roles_to_all_routes(app) -> None:
@@ -139,3 +140,6 @@ def assign_roles_to_all_routes(app) -> None:
     assign_firebase_notification_roles(app)
     #Sota
     assign_sota_roles(app)
+
+    # Yandex Afisha Widget Ticket routes
+    assign_yandex_afisha_widget_ticket_roles(app)

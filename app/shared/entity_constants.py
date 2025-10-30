@@ -83,3 +83,6 @@ class AppEntityNames:
     NotificationEntityName = "NotificationEntity"
     ReadNotificationEntityName = "ReadNotificationEntity"
     UserCodeResetPasswordEntityName = "UserCodeResetPasswordEntity"
+
+    # Yandex Afisha entities
+    YandexAfishaWidgetTicketEntityName = "YandexAfishaWidgetTicketEntity"

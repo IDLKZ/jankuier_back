@@ -59,4 +59,5 @@ class AppTableNames:
     UserNotificationTableName = "user_notifications"
     ReadNotificationTableName = "read_notifications"
     UserCodeResetPasswordTableName = "user_code_reset_passwords"
+    YandexAfishaWidgetTicketTableName = "yandex_afisha_widget_tickets"
 

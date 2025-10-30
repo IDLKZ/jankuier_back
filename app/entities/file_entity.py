@@ -136,3 +136,11 @@ class FileEntity(Base):
             foreign_keys=f"{AppEntityNames.TopicNotificationEntityName}.image_id",
         )
     )
+
+    yandex_afisha_widget_tickets: Mapped[list[AppEntityNames.YandexAfishaWidgetTicketEntityName]] = (
+        DbRelationshipConstants.one_to_many(
+            target=AppEntityNames.YandexAfishaWidgetTicketEntityName,
+            back_populates="image",
+            foreign_keys=f"{AppEntityNames.YandexAfishaWidgetTicketEntityName}.image_id",
+        )
+    )
