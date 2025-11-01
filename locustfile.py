@@ -90,9 +90,11 @@ class AuthenticationFlow(SequentialTaskSet):
             "username": self.username,
             "password": self.password,
             "email": f"{self.username}@test.com",
-            "phone": f"+7{random.randint(7000000000, 7999999999)}",
+            "phone": f"77{random.randint(700000000, 799999999)}",
+            "iin": f"{random.randint(100000000000, 999999999999)}",  # 12-digit IIN
             "first_name": "Test",
             "last_name": "User",
+            "patronomic": None,
             "role_id": 2  # Client role
         }
 
@@ -179,7 +181,7 @@ class ProductBrowserUser(HttpUser):
         """Аутентификация с тестовым пользователем"""
         payload = {
             "username": "client",  # Из seeder
-            "password": "client123"
+            "password": "Client123!"
         }
 
         with self.client.post(
@@ -341,7 +343,7 @@ class AdminOperationsUser(HttpUser):
         """Аутентификация администратора"""
         payload = {
             "username": "admin",  # Из seeder
-            "password": "admin123"
+            "password": "Admin123!"
         }
 
         with self.client.post(
@@ -432,7 +434,7 @@ class MixedOperationsUser(HttpUser):
         """Попытка авторизации"""
         payload = {
             "username": "client",
-            "password": "client123"
+            "password": "Client123!"
         }
 
         response = self.client.post("/api/auth/login-client", json=payload)
